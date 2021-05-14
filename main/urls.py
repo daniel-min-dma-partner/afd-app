@@ -20,5 +20,6 @@ import main.views as main
 app_name = 'main'
 
 urlpatterns = [
-    path('', main.Home.as_view(), name='home')
+    path('', main.Home.as_view(), name='home'),
+    path('tree-remover/', main.TreeRemover.as_view(), name='tree-remover')
 ]

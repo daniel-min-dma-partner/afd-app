@@ -10,53 +10,54 @@
       Automation Web
     </a></div>
   <div class="sidebar-wrapper">
-    {% url 'main:home' as home_url %}
     <ul class="nav">
-      <li class="nav-item {% if request.get_full_path == home_url %} active {% endif %}">
+      {% url 'main:home' as home_url %}
+      <li class="nav-item{% if request.get_full_path == home_url %} active{% endif %}">
         <a class="nav-link" href="./dashboard.html">
-          <em class="material-icons">dashboard</em>
+          <i class="material-icons">dashboard</i>
           <p>Home</p>
         </a>
       </li>
-      <li class="nav-item ">
-        <a class="nav-link" href="./user.html">
-          <em class="material-icons">person</em>
-          <p>User Profile</p>
+      {% url 'main:tree-remover' as tree_remover_url %}
+      <li class="nav-item{% if request.get_full_path == tree_remover_url %} active{% endif %}">
+        <a class="nav-link" href="{% url 'main:tree-remover' %}">
+          <i class="material-icons">delete_sweep</i>
+          <p>Tree Remover</p>
         </a>
       </li>
       <li class="nav-item ">
         <a class="nav-link" href="./tables.html">
-          <em class="material-icons">content_paste</em>
+          <i class="material-icons">content_paste</i>
           <p>Table List</p>
         </a>
       </li>
       <li class="nav-item ">
         <a class="nav-link" href="./typography.html">
-          <em class="material-icons">library_books</em>
+          <i class="material-icons">library_books</i>
           <p>Typography</p>
         </a>
       </li>
       <li class="nav-item ">
         <a class="nav-link" href="./icons.html">
-          <em class="material-icons">bubble_chart</em>
+          <i class="material-icons">bubble_chart</i>
           <p>Icons</p>
         </a>
       </li>
       <li class="nav-item ">
         <a class="nav-link" href="./map.html">
-          <em class="material-icons">location_ons</em>
+          <i class="material-icons">location_ons</i>
           <p>Maps</p>
         </a>
       </li>
       <li class="nav-item ">
         <a class="nav-link" href="./notifications.html">
-          <em class="material-icons">notifications</em>
+          <i class="material-icons">notifications</i>
           <p>Notifications</p>
         </a>
       </li>
       <li class="nav-item ">
         <a class="nav-link" href="./rtl.html">
-          <em class="material-icons">language</em>
+          <i class="material-icons">language</i>
           <p>RTL Support</p>
         </a>
       </li>

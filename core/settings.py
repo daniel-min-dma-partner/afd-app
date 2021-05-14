@@ -40,9 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Extra apps
+    'bootstrap4',
     'django_extensions',
 
     # Created apps
+    'libs',
     'main',
 ]
 
