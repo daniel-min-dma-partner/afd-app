@@ -1,0 +1,21 @@
+image: "python:3.8"
+
+before_script:
+  - python --version
+  - pip install -r requirements.txt
+
+stages:
+  - Static Analysis
+  - Coverage
+
+flake8:
+  stage: Static Analysis
+  needs: []
+  script:
+  - flake8 --max-line-length=120 *.py
+
+code_coverage:
+  stage: Coverage
+  needs: []
+  script:
+    - pytest --cov=test/
