@@ -1,0 +1,3 @@
+[submodule "libs/tcrm_automation"]
+	path = libs/tcrm_automation
+	url = git@gitlab.com:HeanGee/tcrm_automation.git
