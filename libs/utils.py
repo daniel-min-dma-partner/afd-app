@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 from pathlib import Path
 
+import django.core.files.uploadedfile
 import tzlocal
 
 
@@ -26,3 +27,14 @@ def relative_mkdir(name="", as_pymodule=True):
             init_file_path = f"{os.getcwd()}/{name}/__init__.py"
             if not (os.path.isfile(init_file_path) or os.path.isdir(init_file_path)):
                 open(init_file_path, 'w').close()
+
+
+def byte_to_str(in_mem_data: bytes):
+    if isinstance(in_mem_data, bytes):
+        return in_mem_data.decode('utf-8')
+
+
+def str_to_json(string: str):
+    if isinstance(string, str):
+        import json as js
+        return js.loads(string)
