@@ -13,5 +13,6 @@ class TreeRemoverForm(forms.Form):
                                 label=mark_safe(
                                     "List of <strong>sfdcRegisters, registers, edgeMart</strong> nodes"), )
     name = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Output dataflow name'}))
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Output dataflow name',
+                                      'value': 'UpdatedDataflow.json'}))
     result = forms.JSONField(required=False, label='Result', initial=False)
