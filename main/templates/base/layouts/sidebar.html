@@ -21,8 +21,8 @@
       {% url 'main:tree-remover' as tree_remover_url %}
       <li class="nav-item{% if request.get_full_path == tree_remover_url %} active{% endif %}">
         <a class="nav-link" href="{% url 'main:tree-remover' %}">
-          <i class="material-icons">delete_sweep</i>
-          <p>Tree Remover</p>
+          <i class="material-icons">cached</i>
+          <p>Manage Json Trees</p>
         </a>
       </li>
       <li class="nav-item ">

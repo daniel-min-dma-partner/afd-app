@@ -7,7 +7,7 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-8 mx-auto">
         <div class="card">
             <div class="card-header card-header-rose">
                 <h3 class="card-title">Tree Remover</h3>
@@ -19,9 +19,11 @@
                     {% csrf_token %}
 
                     <div class="form-group form-file-upload form-file-multiple">
-                        <input type="file" class="inputFileHidden" name="{{ form.dataflow.name }}" id="id_{{ form.dataflow.name }}">
+                        <input type="file" class="inputFileHidden" name="{{ form.dataflow.name }}"
+                               id="id_{{ form.dataflow.name }}">
                         <div class="input-group">
-                            <input type="text" readonly class="form-control inputFileVisible" placeholder="{{ form.dataflow.help_text }}">
+                            <input type="text" readonly class="form-control inputFileVisible"
+                                   placeholder="{{ form.dataflow.help_text }}">
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-fab btn-round btn-rose">
                                     <i class="material-icons">attach_file</i>
@@ -31,9 +33,11 @@
                     </div>
 
                     <div class="form-group form-file-upload form-file-multiple">
-                        <input type="file" multiple="" class="inputFileHidden" name="{{ form.replacers.name }}" id="id_{{ form.replacers.name }}">
+                        <input type="file" multiple="" class="inputFileHidden" name="{{ form.replacers.name }}"
+                               id="id_{{ form.replacers.name }}">
                         <div class="input-group">
-                            <input type="text" readonly class="form-control inputFileVisible" placeholder="{{ form.replacers.help_text }}"
+                            <input type="text" readonly class="form-control inputFileVisible"
+                                   placeholder="{{ form.replacers.help_text }}"
                                    multiple>
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-fab btn-round btn-rose">
@@ -65,6 +69,19 @@
                                     <i class="material-icons">label</i>
                                 </button>
                             </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" name="{{ form.extract.name }}"
+                                       id="id_{{ form.extract.name }}">
+                                Extract? (Do not remove)
+                                <span class="form-check-sign">
+                                <span class="check"></span>
+                              </span>
+                            </label>
                         </div>
                     </div>
 
