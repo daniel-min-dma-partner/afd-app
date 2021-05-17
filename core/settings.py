@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # Extra apps
     'bootstrap4',
     'django_extensions',
+    'libs.interactor.interactor',
 
     # Created apps
     'libs',
