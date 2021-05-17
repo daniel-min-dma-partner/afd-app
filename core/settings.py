@@ -44,7 +44,7 @@ INSTALLED_APPS = [
 
     # Created apps
     'libs',
-    'libs.diff2HtmlCompare',
+    'libs.diff2htmlcompare',
     'libs.tcrm_automation',
     'main',
 ]
