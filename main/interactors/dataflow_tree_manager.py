@@ -1,16 +1,16 @@
 import os
+from pathlib import Path
 
 from libs.interactor.interactor import Interactor
 from libs.tcrm_automation.tree_remover import tree_remover
 from libs.utils import current_datetime
-from pathlib import Path
 
 
 class TreeRemoverInteractor(Interactor):
     def run(self):
         # Prepare the outout directory
         today = current_datetime(add_time=False)
-        outdir = os.path.join(Path(__file__).resolve().parent.parent, f'libs/tcrm_automation/{today}')
+        outdir = os.path.join(Path(__file__).resolve().parent.parent.parent, f'libs/tcrm_automation/{today}')
 
         if not os.path.isdir(outdir):
             os.makedirs(outdir)
