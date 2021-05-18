@@ -5,12 +5,18 @@
 
 {% block title %}Tree Remover{% endblock title %}
 
+{% block extra_header_script %}
+<script>
+    let default_title = "{{ default_title }}";
+</script>
+{% endblock extra_header_script %}
+
 {% block content %}
 <div class="row">
     <div class="col-md-8 mx-auto">
         <div class="card">
             <div class="card-header card-header-rose">
-                <h3 class="card-title">Tree Remover</h3>
+                <h3 class="card-title">{{ default_title }}</h3>
                 <p class="category">Removes all tree based on the Registers and replace with Replacers.</p>
             </div>
 
@@ -19,10 +25,10 @@
                     {% csrf_token %}
 
                     <div class="form-group form-file-upload form-file-multiple">
-                        <input type="file" class="inputFileHidden" name="{{ form.dataflow.name }}"
+                        <input type="file" required class="inputFileHidden" name="{{ form.dataflow.name }}"
                                id="id_{{ form.dataflow.name }}">
                         <div class="input-group">
-                            <input type="text" readonly class="form-control inputFileVisible"
+                            <input type="text" class="form-control inputFileVisible"
                                    placeholder="{{ form.dataflow.help_text }}">
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-fab btn-round btn-rose">
@@ -36,8 +42,9 @@
                         <input type="file" multiple="" class="inputFileHidden" name="{{ form.replacers.name }}"
                                id="id_{{ form.replacers.name }}">
                         <div class="input-group">
-                            <input type="text" readonly class="form-control inputFileVisible"
+                            <input type="text" class="form-control inputFileVisible"
                                    placeholder="{{ form.replacers.help_text }}"
+                                   id="id_{{ form.replacers.name }}_display"
                                    multiple>
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-fab btn-round btn-rose">
@@ -101,3 +108,7 @@
 </div>
 
 {% endblock content %}
+
+{% block extra_scripts %}
+<script src="{% static 'site/tree_remover.js' %}"></script>
+{% endblock extra_scripts %}
