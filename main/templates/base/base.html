@@ -26,6 +26,7 @@ The above copyright notice and this permission notice shall be included in all c
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport'/>
 
     {% include 'base/base_header_styles_fonts.html' %}
+    {% block extra_header_script %}{% endblock extra_header_script %}
 </head>
 
 <body class="">
@@ -454,6 +455,7 @@ The above copyright notice and this permission notice shall be included in all c
 </div>
 {% include 'base/layouts/fixed-plugins.html' %}
 {% include 'base/footer_scripts.html' %}
+{% block extra_scripts %}{% endblock extra_scripts %}
 </body>
 
 </html>
