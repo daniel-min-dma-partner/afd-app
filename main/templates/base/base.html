@@ -455,6 +455,35 @@ The above copyright notice and this permission notice shall be included in all c
 </div>
 {% include 'base/layouts/fixed-plugins.html' %}
 {% include 'base/footer_scripts.html' %}
+<script>
+    function update_status_bubble(status) {
+        // Source: https://davidwalsh.name/css-variables-javascript
+        let parent = $('.dot').parent();
+        parent.empty();
+        parent.append('<span class="dot align-middle" role="status" aria-hidden="true"></span>')
+
+        if (status === 200) {
+            $(".dot").css('background-color', getComputedStyle(document.documentElement).getPropertyValue('--spinner-success'));
+            parent.append('&nbsp;&nbsp;Connected');
+        } else {
+            $(".dot").css('background-color', getComputedStyle(document.documentElement).getPropertyValue('--spinner-warning'));
+            parent.append('&nbsp;&nbsp;Dis-connected');
+        }
+    }
+
+    $.ajax({
+        type: 'GET',
+        url: "{% url 'main:sfdc_status' %}",
+        success: function (response) {
+            update_status_bubble(response['message'] === "Yes" ? 200 : 400);
+        },
+        error: function (response) {
+            console.log(response['responseJSON']);
+            update_status_bubble(400);
+        }
+    })
+
+</script>
 {% block extra_scripts %}{% endblock extra_scripts %}
 </body>
 
