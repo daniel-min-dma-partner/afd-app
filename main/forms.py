@@ -13,7 +13,7 @@ class TreeRemoverForm(forms.Form):
                                     "List of <strong>sfdcRegisters, registers, edgeMart</strong> nodes"), )
     name = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Output dataflow name',
-                                      'value': 'UpdatedDataflow.json'}))
+                                      'value': 'UpdatedDataflow.json'}), required=False)
 
     # For tree removers
     replacers = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False,
