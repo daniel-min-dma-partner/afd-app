@@ -1,72 +1,74 @@
 {% load static %}
 
-<div class="sidebar" data-color="purple" data-background-color="white" data-image="{% static 'assets/img/sidebar-1.jpg' %}">
-  <!--
-    Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
+<div class="sidebar" data-color="purple" data-background-color="white"
+     data-image="{% static 'assets/img/sidebar-1.jpg' %}">
+    <!--
+      Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
-    Tip 2: you can also add an image using data-image tag
-  -->
-  <div class="logo"><a href="#" class="simple-text logo-normal">
-      Automation Web
+      Tip 2: you can also add an image using data-image tag
+    -->
+    <div class="logo"><a href="#" class="simple-text logo-normal">
+        Automation Web
     </a></div>
-  <div class="sidebar-wrapper">
-    <ul class="nav">
-      {% url 'main:home' as home_url %}
-      <li class="nav-item{% if request.get_full_path == home_url %} active{% endif %}">
-        <a class="nav-link" href="{% url 'main:home' %}">
-          <i class="material-icons">dashboard</i>
-          <p>Home</p>
-        </a>
-      </li>
-      {% url 'main:tree-remover' as tree_remover_url %}
-      <li class="nav-item{% if request.get_full_path == tree_remover_url %} active{% endif %}">
-        <a class="nav-link" href="{% url 'main:tree-remover' %}">
-          <i class="material-icons">cached</i>
-          <p>Manage Json Trees</p>
-        </a>
-      </li>
-      <li class="nav-item ">
-        <a class="nav-link" href="./tables.html">
-          <i class="material-icons">content_paste</i>
-          <p>Table List</p>
-        </a>
-      </li>
-      <li class="nav-item ">
-        <a class="nav-link" href="./typography.html">
-          <i class="material-icons">library_books</i>
-          <p>Typography</p>
-        </a>
-      </li>
-      <li class="nav-item ">
-        <a class="nav-link" href="./icons.html">
-          <i class="material-icons">bubble_chart</i>
-          <p>Icons</p>
-        </a>
-      </li>
-      <li class="nav-item ">
-        <a class="nav-link" href="./map.html">
-          <i class="material-icons">location_ons</i>
-          <p>Maps</p>
-        </a>
-      </li>
-      <li class="nav-item ">
-        <a class="nav-link" href="./notifications.html">
-          <i class="material-icons">notifications</i>
-          <p>Notifications</p>
-        </a>
-      </li>
-      <li class="nav-item ">
-        <a class="nav-link" href="./rtl.html">
-          <i class="material-icons">language</i>
-          <p>RTL Support</p>
-        </a>
-      </li>
-<!--      <li class="nav-item active-pro ">-->
-<!--        <a class="nav-link" href="./upgrade.html">-->
-<!--          <i class="material-icons">unarchive</i>-->
-<!--          <p>Upgrade to PRO</p>-->
-<!--        </a>-->
-<!--      </li>-->
-    </ul>
-  </div>
+    <div class="sidebar-wrapper">
+        <ul class="nav">
+            {% url 'main:home' as home_url %}
+            <li class="nav-item{% if request.get_full_path == home_url %} active{% endif %}">
+                <a class="nav-link" href="{% url 'main:home' %}">
+                    <i class="material-icons">dashboard</i>
+                    <p>Home</p>
+                </a>
+            </li>
+            {% url 'main:tree-remover' as tree_remover_url %}
+            <li class="nav-item{% if request.get_full_path == tree_remover_url %} active{% endif %}">
+                <a class="nav-link" href="{% url 'main:tree-remover' %}">
+                    <i class="material-icons">cached</i>
+                    <p>Manage Json Trees</p>
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" target="_blank"
+                   href="https://test.salesforce.com/services/oauth2/authorize?client_id=3MVG9GiqKapCZBwEtNyEQ0U2Pv34k4ziXjebvIMgh7mW2jGmX6h9ZIls_K9gMU0CFz_6kw5HcvNpE7kV5QFeo&redirect_uri=https://localhost:8080/rest&response_type=code">
+                    <i class="material-icons">content_paste</i>
+                    <p>Table List</p>
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="./typography.html">
+                    <i class="material-icons">library_books</i>
+                    <p>Typography</p>
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="./icons.html">
+                    <i class="material-icons">bubble_chart</i>
+                    <p>Icons</p>
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="./map.html">
+                    <i class="material-icons">location_ons</i>
+                    <p>Maps</p>
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="./notifications.html">
+                    <i class="material-icons">notifications</i>
+                    <p>Notifications</p>
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="./rtl.html">
+                    <i class="material-icons">language</i>
+                    <p>RTL Support</p>
+                </a>
+            </li>
+            <li class="nav-item active-pro">
+                <a class="nav-link" style="margin-left:10px">
+                    <span class="dot spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    Verifying Status...
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>
