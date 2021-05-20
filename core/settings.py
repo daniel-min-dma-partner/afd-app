@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'django_extensions',
     'libs.interactor.interactor',
+    'rest_framework',
 
     # Created apps
     'libs',
@@ -76,6 +77,16 @@ TEMPLATES = [
         },
     },
 ]
+
+# REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAdminUser'
+    # ),
+}
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
@@ -145,7 +156,6 @@ DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#media-root
 MEDIA_ROOT = '/tmp/'
 MEDIA_URL = ''  # It must end in a slash if set to a non-empty value.
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
