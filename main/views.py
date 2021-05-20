@@ -1,9 +1,58 @@
+import requests
+from django.http import JsonResponse
 from django.views import generic
+from rest_framework import authentication
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 # Create your views here.
 import main.forms as forms
 from libs.utils import byte_to_str, str_to_json
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor
+
+
+def ajax_sfdc_conn_status_view(request):
+    # request should be ajax and method should be POST.
+    error_msg = ""
+    response = ""
+    response_status = 200
+
+    if request.is_ajax and request.method == "GET":
+        # get the form data
+        response = _sfdc_status_check(request)
+
+        if response != "Yes":
+            error_msg = response
+            response_status = 400
+
+    return JsonResponse({"message": response, "error": error_msg}, status=response_status)
+
+
+def _sfdc_status_check(request):
+    if 'sfdc-apiuser-access-token' not in request.session.keys():
+        return "No"
+
+    sfdc_apiuser_request_header = 'sfdc-apiuser-request-header'
+    sfdc_apiuser_request_instance = 'sfdc-apiuser-request-instance'
+
+    header = request.session[sfdc_apiuser_request_header]
+    instance_url = request.session[sfdc_apiuser_request_instance]
+    dataflows_url = '/services/data/v51.0/wave/dataflows/'
+
+    url = instance_url + dataflows_url
+    response = requests.get(url, headers=header)
+    status = response.status_code
+
+    if response.text:
+        response = response.json()
+
+    if isinstance(response, list) and 'errorCode' in response[0].keys():
+        return response[0]['errorCode']
+
+    if 'dataflows' in response.keys():
+        return "Yes"
+
+    return "No"
 
 
 class Home(generic.TemplateView):
@@ -12,6 +61,13 @@ class Home(generic.TemplateView):
     """
     module = 'home'
     template_name = 'home/home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # login_status = _sfdc_status_check(self.request)
+        # context['sfdc_login_status'] = login_status
+        return context
 
 
 class TreeRemover(generic.FormView):
@@ -42,6 +98,7 @@ class TreeRemover(generic.FormView):
 
             try:
                 if not extract:
+                    name = f"{dataflow[0].name.replace('.json', '')} with removed nodes.json"
                     _ = TreeRemoverInteractor.call(dataflow=_dataflow, replacers=_replacers, registers=registers,
                                                    name=name, request=request)
                 else:
@@ -69,3 +126,41 @@ class TreeRemover(generic.FormView):
             print('entro aqui')
             print(form.errors.as_data())
             return self.form_invalid(form)
+
+
+class Rest(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def get(self, request, format='api'):
+        """
+        Return a list of all users.
+        """
+
+        if 'code' in request.GET:
+            env = 'test'
+            auth_code = request.GET.get('code')
+            secret = '27A8FA1974441479425E8372A3F8A0D6F2F10F55F9EF62B92E430D049A238E2E'
+            key = '3MVG9GiqKapCZBwEtNyEQ0U2Pv34k4ziXjebvIMgh7mW2jGmX6h9ZIls_K9gMU0CFz_6kw5HcvNpE7kV5QFeo'
+
+            url = f"https://{env}.salesforce.com/services/oauth2/token?client_id=" \
+                  f"{key}&grant_type=authorization_code" \
+                  f"&code={str(auth_code)}&redirect_uri=https://localhost:8080/rest&client_secret={str(secret)}"
+            response = requests.get(url)
+
+            if response.text:
+                response = response.json()
+
+            header = {'Authorization': "Bearer " + response["access_token"], 'Content-Type': "application/json"}
+
+            sfdc_apiuser_request_header = 'sfdc-apiuser-request-header'
+            sfdc_apiuser_request_instance = 'sfdc-apiuser-request-instance'
+            sfdc_apiuser_access_token = 'sfdc-apiuser-access-token'
+
+            request.session[sfdc_apiuser_request_header] = header
+            request.session[sfdc_apiuser_request_instance] = response['instance_url']
+            request.session[sfdc_apiuser_access_token] = response["access_token"]
+
+            return Response("Authentication Success!!!")
+
+        else:
+            return Response("Someting went wrong" + str(request))
