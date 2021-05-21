@@ -465,9 +465,13 @@ The above copyright notice and this permission notice shall be included in all c
         if (status === 200) {
             $(".dot").css('background-color', getComputedStyle(document.documentElement).getPropertyValue('--spinner-success'));
             parent.append('&nbsp;&nbsp;Connected');
+
+            $(".dot.align-middle").parent().fadeTo(2200, 0, function () {
+                $(this).fadeTo('slow', 0);
+            });
         } else {
-            $(".dot").css('background-color', getComputedStyle(document.documentElement).getPropertyValue('--spinner-warning'));
-            parent.append('&nbsp;&nbsp;Dis-connected');
+            $(".dot").css('background-color', getComputedStyle(document.documentElement).getPropertyValue('--spinner-danger'));
+            parent.append('&nbsp;&nbsp;Not Connected');
         }
     }
 
