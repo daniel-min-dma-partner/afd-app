@@ -44,13 +44,13 @@ class TreeRemover(generic.FormView):
 
         if form.is_valid():
             dataflow = request.FILES.getlist('dataflow')
-            replacers = request.FILES.getlist('replacer')
+            replacers = request.FILES.getlist('replacers')
             name = form.cleaned_data['name']
             extract = form.cleaned_data['extract']
             registers = [register.rstrip() for register in form.cleaned_data['registers'].split('\n')]
 
             _dataflow = str_to_json(byte_to_str(dataflow[0].read()))
-            _replacers = [str_to_json(byte_to_str(replacer[0].read())) for replacer in replacers]
+            _replacers = [str_to_json(byte_to_str(replacer.read())) for replacer in replacers]
 
             try:
                 if not extract:
