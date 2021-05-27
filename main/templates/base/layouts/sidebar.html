@@ -33,6 +33,13 @@
                     <p>Manage Json Trees</p>
                 </a>
             </li>
+            {% url 'main:slack-approval-request' as slack_url %}
+            <li class="nav-item{% if request.get_full_path == slack_url %} active{% endif %}">
+                <a class="nav-link" href="{% url 'main:slack-approval-request' %}">
+                    <i class="material-icons">approval</i>
+                    <p>Slack Approval Requester</p>
+                </a>
+            </li>
             <!--            <li class="nav-item ">-->
             <!--                <a class="nav-link" href="./typography.html">-->
             <!--                    <i class="material-icons">library_books</i>-->

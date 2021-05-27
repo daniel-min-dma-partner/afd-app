@@ -1,0 +1,140 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+
+{% block title %}Tree Remover{% endblock title %}
+
+{% block extra_header_script %}
+<script>
+    let default_title = "{{ default_title }}";
+
+
+
+
+
+</script>
+{% endblock extra_header_script %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header card-header-rose">
+                <h3 class="card-title">{{ default_title }}</h3>
+                <p class="category">Pushes dynamic message to slack channel.</p>
+            </div>
+
+            <div class="card-body">
+                <form method="post" action="{% url 'main:slack-approval-request' %}">
+                    {% csrf_token %}
+
+                    <div class="form-row">
+                        <div class="form-group col-md-8">
+                            {% with "id_"|add:form.case_url.name as case_url_id %}
+                            <label for="{{ case_url_id }}">{{ form.case_url.label }}</label>
+                            <input name="{{ form.case_url.name }}"
+                                   type="url"
+                                   class="form-control"
+                                   required
+                                   id="{{ case_url_id }}"
+                                   placeholder="">
+                            {% endwith %}
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            {% with "id_"|add:form.case_number.name as case_number_id %}
+                            <label for="{{ case_number_id }}">{{ form.case_number.label }}</label>
+                            <input name="{{ form.case_number.name }}"
+                                   type="text"
+                                   class="form-control"
+                                   required
+                                   id="{{ case_number_id }}"
+                                   placeholder="">
+                            {% endwith %}
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            {% with "id_"|add:form.case_description.name as case_description_id %}
+                            <label for="{{ case_description_id }}">{{ form.case_description.label }}</label>
+                            <textarea name="{{ form.case_description.name }}"
+                                      required
+                                      class="form-control"
+                                      id="{{ case_description_id }}"
+                                      required
+                                      rows="3"></textarea>
+                            {% endwith %}
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox"
+                                           name="{{ form.case_business_justification.name }}"
+                                           id="id_{{ form.case_business_justification.name }}">
+                                    {{ form.case_business_justification.label }}
+                                    <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox"
+                                           name="{{ form.case_manager_approval.name }}"
+                                           id="id_{{ form.case_manager_approval.name }}">
+                                    {{ form.case_manager_approval.label }}
+                                    <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            {% with "id_"|add:form.case_manager_name.name as manager_name_id %}
+                            <label for="{{ manager_name_id }}">{{ form.case_manager_name.label }}</label>
+                            <input name="{{ form.case_manager_name.name }}" type="text"
+                                   class="form-control"
+                                   id="{{ manager_name_id }}"
+                                   readonly
+                                   placeholder="">
+                            {% endwith %}
+                        </div>
+                    </div>
+
+
+                    <br/>
+                    <br/>
+
+                    <div class="">
+                        <button type="submit" class="btn btn-rose btn-user float-right">
+                            Proceed
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block extra_scripts %}
+<script>
+    {% with "id_"|add:form.case_manager_name.name as manager_name_id %}
+    const manager_name_field_id = "{{manager_name_id}}";
+    {% endwith %}
+
+    const has_manager_approval_field_id = "id_{{ form.case_manager_approval.name }}";
+
+</script>
+<script src="{% static 'site/js/slack_msg_pusher.js' %}"></script>
+{% endblock extra_scripts %}

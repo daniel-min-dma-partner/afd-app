@@ -1,3 +1,6 @@
+import json as js
+
+import requests
 from django.http import JsonResponse
 from django.views import generic
 from rest_framework import authentication
@@ -9,6 +12,7 @@ import main.forms as forms
 from libs.utils import byte_to_str, str_to_json
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor
 from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp, SfdcConnectionStatusCheck
+from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 
 
 class Home(generic.TemplateView):
@@ -69,6 +73,47 @@ class TreeRemover(generic.FormView):
             return self.form_invalid(form)
 
 
+class SlackApprovalRequestView(generic.FormView):
+    template_name = 'slack-approval-request-form/index.html'
+    form_class = forms.SlackMsgPusherForm
+    success_url = '/slack-approval-request/'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+
+        # Adds extra form context here...
+        context['default_title'] = "Approval Request Message Pusher - Slack"
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = form_class(request.POST)
+
+        if form.is_valid():
+            _values = {
+                "case-number": form.cleaned_data['case_number'],
+                "case-url": form.cleaned_data['case_url'],
+                "case-description": form.cleaned_data['case_description'],
+                "case-business-justification": form.cleaned_data['case_business_justification'],
+                "case-manager-approval": form.cleaned_data['case_manager_approval'],
+                "case-manager-name": form.cleaned_data['case_manager_name'],
+            }
+
+            ctx = SlackMessagePushInteractor.call(values=_values)
+            _payload = js.dumps(ctx.payload)
+
+            _header = {'Content-Type': "application/json"}
+            _url = "https://hooks.slack.com/services/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"
+            response = requests.post(url=_url, data=_payload, headers=_header, json=True)
+            print(response)
+
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+
 class Rest(APIView):
     authentication_classes = [authentication.TokenAuthentication]
 
@@ -76,7 +121,7 @@ class Rest(APIView):
         """
         Return a list of all users.
         """
-
+        print(request)
         ctx = SfdcConnectWithConnectedApp.call(request=request)
         return Response(ctx.message)
 
