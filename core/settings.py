@@ -39,11 +39,13 @@ INSTALLED_APPS = [
 
     # Extra apps
     'bootstrap4',
+    'channels',
     'django_extensions',
     'libs.interactor.interactor',
     'rest_framework',
 
     # Created apps
+    'chat',
     'libs',
     'libs.diff2htmlcompare',
     'libs.tcrm_automation',
@@ -89,6 +91,18 @@ REST_FRAMEWORK = {
 }
 
 WSGI_APPLICATION = 'core.wsgi.application'
+
+# For Websocket using channels package:
+ASGI_APPLICATION = "core.asgi.application"
+# Channel backing store
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('localhost', 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
