@@ -257,4 +257,14 @@ $(document).ready(function() {
   $('.form-file-multiple .btn').on('focusout', function() {
     $(this).parent().siblings().trigger('focusout');
   });
+
+</script>
+
+<!-- Temporal fix for Material-Dashboard bug with infinite onchange with form tag -->
+<!-- Bug fix source: https://github.com/creativetimofficial/material-dashboard/issues/80 -->
+<script>
+    $('body').bootstrapMaterialDesign({
+        autofill: false
+    });
+
 </script>
