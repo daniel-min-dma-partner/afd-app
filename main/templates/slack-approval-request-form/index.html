@@ -30,19 +30,7 @@
                     {% csrf_token %}
 
                     <div class="form-row">
-                        <div class="form-group col-md-8">
-                            {% with "id_"|add:form.case_url.name as case_url_id %}
-                            <label for="{{ case_url_id }}">{{ form.case_url.label }}</label>
-                            <input name="{{ form.case_url.name }}"
-                                   type="url"
-                                   class="form-control"
-                                   required
-                                   id="{{ case_url_id }}"
-                                   placeholder="">
-                            {% endwith %}
-                        </div>
-
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-2">
                             {% with "id_"|add:form.case_number.name as case_number_id %}
                             <label for="{{ case_number_id }}">{{ form.case_number.label }}</label>
                             <input name="{{ form.case_number.name }}"
@@ -50,6 +38,30 @@
                                    class="form-control"
                                    required
                                    id="{{ case_number_id }}"
+                                   placeholder="">
+                            {% endwith %}
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            {% with "id_"|add:form.case_contact.name as case_cname_id %}
+                            <label for="{{ case_cname_id }}">{{ form.case_contact.label }}</label>
+                            <input name="{{ form.case_contact.name }}"
+                                   type="text"
+                                   class="form-control"
+                                   required
+                                   id="{{ case_cname_id }}"
+                                   placeholder="">
+                            {% endwith %}
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            {% with "id_"|add:form.case_url.name as case_url_id %}
+                            <label for="{{ case_url_id }}">{{ form.case_url.label }}</label>
+                            <input name="{{ form.case_url.name }}"
+                                   type="url"
+                                   class="form-control"
+                                   required
+                                   id="{{ case_url_id }}"
                                    placeholder="">
                             {% endwith %}
                         </div>
