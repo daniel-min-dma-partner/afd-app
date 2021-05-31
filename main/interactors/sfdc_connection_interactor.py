@@ -8,6 +8,12 @@ SFDC_APIUSER_REQUEST_INSTANCE = 'sfdc-apiuser-request-instance'
 SFDC_APIUSER_ACCESS_TOKEN = 'sfdc-apiuser-access-token'
 
 
+def clear_session(session):
+    for key in [SFDC_APIUSER_REQUEST_HEADER, SFDC_APIUSER_REQUEST_INSTANCE, SFDC_APIUSER_ACCESS_TOKEN]:
+        if key in session.keys():
+            del session[key]
+
+
 class SfdcConnectWithConnectedApp(Interactor):
     """
     Checks the status of the connection with SF Connected App.
@@ -54,8 +60,10 @@ class SfdcConnectionStatusCheck(Interactor):
     """
 
     def run(self):
-        if SFDC_APIUSER_ACCESS_TOKEN not in self.context.request.session.keys():
-            return "No"
+        status = "No"
+
+        # if SFDC_APIUSER_ACCESS_TOKEN not in self.context.request.session.keys():
+        #     return status
 
         header = self.context.request.session[SFDC_APIUSER_REQUEST_HEADER]
         instance_url = self.context.request.session[SFDC_APIUSER_REQUEST_INSTANCE]
@@ -64,16 +72,17 @@ class SfdcConnectionStatusCheck(Interactor):
         url = instance_url + dataflows_url
         response = requests.get(url, headers=header)
         response_status = response.status_code
-        status = "No"
 
         if response.text:
             response = response.json()
 
         if isinstance(response, list) and 'errorCode' in response[0].keys():
+            clear_session(self.context.request.session)
             status = response[0]['errorCode']
         elif 'dataflows' in response.keys():
             status = "Yes"
 
-        self.context.status = status
-        self.context.response_status = response_status
+        self.context.instance_url = instance_url
         self.context.response = response
+        self.context.response_status = response_status
+        self.context.status = status
