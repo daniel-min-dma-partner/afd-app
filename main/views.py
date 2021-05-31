@@ -11,7 +11,8 @@ from rest_framework.views import APIView
 import main.forms as forms
 from libs.utils import byte_to_str, str_to_json
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor
-from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp, SfdcConnectionStatusCheck
+from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp, SfdcConnectionStatusCheck, \
+    clear_session
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 
 
@@ -105,7 +106,8 @@ class SlackApprovalRequestView(generic.FormView):
             _payload = js.dumps(ctx.payload)
 
             _header = {'Content-Type': "application/json"}
-            _url = "https://hooks.slack.com/services/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"
+            _url = "https://hooks.slack.com/services/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"  # channel
+            _url_dpark = "https://hooks.slack.com/services/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"
             response = requests.post(url=_url, data=_payload, headers=_header, json=True)
             print(response)
 
@@ -129,17 +131,21 @@ class Rest(APIView):
 def ajax_sfdc_conn_status_view(request):
     # request should be ajax and method should be POST.
     error_msg = ""
+    instance = ""
     response = ""
     response_status = 200
 
     if request.is_ajax and request.method == "GET":
         # get the form data
         ctx = SfdcConnectionStatusCheck.call(request=request)
-        response = ctx.status
+        instance = ctx.instance_url if "instance_url" in ctx.__dict__ else ""
+        response = ctx.status if "status" in ctx.__dict__ else ""
 
         if response != "Yes":
             error_msg = response
             response_status = 400
 
+            clear_session(request.session)
+
     print(error_msg, response, response_status)
-    return JsonResponse({"message": response, "error": error_msg}, status=response_status)
+    return JsonResponse({"message": response, "error": error_msg, "instance_url": instance}, status=response_status)
