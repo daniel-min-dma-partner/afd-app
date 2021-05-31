@@ -24,6 +24,14 @@ class TreeRemoverForm(forms.Form):
 
 
 class SlackMsgPusherForm(forms.Form):
+    case_contact = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control',
+                   'placeholder': ''}
+        ),
+        label=mark_safe("Case Contact Name"),
+        required=False
+    )
     case_number = forms.CharField(
         widget=forms.TextInput(
             attrs={'class': 'form-control',
@@ -44,7 +52,7 @@ class SlackMsgPusherForm(forms.Form):
     case_manager_name = forms.CharField(
         widget=forms.TextInput(
             attrs={'class': 'form-control',
-                   'placeholder': 'Output dataflow name'}
+                   'placeholder': ''}
         ),
         label=mark_safe("Case Contact Manager"),
         required=False
