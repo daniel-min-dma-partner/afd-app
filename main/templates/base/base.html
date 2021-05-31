@@ -456,7 +456,7 @@ The above copyright notice and this permission notice shall be included in all c
 {% include 'base/layouts/fixed-plugins.html' %}
 {% include 'base/footer_scripts.html' %}
 <script>
-    function update_status_bubble(status) {
+    function update_status_bubble(status, instance_url = "") {
         // Source: https://davidwalsh.name/css-variables-javascript
         let parent = $('.dot').parent();
         parent.empty();
@@ -464,7 +464,7 @@ The above copyright notice and this permission notice shall be included in all c
 
         if (status === 200) {
             $(".dot").css('background-color', getComputedStyle(document.documentElement).getPropertyValue('--spinner-success'));
-            parent.append('&nbsp;&nbsp;Connected');
+            parent.append('&nbsp;&nbsp;' + (instance_url ? instance_url : 'Connected'));
 
             $(".dot.align-middle").parent().fadeTo(2200, 0, function () {
                 $(this).fadeTo('slow', 0);
@@ -479,7 +479,7 @@ The above copyright notice and this permission notice shall be included in all c
         type: 'GET',
         url: "{% url 'main:sfdc_status' %}",
         success: function (response) {
-            update_status_bubble(response['message'] === "Yes" ? 200 : 400);
+            update_status_bubble(response['message'] === "Yes" ? 200 : 400, response['responseJSON']['instance_url']);
         },
         error: function (response) {
             console.log(response['responseJSON']);
