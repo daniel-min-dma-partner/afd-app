@@ -21,6 +21,7 @@ app_name = 'main'
 
 urlpatterns = [
     path('', main.Home.as_view(), name='home'),
+    path('login/', main.LoginView.as_view(), name="login"),
     path('rest/', main.Rest.as_view(), name='rest'),
     path('slack-approval-request/', main.SlackApprovalRequestView.as_view(), name='slack-approval-request'),
     path('tree-remover/', main.TreeRemover.as_view(), name='tree-remover'),

@@ -1,5 +1,28 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 from django.utils.safestring import mark_safe
+
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control',
+                   'placeholder': ''}
+        ),
+        label=mark_safe("Username"))
+
+    password = forms.CharField(
+        label="Password",
+        widget=forms.PasswordInput(attrs={
+            'autocomplete': 'current-password',
+            'class': 'form-control form-control-use',
+        }))
+
+    password_2 = forms.CharField(
+        label="Password Confirmed",
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control form-control-use',
+        }))
 
 
 class TreeRemoverForm(forms.Form):

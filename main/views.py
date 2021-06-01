@@ -1,7 +1,10 @@
 import json as js
+from urllib import parse
 
 import requests
+from django.contrib.auth import authenticate, login as do_login
 from django.http import JsonResponse
+from django.shortcuts import redirect
 from django.views import generic
 from rest_framework import authentication
 from rest_framework.response import Response
@@ -11,8 +14,7 @@ from rest_framework.views import APIView
 import main.forms as forms
 from libs.utils import byte_to_str, str_to_json
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor
-from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp, SfdcConnectionStatusCheck, \
-    clear_session
+from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp, SfdcConnectionStatusCheck
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 
 
@@ -29,6 +31,47 @@ class Home(generic.TemplateView):
         # login_status = _sfdc_status_check(self.request)
         # context['sfdc_login_status'] = login_status
         return context
+
+
+class LoginView(generic.FormView):
+    """
+    Login view:
+    """
+    form_class = forms.LoginForm
+    module = 'login'
+    template_name = 'login/loginform.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['default_title'] = "Login"
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = form_class(data=request.POST)
+
+        if form.is_valid():
+            # Recuperamos las credenciales validadas
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            # Verificamos las credenciales del usuario
+            user = authenticate(username=username, password=password)
+
+            # Si existe un usuario con ese nombre y contraseña
+            if user is not None:
+                # Hacemos el login manualmente
+                do_login(request, user)
+                # Y le redireccionamos a la portada
+                return redirect('/')
+            else:
+                print(user)
+        else:
+            print('not valid', form.errors.as_data)
+        # Si llegamos al final renderizamos el formulario
+        return self.form_invalid(form)
 
 
 class TreeRemover(generic.FormView):
