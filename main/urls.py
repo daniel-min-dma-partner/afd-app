@@ -28,5 +28,6 @@ urlpatterns = [
 
     # API urls
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('sfdc/authenticate/', main.ajax_sfdc_authenticate, name='sfdc-authenticate'),
     path('sfdc-status/', main.ajax_sfdc_conn_status_view, name='sfdc_status'),
 ]

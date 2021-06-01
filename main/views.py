@@ -185,7 +185,20 @@ def ajax_sfdc_conn_status_view(request):
     return JsonResponse(payload, status=status_code)
 
 
-            clear_session(request.session)
+def ajax_sfdc_authenticate(request):
+    base_url = "https://test.salesforce.com/services/oauth2/authorize"
+    parameters = {
+        "client_id": "3MVG9GiqKapCZBwEtNyEQ0U2Pv34k4ziXjebvIMgh7mW2jGmX6h9ZIls_K9gMU0CFz_6kw5HcvNpE7kV5QFeo",
+        "redirect_uri": "https://localhost:8080/rest",
+        "response_type": "code"
+    }
 
-    print(error_msg, response, response_status)
-    return JsonResponse({"message": response, "error": error_msg, "instance_url": instance}, status=response_status)
+    url_parse = parse.urlparse(base_url)
+    query = url_parse.query
+    url_dict = dict(parse.parse_qsl(query))
+    url_dict.update(parameters)
+    url_new_query = parse.urlencode(url_dict)
+    url_parse = url_parse._replace(query=url_new_query)
+    new_url = parse.urlunparse(url_parse)
+
+    return JsonResponse({"payload": new_url}, status=200)

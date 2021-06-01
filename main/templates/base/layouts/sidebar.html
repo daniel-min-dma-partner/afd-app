@@ -20,8 +20,8 @@
                 </a>
             </li>
             <li class="nav-item ">
-                <a class="nav-link" target="_blank"
-                   href="https://test.salesforce.com/services/oauth2/authorize?client_id=3MVG9GiqKapCZBwEtNyEQ0U2Pv34k4ziXjebvIMgh7mW2jGmX6h9ZIls_K9gMU0CFz_6kw5HcvNpE7kV5QFeo&redirect_uri=https://localhost:8080/rest&response_type=code">
+                <a class="nav-link"
+                   href="#" onclick="sfdc_authenticate()">
                     <i class="material-icons">cloud_queue</i>
                     <p>Connect with Salesforce</p>
                 </a>
@@ -79,3 +79,21 @@
         </ul>
     </div>
 </div>
+
+<script>
+    const sfdc_authenticate = () => {
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'main:sfdc-authenticate' %}",
+            success: function (response) {
+                console.log(response.payload);
+                myWindow = window.open(response.payload);
+                myWindow.focus();
+            },
+            error: function (response) {
+                console.log("Error from");
+            }
+        });
+    };
+
+</script>
