@@ -130,20 +130,17 @@ class Rest(APIView):
 
 def ajax_sfdc_conn_status_view(request):
     # request should be ajax and method should be POST.
-    error_msg = ""
-    instance = ""
-    response = ""
-    response_status = 200
+    payload = None
+    status_code = 500
 
     if request.is_ajax and request.method == "GET":
-        # get the form data
         ctx = SfdcConnectionStatusCheck.call(request=request)
-        instance = ctx.instance_url if "instance_url" in ctx.__dict__ else ""
-        response = ctx.status if "status" in ctx.__dict__ else ""
+        payload = ctx.response
+        status_code = ctx.status_code
 
-        if response != "Yes":
-            error_msg = response
-            response_status = 400
+    print(payload, request.session['sfdc-apiuser-request-header'])
+    return JsonResponse(payload, status=status_code)
+
 
             clear_session(request.session)
 

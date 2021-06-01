@@ -60,29 +60,45 @@ class SfdcConnectionStatusCheck(Interactor):
     """
 
     def run(self):
-        status = "No"
+        self._set_context(data={
+            'message': "There is an error.",
+            'error': "Not authenticated yet.",
+            'instance_url': ''
+        }, status_code=400)
 
-        # if SFDC_APIUSER_ACCESS_TOKEN not in self.context.request.session.keys():
-        #     return status
+        if SFDC_APIUSER_ACCESS_TOKEN not in self.context.request.session.keys():
+            return
 
+        # Gets previous login data from session
+        dataflows_url = '/services/data/v51.0/wave/dataflows/'
         header = self.context.request.session[SFDC_APIUSER_REQUEST_HEADER]
         instance_url = self.context.request.session[SFDC_APIUSER_REQUEST_INSTANCE]
-        dataflows_url = '/services/data/v51.0/wave/dataflows/'
 
+        # Constructs full url and make a sample get request
         url = instance_url + dataflows_url
         response = requests.get(url, headers=header)
-        response_status = response.status_code
+
+        # Collects status data
+        message = ""
+        error = ""
+        status_code = response.status_code
 
         if response.text:
             response = response.json()
 
         if isinstance(response, list) and 'errorCode' in response[0].keys():
-            clear_session(self.context.request.session)
-            status = response[0]['errorCode']
+            # clear_session(self.context.request.session)
+            error = response[0]['errorCode']
+            message = "There is an error."
         elif 'dataflows' in response.keys():
-            status = "Yes"
+            message = "Yes"
 
-        self.context.instance_url = instance_url
-        self.context.response = response
-        self.context.response_status = response_status
-        self.context.status = status
+        self._set_context(data={
+            'message': message,
+            'error': error,
+            'instance_url': instance_url
+        }, status_code=status_code)
+
+    def _set_context(self, data: dict, status_code):
+        self.context.response = data
+        self.context.status_code = status_code
