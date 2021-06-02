@@ -2,9 +2,10 @@ import json as js
 from urllib import parse
 
 import requests
-from django.contrib.auth import authenticate, login as do_login
+from django.contrib import messages
+from django.contrib.auth import authenticate, login as do_login, logout as do_logout
 from django.http import JsonResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views import generic
 from rest_framework import authentication
 from rest_framework.response import Response
@@ -13,9 +14,11 @@ from rest_framework.views import APIView
 # Create your views here.
 import main.forms as forms
 from libs.utils import byte_to_str, str_to_json
+from libs.utils import next_url
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor
 from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp, SfdcConnectionStatusCheck
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
+from .models import SalesforceEnvironment as SfdcEnv
 
 
 class Home(generic.TemplateView):
@@ -41,12 +44,14 @@ class LoginView(generic.FormView):
     module = 'login'
     template_name = 'login/loginform.html'
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['default_title'] = "Login"
-        return context
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            messages.info(request, "You're already log in.")
+            return redirect(next_url('get', request))
+
+        form_class = self.get_form_class()
+        form = form_class()
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()
@@ -65,12 +70,71 @@ class LoginView(generic.FormView):
                 # Hacemos el login manualmente
                 do_login(request, user)
                 # Y le redireccionamos a la portada
-                return redirect('/')
+                messages.success(request, "Loged in Successfully!")
+                return redirect(next_url('post', request))
             else:
-                print(user)
+                messages.error(request, f"'{username}' user doesn't exist.")
         else:
             print('not valid', form.errors.as_data)
+            messages.error(request, form.errors.as_data)
         # Si llegamos al final renderizamos el formulario
+        return self.form_invalid(form)
+
+
+def logout(request):
+    do_logout(request)
+
+    return render(request, "logout/logout.html")
+
+
+class SfdcEnvEditView(generic.FormView):
+    form_class = forms.SfdcEnvEditFormset
+    module = 'register'
+    template_name = 'sfdc/env/credential-edit-form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        context['formset'] = forms.SfdcEnvEditFormset(queryset=SfdcEnv.objects.none())
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = form_class(data=request.POST)
+
+        if form.is_valid():
+            pass
+
+
+class RegisterUserView(generic.FormView):
+    form_class = forms.RegisterUserForm
+    module = 'register'
+    template_name = 'users/register_form.html'
+    next_url = None
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['default_title'] = "Register New User"
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = form_class(data=request.POST)
+
+        if form.is_valid():
+            user: forms.User = form.save(commit=False)  # guarda en el model.
+            user.is_active = 1
+            user.save()
+
+            if user is not None:
+                messages.success(request, f"User '{user.username}' saved successfully.")
+                return redirect("main:home")
+            else:
+                messages.error(request, f"Error saving new user.")
+        else:
+            print('form no valid', form.errors.as_data, request.POST)
+
         return self.form_invalid(form)
 
 
@@ -128,6 +192,7 @@ class SlackApprovalRequestView(generic.FormView):
 
         # Adds extra form context here...
         context['default_title'] = "Approval Request Message Pusher - Slack"
+        context['slack_target'] = self.form_class.slack_target_choices()
 
         return context
 
@@ -149,12 +214,11 @@ class SlackApprovalRequestView(generic.FormView):
             _payload = js.dumps(ctx.payload)
 
             _header = {'Content-Type': "application/json"}
-            _url = "https://hooks.slack.com/services/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"  # channel
-            _url_dpark = "https://hooks.slack.com/services/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"
+            _url = form_class.get_slack_webhook(key=form.cleaned_data.get('slack_target'))
             response = requests.post(url=_url, data=_payload, headers=_header, json=True)
-            print(response)
+            messages.info(request, response.status_code)
 
-            return self.form_valid(form)
+            return redirect("main:slack-approval-request")
         else:
             return self.form_invalid(form)
 
@@ -181,7 +245,7 @@ def ajax_sfdc_conn_status_view(request):
         payload = ctx.response
         status_code = ctx.status_code
 
-    print(payload, request.session['sfdc-apiuser-request-header'])
+    # print(payload, request.session['sfdc-apiuser-request-header'])
     return JsonResponse(payload, status=status_code)
 
 
