@@ -62,18 +62,22 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     # Global Login required
-    # 'global_login_required.GlobalLoginRequiredMiddleware',
+    'global_login_required.GlobalLoginRequiredMiddleware',
 ]
 
 # Login
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 PUBLIC_PATHS = [
     #     # '^%s.*' % MEDIA_URL, # allow public access to any media on your application
+    r'^/admin/',
     r'^/admin/login',
     r'^/login/',
+    r'^/logout/',
+    r'^/register/',
     r'^/rest/.*',
-    r'^/sfdc/authenticate/',
+    # r'^/sfdc/authenticate/',
 ]
 # PUBLIC_VIEWS = [
 #     'main.views.LoginView',
