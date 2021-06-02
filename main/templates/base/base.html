@@ -40,8 +40,8 @@ The above copyright notice and this permission notice shall be included in all c
                 {% for message in messages %}
                 <div class="alert alert-{% if 'error' in message.tags %}danger{% elif 'warning' in message.tags %}warning{% elif 'success' in message.tags %}success{% else %}info{% endif %} alert-dismissible fade show"
                      role="alert">
-                    {% if 'success' not in message.tags %}<strong>Warning!</strong>{% endif %}{% for message in messages
-                    %}<i class="fa fa-sign-out" aria-hidden="true"></i>{{ message }}{% endfor %}
+                    {% if 'success' not in message.tags %}<strong>Warning!</strong>{% endif %}
+                    {% for message in messages %}<i class="fa fa-sign-out" aria-hidden="true"></i>{{ message }}{% endfor %}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -89,6 +89,7 @@ The above copyright notice and this permission notice shall be included in all c
             update_status_bubble(400);
         }
     })
+
 
 </script>
 {% block extra_scripts %}{% endblock extra_scripts %}
