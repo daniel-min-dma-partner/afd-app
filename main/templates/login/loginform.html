@@ -14,8 +14,8 @@
     <div class="col-md-8 mx-auto">
         <div class="card">
             <div class="card-header card-header-rose">
-                <h3 class="card-title">{{ default_title }}</h3>
-                <p class="category">{{ default_category }}</p>
+                <h3 class="card-title">Login</h3>
+                {% if default_category %}<p class="category">{{ default_category }}</p>{% endif %}
             </div>
 
             <div class="card-body">
@@ -23,9 +23,14 @@
                     {% csrf_token %}
 
                     {% comment %} Form errors {% endcomment %}
-                    {{ form.username.errors }}
-                    {{ form.password.errors }}
-                    {{ form.password_2.errors }}
+                    {% if form.errors %}
+                    {{ form.non_field_errors }}
+                    {% for field in form %}
+                    {% for error in field.errors %}
+                    <p> {{ error }} </p>
+                    {% endfor %}
+                    {% endfor %}
+                    {% endif %}
 
                     <div class="form-group">
                         {% with "id_"|add:form.username.name as username_field_id %}
@@ -44,15 +49,6 @@
                             <input type="password" class="form-control"
                                    required
                                    name="{{ form.password.name }}" id="{{ pass_field_id }}">
-                            {% endwith %}
-                        </div>
-
-                        <div class="col">
-                            {% with "id_"|add:form.password_2.name as pass2_field_id %}
-                            <label for="{{ pass2_field_id }}">{{ form.password_2.label }}</label>
-                            <input type="password" class="form-control"
-                                   required
-                                   name="{{ form.password_2.name }}" id="{{ pass2_field_id }}">
                             {% endwith %}
                         </div>
                     </div>
