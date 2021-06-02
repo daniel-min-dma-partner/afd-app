@@ -1,6 +1,11 @@
+import copy
+
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
+
+from .models import SalesforceEnvironment
 
 
 class LoginForm(AuthenticationForm):
@@ -18,11 +23,57 @@ class LoginForm(AuthenticationForm):
             'class': 'form-control form-control-use',
         }))
 
-    password_2 = forms.CharField(
-        label="Password Confirmed",
-        widget=forms.PasswordInput(attrs={
-            'class': 'form-control form-control-use',
-        }))
+
+class RegisterUserForm(forms.ModelForm):
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput, initial='password', required=True)
+    password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput, initial='password',
+                                required=True)
+
+    class Meta:
+        model = User
+        help_texts = {'username': ''}
+        exclude = {'id', 'password', 'is_superuser', 'is_staff', 'last_login', 'date_joined',
+                   'user_permissions', 'is_active', 'groups', 'first_name', 'last_name', }
+        REQUIRED_FIELDS = [
+            'email', 'username', 'password1', 'password2'
+        ]
+
+    def clean_email(self):
+        _email = self.cleaned_data['email'].rstrip()
+        if User.objects.filter(email=_email).exists():
+            raise forms.ValidationError("The email has been already taken.")
+        return _email
+
+    def clean_password2(self):
+        p1 = self.cleaned_data['password1'].rstrip()
+        p2 = self.cleaned_data['password2'].rstrip()
+        if p1 == p2:
+            return p2
+        raise forms.ValidationError("Password mismatch")
+
+    def clean_username(self):
+        return self.cleaned_data['username'].rstrip()
+
+    def save(self, commit=True):
+        user = super(RegisterUserForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
+        if commit:
+            user.save()
+        return user
+
+
+# class SfdcEnvEditForm(forms.ModelForm):
+#     class Meta:
+#         model = SalesforceEnvironment
+#         exclude = {'user'}
+#         REQUIRED_FIELDS = [
+#             'client_key', 'client_secret', 'client_username', 'client_password', 'environment'
+#         ]
+
+
+SfdcEnvEditFormset = forms.modelform_factory(SalesforceEnvironment,
+                                             fields=('client_key', 'client_secret', 'client_username',
+                                                     'client_password', 'environment'))
 
 
 class TreeRemoverForm(forms.Form):
@@ -80,3 +131,34 @@ class SlackMsgPusherForm(forms.Form):
         label=mark_safe("Case Contact Manager"),
         required=False
     )
+
+    _SLACK_WEBHOOK_LINKS = {
+        "SFDC_INTERNAL_SUBBARAO": {
+            "url": "https://hooks.slack.com/services/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",
+            "name": "Subbarao Talachiru"
+        },
+        "SFDF_I_bt-eops-dna-all": {
+            "url": "https://hooks.slack.com/services/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",
+            "name": "bt-eops-dna-all"
+        },
+        "DPARK": {
+            "url": "https://hooks.slack.com/services/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",
+            "name": "Daniel"
+        }
+    }
+
+    _SLACK_TARGET_CHOICES = [('SFDC_INTERNAL_SUBBARAO', 'Subbarao Talachiru'),
+                             ('SFDF_I_bt-eops-dna-all', 'bt-eops-dna-all')]
+
+    slack_target = forms.ChoiceField(choices=_SLACK_TARGET_CHOICES, widget=forms.RadioSelect(), required=True)
+
+    @classmethod
+    def slack_target_choices(cls):
+        return copy.deepcopy(cls._SLACK_TARGET_CHOICES)
+
+    @classmethod
+    def get_slack_webhook(cls, key):
+        if key not in cls._SLACK_WEBHOOK_LINKS.keys():
+            raise KeyError(f"'{key}' is not a valid Slack target.")
+
+        return cls._SLACK_WEBHOOK_LINKS[key]['url']
