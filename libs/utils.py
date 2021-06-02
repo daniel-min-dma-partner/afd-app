@@ -1,9 +1,17 @@
+import logging
 import os
+import random
+import string
 from datetime import datetime
 from pathlib import Path
 
-import django.core.files.uploadedfile
 import tzlocal
+from django.core.cache import cache
+
+logger = logging.getLogger('main')
+logger.level = logging.DEBUG
+
+DEFAULT_CHAR_STRING = string.ascii_lowercase + string.digits
 
 
 def current_datetime(add_time=False):
@@ -38,3 +46,23 @@ def str_to_json(string: str):
     if isinstance(string, str):
         import json as js
         return js.loads(string)
+
+
+def generate_random_string(chars=DEFAULT_CHAR_STRING, size=6):
+    return ''.join(random.choice(chars) for _ in range(size))
+
+
+def next_url(action='get', request=None):
+    _next_url = '/'
+
+    if action == 'get':
+        _next_url = request.GET.get('next', '/')
+        if _next_url and _next_url != '/':
+            cache.set('next', _next_url)
+        else:
+            _next_url = request.META.get('HTTP_REFERER', '/')
+    elif action == 'post':
+        _next_url = cache.get('next', '/')
+        cache.delete('next') if _next_url else None
+
+    return _next_url
