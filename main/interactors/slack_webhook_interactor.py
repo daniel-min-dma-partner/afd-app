@@ -1,3 +1,5 @@
+import copy
+
 from libs.interactor.interactor import Interactor
 
 _SLACK_MESSAGE_PAYLOAD_TEMPLATE = {
@@ -50,7 +52,7 @@ class SlackMessagePushInteractor(Interactor):
         url = values['case-url']
         case_number = values['case-number']
 
-        payload = _SLACK_MESSAGE_PAYLOAD_TEMPLATE.copy()
+        payload = copy.deepcopy(_SLACK_MESSAGE_PAYLOAD_TEMPLATE)
 
         payload['blocks'][0]['text']['text'] = payload['blocks'][0]['text']['text'].replace('{{case_url}}', url)
         payload['blocks'][0]['text']['text'] = payload['blocks'][0]['text']['text'].replace('{{case_title}}',
