@@ -1,0 +1,41 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block title %}Profile{% endblock title %}
+
+{% block extra_header_script %}
+<script>
+</script>
+{% endblock extra_header_script %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header card-header-rose">
+                <h3 class="card-title">Edit Salesforce Environment Credentials</h3>
+                {% if default_category %}<p class="category">{{ default_category }}</p>{% endif %}
+            </div>
+
+            <div class="card-body">
+                <form class="form-horizontal" method="post" action="{% url 'main:sfdc-env-edit' pk=5 %}">
+                    {% csrf_token %}
+
+                    <div class="form-row">
+                        {{ form.as_table }}`
+                    </div>
+
+                    <div class="row spacer float-right">
+                        <div class="col-4 offset-0">
+                            <button type="submit" class="btn btn-primary">
+                                Create
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
