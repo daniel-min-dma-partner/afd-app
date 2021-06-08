@@ -59,7 +59,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
                         {% if request.user.is_authenticated %}
-                        <a class="dropdown-item" href="{% url 'main:sfdc-env-edit' %}">Profile</a>
+                        <a class="dropdown-item" href="{% url 'main:sfdc-env-list' %}">Credentials</a>
                         <a class="dropdown-item" href="#">Settings</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'main:logout' %}">Log out</a>
