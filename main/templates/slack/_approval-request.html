@@ -1,45 +1,14 @@
-{% extends 'base/base.html' %}
 {% load static %}
-{% load bootstrap4 %}
 
-
-{% block title %}Tree Remover{% endblock title %}
-
-{% block extra_header_script %}
-<script>
-    let default_title = "{{ default_title }}";
-
-
-
-
-
-</script>
-{% endblock extra_header_script %}
-
-{% block content %}
-<div class="row">
-    <div class="col-md-8 mx-auto">
-        <div class="card">
+<div class="card">
             <div class="card-header card-header-rose">
                 <h3 class="card-title">{{ default_title }}</h3>
                 <p class="category">Pushes dynamic message to slack channel.</p>
             </div>
 
             <div class="card-body">
-                <form method="post" action="{% url 'main:slack-approval-request' %}">
+                <form method="post" action="{% url 'main:slack' %}">
                     {% csrf_token %}
-
-                    <div class="form-row" id="id_slack_target">
-                        {% include 'slack-approval-request-form/_slack_target_list.html' %}
-                        <br/>
-                        <br/>
-                    </div>
-
-                    <div class="dropdown-divider"></div>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
 
                     <div class="form-row">
                         <div class="form-group col-md-2">
@@ -134,6 +103,14 @@
                         </div>
                     </div>
 
+                    <div class="dropdown-divider"></div>
+
+                    <label for="id_slack_target">Send To</label>
+                    <div class="form-row" id="id_slack_target">
+                        {% include 'slack/_slack_target_list.html' %}
+                    </div>
+
+
 
                     <br/>
                     <br/>
@@ -146,19 +123,3 @@
                 </form>
             </div>
         </div>
-    </div>
-</div>
-
-{% endblock content %}
-
-{% block extra_scripts %}
-<script>
-    {% with "id_"|add:form.case_manager_name.name as manager_name_id %}
-    const manager_name_field_id = "{{manager_name_id}}";
-    {% endwith %}
-
-    const has_manager_approval_field_id = "id_{{ form.case_manager_approval.name }}";
-
-</script>
-<script src="{% static 'site/js/slack_msg_pusher.js' %}"></script>
-{% endblock extra_scripts %}
