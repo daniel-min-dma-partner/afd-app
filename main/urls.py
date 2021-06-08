@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
+from django.urls import path, re_path
 
 import main.views as main
 
@@ -23,7 +23,9 @@ urlpatterns = [
     path('', main.Home.as_view(), name='home'),
     path('login/', main.LoginView.as_view(), name="login"),
     path('logout/', main.logout, name="logout"),
-    path('sfdc/env/credentials-edit/', main.SfdcEnvEditView.as_view(), name="sfdc-env-edit"),
+    path('sfdc/env/credentials/', main.SfdcEnvListView.as_view(), name="sfdc-env-list"),
+    re_path(r'^sfdc/env/credentials/(?P<pk>\d+)/edit$', main.SfdcEnvUpdateView.as_view(), name="sfdc-env-edit"),
+    path('sfdc/env/credentials/create/', main.SfdcEnvCreateView.as_view(), name="sfdc-env-create"),
     path('register/', main.RegisterUserView.as_view(), name='register-user'),
     path('rest/', main.Rest.as_view(), name='rest'),
     path('slack-approval-request/', main.SlackApprovalRequestView.as_view(), name='slack-approval-request'),
