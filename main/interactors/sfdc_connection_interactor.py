@@ -39,14 +39,17 @@ class SfdcConnectWithConnectedApp(Interactor):
             if response.text:
                 response = response.json()
 
-            header = {'Authorization': "Bearer " + response["access_token"], 'Content-Type': "application/json"}
+            if isinstance(response, dict) and 'error' in response.keys():
+                _message = f"{response['error']}: {response['error_description']}"
+            else:
+                header = {'Authorization': "Bearer " + response["access_token"], 'Content-Type': "application/json"}
 
-            self.context.request.session[SFDC_APIUSER_REQUEST_HEADER] = header
-            self.context.request.session[SFDC_APIUSER_REQUEST_INSTANCE] = response['instance_url']
-            self.context.request.session[SFDC_APIUSER_ACCESS_TOKEN] = response["access_token"]
-            self.context.response = response
+                self.context.request.session[SFDC_APIUSER_REQUEST_HEADER] = header
+                self.context.request.session[SFDC_APIUSER_REQUEST_INSTANCE] = response['instance_url']
+                self.context.request.session[SFDC_APIUSER_ACCESS_TOKEN] = response["access_token"]
+                self.context.response = response
 
-            _message = "Authentication Success!!!"
+                _message = "Authentication Success!!!"
         else:
             _message = "Someting went wrong" + str(self.context.request)
 
