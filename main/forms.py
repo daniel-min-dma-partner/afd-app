@@ -62,18 +62,24 @@ class RegisterUserForm(forms.ModelForm):
         return user
 
 
-# class SfdcEnvEditForm(forms.ModelForm):
-#     class Meta:
-#         model = SalesforceEnvironment
-#         exclude = {'user'}
-#         REQUIRED_FIELDS = [
-#             'client_key', 'client_secret', 'client_username', 'client_password', 'environment'
-#         ]
+class SfdcEnvEditForm(forms.ModelForm):
+    class Meta:
+        model = SalesforceEnvironment
+        exclude = {'user'}
+        REQUIRED_FIELDS = [
+            'client_key', 'client_secret', 'client_username', 'client_password', 'environment', 'name'
+        ]
+
+    def save(self, commit=True):
+        sfdc_env = super(SfdcEnvEditForm, self).save(commit=False)
+        if commit:
+            sfdc_env.save()
+        return sfdc_env
 
 
-SfdcEnvEditFormset = forms.modelform_factory(SalesforceEnvironment,
-                                             fields=('client_key', 'client_secret', 'client_username',
-                                                     'client_password', 'environment'))
+# SfdcEnvEditFormset = modelformset_factory(SalesforceEnvironment,
+#                                           fields=('client_key', 'client_secret', 'client_username',
+#                                                   'client_password', 'environment', 'name'), exclude=('user',))
 
 
 class TreeRemoverForm(forms.Form):
@@ -142,13 +148,14 @@ class SlackMsgPusherForm(forms.Form):
             "name": "bt-eops-dna-all"
         },
         "DPARK": {
-            "url": "https://hooks.slack.com/services/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",
+            "url": "https://hooks.slack.com/services/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",
             "name": "Daniel"
         }
     }
 
     _SLACK_TARGET_CHOICES = [('SFDC_INTERNAL_SUBBARAO', 'Subbarao Talachiru'),
-                             ('SFDF_I_bt-eops-dna-all', 'bt-eops-dna-all')]
+                             ('SFDF_I_bt-eops-dna-all', 'bt-eops-dna-all'),
+                             ('DPARK', '민 현 기')]
 
     slack_target = forms.ChoiceField(choices=_SLACK_TARGET_CHOICES, widget=forms.RadioSelect(), required=True)
 
@@ -162,3 +169,39 @@ class SlackMsgPusherForm(forms.Form):
             raise KeyError(f"'{key}' is not a valid Slack target.")
 
         return cls._SLACK_WEBHOOK_LINKS[key]['url']
+
+
+class SlackCustomerConversationForm(forms.Form):
+    channel_id = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control',
+                   'placeholder': ''}
+        ),
+        label=mark_safe("Channel ID")
+    )
+    case_number_slack_customer = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control',
+                   'placeholder': ''}
+        ),
+        label=mark_safe("Case Number"),
+        required=False
+    )
+    case_url_slack_customer = forms.URLField(label='SupportForce Case URL', required=False)
+    _MSG_TPLT_SECTIONS = {
+        "salutation": "Hi {{target}}, Nice to meet you! :wave:",
+        "whoami": "I'm from Salesforce BT Tableau CRM - Enterprise & Operations Support Team.",
+        "reason": "I'm reaching you for your <{{case_url}}|case #{{case_number}}>.",
+        "request": "I've left a replay to your case in concierge. Could you review it and provide me the indicated "
+                   "additional information?"
+    }
+    _MESSAGE_TEMPLATE = "\n".join([
+        _MSG_TPLT_SECTIONS['salutation'],
+        _MSG_TPLT_SECTIONS['whoami'],
+        _MSG_TPLT_SECTIONS['reason'],
+        _MSG_TPLT_SECTIONS['request'],
+    ])
+
+    @classmethod
+    def get_msg_template(cls):
+        return copy.deepcopy(cls._MESSAGE_TEMPLATE)
