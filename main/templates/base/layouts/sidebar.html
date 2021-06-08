@@ -28,6 +28,7 @@
                         <i class="material-icons">cloud_queue</i>
                         <p>Connect with Salesforce</p>
                     </a>
+                </a>
             </li>
             {% url 'main:tree-remover' as tree_remover_url %}
             <li class="nav-item{% if request.get_full_path == tree_remover_url %} active{% endif %}">
@@ -36,9 +37,9 @@
                     <p>Manage Json Trees</p>
                 </a>
             </li>
-            {% url 'main:slack-approval-request' as slack_url %}
+            {% url 'main:slack' as slack_url %}
             <li class="nav-item{% if request.get_full_path == slack_url %} active{% endif %}">
-                <a class="nav-link" href="{% url 'main:slack-approval-request' %}">
+                <a class="nav-link" href="{% url 'main:slack' %}">
                     <i class="material-icons">approval</i>
                     <p>Slack Approval Requester</p>
                 </a>

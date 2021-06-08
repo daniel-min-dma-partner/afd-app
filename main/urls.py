@@ -28,7 +28,8 @@ urlpatterns = [
     path('sfdc/env/credentials/create/', main.SfdcEnvCreateView.as_view(), name="sfdc-env-create"),
     path('register/', main.RegisterUserView.as_view(), name='register-user'),
     path('rest/', main.Rest.as_view(), name='rest'),
-    path('slack-approval-request/', main.SlackApprovalRequestView.as_view(), name='slack-approval-request'),
+    path('slack/', main.SlackIntegrationView.as_view(), name='slack'),
+    path('slack/interactive-endpoint/', main.slack_interactive_endpoint, name='slack-interactive-endpoint'),
     path('tree-remover/', main.TreeRemover.as_view(), name='tree-remover'),
 
     # API urls
