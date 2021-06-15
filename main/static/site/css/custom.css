@@ -12,3 +12,21 @@
   border-radius: 50%;
   display: inline-block;
 }
+
+
+.dot-wo-text-warning {
+  height: 15px;
+  width: 15px;
+  background-color: var(--spinner-warning);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+
+.dot-wo-text-success {
+  height: 15px;
+  width: 15px;
+  background-color: var(--spinner-success);
+  border-radius: 50%;
+  display: inline-block;
+}

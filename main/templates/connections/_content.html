@@ -1,0 +1,29 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th class="text-center"><i class="material-icons">wifi_tethering</i></th>
+        <th>Name</th>
+        <th>URL</th>
+        <th>Oauth Flow Status</th>
+        <th class="text-right">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for env in env_list %}
+    <tr>
+        <td class="text-center"><span class="dot-wo-text-{% if env.oauth_flow_stage != 4 %}warning{% else %}success{% endif %} align-middle" role="status" aria-hidden="true"></span></td>
+        <td>{{ env.name }} </td>
+        <td>{{ env.environment }}</td>
+        <td>{{ env.get_oauth_flow_stage_string }}</td>
+        <td class="td-actions text-right">
+            <a href="{% url 'main:sfdc-connect' env_name=env.name action='login' %}" rel="tooltip" class="btn btn-success">
+                <i class="material-icons">link</i>
+            </a>
+            <a href="{% url 'main:sfdc-connect' env_name=env.name action='logout' %}" rel="tooltip" class="btn btn-warning">
+                <i class="material-icons">link_off</i>
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

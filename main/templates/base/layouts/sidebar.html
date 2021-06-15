@@ -44,6 +44,14 @@
                     <p>Slack Approval Requester</p>
                 </a>
             </li>
+            </li>
+            {% url 'main:connection-status' as conn_url %}
+            <li class="nav-item{% if request.get_full_path == conn_url %} active{% endif %}">
+                <a class="nav-link" href="{{ conn_url }}">
+                    <i class="material-icons">wifi_tethering</i>
+                    <p>Connection Status</p>
+                </a>
+            </li>
             <!--            <li class="nav-item ">-->
             <!--                <a class="nav-link" href="./typography.html">-->
             <!--                    <i class="material-icons">library_books</i>-->
@@ -95,7 +103,9 @@
                 myWindow.focus();
             },
             error: function (response) {
-                console.log("Error from ajax:", response);
+                let msg = "Error from ajax:" + response;
+                console.log(msg);
+                alert(msg);
             }
         });
     };

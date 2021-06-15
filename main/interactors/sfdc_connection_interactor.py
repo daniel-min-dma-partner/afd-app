@@ -56,6 +56,52 @@ class SfdcConnectWithConnectedApp(Interactor):
         self.context.message = _message
 
 
+class SfdcConnectWithConnectedApp2(Interactor):
+    """
+    Checks the status of the connection with SF Connected App.
+
+    """
+
+    def run(self):
+        _message = ""
+        env_obj = self.context.env_object
+
+        try:
+            env_obj.set_oauth_flow_stage('ACCESS_TOKEN_REQUEST')
+            env_obj.save()
+            env_obj.refresh_from_db()
+
+            url = f"{env_obj.environment}/services/oauth2/token?" \
+                  f"client_id={env_obj.client_key}&" \
+                  f"grant_type=authorization_code&" \
+                  f"code={env_obj.oauth_authorization_code}&" \
+                  f"redirect_uri=https://localhost:8080/sfdc/connected-app/oauth2/callback&" \
+                  f"client_secret={env_obj.client_secret}"
+            response = requests.get(url)
+
+            if response.text:
+                response = response.json()
+
+            if isinstance(response, dict) and 'error' in response.keys():
+                _message = f"{response['error']}: {response['error_description']}"
+            else:
+                header = {'Authorization': "Bearer " + response["access_token"], 'Content-Type': "application/json"}
+                env_obj.set_oauth_access_token(response['access_token'])
+                env_obj.set_oauth_flow_stage('ACCESS_TOKEN_RECEIVE')
+                env_obj.save()
+                env_obj.refresh_from_db()
+
+                del self.context.env_object
+                self.context.env_object = env_obj
+
+                _message = f"Authentication Success!!! using '{env_obj.name}' environment."
+        except Exception as e:
+            raise e
+            _message = str(e)
+
+        self.context.message = _message
+
+
 class SfdcConnectionStatusCheck(Interactor):
     """
     Connects with the SF Connected App.

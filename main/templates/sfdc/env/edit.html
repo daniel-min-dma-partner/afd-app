@@ -49,7 +49,7 @@
                             {% with "id_"|add:form.client_key.name as client_key_id %}
                             <label for="{{ client_key_id }}">{{ form.client_key.label }}</label>
                             <input name="{{ form.client_key.name }}"
-                                   type="text"
+                                   type="password"
                                    class="form-control"
                                    required
                                    id="{{ client_key_id }}"
@@ -61,7 +61,7 @@
                             {% with "id_"|add:form.client_secret.name as client_secret_id %}
                             <label for="{{ client_secret_id }}">{{ form.client_secret.label }}</label>
                             <input name="{{ form.client_secret.name }}"
-                                   type="text"
+                                   type="password"
                                    class="form-control"
                                    required
                                    id="{{ client_secret_id }}"
@@ -87,7 +87,7 @@
                             {% with "id_"|add:form.client_password.name as client_password_id %}
                             <label for="{{ client_password_id }}">{{ form.client_password.label }}</label>
                             <input name="{{ form.client_password.name }}"
-                                   type="text"
+                                   type="password"
                                    class="form-control"
                                    required
                                    id="{{ client_password_id }}"
@@ -96,10 +96,18 @@
                         </div>
                     </div>
 
+                    <div class="row spacer float-left">
+                        <div class="col-4 offset-0">
+                            <a href="{% url 'main:sfdc-env-list' %}" class="btn btn-primary">
+                                <i class="material-icons">view_list</i>&nbsp;&nbsp;Go to List
+                            </a>
+                        </div>
+                    </div>
+
                     <div class="row spacer float-right">
                         <div class="col-4 offset-0">
                             <button type="submit" class="btn btn-primary">
-                                Update
+                                <i class="material-icons">edit</i>&nbsp;&nbsp;Update
                             </button>
                         </div>
                     </div>

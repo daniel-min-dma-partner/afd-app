@@ -197,3 +197,10 @@ MEDIA_URL = ''  # It must end in a slash if set to a non-empty value.
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Custom configs
+SALESFORCE_INSTANCE_URLS ={
+    'Sandbox': 'https://test.salesforce.com',
+    'Production': 'https://login.salesforce.com',
+}
