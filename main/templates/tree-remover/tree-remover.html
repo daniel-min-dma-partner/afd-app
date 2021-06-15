@@ -1,0 +1,114 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+
+{% block title %}Tree Remover{% endblock title %}
+
+{% block extra_header_script %}
+<script>
+    let default_title = "{{ default_title }}";
+</script>
+{% endblock extra_header_script %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header card-header-rose">
+                <h3 class="card-title">{{ default_title }}</h3>
+                <p class="category">Removes all tree based on the Registers and replace with Replacers.</p>
+            </div>
+
+            <div class="card-body">
+                <form method="post" action="{% url 'main:tree-remover' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-group form-file-upload form-file-multiple">
+                        <input type="file" required class="inputFileHidden" name="{{ form.dataflow.name }}"
+                               id="id_{{ form.dataflow.name }}">
+                        <div class="input-group">
+                            <input type="text" class="form-control inputFileVisible"
+                                   placeholder="{{ form.dataflow.help_text }}">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-fab btn-round btn-rose">
+                                    <i class="material-icons">attach_file</i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-file-upload form-file-multiple">
+                        <input type="file" multiple="" class="inputFileHidden" name="{{ form.replacers.name }}"
+                               id="id_{{ form.replacers.name }}">
+                        <div class="input-group">
+                            <input type="text" class="form-control inputFileVisible"
+                                   placeholder="{{ form.replacers.help_text }}"
+                                   id="id_{{ form.replacers.name }}_display"
+                                   multiple>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-fab btn-round btn-rose">
+                                    <i class="material-icons">layers</i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <br/>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            {{ form.registers }}
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-fab btn-round btn-rose">
+                                    <i class="material-icons">format_list_bulleted</i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            {{ form.name }}
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-fab btn-round btn-rose">
+                                    <i class="material-icons">label</i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" name="{{ form.extract.name }}"
+                                       id="id_{{ form.extract.name }}">
+                                Extract? (Do not remove)
+                                <span class="form-check-sign">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                        </div>
+                    </div>
+
+
+                    <br/>
+                    <br/>
+
+                    <div class="">
+                        <button type="submit" class="btn btn-rose btn-user float-right">
+                            Proceed
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block extra_scripts %}
+<script src="{% static 'site/js/tree_remover.js' %}"></script>
+{% endblock extra_scripts %}

@@ -1,0 +1,32 @@
+{% load static %}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th class="text-center">ID</th>
+        <th>Name</th>
+        <th>Environment</th>
+        <th class="text-right">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for env in sfdc_env_list %}
+    <tr>
+        <td class="text-center id-field">{{ env.id }}</td>
+        <td>{{ env.name }}</td>
+        <td>{{ env.environment }}</td>
+        <td class="td-actions text-right">
+            <button type="button" rel="tooltip" class="btn btn-success">
+                <i class="material-icons">edit</i>
+            </button>
+            <form method="POST" action="{% url 'main:sfdc-env-remove' pk=env.pk %}">
+                {% csrf_token %}
+                <button type="submit" rel="tooltip" class="btn btn-danger">
+                    <i class="material-icons">close</i>
+                </button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

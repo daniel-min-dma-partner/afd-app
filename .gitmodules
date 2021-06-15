@@ -1,0 +1,9 @@
+[submodule "libs/tcrm_automation"]
+	path = libs/tcrm_automation
+	url = git@gitlab.com:HeanGee/tcrm_automation.git
+[submodule "libs/interactor"]
+	path = libs/interactor
+	url = git@github.com:Bluewine/interactor.git
+[submodule "libs/diff2htmlcompare"]
+	path = libs/diff2htmlcompare
+	url = git@gitlab.com:HeanGee/diff2htmlcompare.git

@@ -1,0 +1,14 @@
+:root {
+  --spinner-warning: #FB8C00;
+  --spinner-success: #4bca80;
+  --spinner-danger: #ff0000;
+}
+
+
+.dot {
+  height: 15px;
+  width: 15px;
+  background-color: var(--spinner-warning);
+  border-radius: 50%;
+  display: inline-block;
+}

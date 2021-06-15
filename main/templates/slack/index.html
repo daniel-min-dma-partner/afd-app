@@ -1,0 +1,36 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+
+{% block title %}Tree Remover{% endblock title %}
+
+{% block extra_header_script %}
+<script>
+    let default_title = "{{ default_title }}";
+</script>
+{% endblock extra_header_script %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        {% include 'slack/_approval-request.html' %}
+    </div>
+<!--    <div class="col-md-6">-->
+<!--        {% include 'slack/_customer-initial-msg.html' %}-->
+<!--    </div>-->
+</div>
+
+{% endblock content %}
+
+{% block extra_scripts %}
+<script>
+    {% with "id_"|add:form.case_manager_name.name as manager_name_id %}
+    const manager_name_field_id = "{{manager_name_id}}";
+    {% endwith %}
+
+    const has_manager_approval_field_id = "id_{{ form.case_manager_approval.name }}";
+
+</script>
+<script src="{% static 'site/js/slack_msg_pusher.js' %}"></script>
+{% endblock extra_scripts %}

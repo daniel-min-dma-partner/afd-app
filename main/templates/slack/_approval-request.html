@@ -1,0 +1,125 @@
+{% load static %}
+
+<div class="card">
+            <div class="card-header card-header-rose">
+                <h3 class="card-title">{{ default_title }}</h3>
+                <p class="category">Pushes dynamic message to slack channel.</p>
+            </div>
+
+            <div class="card-body">
+                <form method="post" action="{% url 'main:slack' %}">
+                    {% csrf_token %}
+
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            {% with "id_"|add:form.case_number.name as case_number_id %}
+                            <label for="{{ case_number_id }}">{{ form.case_number.label }}</label>
+                            <input name="{{ form.case_number.name }}"
+                                   type="text"
+                                   class="form-control"
+                                   required
+                                   id="{{ case_number_id }}"
+                                   placeholder="">
+                            {% endwith %}
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            {% with "id_"|add:form.case_contact.name as case_cname_id %}
+                            <label for="{{ case_cname_id }}">{{ form.case_contact.label }}</label>
+                            <input name="{{ form.case_contact.name }}"
+                                   type="text"
+                                   class="form-control"
+                                   required
+                                   id="{{ case_cname_id }}"
+                                   placeholder="">
+                            {% endwith %}
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            {% with "id_"|add:form.case_url.name as case_url_id %}
+                            <label for="{{ case_url_id }}">{{ form.case_url.label }}</label>
+                            <input name="{{ form.case_url.name }}"
+                                   type="url"
+                                   class="form-control"
+                                   required
+                                   id="{{ case_url_id }}"
+                                   placeholder="">
+                            {% endwith %}
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            {% with "id_"|add:form.case_description.name as case_description_id %}
+                            <label for="{{ case_description_id }}">{{ form.case_description.label }}</label>
+                            <textarea name="{{ form.case_description.name }}"
+                                      required
+                                      class="form-control"
+                                      id="{{ case_description_id }}"
+                                      required
+                                      rows="3"></textarea>
+                            {% endwith %}
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox"
+                                           name="{{ form.case_business_justification.name }}"
+                                           id="id_{{ form.case_business_justification.name }}">
+                                    {{ form.case_business_justification.label }}
+                                    <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox"
+                                           name="{{ form.case_manager_approval.name }}"
+                                           id="id_{{ form.case_manager_approval.name }}">
+                                    {{ form.case_manager_approval.label }}
+                                    <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            {% with "id_"|add:form.case_manager_name.name as manager_name_id %}
+                            <label for="{{ manager_name_id }}"></label>
+                            <input name="{{ form.case_manager_name.name }}" type="text"
+                                   class="form-control"
+                                   id="{{ manager_name_id }}"
+                                   readonly
+                                   placeholder="{{ form.case_manager_name.label }}">
+                            {% endwith %}
+                        </div>
+                    </div>
+
+                    <div class="dropdown-divider"></div>
+
+                    <label for="id_slack_target">Send To</label>
+                    <div class="form-row" id="id_slack_target">
+                        {% include 'slack/_slack_target_list.html' %}
+                    </div>
+
+
+
+                    <br/>
+                    <br/>
+
+                    <div class="">
+                        <button type="submit" class="btn btn-primary btn-user float-right">
+                            Proceed
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>

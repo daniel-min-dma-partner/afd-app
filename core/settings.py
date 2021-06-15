@@ -16,7 +16,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -27,7 +26,6 @@ SECRET_KEY = 'django-insecure-wi5%3e1_fpxq+fm8sowdg0^(0vz*qv0oryh3ww+adav$+v$e4%
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -40,9 +38,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Extra apps
+    'bootstrap4',
+    'channels',
     'django_extensions',
+    'libs.interactor.interactor',
+    'rest_framework',
 
     # Created apps
+    'chat',
+    'libs',
+    'libs.diff2htmlcompare',
+    'libs.tcrm_automation',
     'main',
 ]
 
@@ -54,7 +60,29 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # Global Login required
+    'global_login_required.GlobalLoginRequiredMiddleware',
 ]
+
+# Login
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+PUBLIC_PATHS = [
+    #     # '^%s.*' % MEDIA_URL, # allow public access to any media on your application
+    r'^/admin/',
+    r'^/admin/login',
+    r'^/login/',
+    r'^/logout/',
+    r'^/register/',
+    r'^/rest/.*',
+    # r'^/sfdc/authenticate/',
+]
+# PUBLIC_VIEWS = [
+#     'main.views.LoginView',
+# ]
+
 
 ROOT_URLCONF = 'core.urls'
 
@@ -74,8 +102,29 @@ TEMPLATES = [
     },
 ]
 
+# REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAdminUser'
+    # ),
+}
+
 WSGI_APPLICATION = 'core.wsgi.application'
 
+# For Websocket using channels package:
+ASGI_APPLICATION = "core.asgi.application"
+# Channel backing store
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('localhost', 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -86,7 +135,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -106,7 +154,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -120,7 +167,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -131,7 +177,21 @@ static_dir = os.path.join(BASE_DIR, "main/static")  # Static files for developme
 STATICFILES_DIRS = [
     static_dir,
 ]
-print(static_dir)
+
+# File Upload managers
+FILE_UPLOAD_HANDLERS = [
+    # "django.core.files.uploadhandler.MemoryFileUploadHandler",
+    "django.core.files.uploadhandler.TemporaryFileUploadHandler"
+]
+
+# File storage manager
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+
+# Media files (file uploaded, etc)
+# https://docs.djangoproject.com/en/3.2/ref/files/storage/#django.core.files.storage.FileSystemStorage.location
+# https://docs.djangoproject.com/en/3.2/ref/settings/#media-root
+MEDIA_ROOT = '/tmp/'
+MEDIA_URL = ''  # It must end in a slash if set to a non-empty value.
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

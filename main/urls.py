@@ -13,12 +13,28 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
+from django.urls import path, re_path
 
 import main.views as main
 
 app_name = 'main'
 
 urlpatterns = [
-    path('', main.Home.as_view(), name='home')
+    path('', main.Home.as_view(), name='home'),
+    path('login/', main.LoginView.as_view(), name="login"),
+    path('logout/', main.logout, name="logout"),
+    path('sfdc/env/credentials/', main.SfdcEnvListView.as_view(), name="sfdc-env-list"),
+    re_path(r'^sfdc/env/credentials/(?P<pk>\d+)/edit$', main.SfdcEnvUpdateView.as_view(), name="sfdc-env-edit"),
+    re_path(r'^sfdc/env/credentials/(?P<pk>\d+)/remove$', main.sfdc_env_delete, name="sfdc-env-remove"),
+    path('sfdc/env/credentials/create/', main.SfdcEnvCreateView.as_view(), name="sfdc-env-create"),
+    path('register/', main.RegisterUserView.as_view(), name='register-user'),
+    path('rest/', main.Rest.as_view(), name='rest'),
+    path('slack/', main.SlackIntegrationView.as_view(), name='slack'),
+    path('slack/interactive-endpoint/', main.slack_interactive_endpoint, name='slack-interactive-endpoint'),
+    path('tree-remover/', main.TreeRemover.as_view(), name='tree-remover'),
+
+    # API urls
+    # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('sfdc/authenticate/', main.ajax_sfdc_authenticate, name='sfdc-authenticate'),
+    path('sfdc-status/', main.ajax_sfdc_conn_status_view, name='sfdc_status'),
 ]

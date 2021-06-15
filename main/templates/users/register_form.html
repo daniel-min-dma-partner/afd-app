@@ -1,0 +1,82 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block title %}Login{% endblock title %}
+
+{% block extra_header_script %}
+<script>
+</script>
+{% endblock extra_header_script %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header card-header-rose">
+                <h3 class="card-title">Register New User</h3>
+                {% if default_category %}<p class="category">{{ default_category }}</p>{% endif %}
+            </div>
+
+            <div class="card-body">
+                <form method="post" action="{% url 'main:register-user' %}">
+                    {% csrf_token %}
+
+                    {% comment %} Form errors {% endcomment %}
+                    {% if form.errors %}
+                    {{ form.non_field_errors }}
+                    {% for field in form %}
+                    {% for error in field.errors %}
+                    <p> {{ error }} </p>
+                    {% endfor %}
+                    {% endfor %}
+                    {% endif %}
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            {% with "id_"|add:form.username.name as username_field_id %}
+                            <label for="{{ username_field_id }}">{{ form.username.label }}</label>
+                            <input type="text" class="form-control"
+                                   name="{{ form.username.name }}"
+                                   required
+                                   id="{{ username_field_id }}">
+                            {% endwith %}
+                        </div>
+                        <div class="form-group col-md-8">
+                            {% with "id_"|add:form.email.name as email_field_id %}
+                            <label for="{{ email_field_id }}">{{ form.email.label }}</label>
+                            <input type="email" class="form-control"
+                                   name="{{ form.email.name }}"
+                                   required
+                                   id="{{ email_field_id }}" aria-describedby="emailHelp">
+                            {% endwith %}
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col">
+                            {% with "id_"|add:form.password1.name as pass_field_id %}
+                            <label for="{{ pass_field_id }}">{{ form.password1.label }}</label>
+                            <input type="password" class="form-control"
+                                   required
+                                   name="{{ form.password1.name }}" id="{{ pass_field_id }}">
+                            {% endwith %}
+                        </div>
+                        <div class="col">
+                            {% with "id_"|add:form.password2.name as pass2_field_id %}
+                            <label for="{{ pass2_field_id }}">{{ form.password2.label }}</label>
+                            <input type="password" class="form-control"
+                                   required
+                                   name="{{ form.password2.name }}" id="{{ pass2_field_id }}">
+                            {% endwith %}
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock content %}
