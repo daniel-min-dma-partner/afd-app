@@ -5,16 +5,18 @@ import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as do_login, logout as do_logout
 from django.http import JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import authentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-# Create your views here.
-import main.forms as forms
 from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
+from main.forms import LoginForm, RegisterUserForm, SfdcEnvEditForm, SlackCustomerConversationForm, \
+    SlackMsgPusherForm, \
+    TreeRemoverForm, User
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor
 from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp, SfdcConnectionStatusCheck
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
@@ -40,7 +42,7 @@ class LoginView(generic.FormView):
     """
     Login view:
     """
-    form_class = forms.LoginForm
+    form_class = LoginForm
     module = 'login'
     template_name = 'login/loginform.html'
 
@@ -87,26 +89,8 @@ def logout(request):
     return render(request, "logout/logout.html")
 
 
-class SfdcEnvEditView(generic.FormView):
-    form_class = forms.SfdcEnvEditFormset
-    module = 'register'
-    template_name = 'sfdc/env/credential-edit-form.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(self.__class__, self).get_context_data(**kwargs)
-        context['formset'] = forms.SfdcEnvEditFormset(queryset=SfdcEnv.objects.none())
-        return context
-
-    def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = form_class(data=request.POST)
-
-        if form.is_valid():
-            pass
-
-
 class RegisterUserView(generic.FormView):
-    form_class = forms.RegisterUserForm
+    form_class = RegisterUserForm
     module = 'register'
     template_name = 'users/register_form.html'
     next_url = None
@@ -123,7 +107,7 @@ class RegisterUserView(generic.FormView):
         form = form_class(data=request.POST)
 
         if form.is_valid():
-            user: forms.User = form.save(commit=False)  # guarda en el model.
+            user: User = form.save(commit=False)  # guarda en el model.
             user.is_active = 1
             user.save()
 
@@ -140,7 +124,7 @@ class RegisterUserView(generic.FormView):
 
 class TreeRemover(generic.FormView):
     template_name = 'tree-remover/tree-remover.html'
-    form_class = forms.TreeRemoverForm
+    form_class = TreeRemoverForm
     success_url = '/tree-remover/'
 
     def get_context_data(self, **kwargs):
@@ -181,10 +165,10 @@ class TreeRemover(generic.FormView):
             return self.form_invalid(form)
 
 
-class SlackApprovalRequestView(generic.FormView):
-    template_name = 'slack-approval-request-form/index.html'
-    form_class = forms.SlackMsgPusherForm
-    success_url = '/slack-approval-request/'
+class SlackIntegrationView(generic.FormView):
+    form_class = SlackMsgPusherForm
+    success_url = '/slack/'
+    template_name = 'slack/index.html'
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -193,12 +177,13 @@ class SlackApprovalRequestView(generic.FormView):
         # Adds extra form context here...
         context['default_title'] = "Approval Request Message Pusher - Slack"
         context['slack_target'] = self.form_class.slack_target_choices()
+        context['customer_conversation_form'] = SlackCustomerConversationForm()
 
         return context
 
     def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = form_class(request.POST)
+        form = SlackMsgPusherForm(request.POST)
+        form_customer_initial = SlackCustomerConversationForm(request.POST)
 
         if form.is_valid():
             _values = {
@@ -208,17 +193,30 @@ class SlackApprovalRequestView(generic.FormView):
                 "case-business-justification": form.cleaned_data['case_business_justification'],
                 "case-manager-approval": form.cleaned_data['case_manager_approval'],
                 "case-manager-name": form.cleaned_data['case_manager_name'],
+                "case-contact": form.cleaned_data['case_contact'],
+                "submitter": ""
             }
+
+            if request.user.is_authenticated and request.user.first_name:
+                _values['submitter'] = f"{request.user.first_name} {request.user.last_name}"
 
             ctx = SlackMessagePushInteractor.call(values=_values)
             _payload = js.dumps(ctx.payload)
 
             _header = {'Content-Type': "application/json"}
-            _url = form_class.get_slack_webhook(key=form.cleaned_data.get('slack_target'))
+            _url = SlackMsgPusherForm.get_slack_webhook(key=form.cleaned_data.get('slack_target'))
             response = requests.post(url=_url, data=_payload, headers=_header, json=True)
-            messages.info(request, response.status_code)
 
-            return redirect("main:slack-approval-request")
+            if response.status_code != 200:
+                print(response.text)
+                messages.error(request, response.text)
+                return self.form_invalid(form)
+            else:
+                messages.info(request, f"Response status: {response.status_code}")
+                return redirect("main:slack")
+        elif form_customer_initial.is_valid():
+            messages.success(request, "Form 2 Works.")
+            return redirect("main:slack")
         else:
             return self.form_invalid(form)
 
@@ -233,6 +231,87 @@ class Rest(APIView):
         print(request)
         ctx = SfdcConnectWithConnectedApp.call(request=request)
         return Response(ctx.message)
+
+
+class SfdcEnvListView(generic.ListView):
+    context_object_name = 'sfdc_env_list'
+    template_name = 'sfdc/env/credential-list-view.html'
+
+    def get_queryset(self):
+        return SfdcEnv.objects.filter(user=self.request.user)
+
+
+class SfdcEnvUpdateView(generic.TemplateView):
+    form_class = SfdcEnvEditForm
+    template_name = 'sfdc/env/edit.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        context['form'] = self.form_class(self.request.POST or None, instance=self.get_object())
+        context['pk'] = self.kwargs['pk']
+        return context
+
+    def get_object(self, queryset=None):
+        obj = SfdcEnv.objects.filter(pk=self.kwargs['pk']).first()
+        return obj
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, instance=get_object_or_404(SfdcEnv, pk=kwargs['pk']))
+        if form.is_valid():
+            sfdc_env = form.save(commit=False)
+            sfdc_env.user = request.user
+            sfdc_env.save()
+            print(sfdc_env.pk)
+            print(sfdc_env.name)
+            messages.info(request, 'form valid')
+            return redirect('main:sfdc-env-list')
+        else:
+            messages.error(request, f'form invalid:{form.errors.as_data}')
+
+        return render(request, self.template_name, {'form': form})
+
+
+class SfdcEnvCreateView(generic.FormView):
+    form_class = SfdcEnvEditForm
+    module = 'register'
+    template_name = 'sfdc/env/create.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        context['environment_choice'] = SfdcEnv.environment_choice()
+        context['default_category'] = "H.U.S.H."
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = form_class(data=request.POST)
+
+        if form.is_valid():
+            try:
+                sfdc_env = form.save(commit=False)
+                sfdc_env.user = request.user
+                sfdc_env.save()
+
+                messages.info(request, f"New '{sfdc_env.name}' env created successfully.")
+                return redirect("main:sfdc-env-list")
+            except Exception as e:
+                messages.error(request, e)
+        else:
+            messages.error(request, form.errors.as_data)
+
+        return self.form_invalid(form)
+
+
+def sfdc_env_delete(request, pk):
+    print(request.method)
+
+    if request.method == "POST":
+        _obj = get_object_or_404(SfdcEnv, pk=pk)
+        a = _obj.delete()
+        print(a)
+        messages.info(request, f"SF Env '{_obj.name}' deleted successfully.")
+
+    return redirect('main:sfdc-env-list')
 
 
 def ajax_sfdc_conn_status_view(request):
@@ -266,3 +345,12 @@ def ajax_sfdc_authenticate(request):
     new_url = parse.urlunparse(url_parse)
 
     return JsonResponse({"payload": new_url}, status=200)
+
+
+@csrf_exempt
+def slack_interactive_endpoint(request):
+    if request.method == "POST":
+        print("Someone clicked in the link", request.POST.get('payload'))
+        return JsonResponse({"message": "ok"}, status=200)
+    if request.method == "GET":
+        return redirect("main:home")

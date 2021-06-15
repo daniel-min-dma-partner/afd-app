@@ -25,6 +25,7 @@ urlpatterns = [
     path('logout/', main.logout, name="logout"),
     path('sfdc/env/credentials/', main.SfdcEnvListView.as_view(), name="sfdc-env-list"),
     re_path(r'^sfdc/env/credentials/(?P<pk>\d+)/edit$', main.SfdcEnvUpdateView.as_view(), name="sfdc-env-edit"),
+    re_path(r'^sfdc/env/credentials/(?P<pk>\d+)/remove$', main.sfdc_env_delete, name="sfdc-env-remove"),
     path('sfdc/env/credentials/create/', main.SfdcEnvCreateView.as_view(), name="sfdc-env-create"),
     path('register/', main.RegisterUserView.as_view(), name='register-user'),
     path('rest/', main.Rest.as_view(), name='rest'),

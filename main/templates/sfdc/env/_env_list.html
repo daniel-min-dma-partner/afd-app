@@ -19,9 +19,12 @@
             <button type="button" rel="tooltip" class="btn btn-success">
                 <i class="material-icons">edit</i>
             </button>
-            <button type="button" rel="tooltip" class="btn btn-danger">
-                <i class="material-icons">close</i>
-            </button>
+            <form method="POST" action="{% url 'main:sfdc-env-remove' pk=env.pk %}">
+                {% csrf_token %}
+                <button type="submit" rel="tooltip" class="btn btn-danger">
+                    <i class="material-icons">close</i>
+                </button>
+            </form>
         </td>
     </tr>
     {% endfor %}
