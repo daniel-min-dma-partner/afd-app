@@ -303,8 +303,9 @@ class SfdcEnvCreateView(generic.FormView):
 
 
 def sfdc_env_delete(request, pk):
-    if request.method == "POST":
+    if request.method == "GET":
         _obj = get_object_or_404(SfdcEnv, pk=pk)
+        # _obj.delete()
         messages.info(request, f"SF Env '{_obj.name}' deleted successfully.")
 
     return redirect('main:sfdc-env-list')
@@ -387,7 +388,7 @@ class SfdcConnect(View):
                 messages.warning(request, e)
                 raise e
 
-        return redirect('main:connection-status')
+        return redirect('main:sfdc-env-list')
 
 
 class SfdcConnectedAppOauth2Callback(APIView):
@@ -409,7 +410,7 @@ class SfdcConnectedAppOauth2Callback(APIView):
             env.refresh_from_db()
             ctx = SfdcConnectWithConnectedApp2.call(env_object=env)
             messages.info(request, ctx.message)
-            return redirect("main:connection-status")
+            return redirect("main:sfdc-env-list")
 
         return Response("'code' not received.")
 

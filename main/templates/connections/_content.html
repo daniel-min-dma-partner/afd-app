@@ -5,7 +5,8 @@
         <th>Name</th>
         <th>URL</th>
         <th>Oauth Flow Status</th>
-        <th class="text-right">Actions</th>
+        <th class="text-right">Connect?</th>
+        <th class="text-right">CRUD</th>
     </tr>
     </thead>
     <tbody>
@@ -16,11 +17,19 @@
         <td>{{ env.environment }}</td>
         <td>{{ env.get_oauth_flow_stage_string }}</td>
         <td class="td-actions text-right">
-            <a href="{% url 'main:sfdc-connect' env_name=env.name action='login' %}" rel="tooltip" class="btn btn-success">
+            <a href="{% url 'main:sfdc-connect' env_name=env.name action='login' %}" rel="tooltip" class="btn btn-success" title="Connect">
                 <i class="material-icons">link</i>
             </a>
-            <a href="{% url 'main:sfdc-connect' env_name=env.name action='logout' %}" rel="tooltip" class="btn btn-warning">
+            <a href="{% url 'main:sfdc-connect' env_name=env.name action='logout' %}" rel="tooltip" class="btn btn-warning" title="Disconnect">
                 <i class="material-icons">link_off</i>
+            </a>
+        </td>
+        <td class="td-actions text-right">
+            <a href="{% url 'main:sfdc-env-remove' pk=env.pk %}" rel="tooltip" class="btn btn-danger" title="Delete">
+                <i class="material-icons">close</i>
+            </a>
+            <a href="{% url 'main:sfdc-env-edit' pk=env.pk %}" rel="tooltip" class="btn btn-success" title="Edit">
+                <i class="material-icons">edit</i>
             </a>
         </td>
     </tr>

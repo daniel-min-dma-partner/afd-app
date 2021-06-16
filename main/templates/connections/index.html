@@ -21,6 +21,11 @@
             </div>
 
             <div class="card-body">
+                <div class="form-group">
+                    <a href="{% url 'main:sfdc-env-create' %}" class="btn btn-primary btn-round float-right" id="create-new-env-btn">
+                      <i class="material-icons">add_circle</i>&nbsp;&nbsp;Create
+                    </a>
+                </div>
                 {% include 'connections/_content.html' %}
             </div>
         </div>

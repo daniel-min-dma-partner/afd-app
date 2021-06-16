@@ -18,9 +18,11 @@
         <td>{{ env.environment }}</td>
         <td>{{ env.client_username }}</td>
         <td class="td-actions text-right">
+            <form>
             <button type="button" rel="tooltip" class="btn btn-success">
                 <i class="material-icons">edit</i>
             </button>
+            </form>
             <form method="POST" action="{% url 'main:sfdc-env-remove' pk=env.pk %}">
                 {% csrf_token %}
                 <button type="submit" rel="tooltip" class="btn btn-danger">
