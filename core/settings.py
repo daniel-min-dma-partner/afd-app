@@ -63,6 +63,9 @@ MIDDLEWARE = [
 
     # Global Login required
     'global_login_required.GlobalLoginRequiredMiddleware',
+
+    # Custom Middlewares
+    'main.middleware.SfdcCRUDMiddleware',
 ]
 
 # Login
@@ -116,7 +119,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # For Websocket using channels package:
 ASGI_APPLICATION = "core.asgi.application"
-# Channel backing store
+# Channel backing store. You have to start first your redis docker or app.
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
