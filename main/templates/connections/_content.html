@@ -20,21 +20,21 @@
         <td>{{ env.get_oauth_flow_stage_string }}</td>
         <td class="td-actions text-right">
             <a href="{% url 'main:sfdc-connect' env_name=env.name action='login' %}" rel="tooltip"
-               class="btn btn-success" title="Connect">
+               class="btn btn-success">
                 <i class="material-icons">link</i>
             </a>
             <a href="{% url 'main:sfdc-connect' env_name=env.name action='logout' %}" rel="tooltip"
-               class="btn btn-warning" title="Disconnect">
+               class="btn btn-warning">
                 <i class="material-icons">link_off</i>
             </a>
         </td>
         <td class="td-actions text-right">
-            <button type="button" rel="tooltip" class="btn btn-danger sfdc-env-delete-btn" title="Delete"
+            <button type="button" rel="tooltip" class="btn btn-danger sfdc-env-delete-btn"
                     data-toggle="modal" data-target="#sfdc-delete-confirmation-md"
                     data-envid="{{ env.pk }}" data-envname="{{ env.name }}">
-                <i class="material-icons">close</i>
+                <i class="material-icons">delete_outline</i>
             </button>
-            <a href="{% url 'main:sfdc-env-edit' pk=env.pk %}" rel="tooltip" class="btn btn-success" title="Edit">
+            <a href="{% url 'main:sfdc-env-edit' pk=env.pk %}" rel="tooltip" class="btn btn-success">
                 <i class="material-icons">edit</i>
             </a>
         </td>
