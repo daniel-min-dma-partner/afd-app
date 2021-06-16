@@ -13,7 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path, re_path
+from django.conf.urls import include, url
+from django.urls import path
 
 import main.views as main
 
@@ -23,18 +24,23 @@ urlpatterns = [
     path('', main.Home.as_view(), name='home'),
     path('login/', main.LoginView.as_view(), name="login"),
     path('logout/', main.logout, name="logout"),
-    re_path(r'^sfdc/env/connect/(?P<env_name>\w+)/(?P<action>\w+)/$', main.SfdcConnect.as_view(), name="sfdc-connect"),
-    path('sfdc/env/credentials/', main.SfdcEnvListView.as_view(), name="sfdc-env-list"),
-    re_path(r'^sfdc/env/credentials/(?P<pk>\d+)/edit$', main.SfdcEnvUpdateView.as_view(), name="sfdc-env-edit"),
-    re_path(r'^sfdc/env/credentials/(?P<pk>\d+)/remove$', main.sfdc_env_delete, name="sfdc-env-remove"),
-    path('sfdc/env/credentials/create/', main.SfdcEnvCreateView.as_view(), name="sfdc-env-create"),
+
+    url(r'^sfdc/env/', include([
+        url(r'^list/$', main.ConnectionStatus.as_view(), name='sfdc-env-list'),
+        url(r'^create/$', main.SfdcEnvCreateView.as_view(), name='sfdc-env-create'),
+        url(r'^connect/(?P<env_name>\w+)/(?P<action>\w+)/$', main.SfdcConnect.as_view(), name='sfdc-connect'),
+        url(r'^edit/(?P<pk>\d+)/$', main.SfdcEnvUpdateView.as_view(), name='sfdc-env-edit'),
+        url(r'^delete/(?P<pk>\d+)/$', main.sfdc_env_delete, name='sfdc-env-remove'),
+    ])),
+
     path('sfdc/connected-app/oauth2/callback/', main.SfdcConnectedAppOauth2Callback.as_view(), name="sfdc-connected-app-callback"),
-    path('register/', main.RegisterUserView.as_view(), name='register-user'),
     path('rest/', main.Rest.as_view(), name='rest'),
+
+    path('register/', main.RegisterUserView.as_view(), name='register-user'),
+
     path('slack/', main.SlackIntegrationView.as_view(), name='slack'),
     path('slack/interactive-endpoint/', main.slack_interactive_endpoint, name='slack-interactive-endpoint'),
     path('tree-remover/', main.TreeRemover.as_view(), name='tree-remover'),
-    path('connections/status/', main.ConnectionStatus.as_view(), name='connection-status'),
 
     # API urls
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
