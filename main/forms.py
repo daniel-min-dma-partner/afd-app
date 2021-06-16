@@ -150,7 +150,7 @@ class SlackMsgPusherForm(forms.Form):
             "name": "Subbarao Talachiru"
         },
         "SFDF_I_bt-eops-dna-all": {
-            "url": "https://hooks.slack.com/services/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",
+            "url": "https://hooks.slack.com/services/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",
             "name": "bt-eops-dna-all"
         },
         "DPARK": {
