@@ -19,6 +19,7 @@
                     <p>Home</p>
                 </a>
             </li>
+            {% if request.user.is_authenticated %}
             {% url 'main:tree-remover' as tree_remover_url %}
             <li class="nav-item{% if request.get_full_path == tree_remover_url %} active{% endif %}">
                 <a class="nav-link" href="{% url 'main:tree-remover' %}">
@@ -41,6 +42,7 @@
                     <p>Connection Status</p>
                 </a>
             </li>
+            {% endif %}
         </ul>
     </div>
 </div>

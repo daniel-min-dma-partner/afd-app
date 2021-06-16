@@ -19,6 +19,8 @@
             </div>
 
             <div class="card-body">
+                <br/>
+
                 <form method="post" action="{% url 'main:login' %}">
                     {% csrf_token %}
 
@@ -42,18 +44,18 @@
                         {% endwith %}
                     </div>
 
-                    <div class="form-row">
-                        <div class="col">
-                            {% with "id_"|add:form.password.name as pass_field_id %}
-                            <label for="{{ pass_field_id }}">{{ form.password.label }}</label>
-                            <input type="password" class="form-control"
-                                   required
-                                   name="{{ form.password.name }}" id="{{ pass_field_id }}">
-                            {% endwith %}
-                        </div>
+                    <div class="form-group">
+                        {% with "id_"|add:form.password.name as pass_field_id %}
+                        <label for="{{ pass_field_id }}">{{ form.password.label }}</label>
+                        <input type="password" class="form-control"
+                               required
+                               name="{{ form.password.name }}" id="{{ pass_field_id }}">
+                        {% endwith %}
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <br/>
+
+                    <button type="submit" class="btn btn-primary float-right">Submit</button>
                 </form>
             </div>
         </div>
