@@ -36,5 +36,9 @@
 {% block extra_scripts %}
 <script>
 
+$('.sfdc-env-delete-btn').click(function() {
+    $('#sfdc-delete-confirmation-md .modal-body').find('input[id="sfdc-id-field"]').val($(this).data('envid')).trigger('change');
+    $('#sfdc-delete-confirmation-md .modal-body').find('input[id="sfdc-name-field"]').val($(this).data('envname')).trigger('change');
+});
 </script>
 {% endblock extra_scripts %}

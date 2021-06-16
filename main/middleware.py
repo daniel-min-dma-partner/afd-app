@@ -24,15 +24,19 @@ class SfdcCRUDMiddleware:
     def process_view(self, request, view_func, view_args, view_kwargs):
         if 'pk' in view_kwargs.keys():
             pk = view_kwargs['pk']
-            current_url = request.path
-            sfdc_edit_url = reverse('main:sfdc-env-edit', kwargs={'pk': pk})
-            sfdc_delt_url = reverse('main:sfdc-env-remove', kwargs={'pk': pk})
+        elif 'sfdc-id-field' in request.POST:
+            pk = request.POST.get('sfdc-id-field')
+        else:
+            return
 
-            if current_url in [sfdc_edit_url, sfdc_delt_url]:
-                sfdc_env = get_object_or_404(SfdcEnv, pk=pk)
-                print(sfdc_env.oauth_flow_stage != SfdcEnv.oauth_flow_stages()['LOGOUT'])
-                if sfdc_env.oauth_flow_stage != SfdcEnv.oauth_flow_stages()['LOGOUT']:
-                    action = 'delete' if current_url == sfdc_delt_url else 'edit'
-                    messages.error(request, f"Cannot {action} env '{sfdc_env.name}': "
-                                            f"The env is used to be connected now. Disconnect first.")
-                    return redirect('main:sfdc-env-list')
+        current_url = request.path
+        sfdc_delt_url = reverse('main:sfdc-env-remove')
+        sfdc_edit_url = reverse('main:sfdc-env-edit', kwargs={'pk': pk})
+
+        if current_url in [sfdc_edit_url, sfdc_delt_url]:
+            sfdc_env = get_object_or_404(SfdcEnv, pk=pk)
+            if sfdc_env.oauth_flow_stage != SfdcEnv.oauth_flow_stages()['LOGOUT']:
+                action = 'delete' if current_url == sfdc_delt_url else 'edit'
+                messages.error(request, f"Cannot {action} env '{sfdc_env.name}': "
+                                        f"The env is used to be connected now. Disconnect first.")
+                return redirect('main:sfdc-env-list')

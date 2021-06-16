@@ -30,7 +30,7 @@ urlpatterns = [
         url(r'^create/$', main.SfdcEnvCreateView.as_view(), name='sfdc-env-create'),
         url(r'^connect/(?P<env_name>\w+)/(?P<action>\w+)/$', main.SfdcConnect.as_view(), name='sfdc-connect'),
         url(r'^edit/(?P<pk>\d+)/$', main.SfdcEnvUpdateView.as_view(), name='sfdc-env-edit'),
-        url(r'^delete/(?P<pk>\d+)/$', main.sfdc_env_delete, name='sfdc-env-remove'),
+        url(r'^delete/$', main.SfdcEnvDelete.as_view(), name='sfdc-env-remove'),
     ])),
 
     path('sfdc/connected-app/oauth2/callback/', main.SfdcConnectedAppOauth2Callback.as_view(), name="sfdc-connected-app-callback"),

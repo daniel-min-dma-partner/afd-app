@@ -311,6 +311,15 @@ def sfdc_env_delete(request, pk):
     return redirect('main:sfdc-env-list')
 
 
+class SfdcEnvDelete(View):
+    def post(self, request, *args, **kwargs):
+        _obj = get_object_or_404(SfdcEnv, pk=request.POST.get('sfdc-id-field'))
+        # _obj.delete()
+        messages.info(request, f"Sfdc Env '{_obj.name}' deleted succesfully.")
+
+        return redirect("main:sfdc-env-list")
+
+
 class ConnectionStatus(generic.ListView):
     """
     Connections:

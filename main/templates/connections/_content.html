@@ -12,22 +12,28 @@
     <tbody>
     {% for env in env_list %}
     <tr>
-        <td class="text-center"><span class="dot-wo-text-{% if env.oauth_flow_stage != 4 %}warning{% else %}success{% endif %} align-middle" role="status" aria-hidden="true"></span></td>
-        <td>{{ env.name }} </td>
+        <td class="text-center"><span
+                class="dot-wo-text-{% if env.oauth_flow_stage != 4 %}warning{% else %}success{% endif %} align-middle"
+                role="status" aria-hidden="true"></span></td>
+        <td>{{ env.name }}</td>
         <td>{{ env.environment }}</td>
         <td>{{ env.get_oauth_flow_stage_string }}</td>
         <td class="td-actions text-right">
-            <a href="{% url 'main:sfdc-connect' env_name=env.name action='login' %}" rel="tooltip" class="btn btn-success" title="Connect">
+            <a href="{% url 'main:sfdc-connect' env_name=env.name action='login' %}" rel="tooltip"
+               class="btn btn-success" title="Connect">
                 <i class="material-icons">link</i>
             </a>
-            <a href="{% url 'main:sfdc-connect' env_name=env.name action='logout' %}" rel="tooltip" class="btn btn-warning" title="Disconnect">
+            <a href="{% url 'main:sfdc-connect' env_name=env.name action='logout' %}" rel="tooltip"
+               class="btn btn-warning" title="Disconnect">
                 <i class="material-icons">link_off</i>
             </a>
         </td>
         <td class="td-actions text-right">
-            <a href="{% url 'main:sfdc-env-remove' pk=env.pk %}" rel="tooltip" class="btn btn-danger" title="Delete">
+            <button type="button" rel="tooltip" class="btn btn-danger sfdc-env-delete-btn" title="Delete"
+                    data-toggle="modal" data-target="#sfdc-delete-confirmation-md"
+                    data-envid="{{ env.pk }}" data-envname="{{ env.name }}">
                 <i class="material-icons">close</i>
-            </a>
+            </button>
             <a href="{% url 'main:sfdc-env-edit' pk=env.pk %}" rel="tooltip" class="btn btn-success" title="Edit">
                 <i class="material-icons">edit</i>
             </a>
@@ -36,3 +42,50 @@
     {% endfor %}
     </tbody>
 </table>
+
+<!-- Modal -->
+<div class="modal fade" id="sfdc-delete-confirmation-md" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmation to delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form class="form-horizontal" method="post" action="{% url 'main:sfdc-env-remove' %}">
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="sfdc-id-field">Env ID</label>
+                            <input name="sfdc-id-field"
+                                   type="text"
+                                   class="form-control"
+                                   required
+                                   readonly
+                                   id="sfdc-id-field"
+                                   placeholder="" value="">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="sfdc-name-field">Name</label>
+                            <input name="sfdc-name-field"
+                                   type="text"
+                                   class="form-control"
+                                   required
+                                   readonly
+                                   id="sfdc-name-field"
+                                   placeholder="" value="">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger" id="sfdc-env-delete-btn">Delete
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
