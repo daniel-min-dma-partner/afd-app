@@ -6,19 +6,21 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as do_login, logout as do_logout
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views import generic
+from django.views import View, generic
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import authentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from core.settings import SALESFORCE_INSTANCE_URLS
 from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
 from main.forms import LoginForm, RegisterUserForm, SfdcEnvEditForm, SlackCustomerConversationForm, \
     SlackMsgPusherForm, \
     TreeRemoverForm, User
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor
-from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp, SfdcConnectionStatusCheck
+from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp, SfdcConnectWithConnectedApp2, \
+    SfdcConnectionStatusCheck
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .models import SalesforceEnvironment as SfdcEnv
 
@@ -261,8 +263,6 @@ class SfdcEnvUpdateView(generic.TemplateView):
             sfdc_env = form.save(commit=False)
             sfdc_env.user = request.user
             sfdc_env.save()
-            print(sfdc_env.pk)
-            print(sfdc_env.name)
             messages.info(request, 'form valid')
             return redirect('main:sfdc-env-list')
         else:
@@ -303,15 +303,125 @@ class SfdcEnvCreateView(generic.FormView):
 
 
 def sfdc_env_delete(request, pk):
-    print(request.method)
-
-    if request.method == "POST":
+    if request.method == "GET":
         _obj = get_object_or_404(SfdcEnv, pk=pk)
-        a = _obj.delete()
-        print(a)
+        # _obj.delete()
         messages.info(request, f"SF Env '{_obj.name}' deleted successfully.")
 
     return redirect('main:sfdc-env-list')
+
+
+class SfdcEnvDelete(View):
+    def post(self, request, *args, **kwargs):
+        _obj = get_object_or_404(SfdcEnv, pk=request.POST.get('sfdc-id-field'))
+        # _obj.delete()
+        messages.info(request, f"Sfdc Env '{_obj.name}' deleted succesfully.")
+
+        return redirect("main:sfdc-env-list")
+
+
+class ConnectionStatus(generic.ListView):
+    """
+    Connections:
+    """
+    module = 'connections'
+    template_name = 'connections/index.html'
+    context_object_name = 'env_list'
+
+    def get_queryset(self):
+        obj = SfdcEnv.objects.filter(user_id=self.request.user.pk)
+        return obj
+
+
+class SfdcConnect(View):
+    module = 'sfdc-connect'
+    session_var = "request.user.id"
+
+    def get(self, request, *args, **kwargs):
+        action = kwargs['action']
+        env_nm = kwargs['env_name']
+        uri = None
+        if action == "login":
+            uri = '/services/oauth2/authorize'
+        elif action == 'logout':
+            uri = '/services/oauth2/revoke'
+
+        if not uri:
+            messages.warning(request, "No action selected. Choose beetwen 'login' or 'logout'.")
+        else:
+            try:
+                env = SfdcEnv.objects.get(user=request.user, name=env_nm)
+
+                if env.oauth_flow_stage == 0 and action == 'logout':
+                    messages.info(request, 'You already have been logout.')
+                else:
+                    url = env.environment + uri
+                    parms = {
+                        "client_id": env.client_key,
+                        "redirect_uri": "https://localhost:8080/sfdc/connected-app/oauth2/callback",
+                        "response_type": "code"
+                    } if action == "login" else {
+                        "token": env.oauth_access_token
+                    }
+
+                    url_parse = parse.urlparse(url)
+                    query = url_parse.query
+                    url_dict = dict(parse.parse_qsl(query))
+                    url_dict.update(parms)
+                    url_new_query = parse.urlencode(url_dict)
+                    url_parse = url_parse._replace(query=url_new_query)
+                    new_url = parse.urlunparse(url_parse)
+
+                    if action == 'logout':
+                        response = requests.post(new_url)
+
+                        if response.status_code == 200:
+                            env.flush_oauth_data()
+                            env.set_oauth_flow_stage("LOGOUT")
+                            env.save()
+
+                            messages.success(request, f"Logout successfully from '{env.name}' environment.")
+
+                            if self.session_var in self.request.session.keys():
+                                del self.request.session[self.session_var]
+                        else:
+                            messages.warning(request, f"Logout response status: {response.status_code}")
+                    else:
+                        env.flush_oauth_data()
+                        env.set_oauth_flow_stage("AUTHORIZATION_CODE_REQUEST")
+                        env.save()
+                        self.request.session[self.session_var] = request.user.pk
+
+                        return redirect(new_url)
+            except Exception as e:
+                messages.warning(request, e)
+                raise e
+
+        return redirect('main:sfdc-env-list')
+
+
+class SfdcConnectedAppOauth2Callback(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def get(self, request, format='api'):
+        """
+        Return a list of all users.
+        """
+
+        env = SfdcEnv.objects.get(user_id=request.session[SfdcConnect.session_var],
+                                  oauth_flow_stage=SfdcEnv.oauth_flow_stages()["AUTHORIZATION_CODE_REQUEST"])
+        del request.session[SfdcConnect.session_var]
+
+        if 'code' in request.GET:
+            env.set_oauth_flow_stage(stage="AUTHORIZATION_CODE_RECEIVE")
+            env.set_oauth_authorization_code(code=request.GET.get('code'))
+            env.save()
+            env.refresh_from_db()
+            ctx = SfdcConnectWithConnectedApp2.call(env_object=env)
+            messages.info(request, ctx.message)
+            return redirect("main:sfdc-env-list")
+
+        return Response("'code' not received.")
 
 
 def ajax_sfdc_conn_status_view(request):
@@ -328,8 +438,9 @@ def ajax_sfdc_conn_status_view(request):
     return JsonResponse(payload, status=status_code)
 
 
-def ajax_sfdc_authenticate(request):
-    base_url = "https://test.salesforce.com/services/oauth2/authorize"
+def ajax_sfdc_authenticate(request, env="Sandbox"):
+    instance_url = SALESFORCE_INSTANCE_URLS[env]
+    base_url = f"{instance_url}/services/oauth2/authorize"
     parameters = {
         "client_id": "3MVG9GiqKapCZBwEtNyEQ0U2Pv34k4ziXjebvIMgh7mW2jGmX6h9ZIls_K9gMU0CFz_6kw5HcvNpE7kV5QFeo",
         "redirect_uri": "https://localhost:8080/rest",

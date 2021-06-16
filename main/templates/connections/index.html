@@ -1,0 +1,43 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block title %}Connection Status{% endblock title %}
+
+{% block extra_header_script %}
+<script>
+
+</script>
+{% endblock extra_header_script %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mx-auto">
+        <div class="card">
+            <div class="card-header card-header-rose">
+                <h3 class="card-title">Salesforce Connected App Connection Status</h3>
+                <p class="category">Allows you to edit, delete, connect-to and disconnect-from Salesforce Connected Apps Instances</p>
+            </div>
+
+            <div class="card-body">
+                <div class="form-group">
+                    <a href="{% url 'main:sfdc-env-create' %}" class="btn btn-primary btn-round float-right" id="create-new-env-btn">
+                      <i class="material-icons">add_circle</i>&nbsp;&nbsp;Create
+                    </a>
+                </div>
+                {% include 'connections/_content.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_scripts %}
+<script>
+
+$('.sfdc-env-delete-btn').click(function() {
+    $('#sfdc-delete-confirmation-md .modal-body').find('input[id="sfdc-id-field"]').val($(this).data('envid')).trigger('change');
+    $('#sfdc-delete-confirmation-md .modal-body').find('input[id="sfdc-name-field"]').val($(this).data('envname')).trigger('change');
+});
+</script>
+{% endblock extra_scripts %}

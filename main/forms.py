@@ -63,12 +63,18 @@ class RegisterUserForm(forms.ModelForm):
 
 
 class SfdcEnvEditForm(forms.ModelForm):
+    _FORBIDDEN_SYMBOLS = ['-', '+', '*', '$', '&']
+
     class Meta:
         model = SalesforceEnvironment
         exclude = {'user'}
         REQUIRED_FIELDS = [
             'client_key', 'client_secret', 'client_username', 'client_password', 'environment', 'name'
         ]
+
+    def clean_name(self):
+        return ''.join(e for e in self.cleaned_data['name'].rstrip() if e not in self._FORBIDDEN_SYMBOLS) \
+            .replace(' ', "_")
 
     def save(self, commit=True):
         sfdc_env = super(SfdcEnvEditForm, self).save(commit=False)
@@ -144,7 +150,7 @@ class SlackMsgPusherForm(forms.Form):
             "name": "Subbarao Talachiru"
         },
         "SFDF_I_bt-eops-dna-all": {
-            "url": "https://hooks.slack.com/services/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",
+            "url": "https://hooks.slack.com/services/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",
             "name": "bt-eops-dna-all"
         },
         "DPARK": {
