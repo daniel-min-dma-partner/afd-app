@@ -96,7 +96,6 @@ class SfdcConnectWithConnectedApp2(Interactor):
 
                 _message = f"Authentication Succeeded using '{env_obj.name}' Environment."
         except Exception as e:
-            raise e
             _message = str(e)
 
         self.context.message = _message
