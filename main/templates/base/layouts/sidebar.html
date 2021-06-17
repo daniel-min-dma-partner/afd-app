@@ -24,22 +24,22 @@
             <li class="nav-item{% if request.get_full_path == tree_remover_url %} active{% endif %}">
                 <a class="nav-link" href="{% url 'main:tree-remover' %}">
                     <i class="material-icons">share</i>
-                    <p>Manage Json Trees</p>
+                    <p>Manage Dataflows</p>
                 </a>
             </li>
             {% url 'main:slack' as slack_url %}
             <li class="nav-item{% if request.get_full_path == slack_url %} active{% endif %}">
                 <a class="nav-link" href="{% url 'main:slack' %}">
                     <i class="material-icons">approval</i>
-                    <p>Slack Approval Requester</p>
+                    <p>Slack Approval Request</p>
                 </a>
             </li>
             </li>
             {% url 'main:sfdc-env-list' as conn_url %}
             <li class="nav-item{% if request.get_full_path == conn_url %} active{% endif %}">
                 <a class="nav-link" href="{{ conn_url }}">
-                    <i class="material-icons">wifi_tethering</i>
-                    <p>Connection Status</p>
+                    <i class="material-icons">cloud</i>
+                    <p>Salesforce Credentials</p>
                 </a>
             </li>
             {% endif %}
