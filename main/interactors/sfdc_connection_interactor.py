@@ -1,7 +1,6 @@
 import requests
 
 from libs.interactor.interactor import Interactor
-from libs.tcrm_automation.libs.utils import get_connapp_credential_from_env
 
 SFDC_APIUSER_REQUEST_HEADER = 'sfdc-apiuser-request-header'
 SFDC_APIUSER_REQUEST_INSTANCE = 'sfdc-apiuser-request-instance'
@@ -22,48 +21,6 @@ class SfdcConnectWithConnectedApp(Interactor):
 
     def run(self):
         _message = ""
-
-        if 'code' in self.context.request.GET:
-            env = 'test'
-            auth_code = self.context.request.GET.get('code')
-            key, secret, _, _ = get_connapp_credential_from_env()
-
-            url = f"https://{env}.salesforce.com/services/oauth2/token?" \
-                  f"client_id={key}&" \
-                  f"grant_type=authorization_code&" \
-                  f"code={str(auth_code)}&" \
-                  f"redirect_uri=https://localhost:8080/rest&" \
-                  f"client_secret={str(secret)}"
-            response = requests.get(url)
-
-            if response.text:
-                response = response.json()
-
-            if isinstance(response, dict) and 'error' in response.keys():
-                _message = f"{response['error']}: {response['error_description']}"
-            else:
-                header = {'Authorization': "Bearer " + response["access_token"], 'Content-Type': "application/json"}
-
-                self.context.request.session[SFDC_APIUSER_REQUEST_HEADER] = header
-                self.context.request.session[SFDC_APIUSER_REQUEST_INSTANCE] = response['instance_url']
-                self.context.request.session[SFDC_APIUSER_ACCESS_TOKEN] = response["access_token"]
-                self.context.response = response
-
-                _message = "Authentication Success!!!"
-        else:
-            _message = "Someting went wrong" + str(self.context.request)
-
-        self.context.message = _message
-
-
-class SfdcConnectWithConnectedApp2(Interactor):
-    """
-    Checks the status of the connection with SF Connected App.
-
-    """
-
-    def run(self):
-        _message = ""
         env_obj = self.context.env_object
 
         try:
@@ -77,7 +34,7 @@ class SfdcConnectWithConnectedApp2(Interactor):
                   f"code={env_obj.oauth_authorization_code}&" \
                   f"redirect_uri=https://localhost:8080/sfdc/connected-app/oauth2/callback&" \
                   f"client_secret={env_obj.client_secret}"
-            response = requests.get(url)
+            response = requests.post(url)
             response_status_code = response.status_code
 
             if response.text:
