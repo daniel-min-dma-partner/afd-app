@@ -19,8 +19,7 @@ from main.forms import LoginForm, RegisterUserForm, SfdcEnvEditForm, SlackCustom
     SlackMsgPusherForm, \
     TreeRemoverForm, User
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor
-from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp, SfdcConnectWithConnectedApp2, \
-    SfdcConnectionStatusCheck
+from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp, SfdcConnectionStatusCheck
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .models import SalesforceEnvironment as SfdcEnv
 
@@ -223,24 +222,13 @@ class SlackIntegrationView(generic.FormView):
             return self.form_invalid(form)
 
 
-class Rest(APIView):
-    authentication_classes = [authentication.TokenAuthentication]
-
-    def get(self, request, format='api'):
-        """
-        Return a list of all users.
-        """
-        print(request)
-        ctx = SfdcConnectWithConnectedApp.call(request=request)
-        return Response(ctx.message)
-
-
 class SfdcEnvListView(generic.ListView):
-    context_object_name = 'sfdc_env_list'
-    template_name = 'sfdc/env/credential-list-view.html'
+    context_object_name = 'env_list'
+    template_name = 'sfdc/env/index.html'
 
     def get_queryset(self):
-        return SfdcEnv.objects.filter(user=self.request.user)
+        obj = SfdcEnv.objects.filter(user_id=self.request.user.pk)
+        return obj
 
 
 class SfdcEnvUpdateView(generic.TemplateView):
@@ -302,15 +290,6 @@ class SfdcEnvCreateView(generic.FormView):
         return self.form_invalid(form)
 
 
-def sfdc_env_delete(request, pk):
-    if request.method == "GET":
-        _obj = get_object_or_404(SfdcEnv, pk=pk)
-        # _obj.delete()
-        messages.info(request, f"SF Env '{_obj.name}' deleted successfully.")
-
-    return redirect('main:sfdc-env-list')
-
-
 class SfdcEnvDelete(View):
     def post(self, request, *args, **kwargs):
         _obj = get_object_or_404(SfdcEnv, pk=request.POST.get('sfdc-id-field'))
@@ -318,19 +297,6 @@ class SfdcEnvDelete(View):
         messages.info(request, f"Sfdc Env '{_obj.name}' deleted succesfully.")
 
         return redirect("main:sfdc-env-list")
-
-
-class ConnectionStatus(generic.ListView):
-    """
-    Connections:
-    """
-    module = 'connections'
-    template_name = 'connections/index.html'
-    context_object_name = 'env_list'
-
-    def get_queryset(self):
-        obj = SfdcEnv.objects.filter(user_id=self.request.user.pk)
-        return obj
 
 
 class SfdcConnectView(View):
@@ -374,16 +340,15 @@ class SfdcConnectView(View):
 
                     if action == 'logout':
                         response = requests.post(new_url)
+                        env.flush_oauth_data()
+                        env.set_oauth_flow_stage("LOGOUT")
+                        env.save()
+
+                        if self.session_var in self.request.session.keys():
+                            del self.request.session[self.session_var]
 
                         if response.status_code == 200:
-                            env.flush_oauth_data()
-                            env.set_oauth_flow_stage("LOGOUT")
-                            env.save()
-
                             messages.success(request, f"Logout successfully from '{env.name}' environment.")
-
-                            if self.session_var in self.request.session.keys():
-                                del self.request.session[self.session_var]
                         else:
                             messages.warning(request, f"Logout response status: {response.status_code}")
                     else:
@@ -395,7 +360,6 @@ class SfdcConnectView(View):
                         return redirect(new_url)
             except Exception as e:
                 messages.warning(request, e)
-                raise e
 
         return redirect('main:sfdc-env-list')
 
@@ -418,7 +382,7 @@ class SfdcConnectedAppOauth2Callback(APIView):
             env.save()
             env.refresh_from_db()
 
-            ctx = SfdcConnectWithConnectedApp2.call(env_object=env)
+            ctx = SfdcConnectWithConnectedApp.call(env_object=env)
             response_status = ctx.response_status
 
             if response_status != 200:
