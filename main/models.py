@@ -1,5 +1,7 @@
 import copy
+import datetime as dt
 
+import tzlocal
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -35,6 +37,7 @@ class SalesforceEnvironment(models.Model):
     oauth_flow_stage = models.IntegerField(default=0, blank=True, null=True)
     oauth_authorization_code = models.CharField(max_length=256, help_text='', default='', null=True, blank=True)
     oauth_access_token = models.CharField(max_length=256, help_text='', default='', null=True, blank=True)
+    oauth_access_token_created_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         constraints = [
@@ -70,6 +73,7 @@ class SalesforceEnvironment(models.Model):
 
     def set_oauth_access_token(self, token):
         self.oauth_access_token = token.rstrip()
+        self.oauth_access_token_created_date = dt.datetime.now(tz=tzlocal.get_localzone())
 
     def flush_oauth_data(self):
         self.oauth_access_token = ""

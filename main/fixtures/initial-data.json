@@ -1,0 +1,368 @@
+[
+  {
+    "model": "auth.permission",
+    "pk": 1,
+    "fields": {
+      "name": "Can add log entry",
+      "content_type": 1,
+      "codename": "add_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 2,
+    "fields": {
+      "name": "Can change log entry",
+      "content_type": 1,
+      "codename": "change_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 3,
+    "fields": {
+      "name": "Can delete log entry",
+      "content_type": 1,
+      "codename": "delete_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 4,
+    "fields": {
+      "name": "Can view log entry",
+      "content_type": 1,
+      "codename": "view_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 5,
+    "fields": {
+      "name": "Can add permission",
+      "content_type": 2,
+      "codename": "add_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 6,
+    "fields": {
+      "name": "Can change permission",
+      "content_type": 2,
+      "codename": "change_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 7,
+    "fields": {
+      "name": "Can delete permission",
+      "content_type": 2,
+      "codename": "delete_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 8,
+    "fields": {
+      "name": "Can view permission",
+      "content_type": 2,
+      "codename": "view_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 9,
+    "fields": {
+      "name": "Can add group",
+      "content_type": 3,
+      "codename": "add_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 10,
+    "fields": {
+      "name": "Can change group",
+      "content_type": 3,
+      "codename": "change_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 11,
+    "fields": {
+      "name": "Can delete group",
+      "content_type": 3,
+      "codename": "delete_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 12,
+    "fields": {
+      "name": "Can view group",
+      "content_type": 3,
+      "codename": "view_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 13,
+    "fields": {
+      "name": "Can add user",
+      "content_type": 4,
+      "codename": "add_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 14,
+    "fields": {
+      "name": "Can change user",
+      "content_type": 4,
+      "codename": "change_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 15,
+    "fields": {
+      "name": "Can delete user",
+      "content_type": 4,
+      "codename": "delete_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 16,
+    "fields": {
+      "name": "Can view user",
+      "content_type": 4,
+      "codename": "view_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 17,
+    "fields": {
+      "name": "Can add content type",
+      "content_type": 5,
+      "codename": "add_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 18,
+    "fields": {
+      "name": "Can change content type",
+      "content_type": 5,
+      "codename": "change_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 19,
+    "fields": {
+      "name": "Can delete content type",
+      "content_type": 5,
+      "codename": "delete_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 20,
+    "fields": {
+      "name": "Can view content type",
+      "content_type": 5,
+      "codename": "view_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 21,
+    "fields": {
+      "name": "Can add session",
+      "content_type": 6,
+      "codename": "add_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 22,
+    "fields": {
+      "name": "Can change session",
+      "content_type": 6,
+      "codename": "change_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 23,
+    "fields": {
+      "name": "Can delete session",
+      "content_type": 6,
+      "codename": "delete_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 24,
+    "fields": {
+      "name": "Can view session",
+      "content_type": 6,
+      "codename": "view_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 25,
+    "fields": {
+      "name": "Can add salesforce environment",
+      "content_type": 7,
+      "codename": "add_salesforceenvironment"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 26,
+    "fields": {
+      "name": "Can change salesforce environment",
+      "content_type": 7,
+      "codename": "change_salesforceenvironment"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 27,
+    "fields": {
+      "name": "Can delete salesforce environment",
+      "content_type": 7,
+      "codename": "delete_salesforceenvironment"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 28,
+    "fields": {
+      "name": "Can view salesforce environment",
+      "content_type": 7,
+      "codename": "view_salesforceenvironment"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$0PilMWrEsm9pAMGe2TaLlz$imEOQJqmvw0o8M1hQLQG4Hc0Tu8cbkITvIkFSR2kDAU=",
+      "last_login": "2021-06-17T14:41:32.648Z",
+      "is_superuser": true,
+      "username": "dmin",
+      "first_name": "",
+      "last_name": "",
+      "email": "dmin@salesforce.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2021-06-17T14:41:24.495Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 1,
+    "fields": {
+      "app_label": "admin",
+      "model": "logentry"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 2,
+    "fields": {
+      "app_label": "auth",
+      "model": "permission"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 3,
+    "fields": {
+      "app_label": "auth",
+      "model": "group"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 4,
+    "fields": {
+      "app_label": "auth",
+      "model": "user"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 5,
+    "fields": {
+      "app_label": "contenttypes",
+      "model": "contenttype"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 6,
+    "fields": {
+      "app_label": "sessions",
+      "model": "session"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 7,
+    "fields": {
+      "app_label": "main",
+      "model": "salesforceenvironment"
+    }
+  },
+  {
+    "model": "sessions.session",
+    "pk": "crutpwu7bcl1oety72mvpfx9vx0d6ox9",
+    "fields": {
+      "session_data": ".eJxVjMsOwiAUBf-FtSFBsIBL934DudyHVA0kpV01_rtt0oVuz8ycVSVY5pKWzlMaSV2VUaffLQO-uO6AnlAfTWOr8zRmvSv6oF3fG_H7drh_BwV62Wo07MRZid5YYXchEQg5OApGWHxkEiPDcA4uImQEBofeZt66QF5Yfb4XljnS:1lttE9:jDEqWi4jJWfu19hKWx6yQym4KcakCXpemZK0YM6K8Bs",
+      "expire_date": "2021-07-01T14:42:41.487Z"
+    }
+  },
+  {
+    "model": "main.salesforceenvironment",
+    "pk": 1,
+    "fields": {
+      "client_key": "3MVG9GiqKapCZBwEtNyEQ0U2Pv34k4ziXjebvIMgh7mW2jGmX6h9ZIls_K9gMU0CFz_6kw5HcvNpE7kV5QFeo",
+      "client_secret": "27A8FA1974441479425E8372A3F8A0D6F2F10F55F9EF62B92E430D049A238E2E",
+      "client_username": "biztech-eops-einsteinanalytics@salesforce.com.devpro61",
+      "client_password": "4ut7rDTcUSr38",
+      "environment": "https://test.salesforce.com",
+      "name": "Dev_Pro_61",
+      "user": 1,
+      "oauth_flow_stage": 0,
+      "oauth_authorization_code": "",
+      "oauth_access_token": ""
+    }
+  },
+  {
+    "model": "main.salesforceenvironment",
+    "pk": 2,
+    "fields": {
+      "client_key": "3MVG9FxR3Tq3eZN.3V6YxUdwIni2LDfrIrg7v4zIbWrvdMsJHDDoQScnXZd5ZUKQKemnSQI5a2IGp2pWWnFfs",
+      "client_secret": "88059192E5600D3A43A74E7D4EF23042F53436A1355EC279313B0B8D807619B1",
+      "client_username": "api-tcrm_field_deprecation@salesforce.com.org62stage",
+      "client_password": "gPM9vYTxK8oLj",
+      "environment": "https://test.salesforce.com",
+      "name": "Stage__Org62",
+      "user": 1,
+      "oauth_flow_stage": 0,
+      "oauth_authorization_code": "",
+      "oauth_access_token": ""
+    }
+  }
+]
