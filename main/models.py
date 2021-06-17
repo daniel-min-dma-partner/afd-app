@@ -77,6 +77,7 @@ class SalesforceEnvironment(models.Model):
 
     def flush_oauth_data(self):
         self.oauth_access_token = ""
+        self.oauth_access_token_created_date = None
         self.oauth_authorization_code = ""
         self.oauth_flow_stage = 0
 
