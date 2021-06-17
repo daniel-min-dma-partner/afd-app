@@ -1,10 +1,11 @@
 <table class="table">
     <thead>
     <tr>
-        <th class="text-center"><i class="material-icons">wifi_tethering</i></th>
+        <th class="text-center">Status</th>
         <th>Name</th>
         <th>URL</th>
         <th>Oauth Flow Status</th>
+        <th>Access Token Created Date</th>
         <th class="text-right">Connect?</th>
         <th class="text-right">CRUD</th>
     </tr>
@@ -13,18 +14,19 @@
     {% for env in env_list %}
     <tr>
         <td class="text-center"><span
-                class="dot-wo-text-{% if env.oauth_flow_stage != 4 %}warning{% else %}success{% endif %} align-middle"
+                class="dot-wo-text-{% if env.oauth_flow_stage == 0 %}off{% elif env.oauth_flow_stage != 4 %}warning{% else %}success{% endif %} align-middle"
                 role="status" aria-hidden="true"></span></td>
         <td>{{ env.name }}</td>
         <td>{{ env.environment }}</td>
         <td>{{ env.get_oauth_flow_stage_string }}</td>
+        <td>{{ env.oauth_access_token_created_date }}</td>
         <td class="td-actions text-right">
             <a href="{% url 'main:sfdc-connect' env_name=env.name action='login' %}" rel="tooltip"
                class="btn btn-success">
                 <i class="material-icons">link</i>
             </a>
             <a href="{% url 'main:sfdc-connect' env_name=env.name action='logout' %}" rel="tooltip"
-               class="btn btn-warning">
+               class="btn btn-default">
                 <i class="material-icons">link_off</i>
             </a>
         </td>
@@ -34,7 +36,7 @@
                     data-envid="{{ env.pk }}" data-envname="{{ env.name }}">
                 <i class="material-icons">delete_outline</i>
             </button>
-            <a href="{% url 'main:sfdc-env-edit' pk=env.pk %}" rel="tooltip" class="btn btn-success">
+            <a href="{% url 'main:sfdc-env-edit' pk=env.pk %}" rel="tooltip" class="btn btn-info">
                 <i class="material-icons">edit</i>
             </a>
         </td>
