@@ -333,7 +333,7 @@ class ConnectionStatus(generic.ListView):
         return obj
 
 
-class SfdcConnect(View):
+class SfdcConnectView(View):
     module = 'sfdc-connect'
     session_var = "request.user.id"
 
@@ -408,17 +408,26 @@ class SfdcConnectedAppOauth2Callback(APIView):
         Return a list of all users.
         """
 
-        env = SfdcEnv.objects.get(user_id=request.session[SfdcConnect.session_var],
+        env = SfdcEnv.objects.get(user_id=request.session[SfdcConnectView.session_var],
                                   oauth_flow_stage=SfdcEnv.oauth_flow_stages()["AUTHORIZATION_CODE_REQUEST"])
-        del request.session[SfdcConnect.session_var]
+        del request.session[SfdcConnectView.session_var]
 
         if 'code' in request.GET:
             env.set_oauth_flow_stage(stage="AUTHORIZATION_CODE_RECEIVE")
             env.set_oauth_authorization_code(code=request.GET.get('code'))
             env.save()
             env.refresh_from_db()
+
             ctx = SfdcConnectWithConnectedApp2.call(env_object=env)
-            messages.info(request, ctx.message)
+            response_status = ctx.response_status
+
+            if response_status != 200:
+                messages.error(request, f"Response status: {response_status}: {ctx.message}")
+                env.flush_oauth_data()
+                env.save()
+            else:
+                messages.success(request, ctx.message)
+
             return redirect("main:sfdc-env-list")
 
         return Response("'code' not received.")

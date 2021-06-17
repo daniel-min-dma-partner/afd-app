@@ -78,6 +78,7 @@ class SfdcConnectWithConnectedApp2(Interactor):
                   f"redirect_uri=https://localhost:8080/sfdc/connected-app/oauth2/callback&" \
                   f"client_secret={env_obj.client_secret}"
             response = requests.get(url)
+            response_status_code = response.status_code
 
             if response.text:
                 response = response.json()
@@ -85,7 +86,6 @@ class SfdcConnectWithConnectedApp2(Interactor):
             if isinstance(response, dict) and 'error' in response.keys():
                 _message = f"{response['error']}: {response['error_description']}"
             else:
-                header = {'Authorization': "Bearer " + response["access_token"], 'Content-Type': "application/json"}
                 env_obj.set_oauth_access_token(response['access_token'])
                 env_obj.set_oauth_flow_stage('ACCESS_TOKEN_RECEIVE')
                 env_obj.save()
@@ -94,12 +94,13 @@ class SfdcConnectWithConnectedApp2(Interactor):
                 del self.context.env_object
                 self.context.env_object = env_obj
 
-                _message = f"Authentication Success!!! using '{env_obj.name}' environment."
+                _message = f"Authentication Succeeded using '{env_obj.name}' Environment."
         except Exception as e:
             raise e
             _message = str(e)
 
         self.context.message = _message
+        self.context.response_status = response_status_code
 
 
 class SfdcConnectionStatusCheck(Interactor):
