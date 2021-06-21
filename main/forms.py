@@ -154,7 +154,7 @@ class SlackMsgPusherForm(forms.Form):
             "name": "bt-eops-dna-all"
         },
         "DPARK": {
-            "url": "https://hooks.slack.com/services/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",
+            "url": "https://hooks.slack.com/services/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",
             "name": "Daniel"
         }
     }
