@@ -91,9 +91,9 @@ class SfdcEnvEditForm(forms.ModelForm):
 class TreeRemoverForm(forms.Form):
     # Common fields
     dataflow = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False,
-                               label='Dataflows', help_text='Select a dataflow')
+                               label='Dataflows', help_text='Select the main dataflow')
     registers = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1,
-                                                             'placeholder': "List Register Nodes"}),
+                                                             'placeholder': "Specify sfdcRegister nodes"}),
                                 required=False,
                                 label=mark_safe(
                                     "List of <strong>sfdcRegisters, registers, edgeMart</strong> nodes"), )
@@ -103,10 +103,18 @@ class TreeRemoverForm(forms.Form):
 
     # For tree removers
     replacers = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False,
-                                label='Replacer Dataflow', help_text='Select one or more replacers')
+                                label='Replacer Dataflow', help_text='Select new dataflows')
 
     # For tree extractor
     extract = forms.BooleanField(required=False)
+
+    def clean_extract(self):
+        _extract = self.cleaned_data['extract']
+        _registers = self.cleaned_data['registers']
+
+        if _extract and not _registers:
+            _msg = "When <strong>Extract?</strong> is checked, <strong>sfdcRegister nodes</strong> field can't be empty."
+            raise forms.ValidationError(mark_safe(_msg))
 
 
 class SlackMsgPusherForm(forms.Form):
