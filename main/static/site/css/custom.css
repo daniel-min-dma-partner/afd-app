@@ -2,6 +2,7 @@
   --spinner-warning: #FB8C00;
   --spinner-success: #4bca80;
   --spinner-danger: #ff0000;
+  --spinner-off: #b3b3b3;
 }
 
 
@@ -27,6 +28,15 @@
   height: 15px;
   width: 15px;
   background-color: var(--spinner-success);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+
+.dot-wo-text-off {
+  height: 15px;
+  width: 15px;
+  background-color: var(--spinner-off);
   border-radius: 50%;
   display: inline-block;
 }

@@ -26,15 +26,14 @@ urlpatterns = [
     path('logout/', main.logout, name="logout"),
 
     url(r'^sfdc/env/', include([
-        url(r'^list/$', main.ConnectionStatus.as_view(), name='sfdc-env-list'),
+        url(r'^list/$', main.SfdcEnvListView.as_view(), name='sfdc-env-list'),
         url(r'^create/$', main.SfdcEnvCreateView.as_view(), name='sfdc-env-create'),
-        url(r'^connect/(?P<env_name>\w+)/(?P<action>\w+)/$', main.SfdcConnect.as_view(), name='sfdc-connect'),
+        url(r'^connect/(?P<env_name>\w+)/(?P<action>\w+)/$', main.SfdcConnectView.as_view(), name='sfdc-connect'),
         url(r'^edit/(?P<pk>\d+)/$', main.SfdcEnvUpdateView.as_view(), name='sfdc-env-edit'),
         url(r'^delete/$', main.SfdcEnvDelete.as_view(), name='sfdc-env-remove'),
     ])),
 
     path('sfdc/connected-app/oauth2/callback/', main.SfdcConnectedAppOauth2Callback.as_view(), name="sfdc-connected-app-callback"),
-    path('rest/', main.Rest.as_view(), name='rest'),
 
     path('register/', main.RegisterUserView.as_view(), name='register-user'),
 

@@ -1,5 +1,7 @@
 import copy
+import datetime as dt
 
+import tzlocal
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -21,6 +23,8 @@ class SalesforceEnvironment(models.Model):
         "ACCESS_TOKEN_RECEIVE": 4,
     }
 
+    _HEADER = {'Authorization': "Bearer {{access_token}}", 'Content-Type': "application/json"}
+
     client_key = models.CharField(max_length=128, help_text='', null=False, blank=False, default='')
     client_secret = models.CharField(max_length=128, help_text='', null=False, blank=False, default='')
     client_username = models.CharField(max_length=128, help_text='', null=False, blank=True, default='')
@@ -33,6 +37,7 @@ class SalesforceEnvironment(models.Model):
     oauth_flow_stage = models.IntegerField(default=0, blank=True, null=True)
     oauth_authorization_code = models.CharField(max_length=256, help_text='', default='', null=True, blank=True)
     oauth_access_token = models.CharField(max_length=256, help_text='', default='', null=True, blank=True)
+    oauth_access_token_created_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         constraints = [
@@ -47,6 +52,19 @@ class SalesforceEnvironment(models.Model):
     def oauth_flow_stages(cls):
         return copy.deepcopy(cls._OAUTH_FLOW_STAGES)
 
+    @classmethod
+    def get_header_template(cls):
+        return copy.deepcopy(cls._HEADER)
+
+    def get_header(self):
+        _header_copy = copy.deepcopy(self._HEADER)
+        _header_copy = {
+            key: value.replace('{{access_token}}', self.oauth_access_token) if key == 'Authorization' else value
+            for key, value in self._HEADER.items()
+        }
+
+        return _header_copy
+
     def set_oauth_authorization_code(self, code: str):
         self.oauth_authorization_code = code.rstrip()
 
@@ -55,12 +73,15 @@ class SalesforceEnvironment(models.Model):
 
     def set_oauth_access_token(self, token):
         self.oauth_access_token = token.rstrip()
+        self.oauth_access_token_created_date = dt.datetime.now(tz=tzlocal.get_localzone())
 
     def flush_oauth_data(self):
         self.oauth_access_token = ""
+        self.oauth_access_token_created_date = None
         self.oauth_authorization_code = ""
         self.oauth_flow_stage = 0
 
     def get_oauth_flow_stage_string(self):
         inv_map = {v: k for k, v in self._OAUTH_FLOW_STAGES.items()}
         return inv_map[self.oauth_flow_stage].rstrip()
+

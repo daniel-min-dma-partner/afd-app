@@ -94,7 +94,7 @@ class TreeRemoverForm(forms.Form):
                                label='Dataflows', help_text='Select a dataflow')
     registers = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1,
                                                              'placeholder': "List Register Nodes"}),
-                                required=True,
+                                required=False,
                                 label=mark_safe(
                                     "List of <strong>sfdcRegisters, registers, edgeMart</strong> nodes"), )
     name = forms.CharField(
@@ -154,7 +154,7 @@ class SlackMsgPusherForm(forms.Form):
             "name": "bt-eops-dna-all"
         },
         "DPARK": {
-            "url": "https://hooks.slack.com/services/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",
+            "url": "https://hooks.slack.com/services/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",
             "name": "Daniel"
         }
     }
