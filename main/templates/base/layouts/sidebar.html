@@ -35,14 +35,14 @@
                 </a>
             </li>
             </li>
-<!--            {% url 'main:sfdc-env-list' as conn_url %}-->
-<!--            <li class="nav-item{% if request.get_full_path == conn_url %} active{% endif %}">-->
-<!--                <a class="nav-link" href="{{ conn_url }}">-->
-<!--                    <i class="material-icons">cloud</i>-->
-<!--                    <p>Salesforce Credentials</p>-->
-<!--                </a>-->
-<!--            </li>-->
-<!--            {% endif %}-->
+            {% url 'main:sfdc-env-list' as conn_url %}
+            <li class="nav-item{% if request.get_full_path == conn_url %} active{% endif %}">
+                <a class="nav-link" href="{{ conn_url }}">
+                    <i class="material-icons">cloud</i>
+                    <p>Salesforce Credentials</p>
+                </a>
+            </li>
+            {% endif %}
         </ul>
     </div>
 </div>
