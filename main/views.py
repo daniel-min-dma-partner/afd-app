@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as do_login, logout as do_logout
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.safestring import mark_safe
 from django.views import View, generic
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import authentication
@@ -132,7 +133,8 @@ class TreeRemover(generic.FormView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the books
-        context['default_title'] = "Tree Remover"
+        context['default_title'] = "Dataflow Updater"
+        context['default_desc'] = "Tree Remover"
         return context
 
     def post(self, request, *args, **kwargs):
@@ -161,8 +163,7 @@ class TreeRemover(generic.FormView):
 
             return self.form_valid(form)
         else:
-            print('entro aqui')
-            print(form.errors.as_data())
+            messages.error(request, mark_safe("<br/>".join(str(value[0]) for _, value in form.errors.as_data().items())))
             return self.form_invalid(form)
 
 
