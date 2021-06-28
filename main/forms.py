@@ -94,7 +94,7 @@ class TreeRemoverForm(forms.Form):
                                label='Dataflows', help_text='Select a dataflow')
     registers = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1,
                                                              'placeholder': "List Register Nodes"}),
-                                required=True,
+                                required=False,
                                 label=mark_safe(
                                     "List of <strong>sfdcRegisters, registers, edgeMart</strong> nodes"), )
     name = forms.CharField(
