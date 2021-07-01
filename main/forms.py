@@ -93,7 +93,7 @@ class TreeRemoverForm(forms.Form):
     dataflow = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False,
                                label='Dataflows', help_text='Select the main dataflow')
     registers = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1,
-                                                             'placeholder': "Specify sfdcRegister nodes"}),
+                                                             'placeholder': "\"Register\" nodes"}),
                                 required=False,
                                 label=mark_safe(
                                     "List of <strong>sfdcRegisters, registers, edgeMart</strong> nodes"), )
