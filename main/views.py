@@ -153,14 +153,21 @@ class TreeRemover(generic.FormView):
 
             try:
                 if not extract:
-                    name = f"{dataflow[0].name.replace('.json', '')} with removed nodes.json"
-                    _ = TreeRemoverInteractor.call(dataflow=_dataflow, replacers=_replacers, registers=registers,
-                                                   name=name, request=request)
+                    name = f"{dataflow[0].name.replace('.json', '')} with modified nodes.json"
+                    ctx = TreeRemoverInteractor.call(dataflow=_dataflow, replacers=_replacers, registers=registers,
+                                                     name=name, request=request)
                 else:
-                    _ = TreeExtractorInteractor.call(dataflow=_dataflow, registers=registers, output_filename=name)
+                    ctx = TreeExtractorInteractor.call(dataflow=_dataflow, registers=registers, output_filename=name)
+
+                message = ctx.output.replace('\\', '')
+                message = mark_safe(f"File generated at <code>{message}</code>")
+                thype = messages.INFO
             except RuntimeError as rt_e:
                 print(rt_e)
+                message = rt_e
+                thype = messages.ERROR
 
+            messages.add_message(request, thype, message)
             return self.form_valid(form)
         else:
             messages.error(request, mark_safe("<br/>".join(str(value[0]) for _, value in form.errors.as_data().items())))
