@@ -10,7 +10,7 @@ function extract_chkbx_evtmgr(checkbox_dom_e) {
     if(checkbox_dom_e.checked) {
         $("#id_replacers").val('').trigger('change');
         $('#id_replacers_display').prop('readonly', true);
-        $('.card-title').text("Tree Extractor");
+        $('.card-title').text("Dataset Extractor");
         $('#id_replacers').attr('onclick', 'return false');
         $('#id_name').prop('readonly', false);
     } else {
