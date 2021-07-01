@@ -1,12 +1,13 @@
 import os
+import platform as pf
 from pathlib import Path
 
-from libs.interactor.interactor import Interactor
-from libs.tcrm_automation.tree_remover import tree_remover
-from libs.tcrm_automation.tree_extractor import tree_extractor
-from libs.utils import current_datetime
-import platform as pf
 from appscript import *
+
+from libs.interactor.interactor import Interactor
+from libs.tcrm_automation.tree_extractor import tree_extractor
+from libs.tcrm_automation.tree_remover import tree_remover
+from libs.utils import current_datetime
 
 
 def _prepare_output_directory(filename: str = None, allow_empty_name: bool = False):
@@ -38,11 +39,11 @@ class TreeRemoverInteractor(Interactor):
         # Lands a page to show the difference due to the removal
         original = self.context.request.FILES['dataflow'].temporary_file_path().replace(' ', "\\ ")
         _output = _output.replace(' ', "\\ ")
-        diff_command = f"python diff2HtmlCompare.py -s {original} {_output}"
+        diff_command = f"python diff_to_html.py -m {original} {_output}"
         cur_dir_tmp = "_CUR_DIR_TMP_"
         _cmd_queue = [
             F"export {cur_dir_tmp}=$(pwd)",
-            "cd libs/diff2HtmlCompare",
+            "cd libs",
             diff_command,
             f"cd ${cur_dir_tmp}",
             f"unset {cur_dir_tmp}"
