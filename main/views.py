@@ -16,9 +16,9 @@ from rest_framework.views import APIView
 from core.settings import SALESFORCE_INSTANCE_URLS
 from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
-from main.forms import LoginForm, RegisterUserForm, SfdcEnvEditForm, SlackCustomerConversationForm, \
-    SlackMsgPusherForm, \
-    TreeRemoverForm, User
+from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
+    SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User
+from .interactors.dataflow_download_interactor import DataflowDownloadInteractor
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor
 from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp, SfdcConnectionStatusCheck
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
@@ -125,9 +125,9 @@ class RegisterUserView(generic.FormView):
 
 
 class TreeRemover(generic.FormView):
-    template_name = 'tree-remover/tree-remover.html'
+    template_name = 'dataflow-manager/extract-update/form.html'
     form_class = TreeRemoverForm
-    success_url = '/tree-remover/'
+    success_url = '/dataflow-manager/'
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -170,7 +170,8 @@ class TreeRemover(generic.FormView):
             messages.add_message(request, thype, message)
             return self.form_valid(form)
         else:
-            messages.error(request, mark_safe("<br/>".join(str(value[0]) for _, value in form.errors.as_data().items())))
+            messages.error(request,
+                           mark_safe("<br/>".join(str(value[0]) for _, value in form.errors.as_data().items())))
             return self.form_invalid(form)
 
 
@@ -405,6 +406,32 @@ class SfdcConnectedAppOauth2Callback(APIView):
         return Response("'code' not received.")
 
 
+class DownloadDataflowView(generic.FormView):
+    form_class = DataflowDownloadForm
+    module = 'dataflow-download'
+    template_name = 'dataflow-manager/download/form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = form_class(data=request.POST)
+
+        if form.is_valid():
+            try:
+                messages.info(request, f"Form is valid.")
+                return redirect("main:download-dataflow")
+            except Exception as e:
+                messages.error(request, e)
+        else:
+            messages.error(request, form.errors.as_data)
+
+        return self.form_invalid(form)
+
+
 def ajax_sfdc_conn_status_view(request):
     # request should be ajax and method should be POST.
     payload = None
@@ -437,6 +464,64 @@ def ajax_sfdc_authenticate(request, env="Sandbox"):
     new_url = parse.urlunparse(url_parse)
 
     return JsonResponse({"payload": new_url}, status=200)
+
+
+def ajax_dataflow_info(request):
+    payload = {}
+    error = "Request is not ajax."
+    status = 500
+
+    if request.is_ajax:
+        try:
+            env = get_object_or_404(SfdcEnv, pk=request.GET.get('env_pk'))
+            if env.oauth_flow_stage != SfdcEnv.oauth_flow_stages()[SfdcEnv.STATUS_ACCESS_TOKEN_RECEIVE]:
+                raise ConnectionError(f"Env '{env.name}' is not connected.")
+            ctx = DataflowDownloadInteractor.call(model=env, search=request.GET.get('search', None),
+                                                  get_metadata=True, dataflow_id=request.GET.get('dataflow_id'))
+            payload = ctx.payload
+            status = ctx.status_code
+            error = ctx.error
+        except Exception as e:
+            status = 400
+            error = str(e)
+
+    return JsonResponse({"payload": payload, "error": error}, status=status)
+
+
+def ajax_list_dataflows(request):
+    payload = {
+        "results": [
+            {
+                "id": "",
+                "text": "Select one",
+            },
+        ],
+    }
+    status = 400
+    error = "Is not an ajax or 'q' parm doesn't exist or it's empty."
+
+    if request.is_ajax and request.GET.get('q'):
+        try:
+            env = get_object_or_404(SfdcEnv, pk=request.GET.get('q'))
+            if env.oauth_flow_stage != SfdcEnv.oauth_flow_stages()[SfdcEnv.STATUS_ACCESS_TOKEN_RECEIVE]:
+                raise ConnectionError(f"Env '{env.name}' is not connected.")
+            ctx = DataflowDownloadInteractor.call(model=env, search=request.GET.get('search', None),
+                                                  get_metadata=False,
+                                                  dataflow_id=None)
+            payload = ctx.payload
+            status = ctx.status_code
+            error = ctx.error
+        except Exception as e:
+            status = 400
+            error = str(e)
+
+    return JsonResponse({"payload": payload, "error": error}, status=status)
+
+
+def ajax_list_envs(request):
+    env_choices = [(model.pk, model.name)
+                   for model in SfdcEnv.objects.filter(user=request.user.pk).all()]
+    return JsonResponse({"payload": env_choices}, status=200)
 
 
 @csrf_exempt

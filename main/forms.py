@@ -219,3 +219,8 @@ class SlackCustomerConversationForm(forms.Form):
     @classmethod
     def get_msg_template(cls):
         return copy.deepcopy(cls._MESSAGE_TEMPLATE)
+
+
+class DataflowDownloadForm(forms.Form):
+    env_selector = forms.ChoiceField()
+    dataflow_selector = forms.ChoiceField()

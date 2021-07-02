@@ -1,0 +1,15 @@
+.toast-header {
+  color: #ffffff;
+}
+
+.text-muted { color: #ffffff !important; }
+
+
+/*  For download dataflow  */
+textarea {
+  width: 100%;
+  min-height: 30rem;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 0.8rem;
+  line-height: 1.2;
+}

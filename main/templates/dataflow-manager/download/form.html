@@ -1,0 +1,84 @@
+{% extends 'sd-base/base.html' %}
+
+{% load static %}
+
+{% block title %} Titulo {% endblock title %}
+{% block page-header %} Home {% endblock page-header %}
+
+
+{% block header-scripts %}
+<script>
+    let get_dataflow_list_url = "{% url 'main:ajax-list-dataflows' %}";
+    let get_env_list_url = "{% url 'main:ajax-list-envs' %}";
+    let get_df_info_url = "{% url 'main:ajax-dataflow-info' %}";
+</script>
+{% endblock header-scripts %}
+
+{% block page-content %}
+<div class="row">
+    <div class="col-xl-8 col-lg-7">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Dropdown Card Example</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                         aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">Dropdown Header:</div>
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <form method="post" action="{% url 'main:download-dataflow' %}">
+                    {% csrf_token %}
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="id_env_selector">Environment: </label>
+                            <select id="id_env_selector" class="js-example-basic-single" name="env_selector"
+                                    style="width:100%;">
+                                <option value="" selected disabled>Select One</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-8">
+                            <label for="id_dataflow_selector">Dataflows: </label>
+                            <select id="id_dataflow_selector" class="js-example-basic-single"
+                                    name="dataflow_selector" style="width:100%;">
+                                <option value="" selected disabled>Select One</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {% include 'dataflow-manager/download/_dataflow-details.html' %}
+
+                    <br/>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success btn-user float-right">
+                            Proceed
+                        </button>
+                    </div>
+                </form>
+
+                <br/>
+                <br/>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page-content %}
+
+{% block extra-scripts %}
+<script src="{% static 'site/js/dataflow-download.js' %}"></script>
+{% endblock extra-scripts %}
