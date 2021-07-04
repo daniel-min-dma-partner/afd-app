@@ -1,9 +1,15 @@
+:root {
+  --spinner-warning: #FB8C00;
+  --spinner-success: #4bca80;
+  --spinner-danger: #ff0000;
+  --spinner-off: #b3b3b3;
+}
+
 .toast-header {
   color: #ffffff;
 }
 
 .text-muted { color: #ffffff !important; }
-
 
 /*  For download dataflow  */
 textarea {
@@ -12,4 +18,36 @@ textarea {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 0.8rem;
   line-height: 1.2;
+}
+
+.dot {
+  height: 15px;
+  width: 15px;
+  background-color: var(--spinner-warning);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-wo-text-warning {
+  height: 15px;
+  width: 15px;
+  background-color: var(--spinner-warning);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-wo-text-success {
+  height: 15px;
+  width: 15px;
+  background-color: var(--spinner-success);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-wo-text-off {
+  height: 15px;
+  width: 15px;
+  background-color: var(--spinner-off);
+  border-radius: 50%;
+  display: inline-block;
 }

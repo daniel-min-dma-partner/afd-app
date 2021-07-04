@@ -12,6 +12,7 @@ class DataflowDownloadInteractor(Interactor):
     """
 
     def run(self):
+        print('entro')
         error = None
         _payload = {
             "results": [

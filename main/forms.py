@@ -116,6 +116,8 @@ class TreeRemoverForm(forms.Form):
             _msg = "When <strong>Extract?</strong> is checked, <strong>sfdcRegister nodes</strong> field can't be empty."
             raise forms.ValidationError(mark_safe(_msg))
 
+        return _extract
+
 
 class SlackMsgPusherForm(forms.Form):
     case_contact = forms.CharField(

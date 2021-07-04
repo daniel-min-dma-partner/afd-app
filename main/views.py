@@ -13,14 +13,13 @@ from rest_framework import authentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from core.settings import SALESFORCE_INSTANCE_URLS
 from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
 from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
     SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User
 from .interactors.dataflow_download_interactor import DataflowDownloadInteractor
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor
-from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp, SfdcConnectionStatusCheck
+from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .models import SalesforceEnvironment as SfdcEnv
 
@@ -77,7 +76,7 @@ class LoginView(generic.FormView):
                 messages.success(request, "Loged in Successfully!")
                 return redirect(next_url('post', request))
             else:
-                messages.error(request, f"'{username}' user doesn't exist.")
+                messages.error(request, mark_safe(f"<code>{username}</code> user doesn't exist."))
         else:
             print('not valid', form.errors.as_data)
             messages.error(request, form.errors.as_data)
@@ -120,6 +119,7 @@ class RegisterUserView(generic.FormView):
                 messages.error(request, f"Error saving new user.")
         else:
             print('form no valid', form.errors.as_data, request.POST)
+            messages.error(request, form.errors.as_data)
 
         return self.form_invalid(form)
 
@@ -127,7 +127,7 @@ class RegisterUserView(generic.FormView):
 class TreeRemover(generic.FormView):
     template_name = 'dataflow-manager/extract-update/form.html'
     form_class = TreeRemoverForm
-    success_url = '/dataflow-manager/'
+    success_url = '/dataflow-manager/extract-update/'
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -150,7 +150,6 @@ class TreeRemover(generic.FormView):
 
             _dataflow = str_to_json(byte_to_str(dataflow[0].read()))
             _replacers = [str_to_json(byte_to_str(replacer.read())) for replacer in replacers]
-
             try:
                 if not extract:
                     name = f"{dataflow[0].name.replace('.json', '')} with modified nodes.json"
@@ -159,6 +158,8 @@ class TreeRemover(generic.FormView):
                 else:
                     ctx = TreeExtractorInteractor.call(dataflow=_dataflow, registers=registers, output_filename=name)
 
+                print(form.cleaned_data)
+                print(request.POST)
                 message = ctx.output.replace('\\', '')
                 message = mark_safe(f"File generated at <code>{message}</code>")
                 thype = messages.INFO
@@ -260,10 +261,10 @@ class SfdcEnvUpdateView(generic.TemplateView):
             sfdc_env = form.save(commit=False)
             sfdc_env.user = request.user
             sfdc_env.save()
-            messages.info(request, 'form valid')
+            messages.success(request, mark_safe(f"Connection <code>{sfdc_env.name}</code> modified succesfully."))
             return redirect('main:sfdc-env-list')
         else:
-            messages.error(request, f'form invalid:{form.errors.as_data}')
+            messages.error(request, f'form invalid: {form.errors.as_data}')
 
         return render(request, self.template_name, {'form': form})
 
@@ -289,7 +290,7 @@ class SfdcEnvCreateView(generic.FormView):
                 sfdc_env.user = request.user
                 sfdc_env.save()
 
-                messages.info(request, f"New '{sfdc_env.name}' env created successfully.")
+                messages.success(request, mark_safe(f"New <code>{sfdc_env.name}</code> connection created successfully."))
                 return redirect("main:sfdc-env-list")
             except Exception as e:
                 messages.error(request, e)
@@ -303,7 +304,7 @@ class SfdcEnvDelete(View):
     def post(self, request, *args, **kwargs):
         _obj = get_object_or_404(SfdcEnv, pk=request.POST.get('sfdc-id-field'))
         # _obj.delete()
-        messages.info(request, f"Sfdc Env '{_obj.name}' deleted succesfully.")
+        messages.success(request, mark_safe(f"Connection <code>{_obj.name}</code> deleted succesfully."))
 
         return redirect("main:sfdc-env-list")
 
@@ -357,9 +358,10 @@ class SfdcConnectView(View):
                             del self.request.session[self.session_var]
 
                         if response.status_code == 200:
-                            messages.success(request, f"Logout successfully from '{env.name}' environment.")
+                            messages.success(request, mark_safe(
+                                f"Logout connection <code>{env.name}</code> performed successfully"))
                         else:
-                            messages.warning(request, f"Logout response status: {response.status_code}")
+                            messages.warning(request, mark_safe(f"Logout response status: {response.status_code}"))
                     else:
                         env.flush_oauth_data()
                         env.set_oauth_flow_stage("AUTHORIZATION_CODE_REQUEST")
@@ -432,40 +434,6 @@ class DownloadDataflowView(generic.FormView):
         return self.form_invalid(form)
 
 
-def ajax_sfdc_conn_status_view(request):
-    # request should be ajax and method should be POST.
-    payload = None
-    status_code = 500
-
-    if request.is_ajax and request.method == "GET":
-        ctx = SfdcConnectionStatusCheck.call(request=request)
-        payload = ctx.response
-        status_code = ctx.status_code
-
-    # print(payload, request.session['sfdc-apiuser-request-header'])
-    return JsonResponse(payload, status=status_code)
-
-
-def ajax_sfdc_authenticate(request, env="Sandbox"):
-    instance_url = SALESFORCE_INSTANCE_URLS[env]
-    base_url = f"{instance_url}/services/oauth2/authorize"
-    parameters = {
-        "client_id": "3MVG9GiqKapCZBwEtNyEQ0U2Pv34k4ziXjebvIMgh7mW2jGmX6h9ZIls_K9gMU0CFz_6kw5HcvNpE7kV5QFeo",
-        "redirect_uri": "https://localhost:8080/rest",
-        "response_type": "code"
-    }
-
-    url_parse = parse.urlparse(base_url)
-    query = url_parse.query
-    url_dict = dict(parse.parse_qsl(query))
-    url_dict.update(parameters)
-    url_new_query = parse.urlencode(url_dict)
-    url_parse = url_parse._replace(query=url_new_query)
-    new_url = parse.urlunparse(url_parse)
-
-    return JsonResponse({"payload": new_url}, status=200)
-
-
 def ajax_dataflow_info(request):
     payload = {}
     error = "Request is not ajax."
@@ -504,7 +472,9 @@ def ajax_list_dataflows(request):
         try:
             env = get_object_or_404(SfdcEnv, pk=request.GET.get('q'))
             if env.oauth_flow_stage != SfdcEnv.oauth_flow_stages()[SfdcEnv.STATUS_ACCESS_TOKEN_RECEIVE]:
+                print('mala condicion detectado')
                 raise ConnectionError(f"Env '{env.name}' is not connected.")
+            print('no deberia entrar')
             ctx = DataflowDownloadInteractor.call(model=env, search=request.GET.get('search', None),
                                                   get_metadata=False,
                                                   dataflow_id=None)
@@ -519,9 +489,22 @@ def ajax_list_dataflows(request):
 
 
 def ajax_list_envs(request):
-    env_choices = [(model.pk, model.name)
-                   for model in SfdcEnv.objects.filter(user=request.user.pk).all()]
-    return JsonResponse({"payload": env_choices}, status=200)
+    try:
+        if SfdcEnv.objects.filter(user=request.user.pk).exists():
+            payload = [(model.pk, model.name)
+                       for model in SfdcEnv.objects.filter(user=request.user.pk).all()]
+            status = 200
+            error = None
+        else:
+            error = "No 'Environment' has been found."
+            status = 400
+            payload = None
+    except Exception as error:
+        error = str(error)
+        status = 500
+        payload = None
+
+    return JsonResponse({"payload": payload, "error": error}, status=status)
 
 
 @csrf_exempt

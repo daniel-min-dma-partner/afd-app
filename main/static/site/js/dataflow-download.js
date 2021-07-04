@@ -1,4 +1,7 @@
+import {popup_notification} from '../../sb-admin/custom-assets/js/mjs/helpers.mjs';
+
 $(document).ready(function(evt) {
+    // Constructs 'Environment' select2
     $.ajax({
         type: 'GET',
         url: get_env_list_url,
@@ -10,10 +13,11 @@ $(document).ready(function(evt) {
             });
         },
         error: function (response) {
-            console.log(response);
+            popup_notification("Warning", response.responseJSON['error'], "warning");
         }
     });
 
+    // Constructs 'Dataflows' select2
     $("#id_dataflow_selector").select2({
         ajax: {
             url: get_dataflow_list_url,
@@ -34,6 +38,7 @@ $(document).ready(function(evt) {
             },
             error: function(response) {
                 console.log(response.responseJSON);
+                popup_notification("Warning", response.responseJSON['error'], 'warning');
             },
             minimumInputLength: 5,
             delay: 1000,
@@ -41,10 +46,12 @@ $(document).ready(function(evt) {
     });
 });
 
+// Clears 'Dataflows' when 'Environment' changes
 $("#id_env_selector").on('change', function() {
     $("#id_dataflow_selector").val('').trigger('change');
 });
 
+// Shows detailed-information of the selected dataflow from 'Dataflows'
 $("#id_dataflow_selector").on('change', function(evt) {
     if ($(this).val() !== null) {
         $("button.accordion-button").removeClass('collapsed').attr('disabled', false);;
@@ -60,11 +67,11 @@ $("#id_dataflow_selector").on('change', function(evt) {
                 env_pk: $("#id_env_selector").val(),
             },
             success: function(response) {
-                console.log(response);
                 $('#myTextarea').html(JSON.stringify(response.payload, undefined, 4));
             },
             error: function(response) {
-                $("div.accordion-body").html(response.responseJSON);
+                console.log(response);
+                popup_notification("Warning", response.responseJSON['error'], "warning");
             },
         });
     } else {

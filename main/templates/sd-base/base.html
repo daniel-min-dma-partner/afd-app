@@ -36,43 +36,49 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
-                <!--                &lt;!&ndash; Page Heading &ndash;&gt;-->
-                <!--                <div class="d-sm-flex align-items-center justify-content-between mb-4">-->
-                <!--                    <h1 class="h3 mb-0 text-gray-800">{% block page-header %}Dashboard{% endblock page-header %}</h1>-->
-                <!--                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">-->
-                <!--                        <i class="fas fa-download fa-sm text-white-50"></i> Generate Report-->
-                <!--                    </a>-->
-                <!--                </div>-->
-                {% if messages %}
-                <div aria-live="polite" aria-atomic="true" class="position-relative">
-                    <!-- Position it: -->
-                    <!-- - `.toast-container` for spacing between toasts -->
-                    <!-- - `.position-absolute`, `top-0` & `end-0` to position the toasts in the upper right corner -->
-                    <!-- - `.p-3` to prevent the toasts from sticking to the edge of the container  -->
-                    <div class="toast-container position-absolute top-0 end-0 p-3">
+                {#                Page Heading#}
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">{% block page-header %}Dashboard{% endblock page-header %}</h1>
+                    {#                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">#}
+                    {#                        <i class="fas fa-download fa-sm text-white-50"></i> Generate Report#}
+                    {#                    </a>#}
 
-                        {% for message in messages %}
-                        <!-- Then put toasts within -->
-                        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
-                            <div class="toast-header bg-{% if 'error' in message.tags %}danger{% else %}{{ message.tags }}{% endif %}">
-                                <strong class="me-auto">{{ message.tags|title }}</strong>
-                                <small class="text-muted">just now</small>
-                                <button type="button" class="btn-close" data-bs-dismiss="toast"
-                                        aria-label="Close"></button>
-                            </div>
-                            <div class="toast-body">
-                                {{ message }}
+                    <!-- Flash Message -->
+                    {% if messages %}
+                        <div aria-live="polite" aria-atomic="true" class="my-toast">
+                            <!-- Position it: -->
+                            <!-- - `.toast-container` for spacing between toasts -->
+                            <!-- - `.position-absolute`, `top-0` & `end-0` to position the toasts in the upper right corner -->
+                            <!-- - `.p-3` to prevent the toasts from sticking to the edge of the container  -->
+                            <div class="toast-container position-absolute top-0 end-0 p-3">
+
+                                {% for message in messages %}
+                                    <!-- Then put toasts within -->
+                                    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"
+                                         data-delay="5000">
+                                        <div class="toast-header bg-{% if 'error' in message.tags %}danger{% else %}{{ message.tags }}{% endif %}">
+                                            <strong class="me-auto">{{ message.tags|title }}</strong>
+                                            <small class="text-muted">just now</small>
+                                            <button type="button" class="btn-close" data-bs-dismiss="toast"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="toast-body">
+                                            {{ message }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
                             </div>
                         </div>
-                        {% endfor %}
-
-                    </div>
+                    {% endif %}
                 </div>
-                {% endif %}
+                <!-- End Flash Message -->
 
+                <!-- Page Content -->
                 {% block page-content %}
-                {% include 'sd-base/body-components/_page-content.html' %}
+                    {% include 'sd-base/body-components/_page-content.html' %}
                 {% endblock page-content %}
+                <!-- End Page Content -->
 
             </div>
             <!-- /.container-fluid -->

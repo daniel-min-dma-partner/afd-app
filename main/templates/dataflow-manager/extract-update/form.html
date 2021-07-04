@@ -1,127 +1,103 @@
-{% extends 'base/base.html' %}
+{% extends 'sd-base/base.html' %}
+
 {% load static %}
-{% load bootstrap4 %}
+
+{% block title %}Manage Dataflows{% endblock title %}
+{% block page-header %}Manage Dataflows{% endblock page-header %}
 
 
-{% block title %}Dataflow Json Manager{% endblock title %}
+{% block header-scripts %}
+    <script>
+        let default_title = "{{ default_title }}";
+    </script>
+{% endblock header-scripts %}
 
-{% block extra_header_script %}
-<script>
-    let default_title = "{{ default_title }}";
-</script>
-{% endblock extra_header_script %}
+{% block page-content %}
+    <div class="row">
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Extract | Update</h6>
+                </div>
 
-{% block content %}
-<div class="row">
-    <div class="col-md-8 mx-auto">
-        <div class="card">
-            <div class="card-header card-header-rose">
-                <h3 class="card-title">{{ default_title }}</h3>
-                <p class="category">Updates the <strong>main dataflow</strong> with the nodes from the <strong>new dataflows</strong> either by adding new nodes or updating the existent properties.</p>
-            </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'main:extract-update-dataflow' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
 
-            <div class="card-body">
-                <form method="post" action="{% url 'main:extract-update-dataflow' %}" enctype="multipart/form-data">
-                    {% csrf_token %}
-
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <div class="form-group form-file-upload form-file-multiple">
-                                <input type="file" required class="inputFileHidden" name="{{ form.dataflow.name }}"
-                                       id="id_{{ form.dataflow.name }}">
-                                <div class="input-group">
-                                    <input type="text" class="form-control inputFileVisible"
-                                           placeholder="Updates the dataflow">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-fab btn-round btn-rose">
-                                            <i class="material-icons">attach_file</i>
-                                        </button>
-                                    </span>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_{{ form.dataflow.name }}" class="form-label">Select the main
+                                        dataflow</label>
+                                    <input class="form-control" type="file" name="{{ form.dataflow.name }}"
+                                           id="id_{{ form.dataflow.name }}" required>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_{{ form.replacers.name }}" class="form-label">Select the modifiers
+                                        dataflows</label>
+                                    <input class="form-control" type="file" name="{{ form.replacers.name }}"
+                                           id="id_{{ form.replacers.name }}" multiple>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group col-md-6">
-                            <div class="form-group form-file-upload form-file-multiple">
-                                <input type="file" multiple="" class="inputFileHidden" name="{{ form.replacers.name }}"
-                                       id="id_{{ form.replacers.name }}">
-                                <div class="input-group">
-                                    <input type="text" class="form-control inputFileVisible"
-                                           placeholder="with"
-                                           id="id_{{ form.replacers.name }}_display"
-                                           multiple>
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-fab btn-round btn-rose">
-                                            <i class="material-icons">layers</i>
-                                        </button>
-                                    </span>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_{{ form.registers.name }}" class="form-label">'Register'
+                                        nodes</label>
+                                    <textarea class="form-control" name="{{ form.registers.name }}"
+                                              id="id_{{ form.registers.name }}"></textarea>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <br/>
-
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    {{ form.registers }}
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-fab btn-round btn-rose">
-                                            <i class="material-icons">format_list_bulleted</i>
-                                        </button>
-                                    </span>
+                            <div class="form-group col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_{{ form.name.name }}" class="form-label">Output file name</label>
+                                    <input class="form-control" type="text"
+                                           name="{{ form.name.name }}"
+                                           placeholder="{{ form.name.placeholder_tag }}"
+                                           aria-label="default input example" id="id_{{ form.name.name }}">
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group col-md-6">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    {{ form.name }}
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-fab btn-round btn-rose">
-                                            <i class="material-icons">label</i>
-                                        </button>
-                                    </span>
+                        <br/>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6 ">
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox"
+                                               id="id_{{ form.extract.name }}"
+                                                name="{{ form.extract.name }}">
+                                        <label class="form-check-label" for="id_{{ form.extract.name }}">
+                                            Extract?
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <br/>
+                        <br/>
+                        <br/>
 
-                    <div class="form-group">
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" name="{{ form.extract.name }}"
-                                       id="id_{{ form.extract.name }}">
-                                Extract? (Do not remove)
-                                <span class="form-check-sign">
-                                <span class="check"></span>
-                              </span>
-                            </label>
-                        </div>
-                    </div>
-
-
-                    <br/>
-                    <br/>
-
-                    <div class="">
-                        <button type="submit" class="btn btn-rose btn-user float-right">
-                            Proceed
+                        <button type="submit" class="btn btn-success btn-icon-split float-right">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-check"></i>
+                            </span>
+                            <span class="text">Proceed</span>
                         </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+{% endblock page-content %}
 
-{% endblock content %}
-
-{% block extra_scripts %}
-<script src="{% static 'site/js/tree_remover.js' %}"></script>
-{% endblock extra_scripts %}
+{% block extra-scripts %}
+    <script src="{% static 'site/js/tree_remover.js' %}"></script>
+{% endblock extra-scripts %}
