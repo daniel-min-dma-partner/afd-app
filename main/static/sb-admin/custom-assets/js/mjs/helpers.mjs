@@ -8,7 +8,6 @@ const build_toast = () => {
     // Shows Toasts
     $.each(toastList, function (index, element) {
         element.show();
-        console.log(element, "excelent");
     });
 };
 

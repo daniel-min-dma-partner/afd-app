@@ -27,6 +27,7 @@ $(document).ready(function(evt) {
                 var query = {
                     search: params.term,
                     q: $('#id_env_selector').val(),
+                    rc: $('#id_refresh')[0].checked,
                 }
 
                 // Query parameters will be ?search=[term]&type=public
@@ -37,11 +38,21 @@ $(document).ready(function(evt) {
                 return response.payload;
             },
             error: function(response) {
-                console.log(response.responseJSON);
-                popup_notification("Warning", response.responseJSON['error'], 'warning');
+                if (response.responseJSON !== null && response.responseJSON !== undefined) {
+                    if ('error' in response.responseJSON) {
+                        popup_notification("Warning", response.responseJSON['error'], 'warning');
+                    } else {
+                        popup_notification("Warning", JSON.stringify(response.responseJSON), 'warning');
+                    }
+                } else {
+                    if (!(response.statusText in [null, '', undefined]) && response.statusText === 'abort') {
+                        return false;
+                    }
+                    popup_notification("Warning", response.statusText, 'warning');
+                }
             },
             minimumInputLength: 5,
-            delay: 1000,
+            delay: 300,
         }
     });
 });
@@ -49,33 +60,4 @@ $(document).ready(function(evt) {
 // Clears 'Dataflows' when 'Environment' changes
 $("#id_env_selector").on('change', function() {
     $("#id_dataflow_selector").val('').trigger('change');
-});
-
-// Shows detailed-information of the selected dataflow from 'Dataflows'
-$("#id_dataflow_selector").on('change', function(evt) {
-    if ($(this).val() !== null) {
-        $("button.accordion-button").removeClass('collapsed').attr('disabled', false);;
-        $("div.accordion-collapse").addClass('show');
-        $('#myTextarea').html("");
-
-        $.ajax({
-            type: "GET",
-            url: get_df_info_url,
-            dataType: "json",
-            data: {
-                dataflow_id: $("#id_dataflow_selector").val(),
-                env_pk: $("#id_env_selector").val(),
-            },
-            success: function(response) {
-                $('#myTextarea').html(JSON.stringify(response.payload, undefined, 4));
-            },
-            error: function(response) {
-                console.log(response);
-                popup_notification("Warning", response.responseJSON['error'], "warning");
-            },
-        });
-    } else {
-        $("button.accordion-button").addClass('collapsed').attr('disabled', true);
-        $("div.accordion-collapse").removeClass('show');
-    }
 });

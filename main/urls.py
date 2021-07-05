@@ -46,7 +46,6 @@ urlpatterns = [
 
     # Ajax
     url(r'^ajax/', include([
-        url(r'^dataflow-info/$', main.ajax_dataflow_info, name='ajax-dataflow-info'),
         url(r'^list-dataflows/$', main.ajax_list_dataflows, name='ajax-list-dataflows'),
         url(r'^list-envs/$', main.ajax_list_envs, name='ajax-list-envs'),
     ])),

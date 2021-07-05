@@ -8,6 +8,26 @@ from django.db import models
 
 # Create your models here.
 
+class Profile(models.Model):
+    _TYPE_CHOICE = (
+        ('int', "Integer"),
+        ('str', "String")
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    key = models.CharField(max_length=128, help_text='', null=False, blank=False)
+    value = models.CharField(max_length=128, help_text='', null=False, blank=False)
+    type = models.CharField(max_length=4, help_text='', null=False, blank=False, choices=_TYPE_CHOICE)
+
+    def clean_key(self):
+        self.key = self.key.strip()
+
+        return self.key
+
+    def clean_value(self):
+        self.value = self.value.strip()
+
+        return self.value
+
 
 class SalesforceEnvironment(models.Model):
     _ENVIRONMENT_CHOICE = (

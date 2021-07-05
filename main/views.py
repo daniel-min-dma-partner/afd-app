@@ -17,9 +17,11 @@ from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
 from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
     SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User
-from .interactors.dataflow_download_interactor import DataflowDownloadInteractor
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor
+from .interactors.download_dataflow_interactor import DownloadDataflowInteractor
+from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp
+from .interactors.sfdc_deployment_interactor import *
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .models import SalesforceEnvironment as SfdcEnv
 
@@ -421,39 +423,29 @@ class DownloadDataflowView(generic.FormView):
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()
         form = form_class(data=request.POST)
+        dataflows = dict(request.POST)['dataflow_selector']
 
         if form.is_valid():
             try:
-                messages.info(request, f"Form is valid.")
+                env = get_object_or_404(SfdcEnv, pk=form.cleaned_data['env_selector'])
+                download_ctx = DownloadDataflowInteractor.call(dataflow=dataflows, model=env, user=request.user)
+
+                if not download_ctx.exception:
+                    wdf_manager_ctx = WdfManager.call(user=request.user, mode="wdfToJson")
+                else:
+                    raise download_ctx.exception
+
+                messages.info(request, "OK")
+
                 return redirect("main:download-dataflow")
             except Exception as e:
                 messages.error(request, e)
+                raise e
         else:
+            print(form.errors.as_data)
             messages.error(request, form.errors.as_data)
 
         return self.form_invalid(form)
-
-
-def ajax_dataflow_info(request):
-    payload = {}
-    error = "Request is not ajax."
-    status = 500
-
-    if request.is_ajax:
-        try:
-            env = get_object_or_404(SfdcEnv, pk=request.GET.get('env_pk'))
-            if env.oauth_flow_stage != SfdcEnv.oauth_flow_stages()[SfdcEnv.STATUS_ACCESS_TOKEN_RECEIVE]:
-                raise ConnectionError(f"Env '{env.name}' is not connected.")
-            ctx = DataflowDownloadInteractor.call(model=env, search=request.GET.get('search', None),
-                                                  get_metadata=True, dataflow_id=request.GET.get('dataflow_id'))
-            payload = ctx.payload
-            status = ctx.status_code
-            error = ctx.error
-        except Exception as e:
-            status = 400
-            error = str(e)
-
-    return JsonResponse({"payload": payload, "error": error}, status=status)
 
 
 def ajax_list_dataflows(request):
@@ -471,13 +463,10 @@ def ajax_list_dataflows(request):
     if request.is_ajax and request.GET.get('q'):
         try:
             env = get_object_or_404(SfdcEnv, pk=request.GET.get('q'))
-            if env.oauth_flow_stage != SfdcEnv.oauth_flow_stages()[SfdcEnv.STATUS_ACCESS_TOKEN_RECEIVE]:
-                print('mala condicion detectado')
-                raise ConnectionError(f"Env '{env.name}' is not connected.")
-            print('no deberia entrar')
-            ctx = DataflowDownloadInteractor.call(model=env, search=request.GET.get('search', None),
-                                                  get_metadata=False,
-                                                  dataflow_id=None)
+            # if env.oauth_flow_stage != SfdcEnv.oauth_flow_stages()[SfdcEnv.STATUS_ACCESS_TOKEN_RECEIVE]:
+            #     raise ConnectionError(f"Env '{env.name}' is not connected.")
+            ctx = DataflowListInteractor.call(model=env, search=request.GET.get('search', None),
+                                              refresh_cache=request.GET.get('rc', None), user=request.user)
             payload = ctx.payload
             status = ctx.status_code
             error = ctx.error

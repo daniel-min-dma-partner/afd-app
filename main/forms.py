@@ -224,5 +224,4 @@ class SlackCustomerConversationForm(forms.Form):
 
 
 class DataflowDownloadForm(forms.Form):
-    env_selector = forms.ChoiceField()
-    dataflow_selector = forms.ChoiceField()
+    env_selector = forms.IntegerField()
