@@ -83,6 +83,11 @@ class JsonStructFixerInteractor(Interactor):
                 if node['action'] == 'sobjectDigest':
                     node['action'] = "sfdcDigest"
 
+                    if 'runtime' in node['parameters']:
+                        for key in node['parameters']['runtime']:
+                            node['parameters'][key] = node['parameters']['runtime'][key]
+                        del node['parameters']['runtime']
+
                 if node['action'] == "dataset":
                     node['action'] = 'edgemart'
                     node['parameters']['alias'] = node['parameters']['name']
@@ -92,7 +97,8 @@ class JsonStructFixerInteractor(Interactor):
                     node['parameters']['sources'] = node['sources']
                     del node['sources']
 
-                if node['action'] == 'flatten':
+                if node['action'] == 'flatten' and 'includeSelfId' in node['parameters'].keys():
+                    print(node)
                     new = ['include_self_id', 'parent_field', 'self_field']
                     old = ['includeSelfId', 'parentField', 'selfField']
                     for ok in old:
@@ -105,7 +111,7 @@ class JsonStructFixerInteractor(Interactor):
                         node['parameters'][corrects[int(fields.index(key))]] = node['parameters'][key]['name']
                         del node['parameters'][key]
 
-                if node['action'] in ['update', "augment"]:
+                if node['action'] in ['update', "augment"] and 'sources' in node.keys():
                     node['parameters']['left'] = node['sources'][0]
                     node['parameters']['right'] = node['sources'][1]
                     del node['sources']
@@ -124,13 +130,17 @@ class JsonStructFixerInteractor(Interactor):
                         node['parameters']['right_select'] = node['parameters']['rightSelect']
                         del node['parameters']['rightSelect']
 
-                if node['action'] == 'register':
+                if node['action'] == 'register' and 'sources' in node.keys():
                     node['action'] = "sfdcRegister"
                     node['parameters']['source'] = node['sources'][0]
                     node['parameters']['alias'] = node['parameters']['name']
                     node['parameters']['name'] = node['parameters']['label']
                     del node['sources']
                     del node['parameters']['label']
+
+                    if 'runtime' in node['parameters'].keys():
+                        node['parameters']['folderid'] = node['parameters']['runtime']['folderid']
+                        del node['parameters']['runtime']
 
                 if node['action'] in ["sliceDataset", "computeRelative", "computeExpression", "filter", "dim2mea",
                                       "flatten"]:
