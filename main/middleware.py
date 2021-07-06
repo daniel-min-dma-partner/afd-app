@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 
 from .models import SalesforceEnvironment as SfdcEnv
 
@@ -37,6 +38,6 @@ class SfdcCRUDMiddleware:
             sfdc_env = get_object_or_404(SfdcEnv, pk=pk)
             if sfdc_env.oauth_flow_stage != SfdcEnv.oauth_flow_stages()['LOGOUT']:
                 action = 'delete' if current_url == sfdc_delt_url else 'edit'
-                messages.error(request, f"Cannot {action} env '{sfdc_env.name}': "
-                                        f"The env is used to be connected now. Disconnect first.")
+                messages.warning(request, mark_safe(f"Cannot <strong>{action}</strong> env <code>{sfdc_env.name}"
+                                                    f"</code>: The env is used to be connected now. Disconnect first."))
                 return redirect('main:sfdc-env-list')

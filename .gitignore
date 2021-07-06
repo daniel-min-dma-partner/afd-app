@@ -1,3 +1,15 @@
 **/.idea
 **/__pycache__
 **/.DS_Store
+ant/**/*.log
+ant/dataflow/package.xml
+ant/retrieve/*
+ant/build.properties
+ant/select2-data-cache/*
+ant/status.json
+ant/push/*
+ant/**/*.wdf
+ant/**/*.json
+ant/**/*.xml
+ant/**/*.properties
+json_diff_output.html

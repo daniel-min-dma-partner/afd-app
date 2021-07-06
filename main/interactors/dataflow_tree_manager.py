@@ -1,12 +1,13 @@
 import os
+import platform as pf
 from pathlib import Path
 
-from libs.interactor.interactor import Interactor
-from libs.tcrm_automation.tree_remover import tree_remover
-from libs.tcrm_automation.tree_extractor import tree_extractor
-from libs.utils import current_datetime
-import platform as pf
 from appscript import *
+
+from libs.interactor.interactor import Interactor
+from libs.tcrm_automation.tree_extractor import tree_extractor
+from libs.tcrm_automation.tree_remover import tree_remover
+from libs.utils import current_datetime
 
 
 def _prepare_output_directory(filename: str = None, allow_empty_name: bool = False):
@@ -26,6 +27,19 @@ def _prepare_output_directory(filename: str = None, allow_empty_name: bool = Fal
     return outdir
 
 
+def show_in_browser(original, generated):
+    diff_command = f"python diff_to_html.py -m {original} {generated}"
+    cur_dir_tmp = "_CUR_DIR_TMP_"
+    _cmd_queue = [
+        F"export {cur_dir_tmp}=$(pwd)",
+        "cd libs",
+        diff_command,
+        f"cd ${cur_dir_tmp}",
+        f"unset {cur_dir_tmp}"
+    ]
+    os.system(" && ".join(_cmd_queue))
+
+
 class TreeRemoverInteractor(Interactor):
     def run(self):
         # Get output directory path
@@ -38,16 +52,8 @@ class TreeRemoverInteractor(Interactor):
         # Lands a page to show the difference due to the removal
         original = self.context.request.FILES['dataflow'].temporary_file_path().replace(' ', "\\ ")
         _output = _output.replace(' ', "\\ ")
-        diff_command = f"python diff2HtmlCompare.py -s {original} {_output}"
-        cur_dir_tmp = "_CUR_DIR_TMP_"
-        _cmd_queue = [
-            F"export {cur_dir_tmp}=$(pwd)",
-            "cd libs/diff2HtmlCompare",
-            diff_command,
-            f"cd ${cur_dir_tmp}",
-            f"unset {cur_dir_tmp}"
-        ]
-        os.system(" && ".join(_cmd_queue))
+        show_in_browser(original, _output)
+        self.context.output = _output
 
 
 class TreeExtractorInteractor(Interactor):
@@ -58,7 +64,7 @@ class TreeExtractorInteractor(Interactor):
         registers = self.context.registers
 
         tree_extractor(dataflow=dataflow, registers=registers, output_dir=output, output_filename=filename)
+        self.context.output = f"{output}/{filename}"
 
         if pf.system() == "Darwin":
-
             app("Finder").reveal(mactypes.Alias(output).alias)

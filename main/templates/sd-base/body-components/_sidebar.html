@@ -1,0 +1,103 @@
+{% load static %}
+
+{% with request.get_full_path as cur_url %}
+
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'main:home' %}">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fab fa-salesforce"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">T-CRM Automation</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item active">
+        <a class="nav-link" href="{% url 'main:home' %}">
+            <i class="fas fa-home"></i>
+            <span>Home</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Salesforce
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        {% url 'main:download-dataflow' as url_down_df %}
+        {% url 'main:extract-update-dataflow' as url_mng_df %}
+        <a class="nav-link{% if 'dataflow-manager' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse" data-target="#collapseTwo"
+           aria-expanded="{% if 'dataflow-manager' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Manage Dataflows</span>
+        </a>
+        <div id="collapseTwo" class="collapse{% if 'dataflow-manager' in cur_url %} show{% endif %}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Actions:</h6>
+                <a class="collapse-item{% if cur_url == url_down_df %} active{% endif %}" href="{{ url_down_df }}">Download</a>
+                <a class="collapse-item{% if cur_url == url_mng_df %} active{% endif %}" href="{{ url_mng_df }}">Extract | Update</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        {% url 'main:sfdc-env-list' as url_envs %}
+        <a class="nav-link{% if 'sfdc/env/' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse" data-target="#collapse3"
+           aria-expanded="{% if 'sfdc/env/' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapse3">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Manage Connections</span>
+        </a>
+        <div id="collapse3" class="collapse{% if 'sfdc/env/' in cur_url %} show{% endif %}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Actions:</h6>
+                <a class="collapse-item{% if cur_url == url_envs %} active{% endif %}" href="{{ url_envs }}">Show Status</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Slack Integration
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        {% url 'main:slack' as url_slack %}
+        <a class="nav-link{% if 'slack/' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse" data-target="#collapse4"
+           aria-expanded="{% if 'slack/' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapse4">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Manage Comunications</span>
+        </a>
+        <div id="collapse4" class="collapse{% if 'slack/' in cur_url %} show{% endif %}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Actions:</h6>
+                <a class="collapse-item{% if cur_url == url_slack %} active{% endif %}" href="{{ url_slack }}">Request Approval</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</ul>
+<!-- End of Sidebar -->
+
+{% endwith %}

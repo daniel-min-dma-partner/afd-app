@@ -66,3 +66,8 @@ def next_url(action='get', request=None):
         cache.delete('next') if _next_url else None
 
     return _next_url
+
+
+def replace_leading(source, char="&nbsp;"):
+    stripped = source.lstrip()
+    return char * (len(source) - len(stripped)) + stripped

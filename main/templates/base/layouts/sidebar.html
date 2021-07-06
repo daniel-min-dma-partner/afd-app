@@ -20,11 +20,18 @@
                 </a>
             </li>
             {% if request.user.is_authenticated %}
-            {% url 'main:tree-remover' as tree_remover_url %}
+            {% url 'main:extract-update-dataflow' as tree_remover_url %}
             <li class="nav-item{% if request.get_full_path == tree_remover_url %} active{% endif %}">
-                <a class="nav-link" href="{% url 'main:tree-remover' %}">
+                <a class="nav-link" href="{% url 'main:extract-update-dataflow' %}">
                     <i class="material-icons">share</i>
                     <p>Dataflow Json Manager</p>
+                </a>
+            </li>
+            {% url 'main:download-dataflow' as download_dataflow %}
+            <li class="nav-item{% if request.get_full_path == download_dataflow %} active{% endif %}">
+                <a class="nav-link" href="{% url 'main:download-dataflow' %}">
+                    <i class="material-icons">file_download</i>
+                    <p>Download Dataflows</p>
                 </a>
             </li>
             {% url 'main:slack' as slack_url %}
@@ -35,14 +42,14 @@
                 </a>
             </li>
             </li>
-<!--            {% url 'main:sfdc-env-list' as conn_url %}-->
-<!--            <li class="nav-item{% if request.get_full_path == conn_url %} active{% endif %}">-->
-<!--                <a class="nav-link" href="{{ conn_url }}">-->
-<!--                    <i class="material-icons">cloud</i>-->
-<!--                    <p>Salesforce Credentials</p>-->
-<!--                </a>-->
-<!--            </li>-->
-<!--            {% endif %}-->
+            {% url 'main:sfdc-env-list' as conn_url %}
+            <li class="nav-item{% if request.get_full_path == conn_url %} active{% endif %}">
+                <a class="nav-link" href="{{ conn_url }}">
+                    <i class="material-icons">cloud</i>
+                    <p>Salesforce Credentials</p>
+                </a>
+            </li>
+            {% endif %}
         </ul>
     </div>
 </div>

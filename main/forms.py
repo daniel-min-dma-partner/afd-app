@@ -93,7 +93,7 @@ class TreeRemoverForm(forms.Form):
     dataflow = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False,
                                label='Dataflows', help_text='Select the main dataflow')
     registers = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1,
-                                                             'placeholder': "Specify sfdcRegister nodes"}),
+                                                             'placeholder': "\"Register\" nodes"}),
                                 required=False,
                                 label=mark_safe(
                                     "List of <strong>sfdcRegisters, registers, edgeMart</strong> nodes"), )
@@ -115,6 +115,8 @@ class TreeRemoverForm(forms.Form):
         if _extract and not _registers:
             _msg = "When <strong>Extract?</strong> is checked, <strong>sfdcRegister nodes</strong> field can't be empty."
             raise forms.ValidationError(mark_safe(_msg))
+
+        return _extract
 
 
 class SlackMsgPusherForm(forms.Form):
@@ -219,3 +221,7 @@ class SlackCustomerConversationForm(forms.Form):
     @classmethod
     def get_msg_template(cls):
         return copy.deepcopy(cls._MESSAGE_TEMPLATE)
+
+
+class DataflowDownloadForm(forms.Form):
+    env_selector = forms.IntegerField()

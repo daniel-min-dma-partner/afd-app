@@ -1,119 +1,115 @@
-{% extends 'base/base.html' %}
+{% extends 'sd-base/base.html' %}
+
 {% load static %}
-{% load bootstrap4 %}
 
-{% block title %}Profile{% endblock title %}
+{% block title %}Manage Connections{% endblock title %}
+{% block page-header %}Modify Connection{% endblock page-header %}
 
-{% block extra_header_script %}
-<script>
-</script>
-{% endblock extra_header_script %}
+{% block page-content %}
+    <div class="row">
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Modify <code>{{ form.name.value }}</code></h6>
+                </div>
 
-{% block content %}
-<div class="row">
-    <div class="col-md-8 mx-auto">
-        <div class="card">
-            <div class="card-header card-header-rose">
-                <h3 class="card-title">Edit Salesforce Environment Credentials</h3>
-                {% if default_category %}<p class="category">{{ default_category }}</p>{% endif %}
-            </div>
+                <div class="card-body">
+                    <form class="form-horizontal" method="post" action="{% url 'main:sfdc-env-edit' pk=pk %}">
+                        {% csrf_token %}
 
-            <div class="card-body">
-                <form class="form-horizontal" method="post" action="{% url 'main:sfdc-env-edit' pk=pk %}">
-                    {% csrf_token %}
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                {% with "id_"|add:form.name.name as name_id %}
+                                    <label for="{{ name_id }}">{{ form.name.label }}</label>
+                                    <input name="{{ form.name.name }}"
+                                           type="text"
+                                           class="form-control"
+                                           required
+                                           id="{{ name_id }}"
+                                           placeholder=""
+                                           value="{{ form.name.value }}">
+                                {% endwith %}
+                            </div>
 
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            {% with "id_"|add:form.name.name as name_id %}
-                            <label for="{{ name_id }}">{{ form.name.label }}</label>
-                            <input name="{{ form.name.name }}"
-                                   type="text"
-                                   class="form-control"
-                                   required
-                                   id="{{ name_id }}"
-                                   placeholder=""
-                                   value="{{ form.name.value }}">
-                            {% endwith %}
-                        </div>
-
-                        <div class="form-group col-md-3">
-                            <div class="form-check form-check-radio form-check-inline">
-                                {{ form.environment.label_tag }}
-                                {{ form.environment }}
+                            <div class="form-group col-md-3">
+                                <div class="form-check form-check-radio form-check-inline">
+                                    {{ form.environment.label_tag }}
+                                    {{ form.environment }}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            {% with "id_"|add:form.client_key.name as client_key_id %}
-                            <label for="{{ client_key_id }}">{{ form.client_key.label }}</label>
-                            <input name="{{ form.client_key.name }}"
-                                   type="password"
-                                   class="form-control"
-                                   required
-                                   id="{{ client_key_id }}"
-                                   placeholder="" value="{{ form.client_key.value }}">
-                            {% endwith %}
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                {% with "id_"|add:form.client_key.name as client_key_id %}
+                                    <label for="{{ client_key_id }}">{{ form.client_key.label }}</label>
+                                    <input name="{{ form.client_key.name }}"
+                                           type="password"
+                                           class="form-control"
+                                           required
+                                           id="{{ client_key_id }}"
+                                           placeholder="" value="{{ form.client_key.value }}">
+                                {% endwith %}
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                {% with "id_"|add:form.client_secret.name as client_secret_id %}
+                                    <label for="{{ client_secret_id }}">{{ form.client_secret.label }}</label>
+                                    <input name="{{ form.client_secret.name }}"
+                                           type="password"
+                                           class="form-control"
+                                           required
+                                           id="{{ client_secret_id }}"
+                                           placeholder="" value="{{ form.client_secret.value }}">
+                                {% endwith %}
+                            </div>
                         </div>
 
-                        <div class="form-group col-md-6">
-                            {% with "id_"|add:form.client_secret.name as client_secret_id %}
-                            <label for="{{ client_secret_id }}">{{ form.client_secret.label }}</label>
-                            <input name="{{ form.client_secret.name }}"
-                                   type="password"
-                                   class="form-control"
-                                   required
-                                   id="{{ client_secret_id }}"
-                                   placeholder="" value="{{ form.client_secret.value }}">
-                            {% endwith %}
-                        </div>
-                    </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                {% with "id_"|add:form.client_username.name as client_username_id %}
+                                    <label for="{{ client_username_id }}">{{ form.client_username.label }}</label>
+                                    <input name="{{ form.client_username.name.value }}"
+                                           type="text"
+                                           class="form-control"
+                                           required
+                                           id="{{ client_username_id }}"
+                                           placeholder="" value="{{ form.client_username.value }}">
+                                {% endwith %}
+                            </div>
 
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            {% with "id_"|add:form.client_username.name as client_username_id %}
-                            <label for="{{ client_username_id }}">{{ form.client_username.label }}</label>
-                            <input name="{{ form.client_username.name.value }}"
-                                   type="text"
-                                   class="form-control"
-                                   required
-                                   id="{{ client_username_id }}"
-                                   placeholder="" value="{{ form.client_username.value }}">
-                            {% endwith %}
+                            <div class="form-group col-md-6">
+                                {% with "id_"|add:form.client_password.name as client_password_id %}
+                                    <label for="{{ client_password_id }}">{{ form.client_password.label }}</label>
+                                    <input name="{{ form.client_password.name }}"
+                                           type="password"
+                                           class="form-control"
+                                           required
+                                           id="{{ client_password_id }}"
+                                           placeholder="" value="{{ form.client_password.value }}">
+                                {% endwith %}
+                            </div>
                         </div>
 
-                        <div class="form-group col-md-6">
-                            {% with "id_"|add:form.client_password.name as client_password_id %}
-                            <label for="{{ client_password_id }}">{{ form.client_password.label }}</label>
-                            <input name="{{ form.client_password.name }}"
-                                   type="password"
-                                   class="form-control"
-                                   required
-                                   id="{{ client_password_id }}"
-                                   placeholder="" value="{{ form.client_password.value }}">
-                            {% endwith %}
+                        <div class="row spacer float-right">
+                            <div class="col-4 offset-0">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="material-icons">edit</i>&nbsp;&nbsp;Update
+                                </button>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="row spacer float-right">
-                        <div class="col-4 offset-0">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="material-icons">edit</i>&nbsp;&nbsp;Update
-                            </button>
+                        <div class="row spacer float-left">
+                            <div class="col-4 offset-0">
+                                <a href="{% url 'main:sfdc-env-list' %}" class="btn btn-primary">
+                                    <i class="material-icons">keyboard_backspace</i>&nbsp;&nbsp;Back to List
+                                </a>
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="row spacer float-left">
-                        <div class="col-4 offset-0">
-                            <a href="{% url 'main:sfdc-env-list' %}" class="btn btn-primary">
-                                <i class="material-icons">keyboard_backspace</i>&nbsp;&nbsp;Back to List
-                            </a>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-{% endblock content %}
+{% endblock page-content %}
