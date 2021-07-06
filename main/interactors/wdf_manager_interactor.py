@@ -163,12 +163,36 @@ class JsonToWdfConverterInteractor(Interactor):
                                               output_filepath=self.context.output_filepath)
 
         with open(self.context.output_filepath, 'r') as f:
-            j = json.load(f)
-            j = [str({'nodes': j}), None]
-            j[0] = j[0].replace("\"", '\\\"').replace("'", '\"').replace(', ', ',').replace(': ', ':')
+            a = json.load(f)
 
-            with open(self.context.wdf_filepath, 'w') as g:
-                g.write(f"{str(json.dumps(j))}")
+        b = json.dumps(a)
+        b = b.replace("\\", "\\\\")
+        b = b.replace('"', '\\"')
+        b = b.replace(': [', ':[')
+        b = b.replace(': {', ':{')
+        b = b.replace(', [', ',[')
+        b = b.replace(', {', ',{')
+        b = b.replace(': ]', ':]')
+        b = b.replace(': }', ':}')
+        b = b.replace(', ]', ',]')
+        b = b.replace(', }', ',}')
+        b = b.replace(' ==', '==')
+        b = b.replace(' >=', '>=')
+        b = b.replace(' <=', '<=')
+        b = b.replace(' !=', '!=')
+        b = b.replace(' :', ':')
+        b = b.replace('== ', '==')
+        b = b.replace('>= ', '>=')
+        b = b.replace('<= ', '<=')
+        b = b.replace('!= ', '!=')
+        b = b.replace(': ', ':')
+        b = b.replace(', ', ',')
+        b = b.replace(' > ', '>')
+        b = b.replace(' < ', '<')
+
+        c = f'[\"{{\\\"nodes\\\":{b}}}\",null]'
+        with open(self.context.wdf_filepath, 'w') as f:
+            f.write(c)
 
 
 class WdfToJsonConverterInteractor(Interactor):
