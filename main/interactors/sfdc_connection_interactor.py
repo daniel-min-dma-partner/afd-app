@@ -45,6 +45,7 @@ class SfdcConnectWithConnectedApp(Interactor):
             else:
                 env_obj.set_oauth_access_token(response['access_token'])
                 env_obj.set_oauth_flow_stage('ACCESS_TOKEN_RECEIVE')
+                env_obj.instance_url = response['instance_url']
                 env_obj.save()
                 env_obj.refresh_from_db()
 

@@ -39,10 +39,14 @@ urlpatterns = [
 
     path('slack/', main.SlackIntegrationView.as_view(), name='slack'),
     path('slack/interactive-endpoint/', main.slack_interactive_endpoint, name='slack-interactive-endpoint'),
-    path('tree-remover/', main.TreeRemover.as_view(), name='tree-remover'),
+    url(r'^dataflow-manager/', include([
+        url(r'^extract-update/$', main.TreeRemover.as_view(), name='extract-update-dataflow'),
+        url(r'^download/$', main.DownloadDataflowView.as_view(), name='download-dataflow'),
+    ])),
 
-    # API urls
-    # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('sfdc/authenticate/', main.ajax_sfdc_authenticate, name='sfdc-authenticate'),
-    path('sfdc-status/', main.ajax_sfdc_conn_status_view, name='sfdc_status'),
+    # Ajax
+    url(r'^ajax/', include([
+        url(r'^list-dataflows/$', main.ajax_list_dataflows, name='ajax-list-dataflows'),
+        url(r'^list-envs/$', main.ajax_list_envs, name='ajax-list-envs'),
+    ])),
 ]

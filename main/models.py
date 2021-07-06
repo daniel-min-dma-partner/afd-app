@@ -8,6 +8,26 @@ from django.db import models
 
 # Create your models here.
 
+class Profile(models.Model):
+    _TYPE_CHOICE = (
+        ('int', "Integer"),
+        ('str', "String")
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    key = models.CharField(max_length=128, help_text='', null=False, blank=False)
+    value = models.CharField(max_length=128, help_text='', null=False, blank=False)
+    type = models.CharField(max_length=4, help_text='', null=False, blank=False, choices=_TYPE_CHOICE)
+
+    def clean_key(self):
+        self.key = self.key.strip()
+
+        return self.key
+
+    def clean_value(self):
+        self.value = self.value.strip()
+
+        return self.value
+
 
 class SalesforceEnvironment(models.Model):
     _ENVIRONMENT_CHOICE = (
@@ -15,12 +35,18 @@ class SalesforceEnvironment(models.Model):
         ('https://login.salesforce.com', 'Production'),
     )
 
+    STATUS_LOGOUT = "LOGOUT"
+    STATUS_AUTHORIZATION_CODE_REQUEST = "AUTHORIZATION_CODE_REQUEST"
+    STATUS_AUTHORIZATION_CODE_RECEIVE = "AUTHORIZATION_CODE_RECEIVE"
+    STATUS_ACCESS_TOKEN_REQUEST = "ACCESS_TOKEN_REQUEST"
+    STATUS_ACCESS_TOKEN_RECEIVE = "ACCESS_TOKEN_RECEIVE"
+
     _OAUTH_FLOW_STAGES = {
-        "LOGOUT": 0,
-        "AUTHORIZATION_CODE_REQUEST": 1,
-        "AUTHORIZATION_CODE_RECEIVE": 2,
-        "ACCESS_TOKEN_REQUEST": 3,
-        "ACCESS_TOKEN_RECEIVE": 4,
+        STATUS_LOGOUT: 0,
+        STATUS_AUTHORIZATION_CODE_REQUEST: 1,
+        STATUS_AUTHORIZATION_CODE_RECEIVE: 2,
+        STATUS_ACCESS_TOKEN_REQUEST: 3,
+        STATUS_ACCESS_TOKEN_RECEIVE: 4,
     }
 
     _HEADER = {'Authorization': "Bearer {{access_token}}", 'Content-Type': "application/json"}
@@ -34,6 +60,7 @@ class SalesforceEnvironment(models.Model):
     name = models.CharField(max_length=128, help_text='', null=False, blank=False, default='')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    instance_url = models.CharField(max_length=256, help_text='', default='', null=True, blank=True)
     oauth_flow_stage = models.IntegerField(default=0, blank=True, null=True)
     oauth_authorization_code = models.CharField(max_length=256, help_text='', default='', null=True, blank=True)
     oauth_access_token = models.CharField(max_length=256, help_text='', default='', null=True, blank=True)
@@ -76,6 +103,7 @@ class SalesforceEnvironment(models.Model):
         self.oauth_access_token_created_date = dt.datetime.now(tz=tzlocal.get_localzone())
 
     def flush_oauth_data(self):
+        self.instance_url = ""
         self.oauth_access_token = ""
         self.oauth_access_token_created_date = None
         self.oauth_authorization_code = ""
@@ -85,3 +113,6 @@ class SalesforceEnvironment(models.Model):
         inv_map = {v: k for k, v in self._OAUTH_FLOW_STAGES.items()}
         return inv_map[self.oauth_flow_stage].rstrip()
 
+    def get_environment_name(self):
+        inv_map = {key: value for (key, value) in self._ENVIRONMENT_CHOICE}
+        return inv_map[self.environment]
