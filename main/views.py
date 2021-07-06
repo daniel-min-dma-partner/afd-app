@@ -21,8 +21,8 @@ from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemo
 from .interactors.download_dataflow_interactor import DownloadDataflowInteractor
 from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp
-from .interactors.sfdc_deployment_interactor import *
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
+from .interactors.wdf_manager_interactor import *
 from .models import SalesforceEnvironment as SfdcEnv
 
 
