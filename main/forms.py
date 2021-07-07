@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 
-from .models import SalesforceEnvironment
+from .models import SalesforceEnvironment, FileModel
 
 
 class LoginForm(AuthenticationForm):
@@ -225,3 +225,22 @@ class SlackCustomerConversationForm(forms.Form):
 
 class DataflowDownloadForm(forms.Form):
     env_selector = forms.IntegerField()
+
+
+class DataflowUploadForm(forms.ModelForm):
+    dataflow_selector = forms.CharField(required=False)
+    env_selector = forms.IntegerField(required=False)
+
+    class Meta:
+        model = FileModel
+        exclude = {}
+        fields = {'file'}
+        REQUIRED_FIELDS = [
+            'file'
+        ]
+
+    def save(self, commit=True):
+        model = super(self.__class__, self).save(commit=False)
+        if commit:
+            model.save()
+        return model

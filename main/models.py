@@ -1,12 +1,24 @@
 import copy
 import datetime as dt
+import os
 
 import tzlocal
 from django.contrib.auth.models import User
 from django.db import models
 
+from core.settings import MEDIA_ROOT
+
 
 # Create your models here.
+
+class FileModel(models.Model):
+    file: models.FileField = models.FileField(upload_to='documents/%Y/%m/%d')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def delete(self, using=None, keep_parents=False):
+        os.remove(os.path.join(MEDIA_ROOT, self.file.name))
+        super(FileModel, self).delete(using=using, keep_parents=keep_parents)
+
 
 class Profile(models.Model):
     _TYPE_CHOICE = (
