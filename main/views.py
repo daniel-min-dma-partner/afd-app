@@ -305,7 +305,7 @@ class SfdcEnvCreateView(generic.FormView):
 class SfdcEnvDelete(View):
     def post(self, request, *args, **kwargs):
         _obj = get_object_or_404(SfdcEnv, pk=request.POST.get('sfdc-id-field'))
-        # _obj.delete()
+        _obj.delete()
         messages.success(request, mark_safe(f"Connection <code>{_obj.name}</code> deleted succesfully."))
 
         return redirect("main:sfdc-env-list")
