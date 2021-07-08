@@ -34,7 +34,7 @@
                 serverurl="${sf.serverurl}"
                 maxPoll="${sf.maxPoll}"
                 pollWaitMillis="${sf.pollWaitMillis}"
-                deployRoot="${sf.retriveAt}"
+                deployRoot="${sf.deployFrom}"
                 rollbackOnError="true"/>
     </target>
 
