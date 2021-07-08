@@ -92,7 +92,9 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [f"{BASE_DIR}/main/templates"],
+        'DIRS': [
+            BASE_DIR / "main/templates",
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -201,9 +203,8 @@ MEDIA_URL = '/media/'  # It must end in a slash if set to a non-empty value.
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 # Custom configs
-SALESFORCE_INSTANCE_URLS ={
+SALESFORCE_INSTANCE_URLS = {
     'Sandbox': 'https://test.salesforce.com',
     'Production': 'https://login.salesforce.com',
 }
