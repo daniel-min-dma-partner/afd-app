@@ -10,14 +10,15 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fab fa-salesforce"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">T-CRM Automation</div>
+        <div class="sidebar-brand-text mx-3">TableauCRM Assistant</div>
     </a>
 
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    {% url "main:home" as home_url %}
+    <li class="nav-item{% if cur_url == home_url %} active{% endif %}">
         <a class="nav-link" href="{% url 'main:home' %}">
             <i class="fas fa-home"></i>
             <span>Home</span></a>
