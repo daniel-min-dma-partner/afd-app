@@ -53,35 +53,9 @@
                     {#                    </a>#}
 
                     <!-- Flash Message -->
-                    {% if messages %}
-                        <div aria-live="polite" aria-atomic="true" class="my-toast">
-                            <!-- Position it: -->
-                            <!-- - `.toast-container` for spacing between toasts -->
-                            <!-- - `.position-absolute`, `top-0` & `end-0` to position the toasts in the upper right corner -->
-                            <!-- - `.p-3` to prevent the toasts from sticking to the edge of the container  -->
-                            <div class="toast-container position-absolute top-0 end-0 p-3">
-
-                                {% for message in messages %}
-                                    <!-- Then put toasts within -->
-                                    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"
-                                         data-delay="5000">
-                                        <div class="toast-header bg-{% if 'error' in message.tags %}danger{% else %}{{ message.tags }}{% endif %}">
-                                            <strong class="me-auto">{{ message.tags|title }}</strong>
-                                            <small class="text-muted">just now</small>
-                                            <button type="button" class="btn-close" data-bs-dismiss="toast"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="toast-body">
-                                            {{ message }}
-                                        </div>
-                                    </div>
-                                {% endfor %}
-
-                            </div>
-                        </div>
-                    {% endif %}
+                    {% include 'sd-base/body-components/_flash-component.html' %}
+                    <!-- End Flash Message -->
                 </div>
-                <!-- End Flash Message -->
 
                 <!-- Page Content -->
                 {% block page-content %}
