@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 
-from .models import SalesforceEnvironment, FileModel
+from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel as DFCompModel
 
 
 class LoginForm(AuthenticationForm):
@@ -251,3 +251,20 @@ class DataflowUploadForm(forms.ModelForm):
         if commit:
             model.save()
         return model
+
+
+class CompareDataflowForm(forms.ModelForm):
+    field1 = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
+    field2 = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
+
+    class Meta:
+        model = DFCompModel
+        exclude = {}
+        fields = {'file1', 'file2'}
+
+    def save(self, commit=True):
+        model = super(self.__class__, self).save(commit=False)
+        if commit:
+            model.save()
+        return model
+

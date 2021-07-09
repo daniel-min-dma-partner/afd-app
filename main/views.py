@@ -16,8 +16,8 @@ from rest_framework.views import APIView
 from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
 from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
-    SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm
-from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor
+    SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm
+from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser
 from .interactors.download_dataflow_interactor import DownloadDataflowInteractor
 from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp
@@ -476,7 +476,12 @@ class UploadDataflowView(generic.FormView):
                 if ctx.exception:
                     raise ctx.exception
                 else:
-                    messages.info(request, "OK")
+                    msg = "Uploading <code>{0}</code> local dataflow to <code>{1}</code> dataflow to " \
+                          "<code>{2}</code> connection has finished."\
+                        .format(
+                            filemodel.file.name, remote_df_name, env.name
+                        )
+                    messages.info(request, mark_safe(msg))
             else:
                 messages.error(request, form.errors.as_data)
         except Exception as e:
@@ -484,6 +489,40 @@ class UploadDataflowView(generic.FormView):
             raise e
 
         return redirect("main:upload-dataflow")
+
+
+class CompareDataflows(generic.FormView):
+    template_name = 'dataflow-manager/compare/form.html'
+    form_class = CompareDataflowForm
+    success_url = '/dataflow-manager/compare/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        try:
+            form_class = self.get_form_class()
+            form = form_class(request.POST, request.FILES)
+
+            if form.is_valid():
+                files_model = form.save(commit=False)
+                files_model.user = request.user
+                files_model.save()
+
+                show_in_browser(original=files_model.file1.path, compared=files_model.file2.path)
+                files_model.delete()
+
+                messages.info(request, "Showing diff in browser.")
+                return self.form_valid(form)
+            else:
+                messages.error(request, form.errors.as_data)
+                return self.form_invalid(form)
+        except Exception as e:
+            messages.error(request, str(e))
+
+        return redirect("main:compare-dataflows")
 
 
 def ajax_list_dataflows(request):

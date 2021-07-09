@@ -17,7 +17,18 @@ class FileModel(models.Model):
 
     def delete(self, using=None, keep_parents=False):
         os.remove(os.path.join(MEDIA_ROOT, self.file.name))
-        super(FileModel, self).delete(using=using, keep_parents=keep_parents)
+        super(self.__class__, self).delete(using=using, keep_parents=keep_parents)
+
+
+class DataflowCompareFilesModel(models.Model):
+    file1: models.FileField = models.FileField(upload_to='documents/%Y/%m/%d')
+    file2: models.FileField = models.FileField(upload_to='documents/%Y/%m/%d')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def delete(self, using=None, keep_parents=False):
+        os.remove(os.path.join(MEDIA_ROOT, self.file1.name))
+        os.remove(os.path.join(MEDIA_ROOT, self.file2.name))
+        super(self.__class__, self).delete(using=using, keep_parents=keep_parents)
 
 
 class Profile(models.Model):

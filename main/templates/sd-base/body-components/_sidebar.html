@@ -34,6 +34,7 @@
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
         {% url 'main:download-dataflow' as url_down_df %}
+        {% url 'main:compare-dataflows' as url_comp_df %}
         {% url 'main:upload-dataflow' as url_up_df %}
         {% url 'main:extract-update-dataflow' as url_mng_df %}
         <a class="nav-link{% if 'dataflow-manager' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse" data-target="#collapseTwo"
@@ -46,6 +47,7 @@
                 <h6 class="collapse-header">Actions:</h6>
                 <a class="collapse-item{% if cur_url == url_down_df %} active{% endif %}" href="{{ url_down_df }}">Download</a>
                 <a class="collapse-item{% if cur_url == url_mng_df %} active{% endif %}" href="{{ url_mng_df }}">Extract | Update</a>
+                <a class="collapse-item{% if cur_url == url_comp_df %} active{% endif %}" href="{{ url_comp_df }}">Compare</a>
                 <a class="collapse-item{% if cur_url == url_up_df %} active{% endif %}" href="{{ url_up_df }}">Upload</a>
             </div>
         </div>

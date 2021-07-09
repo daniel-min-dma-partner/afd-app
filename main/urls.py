@@ -41,6 +41,7 @@ urlpatterns = [
     path('slack/interactive-endpoint/', main.slack_interactive_endpoint, name='slack-interactive-endpoint'),
     url(r'^dataflow-manager/', include([
         url(r'^extract-update/$', main.TreeRemover.as_view(), name='extract-update-dataflow'),
+        url(r'^compare/$', main.CompareDataflows.as_view(), name='compare-dataflows'),
         url(r'^download/$', main.DownloadDataflowView.as_view(), name='download-dataflow'),
         url(r'^upload/$', main.UploadDataflowView.as_view(), name='upload-dataflow'),
     ])),
