@@ -16,12 +16,13 @@ from rest_framework.views import APIView
 from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
 from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
-    SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User
+    SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor
 from .interactors.download_dataflow_interactor import DownloadDataflowInteractor
 from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
+from .interactors.upload_dataflow_interactor import UploadDataflowInteractor
 from .interactors.wdf_manager_interactor import *
 from .models import SalesforceEnvironment as SfdcEnv
 
@@ -305,7 +306,7 @@ class SfdcEnvCreateView(generic.FormView):
 class SfdcEnvDelete(View):
     def post(self, request, *args, **kwargs):
         _obj = get_object_or_404(SfdcEnv, pk=request.POST.get('sfdc-id-field'))
-        # _obj.delete()
+        _obj.delete()
         messages.success(request, mark_safe(f"Connection <code>{_obj.name}</code> deleted succesfully."))
 
         return redirect("main:sfdc-env-list")
@@ -448,6 +449,43 @@ class DownloadDataflowView(generic.FormView):
         return self.form_invalid(form)
 
 
+class UploadDataflowView(generic.FormView):
+    form_class = DataflowUploadForm
+    module = 'dataflow-upload'
+    template_name = 'dataflow-manager/upload/form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        try:
+            form_class = self.get_form_class()
+            form: DataflowUploadForm = form_class(request.POST, request.FILES)
+
+            if form.is_valid():
+                filemodel = form.save(commit=False)
+                filemodel.user = request.user
+                filemodel.save()
+
+                env = get_object_or_404(SfdcEnv, pk=form.cleaned_data['env_selector'])
+                remote_df_name = form.cleaned_data['dataflow_selector']
+                ctx = UploadDataflowInteractor.call(env=env, remote_df_name=remote_df_name, user=request.user,
+                                                    filemodel=filemodel)
+                if ctx.exception:
+                    raise ctx.exception
+                else:
+                    messages.info(request, "OK")
+            else:
+                messages.error(request, form.errors.as_data)
+        except Exception as e:
+            messages.error(request, str(e))
+            raise e
+
+        return redirect("main:upload-dataflow")
+
+
 def ajax_list_dataflows(request):
     payload = {
         "results": [
@@ -473,6 +511,7 @@ def ajax_list_dataflows(request):
         except Exception as e:
             status = 400
             error = str(e)
+            _ = DataflowListInteractor.reset_status(request.user)
 
     return JsonResponse({"payload": payload, "error": error}, status=status)
 

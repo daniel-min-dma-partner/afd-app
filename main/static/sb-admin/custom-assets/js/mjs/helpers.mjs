@@ -1,14 +1,17 @@
 const build_toast = () => {
-    // Bootstrap Toast construction
-    let toastElList = [].slice.call(document.querySelectorAll('.toast'));
-    let toastList = toastElList.map(function (toastEl) {
-        return new bootstrap.Toast(toastEl);
-    });
+    // // Bootstrap Toast construction - Bootstrap 5.0.2
+    // let toastElList = [].slice.call(document.querySelectorAll('.toast'));
+    // let toastList = toastElList.map(function (toastEl) {
+    //     return new bootstrap.Toast(toastEl, {autohide: false});
+    // });
+    //
+    // // Shows Toasts
+    // $.each(toastList, function (index, element) {
+    //     element.show();
+    // });
 
-    // Shows Toasts
-    $.each(toastList, function (index, element) {
-        element.show();
-    });
+    // Boostrap Toast Construction - Bootstrap 4.6.0
+    $('.toast').toast('show');
 };
 
 const popup_notification = (title="Default Title", content="Default Content", type="success") => {
@@ -20,7 +23,7 @@ const popup_notification = (title="Default Title", content="Default Content", ty
     // Html template for Notifications
     let toast_template = "<div aria-live=\"polite\" aria-atomic=\"true\" class=\"my-toast\">\n" +
         "    <div class=\"toast-container position-absolute top-0 end-0 p-3\">\n" +
-        "        <div class=\"toast\" role=\"alert\" aria-live=\"assertive\" aria-atomic=\"true\" data-delay=\"5000\">\n" +
+        "        <div class=\"toast\" role=\"alert\" aria-live=\"assertive\" aria-atomic=\"true\" data-autohide=\"false\">\n" +
         "            <div class=\"toast-header bg-" + type + "\">\n" +
         "                <strong class=\"me-auto\">" + title + "</strong>\n" +
         "                <small class=\"text-muted\">just now</small>\n" +

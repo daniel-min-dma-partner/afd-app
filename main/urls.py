@@ -42,6 +42,7 @@ urlpatterns = [
     url(r'^dataflow-manager/', include([
         url(r'^extract-update/$', main.TreeRemover.as_view(), name='extract-update-dataflow'),
         url(r'^download/$', main.DownloadDataflowView.as_view(), name='download-dataflow'),
+        url(r'^upload/$', main.UploadDataflowView.as_view(), name='upload-dataflow'),
     ])),
 
     # Ajax

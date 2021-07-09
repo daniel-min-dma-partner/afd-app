@@ -51,6 +51,17 @@ class DataflowListInteractor(Interactor):
 
     """
 
+    @classmethod
+    def reset_status(cls, user: User):
+        print('resetting status')
+        status_filenm = f'ant/{user.username}/status.json'
+
+        if os.path.isfile(status_filenm):
+            with open(status_filenm, 'w+') as f:
+                jf = json.load(f)
+                jf['status'] = 0
+        print('status reseted')
+
     def run(self):
         with status_wrapper(self.context.user):
             error = None
@@ -69,7 +80,6 @@ class DataflowListInteractor(Interactor):
                 payload = self._list_metadata_df()
 
             except Exception as e:
-                raise e
                 status = 501
                 error = str(e)
                 payload = bad_payload
@@ -100,9 +110,9 @@ class DataflowListInteractor(Interactor):
 
         diff = (time.time() - os.path.getmtime(self.context.cache_filepath)) / 3600  # in hours
 
-        print(f"============== >> CONDITION ==============")
-        print(f"refresh? {refresh_cache}\nis new file? {is_new_file}\ndiff > 15? {diff > 24}")
-        print(f"============== << CONDITION ==============")
+        # print(f"============== >> CONDITION ==============")
+        # print(f"refresh? {refresh_cache}\nis new file? {is_new_file}\ndiff > 15? {diff > 24}")
+        # print(f"============== << CONDITION ==============")
 
         if refresh_cache or is_new_file or (diff > 15):
             cur_dir_tmp = "_CUR_DIR_TMP_"

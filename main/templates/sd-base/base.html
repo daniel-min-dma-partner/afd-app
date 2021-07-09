@@ -6,10 +6,19 @@
 <head>
 
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{%  static 'favicon-package/apple-touch-icon.png}' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{%  static 'favicon-package/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{%  static 'favicon-package/favicon-16x16.png' %}">
+    <link rel="manifest" href="{%  static 'favicon-package/site.webmanifest' %}">
+    <link rel="mask-icon" href="{%  static 'favicon-package/safari-pinned-tab.svg" color="#5bbad5' %}">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
 
     <title>{% block title %}SB Admin 2 - Dashboard{% endblock title %}</title>
 
@@ -44,35 +53,9 @@
                     {#                    </a>#}
 
                     <!-- Flash Message -->
-                    {% if messages %}
-                        <div aria-live="polite" aria-atomic="true" class="my-toast">
-                            <!-- Position it: -->
-                            <!-- - `.toast-container` for spacing between toasts -->
-                            <!-- - `.position-absolute`, `top-0` & `end-0` to position the toasts in the upper right corner -->
-                            <!-- - `.p-3` to prevent the toasts from sticking to the edge of the container  -->
-                            <div class="toast-container position-absolute top-0 end-0 p-3">
-
-                                {% for message in messages %}
-                                    <!-- Then put toasts within -->
-                                    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"
-                                         data-delay="5000">
-                                        <div class="toast-header bg-{% if 'error' in message.tags %}danger{% else %}{{ message.tags }}{% endif %}">
-                                            <strong class="me-auto">{{ message.tags|title }}</strong>
-                                            <small class="text-muted">just now</small>
-                                            <button type="button" class="btn-close" data-bs-dismiss="toast"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="toast-body">
-                                            {{ message }}
-                                        </div>
-                                    </div>
-                                {% endfor %}
-
-                            </div>
-                        </div>
-                    {% endif %}
+                    {% include 'sd-base/body-components/_flash-component.html' %}
+                    <!-- End Flash Message -->
                 </div>
-                <!-- End Flash Message -->
 
                 <!-- Page Content -->
                 {% block page-content %}
