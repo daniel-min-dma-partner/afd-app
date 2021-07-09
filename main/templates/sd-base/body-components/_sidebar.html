@@ -33,6 +33,22 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
+        {% url 'main:sfdc-env-list' as url_envs %}
+        <a class="nav-link{% if 'sfdc/env/' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse" data-target="#collapse3"
+           aria-expanded="{% if 'sfdc/env/' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapse3">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>O-Auth Connections</span>
+        </a>
+        <div id="collapse3" class="collapse{% if 'sfdc/env/' in cur_url %} show{% endif %}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Actions:</h6>
+                <a class="collapse-item{% if cur_url == url_envs %} active{% endif %}" href="{{ url_envs }}">Show Status</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
         {% url 'main:download-dataflow' as url_down_df %}
         {% url 'main:compare-dataflows' as url_comp_df %}
         {% url 'main:upload-dataflow' as url_up_df %}
@@ -40,7 +56,7 @@
         <a class="nav-link{% if 'dataflow-manager' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse" data-target="#collapseTwo"
            aria-expanded="{% if 'dataflow-manager' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
-            <span>Manage Dataflows</span>
+            <span>Tableau CRM Dataflows</span>
         </a>
         <div id="collapseTwo" class="collapse{% if 'dataflow-manager' in cur_url %} show{% endif %}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
@@ -49,22 +65,6 @@
                 <a class="collapse-item{% if cur_url == url_mng_df %} active{% endif %}" href="{{ url_mng_df }}">Extract | Update</a>
                 <a class="collapse-item{% if cur_url == url_comp_df %} active{% endif %}" href="{{ url_comp_df }}">Compare</a>
                 <a class="collapse-item{% if cur_url == url_up_df %} active{% endif %}" href="{{ url_up_df }}">Upload</a>
-            </div>
-        </div>
-    </li>
-
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        {% url 'main:sfdc-env-list' as url_envs %}
-        <a class="nav-link{% if 'sfdc/env/' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse" data-target="#collapse3"
-           aria-expanded="{% if 'sfdc/env/' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapse3">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Manage Connections</span>
-        </a>
-        <div id="collapse3" class="collapse{% if 'sfdc/env/' in cur_url %} show{% endif %}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Actions:</h6>
-                <a class="collapse-item{% if cur_url == url_envs %} active{% endif %}" href="{{ url_envs }}">Show Status</a>
             </div>
         </div>
     </li>
@@ -83,12 +83,12 @@
         <a class="nav-link{% if 'slack/' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse" data-target="#collapse4"
            aria-expanded="{% if 'slack/' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapse4">
             <i class="fas fa-fw fa-cog"></i>
-            <span>Manage Comunications</span>
+            <span>Communications</span>
         </a>
         <div id="collapse4" class="collapse{% if 'slack/' in cur_url %} show{% endif %}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Actions:</h6>
-                <a class="collapse-item{% if cur_url == url_slack %} active{% endif %}" href="{{ url_slack }}">Request Approval</a>
+                <a class="collapse-item{% if cur_url == url_slack %} active{% endif %}" href="{{ url_slack }}">Request an approval</a>
             </div>
         </div>
     </li>
