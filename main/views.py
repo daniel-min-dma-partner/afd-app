@@ -16,15 +16,17 @@ from rest_framework.views import APIView
 from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
 from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
-    SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm
+    SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm, \
+    DeprecateFieldsForm
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser
+from .interactors.deprecate_fields_interactor import FieldDeprecatorInteractor
 from .interactors.download_dataflow_interactor import DownloadDataflowInteractor
 from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.upload_dataflow_interactor import UploadDataflowInteractor
 from .interactors.wdf_manager_interactor import *
-from .models import SalesforceEnvironment as SfdcEnv
+from .models import SalesforceEnvironment as SfdcEnv, FileModel
 
 
 class Home(generic.TemplateView):
@@ -479,7 +481,7 @@ class UploadDataflowView(generic.FormView):
                     msg = "Uploading <code>{0}</code> local dataflow to <code>{1}</code> dataflow to " \
                           "<code>{2}</code> connection has finished."\
                         .format(
-                            filemodel.file.name, remote_df_name, env.name
+                            os.path.basename(filemodel.file.name), remote_df_name, env.name
                         )
                     messages.info(request, mark_safe(msg))
             else:
@@ -523,6 +525,62 @@ class CompareDataflows(generic.FormView):
             messages.error(request, str(e))
 
         return redirect("main:compare-dataflows")
+
+
+class DeprecateFieldsView(generic.FormView):
+    template_name = 'dataflow-manager/deprecate-fields/form.html'
+    form_class = DeprecateFieldsForm
+    success_url = '/dataflow-manager/deprecate-fields/'
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        df_files = []
+
+        try:
+            if form.is_valid():
+                # Prepare fields
+                fields = [field.rstrip() for field in request.POST.get('fields').split('\n')]
+
+                # Prepare objects
+                objects = [object.rstrip() for object in request.POST.get('objects').split('\n')]
+                _objects = []
+
+                for object in objects:
+                    if "," in object:
+                        _objects += [_object.strip() for _object in object.split(',') if _object.strip() not in [None, ""]]
+                        objects.remove(object)
+                    elif not object:
+                        objects.remove(object)
+                objects += _objects
+                objects = list(set(objects))
+
+                # Prepare dataflow contents
+                for file in request.FILES.getlist('files'):
+                    filemodel = FileModel(file=file)
+                    filemodel.user = request.user
+                    filemodel.save()
+                    df_files.append(filemodel)
+
+                # Calls interactor
+                ctx = FieldDeprecatorInteractor.call(df_files=df_files, objects=objects, fields=fields)
+
+                if ctx.exception:
+                    raise ctx.exception
+
+                for fm in df_files:
+                    fm.delete()
+
+                messages.info(request, "Ok")
+                return self.form_valid(form)
+            else:
+                messages.error(request, form.errors.as_data())
+                return self.form_invalid(form)
+        except Exception as e:
+            for fm in df_files:
+                fm.delete()
+
+            messages.error(request, mark_safe(str(e)))
+            return redirect("main:deprecate-fields")
 
 
 def ajax_list_dataflows(request):

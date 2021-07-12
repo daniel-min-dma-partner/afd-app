@@ -268,3 +268,22 @@ class CompareDataflowForm(forms.ModelForm):
             model.save()
         return model
 
+
+class DeprecateFieldsForm(forms.Form):
+    files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+    objects = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
+    fields = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
+
+    # class Meta:
+    #     model = FileModel
+    #     exclude = {}
+    #     fields = {'file'}
+    #
+    # def save(self, commit=True):
+    #     model = super(self.__class__, self).save(commit=False)
+    #     if commit:
+    #         model.save()
+    #     return model
+
