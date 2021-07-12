@@ -15,6 +15,7 @@ class FileModel(models.Model):
     UPLOAD_TO = 'documents/%Y/%m/%d'
 
     file: models.FileField = models.FileField(upload_to=UPLOAD_TO)
+    parent_file = models.ForeignKey("FileModel", blank=True, null=True, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def delete(self, using=None, keep_parents=False):
@@ -23,6 +24,13 @@ class FileModel(models.Model):
         if os.path.isfile(_filepath) and not os.path.isdir(_filepath):
             os.remove(_filepath)
             print(f"File {_filepath} deleted")
+
+        _filepath = os.path.join(MEDIA_ROOT, self.file.name + '.log')
+        print(f'Trying to delete {_filepath}')
+        if os.path.isfile(_filepath) and not os.path.isdir(_filepath):
+            os.remove(_filepath)
+            print(f"File {_filepath} deleted")
+
         super(self.__class__, self).delete(using=using, keep_parents=keep_parents)
 
 

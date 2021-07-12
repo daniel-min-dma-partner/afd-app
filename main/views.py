@@ -4,6 +4,7 @@ from urllib import parse
 import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as do_login, logout as do_logout
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.safestring import mark_safe
@@ -579,8 +580,51 @@ class DeprecateFieldsView(generic.FormView):
             for fm in df_files:
                 fm.delete()
 
+            raise e
+
             messages.error(request, mark_safe(str(e)))
             return redirect("main:deprecate-fields")
+
+
+class ViewDeprecatedFieldsView(generic.ListView):
+    context_object_name = 'list'
+    template_name = 'dataflow-manager/deprecate-fields/list.html'
+
+    def get_queryset(self):
+        lst = FileModel.objects.filter(user_id=self.request.user.pk).filter(
+            Q(file__icontains="field-deprecations") &
+            ~Q(file__icontains="DEPRECATED__")
+        ).order_by('-file')
+        return lst
+
+
+@csrf_exempt
+def ajax_compare_deprecation(request):
+    payload = None
+    error = "Code not executed"
+    status = 400
+    try:
+        if request.is_ajax() and request.method == 'GET' and request.GET.getlist('pk') is not None:
+            error = None
+            status = 200
+
+            filemodel = get_object_or_404(FileModel, pk=int(request.GET.getlist('pk')[0]))
+            second_fm = FileModel.objects.filter(
+                Q(file__icontains=filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))
+            )
+            if second_fm.exists():
+                second_fm = second_fm.first()
+                show_in_browser(filemodel.file.path, second_fm.file.path)
+                messages.info(request, "Showing difference in a new tab.")
+            else:
+                raise ValueError(f"<code>{os.path.basename(filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))}"
+                                 f"</code> doesn't exist.")
+    except Exception as e:
+        payload = None
+        error = mark_safe(str(e))
+        status = 401
+
+    return JsonResponse({"payload": payload, "error": error}, status=status)
 
 
 def ajax_list_dataflows(request):

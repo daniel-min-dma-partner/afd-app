@@ -2,10 +2,13 @@ import json
 import os.path
 from pathlib import Path
 
+from django.core.files.base import ContentFile
+
 from libs.interactor.interactor import Interactor
 from libs.tcrm_automation.libs.deprecation_libs import delete_fields_of_deleted_node, perform_deprecation
 from libs.tcrm_automation.libs.json_libs import get_nodes_by_action
 from libs.utils import current_datetime
+from main.models import FileModel
 
 
 class FieldDeprecatorInteractor(Interactor):
@@ -28,6 +31,10 @@ class FieldDeprecatorInteractor(Interactor):
 
     def run(self):
         _exc = None
+
+        filemodels = []
+        deprec_fms = []
+
         try:
             df_file_models = self.context.df_files
             objects = self.context.objects
@@ -63,21 +70,35 @@ class FieldDeprecatorInteractor(Interactor):
 
                     dataflow = json.load(f)
 
-                    with open(os.path.join(deprecation_dir, f"[ORIGINAL] {df_name}"), 'w') as f:
-                        json.dump(dataflow, f, indent=2)
+                    file_model = FileModel()
+                    file_model.user = df_file.user
+                    file_model.file.save(f'field-deprecations/ORIGINAL__{df_name}',
+                                         ContentFile(json.dumps(dataflow, indent=2)))
+                    filemodels.append(file_model)
 
-                    with open(os.path.join(deprecation_dir, f"{df_name}.log"), 'w') as log_file:
+                    base_name = os.path.basename(file_model.file.name)
 
+                    with open(os.path.join(deprecation_dir, f"{base_name.replace('ORIGINAL__', '')}.log"),
+                              'w') as log_file:
                         node_list = get_nodes_by_action(df=dataflow, action=['sfdcDigest', 'digest', 'edgemart'])
                         json_modified = perform_deprecation(df=dataflow, fieldlist=field_md,
                                                             node_list=node_list, df_name=df_name,
                                                             log_file=log_file)
                         json_modified = delete_fields_of_deleted_node(json_modified)
 
-                        with open(os.path.join(deprecation_dir, f'[DEPRECATED] {df_name}'), 'w') as deprecated_file:
-                            json.dump(json_modified, deprecated_file, indent=2)
+                        deprec_fm = FileModel()
+                        deprec_fm.user = df_file.user
+                        deprec_fm.parent_file = file_model
+                        deprec_fm.file.save(f"field-deprecations/{base_name.replace('ORIGINAL__', 'DEPRECATED__')}",
+                                             ContentFile(json.dumps(json_modified, indent=2)))
+                        deprec_fms.append(deprec_fm)
 
         except Exception as e:
+            for file_model in filemodels:
+                file_model.delete()
+            for deprec_fm in deprec_fms:
+                if deprec_fm:
+                    deprec_fm.delete()
             _exc = e
 
         self.context.exception = _exc

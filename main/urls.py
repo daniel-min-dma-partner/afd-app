@@ -42,7 +42,11 @@ urlpatterns = [
     url(r'^dataflow-manager/', include([
         url(r'^extract-update/$', main.TreeRemover.as_view(), name='extract-update-dataflow'),
         url(r'^compare/$', main.CompareDataflows.as_view(), name='compare-dataflows'),
-        url(r'^deprecate-fields/$', main.DeprecateFieldsView.as_view(), name='deprecate-fields'),
+        url(r'^deprecate-fields/', include([
+            url(r'^$', main.DeprecateFieldsView.as_view(), name='deprecate-fields'),
+            url(r'^view/$', main.ViewDeprecatedFieldsView.as_view(), name='view-deprecations'),
+            url(r'^compare/$', main.ajax_compare_deprecation, name='compare-deprecations'),
+        ])),
         url(r'^download/$', main.DownloadDataflowView.as_view(), name='download-dataflow'),
         url(r'^upload/$', main.UploadDataflowView.as_view(), name='upload-dataflow'),
     ])),

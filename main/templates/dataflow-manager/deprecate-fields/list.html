@@ -1,0 +1,61 @@
+{% extends 'sd-base/base.html' %}
+
+{% load static %}
+{% load main_extras %}
+
+{% block title %}Manage Dataflows{% endblock title %}
+{% block page-header %}Manage Dataflows{% endblock page-header %}
+
+{% block header-scripts %}
+    <script>
+        let show_diff_url = "{% url 'main:compare-deprecations' %}";
+    </script>
+{% endblock header-scripts %}
+
+{% block page-content %}
+    {% for object in list %}
+
+    {% endfor %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            {#                            <th class="text-center">Status</th>#}
+                            <th>PK</th>
+                            <th>Name</th>
+                            <th>Link</th>
+                            {#                            <th>Instance</th>#}
+                            {#                            <th>Oauth Flow Status</th>#}
+                            {#                            <th>Access Token Created Date</th>#}
+                            {#                            <th class="text-right">Connect?</th>#}
+                            {#                            <th class="text-right">CRUD</th>#}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for object in list %}
+                            <tr>
+                                <td class="pk">{{ object.pk }}</td>
+                                <td>{{ object.file.name|remove_prefix }}</td>
+                                <td>
+                                    <a href="#"
+                                       rel="tooltip" class="btn btn-success btn-show-diff">
+                                        <i class="material-icons">link</i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock page-content %}
+
+{% block extra-scripts %}
+    <script src="{% static 'site/js/list-deprecation.js' %}" type="module"></script>
+{% endblock extra-scripts %}
