@@ -27,7 +27,6 @@ def status_wrapper(user: User):
     with open(status_filenm, 'r') as f:
         jf = json.load(f)
 
-    print(f"========== status es: {jf['status']}")
     if jf['status'] == 1:
         raise BlockingIOError("Another request is already in queue.")
 
