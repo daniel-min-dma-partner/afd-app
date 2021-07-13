@@ -13,16 +13,6 @@ $('.logout').click(function () {
     $('#logoutModal .modal-body').html("You'll be log-ed out.");
 });
 
-// Closes the notification box when "x" is clicked
-$('.btn-close').click(function (evt) {
-    $(this).parent().parent().toast('hide');
-});
-
-// Closes the toast when header or body is clicked
-$('.toast-header, .toast-body').click(function (evt) {
-    $(this).parent().toast('hide');
-});
-
 $('.menu-item-finder').on('keyup click', function(evt) {
     var processed_parent = [];
 

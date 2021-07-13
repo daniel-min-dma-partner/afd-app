@@ -12,11 +12,31 @@ from core.settings import MEDIA_ROOT
 # Create your models here.
 
 class FileModel(models.Model):
-    file: models.FileField = models.FileField(upload_to='documents/%Y/%m/%d')
+    UPLOAD_TO = 'documents/%Y/%m/%d'
+
+    file: models.FileField = models.FileField(upload_to=UPLOAD_TO)
+    parent_file = models.ForeignKey("FileModel", blank=True, null=True, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def delete(self, using=None, keep_parents=False):
-        os.remove(os.path.join(MEDIA_ROOT, self.file.name))
+        _filepath = os.path.join(MEDIA_ROOT, self.file.name)
+        print(f'Trying to delete {_filepath}')
+        if os.path.isfile(_filepath) and not os.path.isdir(_filepath):
+            os.remove(_filepath)
+            print(f"File {_filepath} deleted")
+
+        _filepath = os.path.join(MEDIA_ROOT, self.file.name.replace('ORIGINAL__', '') + '.log')
+        print(f'Trying to delete {_filepath}')
+        if os.path.isfile(_filepath) and not os.path.isdir(_filepath):
+            os.remove(_filepath)
+            print(f"File {_filepath} deleted")
+
+        _filepath = os.path.join(MEDIA_ROOT, self.file.name.replace('ORIGINAL__', 'DEPRECATED__'))
+        print(f'Trying to delete {_filepath}')
+        if os.path.isfile(_filepath) and not os.path.isdir(_filepath):
+            os.remove(_filepath)
+            print(f"File {_filepath} deleted")
+
         super(self.__class__, self).delete(using=using, keep_parents=keep_parents)
 
 

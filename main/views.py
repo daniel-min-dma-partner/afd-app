@@ -4,6 +4,7 @@ from urllib import parse
 import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as do_login, logout as do_logout
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.safestring import mark_safe
@@ -16,15 +17,17 @@ from rest_framework.views import APIView
 from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
 from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
-    SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm
+    SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm, \
+    DeprecateFieldsForm
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser
+from .interactors.deprecate_fields_interactor import FieldDeprecatorInteractor
 from .interactors.download_dataflow_interactor import DownloadDataflowInteractor
 from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.upload_dataflow_interactor import UploadDataflowInteractor
 from .interactors.wdf_manager_interactor import *
-from .models import SalesforceEnvironment as SfdcEnv
+from .models import SalesforceEnvironment as SfdcEnv, FileModel
 
 
 class Home(generic.TemplateView):
@@ -479,7 +482,7 @@ class UploadDataflowView(generic.FormView):
                     msg = "Uploading <code>{0}</code> local dataflow to <code>{1}</code> dataflow to " \
                           "<code>{2}</code> connection has finished."\
                         .format(
-                            filemodel.file.name, remote_df_name, env.name
+                            os.path.basename(filemodel.file.name), remote_df_name, env.name
                         )
                     messages.info(request, mark_safe(msg))
             else:
@@ -523,6 +526,136 @@ class CompareDataflows(generic.FormView):
             messages.error(request, str(e))
 
         return redirect("main:compare-dataflows")
+
+
+class DeprecateFieldsView(generic.FormView):
+    template_name = 'dataflow-manager/deprecate-fields/form.html'
+    form_class = DeprecateFieldsForm
+    success_url = '/dataflow-manager/deprecate-fields/'
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        df_files = []
+
+        try:
+            if form.is_valid():
+                # Prepare fields
+                fields = [field.rstrip() for field in request.POST.get('fields').split('\n')]
+
+                # Prepare objects
+                objects = [object.rstrip() for object in request.POST.get('objects').split('\n')]
+                _objects = []
+
+                for object in objects:
+                    if "," in object:
+                        _objects += [_object.strip() for _object in object.split(',') if _object.strip() not in [None, ""]]
+                        objects.remove(object)
+                    elif not object:
+                        objects.remove(object)
+                objects += _objects
+                objects = list(set(objects))
+
+                # Prepare dataflow contents
+                for file in request.FILES.getlist('files'):
+                    filemodel = FileModel(file=file)
+                    filemodel.user = request.user
+                    filemodel.save()
+                    df_files.append(filemodel)
+
+                # Calls interactor
+                ctx = FieldDeprecatorInteractor.call(df_files=df_files, objects=objects, fields=fields)
+
+                if ctx.exception:
+                    raise ctx.exception
+
+                for fm in df_files:
+                    fm.delete()
+
+                messages.info(request, "Ok")
+                return self.form_valid(form)
+            else:
+                messages.error(request, form.errors.as_data())
+                return self.form_invalid(form)
+        except Exception as e:
+            for fm in df_files:
+                fm.delete()
+
+            raise e
+
+            messages.error(request, mark_safe(str(e)))
+            return redirect("main:deprecate-fields")
+
+
+class ViewDeprecatedFieldsView(generic.ListView):
+    context_object_name = 'list'
+    template_name = 'dataflow-manager/deprecate-fields/list.html'
+
+    def get_queryset(self):
+        lst = FileModel.objects.filter(user_id=self.request.user.pk).filter(
+            Q(file__icontains="field-deprecations") &
+            ~Q(file__icontains="DEPRECATED__")
+        ).order_by('-file')
+        return lst
+
+
+@csrf_exempt
+def ajax_compare_deprecation(request):
+    payload = None
+    error = "Code not executed"
+    status = 400
+    try:
+        if request.is_ajax() and request.method == 'GET' and request.GET.getlist('pk') is not None:
+            error = None
+            status = 200
+
+            filemodel = get_object_or_404(FileModel, pk=int(request.GET.getlist('pk')[0]))
+            second_fm = FileModel.objects.filter(
+                Q(file__icontains=filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))
+            )
+            if second_fm.exists():
+                second_fm = second_fm.first()
+                show_in_browser(filemodel.file.path, second_fm.file.path)
+                messages.info(request, "Showing difference in a new tab.")
+            else:
+                raise ValueError(f"<code>{os.path.basename(filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))}"
+                                 f"</code> doesn't exist.")
+    except Exception as e:
+        payload = None
+        error = mark_safe(str(e))
+        status = 401
+
+    return JsonResponse({"payload": payload, "error": error}, status=status)
+
+
+@csrf_exempt
+def ajax_delete_deprecation(request):
+    message = "Code not executed. Contact to the web admin."
+    typ = messages.ERROR
+    try:
+        if request.method == 'POST' and request.POST.getlist('id-field') is not None:
+
+            filemodel = get_object_or_404(FileModel, pk=int(request.POST.getlist('id-field')[0]))
+            second_fm = FileModel.objects.filter(
+                Q(file__icontains=filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))
+            )
+            if second_fm.exists():
+                second_fm = second_fm.first()
+                if second_fm.parent_file.file.name == filemodel.file.name:
+                    filemodel.delete()
+                    message = "Deprecation deleted successfully."
+                    typ = messages.SUCCESS
+                else:
+                    raise ValueError("For some reason, the main file and the queried parent file aren't the same.")
+            else:
+                raise ValueError(f"<code>{os.path.basename(filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))}"
+                                 f"</code> doesn't exist.")
+    except Exception as e:
+        message = mark_safe(str(e))
+        typ = messages.ERROR
+        raise e
+
+    messages.add_message(request, typ, message)
+    return redirect("main:view-deprecations")
 
 
 def ajax_list_dataflows(request):

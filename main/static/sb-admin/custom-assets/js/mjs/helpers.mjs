@@ -12,6 +12,16 @@ const build_toast = () => {
 
     // Boostrap Toast Construction - Bootstrap 4.6.0
     $('.toast').toast('show');
+
+    // Closes the notification box when "x" is clicked
+    $('.btn-close').click(function (evt) {
+        $(this).parent().parent().toast('hide');
+    });
+
+    // Closes the toast when header or body is clicked
+    $('.toast-header, .toast-body').click(function (evt) {
+        $(this).parent().toast('hide');
+    });
 };
 
 const popup_notification = (title="Default Title", content="Default Content", type="success") => {
