@@ -28,3 +28,8 @@ $('.btn-show-diff').on('click', function (evt) {
         },
     });
 });
+
+$('.btn-remove-deprec').on('click', function () {
+    $('#delete-confirmation-md .modal-body').find('input[id="id-field"]').val($(this).data('id')).trigger('change');
+    $('#delete-confirmation-md .modal-body').find('input[id="name-field"]').val($(this).data('model-name')).trigger('change');
+});

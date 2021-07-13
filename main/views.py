@@ -627,6 +627,37 @@ def ajax_compare_deprecation(request):
     return JsonResponse({"payload": payload, "error": error}, status=status)
 
 
+@csrf_exempt
+def ajax_delete_deprecation(request):
+    message = "Code not executed. Contact to the web admin."
+    typ = messages.ERROR
+    try:
+        if request.method == 'POST' and request.POST.getlist('id-field') is not None:
+
+            filemodel = get_object_or_404(FileModel, pk=int(request.POST.getlist('id-field')[0]))
+            second_fm = FileModel.objects.filter(
+                Q(file__icontains=filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))
+            )
+            if second_fm.exists():
+                second_fm = second_fm.first()
+                if second_fm.parent_file.file.name == filemodel.file.name:
+                    filemodel.delete()
+                    message = "Deprecation deleted successfully."
+                    typ = messages.SUCCESS
+                else:
+                    raise ValueError("For some reason, the main file and the queried parent file aren't the same.")
+            else:
+                raise ValueError(f"<code>{os.path.basename(filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))}"
+                                 f"</code> doesn't exist.")
+    except Exception as e:
+        message = mark_safe(str(e))
+        typ = messages.ERROR
+        raise e
+
+    messages.add_message(request, typ, message)
+    return redirect("main:view-deprecations")
+
+
 def ajax_list_dataflows(request):
     payload = {
         "results": [

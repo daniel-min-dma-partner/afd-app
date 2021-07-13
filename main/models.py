@@ -25,7 +25,13 @@ class FileModel(models.Model):
             os.remove(_filepath)
             print(f"File {_filepath} deleted")
 
-        _filepath = os.path.join(MEDIA_ROOT, self.file.name + '.log')
+        _filepath = os.path.join(MEDIA_ROOT, self.file.name.replace('ORIGINAL__', '') + '.log')
+        print(f'Trying to delete {_filepath}')
+        if os.path.isfile(_filepath) and not os.path.isdir(_filepath):
+            os.remove(_filepath)
+            print(f"File {_filepath} deleted")
+
+        _filepath = os.path.join(MEDIA_ROOT, self.file.name.replace('ORIGINAL__', 'DEPRECATED__'))
         print(f'Trying to delete {_filepath}')
         if os.path.isfile(_filepath) and not os.path.isdir(_filepath):
             os.remove(_filepath)
