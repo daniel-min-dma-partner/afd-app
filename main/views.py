@@ -591,6 +591,7 @@ class ViewDeprecatedFieldsView(generic.ListView):
     template_name = 'dataflow-manager/deprecate-fields/list.html'
 
     def get_queryset(self):
+        print(self.request.GET)
         lst = FileModel.objects.filter(user_id=self.request.user.pk).filter(
             Q(file__icontains="field-deprecations") &
             ~Q(file__icontains="DEPRECATED__")

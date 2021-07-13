@@ -4,7 +4,7 @@
 {% load main_extras %}
 
 {% block title %}Manage Dataflows{% endblock title %}
-{% block page-header %}Manage Dataflows{% endblock page-header %}
+{% block page-header %}Tableau CRM Dataflows / Deprecation{% endblock page-header %}
 
 {% block header-scripts %}
     <script>
@@ -40,7 +40,7 @@
                         {% for object in list %}
                             <tr>
                                 <td class="pk">{{ object.pk }}</td>
-                                <td>{{ object.file.name }}</td>
+                                <td title="{{ object.file.path }}">{{ object.file.name }}</td>
                                 <td class="text-center">
                                     <a href="#"
                                        rel="tooltip" class="btn btn-info btn-circle btn-sm btn-show-diff"

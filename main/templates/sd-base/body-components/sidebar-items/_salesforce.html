@@ -27,8 +27,8 @@
 <li class="nav-item">
     {% url 'main:download-dataflow' as url_down_df %}
     {% url 'main:compare-dataflows' as url_comp_df %}
-    {% url 'main:deprecate-fields' as url_depre_df %}
-    {% url 'main:view-deprecations' as url_depre_list %}
+    {% url 'main:deprecate-fields' as url_depr_df %}
+    {% url 'main:view-deprecations' as url_view_dp %}
     {% url 'main:upload-dataflow' as url_up_df %}
     {% url 'main:extract-update-dataflow' as url_mng_df %}
     <a class="nav-link{% if 'dataflow-manager' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse"
@@ -40,17 +40,19 @@
     <div id="collapseTwo" class="collapse{% if 'dataflow-manager' in cur_url %} show{% endif %}"
          aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Actions:</h6>
-            <a class="collapse-item{% if cur_url == url_depre_df %} active{% endif %}"
-               href="{{ url_depre_df }}">Deprecate fields</a>
-            <a class="collapse-item{% if cur_url == url_depre_list %} active{% endif %}"
-               href="{{ url_depre_list }}">View deprecations</a>
-            <a class="collapse-item{% if cur_url == url_down_df %} active{% endif %}"
-               href="{{ url_down_df }}">Download</a>
-            <a class="collapse-item{% if cur_url == url_mng_df %} active{% endif %}" href="{{ url_mng_df }}">Extract |
-                Update</a>
+            <h6 class="collapse-header">Deprecation:</h6>
+            <a class="collapse-item{% if cur_url == url_depr_df %} active{% endif %}" href="{{ url_depr_df }}">Deprecate
+                fields</a>
+            <a class="collapse-item{% if cur_url == url_view_dp %} active{% endif %}" href="{{ url_view_dp }}">View
+                deprecations</a>
+            <h6 class="collapse-header">Modification:</h6>
             <a class="collapse-item{% if cur_url == url_comp_df %} active{% endif %}"
                href="{{ url_comp_df }}">Compare</a>
+            <a class="collapse-item{% if cur_url == url_mng_df %} active{% endif %}" href="{{ url_mng_df }}">Extract |
+                Update</a>
+            <h6 class="collapse-header">Remote Connection:</h6>
+            <a class="collapse-item{% if cur_url == url_down_df %} active{% endif %}"
+               href="{{ url_down_df }}">Download</a>
             <a class="collapse-item{% if cur_url == url_up_df %} active{% endif %}" href="{{ url_up_df }}">Upload</a>
         </div>
     </div>
