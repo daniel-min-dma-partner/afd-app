@@ -14,10 +14,10 @@ const generate_saql = (secpred_field, saql_field, dataset_field) => {
             let regex = /'[A-Za-z_0-9-']+/g;
             return regex.exec(element.trim());
         }).map((element) => {
-            return element[0].replaceAll("'", '')
+            return element === null ? "" : element[0].replaceAll("'", '')
         }),
         dataset = dataset_field.val(),
-        saql = "q = load \"" + dataset + "\";\n" +
+        saql = tokens.join("") === "" ? "" : "q = load \"" + dataset + "\";\n" +
             "q = foreach q generate '" + tokens.join("', '") + "';\n" +
             "q = limit q 10;"
     ;
