@@ -52,6 +52,12 @@ urlpatterns = [
         url(r'^upload/$', main.UploadDataflowView.as_view(), name='upload-dataflow'),
     ])),
 
+    url(r'^dataset-manager/', include([
+        url(r'^security-predicate/', include([
+            url(r'^convert-to-saql/$', main.SecpredToSaqlView.as_view(), name='secpred-to-saql'),
+        ])),
+    ])),
+
     # Ajax
     url(r'^ajax/', include([
         url(r'^list-dataflows/$', main.ajax_list_dataflows, name='ajax-list-dataflows'),

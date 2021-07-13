@@ -18,7 +18,7 @@ from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
 from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
     SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm, \
-    DeprecateFieldsForm
+    DeprecateFieldsForm, SecpredToSaqlForm
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser
 from .interactors.deprecate_fields_interactor import FieldDeprecatorInteractor
 from .interactors.download_dataflow_interactor import DownloadDataflowInteractor
@@ -580,8 +580,6 @@ class DeprecateFieldsView(generic.FormView):
             for fm in df_files:
                 fm.delete()
 
-            raise e
-
             messages.error(request, mark_safe(str(e)))
             return redirect("main:deprecate-fields")
 
@@ -597,6 +595,12 @@ class ViewDeprecatedFieldsView(generic.ListView):
             ~Q(file__icontains="DEPRECATED__")
         ).order_by('-file')
         return lst
+
+
+class SecpredToSaqlView(generic.FormView):
+    template_name = 'dataset-manager/secpred-to-saql-converter/form.html'
+    form_class = SecpredToSaqlForm
+    success_url = '/dataset-manager/security-predicate/convert-to-saql/'
 
 
 @csrf_exempt

@@ -276,14 +276,12 @@ class DeprecateFieldsForm(forms.Form):
     fields = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
 
-    # class Meta:
-    #     model = FileModel
-    #     exclude = {}
-    #     fields = {'file'}
-    #
-    # def save(self, commit=True):
-    #     model = super(self.__class__, self).save(commit=False)
-    #     if commit:
-    #         model.save()
-    #     return model
 
+class SecpredToSaqlForm(forms.Form):
+    dataset = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True,
+                              label="Dataflow API Name")
+    secpred = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': ""}),
+                              required=False, label="Security Predicate")
+    saql = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 10, 'placeholder': "", "readonly": True}),
+        required=False, label="Generated SAQL")
