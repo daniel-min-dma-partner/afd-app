@@ -1,3 +1,5 @@
+import {popup_notification} from "../../sb-admin/custom-assets/js/mjs/helpers.mjs";
+
 $('#id_secpred').keyup(function (e) {
     generate_saql($(this), $("#id_saql"), $("#id_dataset"));
 });
@@ -15,10 +17,19 @@ const generate_saql = (secpred_field, saql_field, dataset_field) => {
             return element[0].replaceAll("'", '')
         }),
         dataset = dataset_field.val(),
-        saql = "q = load '" + dataset + "';\n" +
+        saql = "q = load \"" + dataset + "\";\n" +
             "q = foreach q generate '" + tokens.join("', '") + "';\n" +
             "q = limit q 10;"
     ;
 
     saql_field.val(saql).trigger('change');
 };
+
+$(".btn-copy-to-clip").click((evt) => {
+    $("#id_saql").focus().select();
+    document.execCommand("copy");
+
+    if (($("#id_saql").val()).length > 0) {
+        popup_notification("Copying to Clipboard", "Success", "success");
+    }
+});
