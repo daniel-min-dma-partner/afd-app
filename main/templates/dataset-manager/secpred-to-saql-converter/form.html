@@ -35,6 +35,16 @@
                             {{ form.saql }}
                         </div>
                     </div>
+
+
+                    <div class="form-group">
+                        <a class="btn btn-primary btn-icon-split btn-copy-to-clip float-right">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-clipboard-check"></i>
+                            </span>
+                            <span class="text">Copy to Clipboard</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -42,5 +52,5 @@
 {% endblock page-content %}
 
 {% block extra-scripts %}
-    <script src="{% static 'site/js/secpred-to-saql.js' %}"></script>
+    <script src="{% static 'site/js/secpred-to-saql.js' %}" type="module"></script>
 {% endblock extra-scripts %}
