@@ -9,12 +9,12 @@
 <li class="nav-item">
     {% url 'main:sfdc-env-list' as url_envs %}
     <a class="nav-link{% if 'sfdc/env/' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse"
-       data-target="#collapse3"
-       aria-expanded="{% if 'sfdc/env/' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapse3">
+       data-target="#collapse1"
+       aria-expanded="{% if 'sfdc/env/' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapse1">
         <i class="fas fa-fw fa-cog"></i>
         <span>O-Auth Connections</span>
     </a>
-    <div id="collapse3" class="collapse{% if 'sfdc/env/' in cur_url %} show{% endif %}" aria-labelledby="headingTwo"
+    <div id="collapse1" class="collapse{% if 'sfdc/env/' in cur_url %} show{% endif %}" aria-labelledby="headingTwo"
          data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Actions:</h6>
@@ -32,12 +32,12 @@
     {% url 'main:upload-dataflow' as url_up_df %}
     {% url 'main:extract-update-dataflow' as url_mng_df %}
     <a class="nav-link{% if 'dataflow-manager' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse"
-       data-target="#collapseTwo"
-       aria-expanded="{% if 'dataflow-manager' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapseTwo">
+       data-target="#collapse2"
+       aria-expanded="{% if 'dataflow-manager' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapse2">
         <i class="fas fa-fw fa-cog"></i>
         <span>Tableau CRM Dataflows</span>
     </a>
-    <div id="collapseTwo" class="collapse{% if 'dataflow-manager' in cur_url %} show{% endif %}"
+    <div id="collapse2" class="collapse{% if 'dataflow-manager' in cur_url %} show{% endif %}"
          aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Deprecation:</h6>
@@ -62,12 +62,12 @@
 <li class="nav-item">
     {% url 'main:secpred-to-saql' as url_sectosaql %}
     <a class="nav-link{% if 'dataset-manager' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse"
-       data-target="#collapseTwo"
-       aria-expanded="{% if 'dataset-manager' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapseTwo">
+       data-target="#collapse3"
+       aria-expanded="{% if 'dataset-manager' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapse3">
         <i class="fas fa-fw fa-cog"></i>
         <span>Tableau CRM Datasets</span>
     </a>
-    <div id="collapseTwo" class="collapse{% if 'dataset-manager' in cur_url %} show{% endif %}"
+    <div id="collapse3" class="collapse{% if 'dataset-manager' in cur_url %} show{% endif %}"
          aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Security Predicate:</h6>

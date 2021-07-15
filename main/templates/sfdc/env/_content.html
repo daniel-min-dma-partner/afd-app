@@ -1,12 +1,9 @@
 <table class="table">
     <thead>
     <tr>
-        <th class="text-center">Status</th>
         <th>Name</th>
-        <th>Instance</th>
         <th>Oauth Flow Status</th>
         <th>Access Token Created Date</th>
-        {#        <th class="text-right">Connect?</th>#}
         <th class="text-center">Copy Secrets</th>
         <th class="text-right">CRUD</th>
     </tr>
@@ -14,23 +11,9 @@
     <tbody>
     {% for env in env_list %}
         <tr>
-            <td class="text-center"><span
-                    class="dot-wo-text-{% if env.oauth_flow_stage == 0 %}off{% elif env.oauth_flow_stage != 4 %}warning{% else %}success{% endif %} align-middle"
-                    role="status" aria-hidden="true"></span></td>
             <td>{{ env.name }}<input type="hidden" value="{{ env.pk }}"></td>
-            <td>{{ env.instance_url }}</td>
             <td>{{ env.get_oauth_flow_stage_string }}</td>
             <td>{{ env.oauth_access_token_created_date }}</td>
-            {#        <td class="td-actions text-right">#}
-            {#            <a href="{% url 'main:sfdc-connect' env_name=env.name action='login' %}" rel="tooltip"#}
-            {#               class="btn btn-success">#}
-            {#                <i class="material-icons">link</i>#}
-            {#            </a>#}
-            {#            <a href="{% url 'main:sfdc-connect' env_name=env.name action='logout' %}" rel="tooltip"#}
-            {#               class="btn btn-default">#}
-            {#                <i class="material-icons">link_off</i>#}
-            {#            </a>#}
-            {#        </td>#}
             <td class="text-center">
                 <a href="#" id="id_key_{{ env.pk }}" class="btn btn-info btn-icon-split btn-sm btn-show-diff">
                 <span class="icon text-white-50">
