@@ -6,41 +6,64 @@
         <th>Instance</th>
         <th>Oauth Flow Status</th>
         <th>Access Token Created Date</th>
-        <th class="text-right">Connect?</th>
+        {#        <th class="text-right">Connect?</th>#}
+        <th class="text-center">Copy Secrets</th>
         <th class="text-right">CRUD</th>
     </tr>
     </thead>
     <tbody>
     {% for env in env_list %}
-    <tr>
-        <td class="text-center"><span
-                class="dot-wo-text-{% if env.oauth_flow_stage == 0 %}off{% elif env.oauth_flow_stage != 4 %}warning{% else %}success{% endif %} align-middle"
-                role="status" aria-hidden="true"></span></td>
-        <td>{{ env.name }}</td>
-        <td>{{ env.instance_url }}</td>
-        <td>{{ env.get_oauth_flow_stage_string }}</td>
-        <td>{{ env.oauth_access_token_created_date }}</td>
-        <td class="td-actions text-right">
-            <a href="{% url 'main:sfdc-connect' env_name=env.name action='login' %}" rel="tooltip"
-               class="btn btn-success">
-                <i class="material-icons">link</i>
-            </a>
-            <a href="{% url 'main:sfdc-connect' env_name=env.name action='logout' %}" rel="tooltip"
-               class="btn btn-default">
-                <i class="material-icons">link_off</i>
-            </a>
-        </td>
-        <td class="td-actions text-right">
-            <button type="button" rel="tooltip" class="btn btn-danger sfdc-env-delete-btn"
-                    data-toggle="modal" data-target="#sfdc-delete-confirmation-md"
-                    data-envid="{{ env.pk }}" data-envname="{{ env.name }}">
-                <i class="material-icons">delete_outline</i>
-            </button>
-            <a href="{% url 'main:sfdc-env-edit' pk=env.pk %}" rel="tooltip" class="btn btn-info">
-                <i class="material-icons">edit</i>
-            </a>
-        </td>
-    </tr>
+        <tr>
+            <td class="text-center"><span
+                    class="dot-wo-text-{% if env.oauth_flow_stage == 0 %}off{% elif env.oauth_flow_stage != 4 %}warning{% else %}success{% endif %} align-middle"
+                    role="status" aria-hidden="true"></span></td>
+            <td>{{ env.name }}<input type="hidden" value="{{ env.pk }}"></td>
+            <td>{{ env.instance_url }}</td>
+            <td>{{ env.get_oauth_flow_stage_string }}</td>
+            <td>{{ env.oauth_access_token_created_date }}</td>
+            {#        <td class="td-actions text-right">#}
+            {#            <a href="{% url 'main:sfdc-connect' env_name=env.name action='login' %}" rel="tooltip"#}
+            {#               class="btn btn-success">#}
+            {#                <i class="material-icons">link</i>#}
+            {#            </a>#}
+            {#            <a href="{% url 'main:sfdc-connect' env_name=env.name action='logout' %}" rel="tooltip"#}
+            {#               class="btn btn-default">#}
+            {#                <i class="material-icons">link_off</i>#}
+            {#            </a>#}
+            {#        </td>#}
+            <td class="text-center">
+                <a href="#" id="id_key_{{ env.pk }}" class="btn btn-info btn-icon-split btn-sm btn-show-diff">
+                <span class="icon text-white-50">
+                    <i class="fas fa-copy"></i>
+                </span>
+                    <span class="text">Key</span>
+                </a>
+                <a href="#" id="id_secret_{{ env.pk }}" class="btn btn-info btn-icon-split btn-sm btn-show-diff">
+                <span class="icon text-white-50">
+                    <i class="fas fa-copy"></i>
+                </span>
+                    <span class="text">Secret</span>
+                </a>
+                <a href="#" id="id_password_{{ env.pk }}" class="btn btn-info btn-icon-split btn-sm btn-show-diff">
+                <span class="icon text-white-50">
+                    <i class="fas fa-copy"></i>
+                </span>
+                    <span class="text">Password</span>
+                </a>
+            </td>
+            <td class="td-actions text-right">
+                <a href="{% url 'main:sfdc-env-edit' pk=env.pk %}" class="btn btn-primary btn-circle btn-sm"
+                   title="Edit">
+                    <i class="fas fa-edit"></i>
+                </a>
+
+                <a rel="tooltip" class="btn btn-danger btn-circle btn-sm sfdc-env-delete-btn"
+                   data-toggle="modal" data-target="#sfdc-delete-confirmation-md"
+                   data-envid="{{ env.pk }}" data-envname="{{ env.name }}" title="Delete">
+                    <i class="fas fa-trash"></i>
+                </a>
+            </td>
+        </tr>
     {% endfor %}
     </tbody>
 </table>

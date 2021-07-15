@@ -24,16 +24,16 @@ const build_toast = () => {
     });
 };
 
-const popup_notification = (title="Default Title", content="Default Content", type="success") => {
+const popup_notification = (title = "Default Title", content = "Default Content", type = "success", autohide = false, delay = null) => {
     // Deletes DOM element if exists
-    if ( $('div.my-toast').length !== 0 ) {
+    if ($('div.my-toast').length !== 0) {
         $('div.my-toast').remove();
     }
 
     // Html template for Notifications
     let toast_template = "<div aria-live=\"polite\" aria-atomic=\"true\" class=\"my-toast\">\n" +
         "    <div class=\"toast-container position-absolute top-0 end-0 p-3\">\n" +
-        "        <div class=\"toast\" role=\"alert\" aria-live=\"assertive\" aria-atomic=\"true\" data-autohide=\"false\">\n" +
+        "        <div class=\"toast\" role=\"alert\" aria-live=\"assertive\" aria-atomic=\"true\"" + (autohide === false ? ' data-autohide="false"' : "") + (delay === null ? "" : ' data-delay=' + delay) + ">\n" +
         "            <div class=\"toast-header bg-" + type + "\">\n" +
         "                <strong class=\"me-auto\">" + title + "</strong>\n" +
         "                <small class=\"text-muted\">just now</small>\n" +
@@ -54,4 +54,19 @@ const popup_notification = (title="Default Title", content="Default Content", ty
     build_toast();
 };
 
-export { build_toast, popup_notification };
+const show_error_and_popup = (response) => {
+    if (response.responseJSON !== null && response.responseJSON !== undefined) {
+        if ('error' in response.responseJSON) {
+            popup_notification("Warning", response.responseJSON['error'], 'warning');
+        } else {
+            popup_notification("Warning", JSON.stringify(response.responseJSON), 'warning');
+        }
+    } else {
+        if (!(response.statusText in [null, '', undefined]) && response.statusText === 'abort') {
+            return false;
+        }
+        popup_notification("Warning", response.statusText, 'warning');
+    }
+};
+
+export {build_toast, popup_notification, show_error_and_popup};

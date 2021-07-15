@@ -62,5 +62,6 @@ urlpatterns = [
     url(r'^ajax/', include([
         url(r'^list-dataflows/$', main.ajax_list_dataflows, name='ajax-list-dataflows'),
         url(r'^list-envs/$', main.ajax_list_envs, name='ajax-list-envs'),
+        url(r'^get-env-key-secret/$', main.ajax_copy_key_to_clipboard, name='env-copy-secrets'),
     ])),
 ]
