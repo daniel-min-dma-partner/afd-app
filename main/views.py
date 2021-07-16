@@ -632,6 +632,26 @@ def ajax_compare_deprecation(request):
     return JsonResponse({"payload": payload, "error": error}, status=status)
 
 
+def ajax_copy_key_to_clipboard(request):
+    payload = None
+    error = "Code not executed. Contact web admin."
+    status = 500
+
+    try:
+        if request.is_ajax() and request.method == "GET":
+            env = get_object_or_404(SfdcEnv, pk=request.GET['pk'])
+            field = "client_{0}".format(request.GET['field'])
+            payload = getattr(env, field)
+            error = None
+            status = 200
+    except Exception as e:
+        payload = None
+        error = str(e)
+        status = 501
+
+    return JsonResponse({"payload": payload, "error": error}, status=status)
+
+
 @csrf_exempt
 def ajax_delete_deprecation(request):
     message = "Code not executed. Contact to the web admin."
