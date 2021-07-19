@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Extra apps
+    'apscheduler',
     'bootstrap4',
     # 'channels',
     'django_extensions',
