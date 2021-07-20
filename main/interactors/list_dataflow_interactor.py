@@ -9,15 +9,16 @@ from core.settings import BASE_DIR
 from libs.amt_helpers import generate_build_file
 from libs.interactor.interactor import Interactor
 from main.models import User
+from core.settings import BASE_DIR
 
 _SELECT2_DATA_CACHE_FOLDER = 'select2-data-cache'
 _SELECT2_DATA_CACHE_FN = 'cache.json'
 
 
 @contextmanager
-def status_wrapper(user: User):
-    status_filenm = f'ant/{user.username}/status.json'
-    status_filedir = f'ant/{user.username}'
+def status_wrapper(user: User, refresh_cache: bool = False):
+    status_filenm = f'{BASE_DIR}/ant/{user.username}/status.json'
+    status_filedir = f'{BASE_DIR}/ant/{user.username}'
     if not os.path.isfile(status_filenm):
         status = {'status': 0}
         Path(status_filedir).mkdir(parents=True, exist_ok=True)
@@ -27,7 +28,7 @@ def status_wrapper(user: User):
     with open(status_filenm, 'r') as f:
         jf = json.load(f)
 
-    if jf['status'] == 1:
+    if jf['status'] == 1 and not refresh_cache:
         raise BlockingIOError("Another request is already in queue.")
 
     with open(file=status_filenm, mode='r') as f:
@@ -53,16 +54,21 @@ class DataflowListInteractor(Interactor):
     @classmethod
     def reset_status(cls, user: User):
         print('resetting status')
-        status_filenm = f'ant/{user.username}/status.json'
+        status_filenm = f'{BASE_DIR}/ant/{user.username}/status.json'
 
         if os.path.isfile(status_filenm):
-            with open(status_filenm, 'w+') as f:
+            with open(status_filenm, 'r') as f:
                 jf = json.load(f)
-                jf['status'] = 0
+
+            jf['status'] = 0
+
+            with open(status_filenm, 'w') as f:
+                json.dump(jf, f, indent=2)
+
         print('status reseted')
 
     def run(self):
-        with status_wrapper(self.context.user):
+        with status_wrapper(self.context.user, self.context.refresh_cache and self.context.refresh_cache == 'true'):
             error = None
             bad_payload = {
                 "results": [
@@ -95,7 +101,7 @@ class DataflowListInteractor(Interactor):
             del self.context.cache_filepath
 
     def _list_metadata_df(self):
-        self.context.cache_dir = f'ant/{self.context.user.username}/{_SELECT2_DATA_CACHE_FOLDER}/{self.context.model.name}'
+        self.context.cache_dir = f'{BASE_DIR}/ant/{self.context.user.username}/{_SELECT2_DATA_CACHE_FOLDER}/{self.context.model.name}'
         self.context.cache_filepath = f'{self.context.cache_dir}/{_SELECT2_DATA_CACHE_FN}'
         is_new_file = False
         load_from_cache = True
@@ -117,7 +123,7 @@ class DataflowListInteractor(Interactor):
             cur_dir_tmp = "_CUR_DIR_TMP_"
             _cmd_queue = [
                 F"export {cur_dir_tmp}=$(pwd)",
-                f"cd ant/{self.context.user.username}",
+                f"cd {BASE_DIR}/ant/{self.context.user.username}",
 
                 "ant listMetadataDf",
 
@@ -136,20 +142,23 @@ class DataflowListInteractor(Interactor):
     def _prepare_data(self, load_from_cache: bool):
         if not load_from_cache:
             print('============== >> REFRESHING CACHE ==============')
-            filename = f'ant/{self.context.user.username}/listMetadata/list.log'
+            filename = f'{BASE_DIR}/ant/{self.context.user.username}/listMetadata/list.log'
 
-            with open(filename, 'r') as file:
-                filelines = file.readlines()
+            if os.path.isfile(filename):
+                with open(filename, 'r') as file:
+                    filelines = file.readlines()
 
-                df_apis = [line.replace('FullName/Id: ', "").split('/')[0]
-                           for line in filelines if "FullName/Id:" in line]
+                    df_apis = [line.replace('FullName/Id: ', "").split('/')[0]
+                               for line in filelines if "FullName/Id:" in line]
 
-                payload = {"results": [
-                    {"id": api, "text": api} for api in df_apis
-                ]}
+                    payload = {"results": [
+                        {"id": api, "text": api} for api in df_apis
+                    ]}
 
-            with open(self.context.cache_filepath, 'w') as file:
-                json.dump(payload, file)
+                with open(self.context.cache_filepath, 'w') as file:
+                    json.dump(payload, file)
+            else:
+                raise FileExistsError("Wave Dataflow list <strong>can not be retrieved</strong>. Contact with admin.")
 
             print('============== << REFRESHING CACHE ==============')
         else:

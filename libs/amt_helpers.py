@@ -70,7 +70,7 @@ def generate_build_file(model: Env, user: User):
 
     file_lines = [f"{key} = {value}\n" for key, value in build.items()]
 
-    with open(f'ant/{user.username}/build.properties', 'w') as file:
+    with open(f'{BASE_DIR}/ant/{user.username}/build.properties', 'w') as file:
         file.writelines(file_lines)
 
     filecopy(BASE_DIR / 'ant/build_tmp.xml', BASE_DIR / f'ant/{user.username}/build.xml')
