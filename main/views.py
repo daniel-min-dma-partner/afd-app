@@ -694,7 +694,7 @@ def ajax_list_dataflows(request):
         ],
     }
     status = 400
-    error = "Is not an ajax or 'q' parm doesn't exist or it's empty."
+    error = "There is an error. Check if the <code>Environment</code> is selected."
 
     if request.is_ajax and request.GET.get('q'):
         try:
