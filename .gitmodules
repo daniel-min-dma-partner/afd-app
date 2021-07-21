@@ -7,6 +7,3 @@
 [submodule "libs/diff2htmlcompare"]
 	path = libs/diff2htmlcompare
 	url = git@gitlab.com:HeanGee/diff2htmlcompare.git
-[submodule "libs/jdd"]
-	path = libs/jdd
-	url = https://github.com/zgrossbart/jdd.git
