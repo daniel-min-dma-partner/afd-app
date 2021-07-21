@@ -6,6 +6,11 @@ from core.settings import BASE_DIR
 from libs.interactor.interactor import Interactor
 from libs.utils import current_datetime
 
+# In org62, sfdcDigest nodes can have 'name' key inside 'parameters' property.
+# In Stage, for the moment, doesn't accept 'name' key inside 'parameters' property.
+# The same happens with 'SFDCToken' key in 'parameters'.
+forbidden_keys_in_parms = ['name', 'SFDCtoken']
+
 
 class JsonStructReverterInteractor(Interactor):
     def run(self):
@@ -15,6 +20,14 @@ class JsonStructReverterInteractor(Interactor):
             for nn, node in js.items():
                 if node['action'] == 'sfdcDigest':
                     node['action'] = "sobjectDigest"
+
+                    if 'complexFilterConditions' in node['parameters'].keys():
+                        node['parameters']['passthroughFilter'] = node['parameters']['complexFilterConditions']
+                        del node['parameters']['complexFilterConditions']
+
+                    for fbk in forbidden_keys_in_parms:
+                        if fbk in node['parameters']:
+                            del node['parameters'][fbk]
 
                 if node['action'] == "edgemart":
                     node['action'] = 'dataset'
@@ -29,14 +42,16 @@ class JsonStructReverterInteractor(Interactor):
                     new = ['includeSelfId', 'parentField', 'selfField']
                     old = ['include_self_id', 'parent_field', 'self_field']
                     for ok in old:
-                        node['parameters'][new[old.index(ok)]] = node['parameters'][ok]
-                        del node['parameters'][ok]
+                        if ok in node['parameters'].keys():
+                            node['parameters'][new[old.index(ok)]] = node['parameters'][ok]
+                            del node['parameters'][ok]
 
                     corrects = ["multiField", "pathField"]
                     fields = ["multi_field", "path_field"]
                     for key in fields:
-                        node['parameters'][corrects[int(fields.index(key))]] = {"name": node['parameters'][key]}
-                        del node['parameters'][key]
+                        if key in node['parameters'].keys():
+                            node['parameters'][corrects[int(fields.index(key))]] = {"name": node['parameters'][key]}
+                            del node['parameters'][key]
 
                 if node['action'] in ['update', "augment"]:
                     node['sources'] = [node['parameters']['left'], node['parameters']['right']]
@@ -95,6 +110,14 @@ class JsonStructFixerInteractor(Interactor):
                         for key in node['parameters']['runtime']:
                             node['parameters'][key] = node['parameters']['runtime'][key]
                         del node['parameters']['runtime']
+
+                    if 'passthroughFilter' in node['parameters'].keys():
+                        node['parameters']['complexFilterConditions'] = node['parameters']['passthroughFilter']
+                        del node['parameters']['passthroughFilter']
+
+                    for fbk in forbidden_keys_in_parms:
+                        if fbk in node['parameters']:
+                            del node['parameters'][fbk]
 
                 if node['action'] == "dataset":
                     node['action'] = 'edgemart'
