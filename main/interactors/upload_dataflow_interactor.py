@@ -1,10 +1,11 @@
 import os
+import shutil
 
+from core.settings import BASE_DIR
 from libs.amt_helpers import move_retrieve_to_deploy, WDF_FILE
 from libs.interactor.interactor import Interactor
 from main.interactors.download_dataflow_interactor import DownloadDataflowInteractor as DownDf
 from main.interactors.wdf_manager_interactor import JsonToWdfConverterInteractor as JsonToWdf
-from core.settings import BASE_DIR
 
 
 class UploadDataflowInteractor(Interactor):
@@ -17,6 +18,10 @@ class UploadDataflowInteractor(Interactor):
             remote_df_name = self.context.remote_df_name
 
             # generate_build_file(env, user)  # No needed since DownDf interactor already creates this
+
+            # Deletes first the retrieve folder.
+            if os.path.isdir(f"{BASE_DIR}/ant/{user.username}/retrieve"):
+                shutil.rmtree(f"{BASE_DIR}/ant/{user.username}/retrieve")
 
             ctx = DownDf.call(model=env, user=user, dataflow=[remote_df_name])
             if ctx.exception:
