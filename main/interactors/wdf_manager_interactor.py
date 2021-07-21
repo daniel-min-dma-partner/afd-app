@@ -2,9 +2,9 @@ import json
 import os
 from pathlib import Path
 
+from core.settings import BASE_DIR
 from libs.interactor.interactor import Interactor
 from libs.utils import current_datetime
-from core.settings import BASE_DIR
 
 
 class JsonStructReverterInteractor(Interactor):
@@ -235,6 +235,7 @@ class WdfManager(Interactor):
 
     def run(self):
         today = current_datetime()
+        env = self.context.env
         user = self.context.user
         mode = self.context.mode
         klass = self._MODE[mode]
@@ -247,6 +248,7 @@ class WdfManager(Interactor):
             original_ext = '.wdf'
             output_ext = '.json'
             output_name_prefix = "[FIXED]"
+            env_name = f"[{env.name}]"
 
             files = [f for f in os.listdir(wdf_filepath)
                      if os.path.isfile(os.path.join(wdf_filepath, f)) and f[-4:] == ".wdf"]
@@ -256,6 +258,7 @@ class WdfManager(Interactor):
             original_ext = '.json'
             output_ext = '.wdf'
             output_name_prefix = "[REVERTED]"
+            env_name = ""
 
             files = [f for f in os.listdir(json_filepath)
                      if os.path.isfile(os.path.join(json_filepath, f)) and f[-5:] == ".json"]
@@ -265,5 +268,5 @@ class WdfManager(Interactor):
             klass.call(json_filepath=os.path.join(json_filepath, file.replace('.wdf', '.json')),
                        wdf_filepath=os.path.join(wdf_filepath, file.replace('.json', '.wdf')),
                        output_filepath=os.path.join(output_filepath,
-                                                    f"{output_name_prefix} {file.replace(original_ext, output_ext)}"))
+                                                    f"{env_name}{output_name_prefix} {file.replace(original_ext, output_ext)}"))
             print(f" === end {file}")
