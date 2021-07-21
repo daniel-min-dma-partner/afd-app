@@ -1,5 +1,4 @@
 import json as js
-import time
 from urllib import parse
 
 import requests
@@ -436,7 +435,7 @@ class DownloadDataflowView(generic.FormView):
                 download_ctx = DownloadDataflowInteractor.call(dataflow=dataflows, model=env, user=request.user)
 
                 if not download_ctx.exception:
-                    wdf_manager_ctx = WdfManager.call(user=request.user, mode="wdfToJson")
+                    wdf_manager_ctx = WdfManager.call(user=request.user, mode="wdfToJson", env=env)
                 else:
                     raise download_ctx.exception
 
@@ -541,18 +540,20 @@ class DeprecateFieldsView(generic.FormView):
         try:
             if form.is_valid():
                 # Prepare fields
-                fields = [field.rstrip() for field in request.POST.get('fields').split('\n')]
+                fields = [field.rstrip() for field in request.POST.get('fields').split('\n') if
+                          field.rstrip() not in [None, ""]]
 
                 # Prepare objects
-                objects = [object.rstrip() for object in request.POST.get('objects').split('\n')]
+                objects = [obj.rstrip() for obj in request.POST.get('objects').split('\n') if
+                           obj.rstrip() not in [None, ""]]
                 _objects = []
 
-                for object in objects:
-                    if "," in object:
-                        _objects += [_object.strip() for _object in object.split(',') if _object.strip() not in [None, ""]]
-                        objects.remove(object)
-                    elif not object:
-                        objects.remove(object)
+                for obj in objects:
+                    if "," in obj:
+                        _objects += [_object.strip() for _object in obj.split(',') if _object.strip() not in [None, ""]]
+                        objects.remove(obj)
+                    elif not obj:
+                        objects.remove(obj)
                 objects += _objects
                 objects = list(set(objects))
 
