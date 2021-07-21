@@ -248,7 +248,7 @@ class WdfManager(Interactor):
             original_ext = '.wdf'
             output_ext = '.json'
             output_name_prefix = "[FIXED]"
-            env_name = f"[{env.name}]"
+            env_name = f"[{env.name}] "
 
             files = [f for f in os.listdir(wdf_filepath)
                      if os.path.isfile(os.path.join(wdf_filepath, f)) and f[-4:] == ".wdf"]
