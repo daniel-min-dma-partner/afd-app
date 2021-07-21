@@ -4,6 +4,7 @@ from pathlib import Path
 
 from libs.interactor.interactor import Interactor
 from libs.utils import current_datetime
+from core.settings import BASE_DIR
 
 
 class JsonStructReverterInteractor(Interactor):
@@ -63,6 +64,13 @@ class JsonStructReverterInteractor(Interactor):
                     node['parameters']['label'] = node['parameters']['name']
                     del node['parameters']['source']
                     del node['parameters']['alias']
+
+                    if 'folderid' in node['parameters']:
+                        node['parameters']['runtime'] = {"folderid": node['parameters']['folderid']}
+                        del node['parameters']['folderid']
+                    elif 'folder' in node['parameters']:
+                        node['parameters']['runtime'] = {"folder": node['parameters']['folder']}
+                        del node['parameters']['folder']
 
                 if node['action'] in ["sliceDataset", "computeRelative", "computeExpression", "filter", "dim2mea",
                                       "flatten"]:
@@ -139,7 +147,11 @@ class JsonStructFixerInteractor(Interactor):
                     del node['parameters']['label']
 
                     if 'runtime' in node['parameters'].keys():
-                        node['parameters']['folderid'] = node['parameters']['runtime']['folderid']
+                        if 'folderid' in node['parameters']['runtime']:
+                            node['parameters']['folderid'] = node['parameters']['runtime']['folderid']
+                        elif 'folder' in node['parameters']['runtime']:
+                            node['parameters']['folder'] = node['parameters']['runtime']['folder']
+
                         del node['parameters']['runtime']
 
                 if node['action'] in ["sliceDataset", "computeRelative", "computeExpression", "filter", "dim2mea",
@@ -226,8 +238,8 @@ class WdfManager(Interactor):
         user = self.context.user
         mode = self.context.mode
         klass = self._MODE[mode]
-        wdf_filepath = f"ant/{user.username}/retrieve/dataflow/wave"
-        json_filepath = f"libs/tcrm_automation/{today}/original_dataflows"
+        wdf_filepath = f"{BASE_DIR}/ant/{user.username}/retrieve/dataflow/wave"
+        json_filepath = f"{BASE_DIR}/libs/tcrm_automation/{today}/original_dataflows"
 
         if mode == 'wdfToJson':
             Path(json_filepath).mkdir(parents=True, exist_ok=True)
@@ -249,8 +261,9 @@ class WdfManager(Interactor):
                      if os.path.isfile(os.path.join(json_filepath, f)) and f[-5:] == ".json"]
 
         for file in files:
-            print(f"processing {file}...")
+            print(f"\n === processing {file}...")
             klass.call(json_filepath=os.path.join(json_filepath, file.replace('.wdf', '.json')),
                        wdf_filepath=os.path.join(wdf_filepath, file.replace('.json', '.wdf')),
                        output_filepath=os.path.join(output_filepath,
                                                     f"{output_name_prefix} {file.replace(original_ext, output_ext)}"))
+            print(f" === end {file}")
