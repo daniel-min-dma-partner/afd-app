@@ -52,14 +52,14 @@ _WDF_XML_TEMPLATE = """
 </WaveDataflow>
 """
 
-_PACKAGE_SPEC_FILE = 'ant/{{user}}/dataflow/package.xml'
-_PACKAGE_SPECF_FOLDER = 'ant/{{user}}/dataflow'
+_PACKAGE_SPEC_FILE = f'{str(BASE_DIR)}/ant/{{{{user}}}}/dataflow/package.xml'
+_PACKAGE_SPECF_FOLDER = f'{str(BASE_DIR)}/ant/{{{{user}}}}/dataflow'
 
-_PACKAGE_UP_SPEC_FILE = 'ant/{{user}}/deploy/dataflow/package.xml'
-_PACKAGE_UP_SPECF_FOLDER = 'ant/{{user}}/deploy/dataflow'
-_XML_FILE = 'ant/{{user}}/deploy/dataflow/wave/{{dataflow_name}}-meta.xml'
-WDF_FILE = 'ant/{{user}}/deploy/dataflow/wave/{{dataflow_name}}.wdf'
-_WDF_XML_FOLDER = 'ant/{{user}}/deploy/dataflow/wave'
+_PACKAGE_UP_SPEC_FILE = f'{str(BASE_DIR)}/ant/{{{{user}}}}/deploy/dataflow/package.xml'
+_PACKAGE_UP_SPECF_FOLDER = f'{str(BASE_DIR)}/ant/{{{{user}}}}/deploy/dataflow'
+_XML_FILE = f'{str(BASE_DIR)}/ant/{{{{user}}}}/deploy/dataflow/wave/{{{{dataflow_name}}}}-meta.xml'
+WDF_FILE = f'{str(BASE_DIR)}/ant/{{{{user}}}}/deploy/dataflow/wave/{{{{dataflow_name}}}}.wdf'
+_WDF_XML_FOLDER = f'{str(BASE_DIR)}/ant/{{{{user}}}}/deploy/dataflow/wave'
 
 
 def generate_build_file(model: Env, user: User):

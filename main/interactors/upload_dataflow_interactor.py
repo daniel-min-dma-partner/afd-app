@@ -4,6 +4,7 @@ from libs.amt_helpers import move_retrieve_to_deploy, WDF_FILE
 from libs.interactor.interactor import Interactor
 from main.interactors.download_dataflow_interactor import DownloadDataflowInteractor as DownDf
 from main.interactors.wdf_manager_interactor import JsonToWdfConverterInteractor as JsonToWdf
+from core.settings import BASE_DIR
 
 
 class UploadDataflowInteractor(Interactor):
@@ -21,7 +22,7 @@ class UploadDataflowInteractor(Interactor):
             if ctx.exception:
                 raise ctx.exception
 
-            move_retrieve_to_deploy(retrieve_path=f"ant/{user.username}/retrieve")
+            move_retrieve_to_deploy(retrieve_path=f"{BASE_DIR}/ant/{user.username}/retrieve")
             wdf_file = WDF_FILE.replace("{{user}}", user.username).replace("{{dataflow_name}}", remote_df_name)
             output_file = filemodel.file.path.replace('.json', ' [REVERTED].JSON')
             _ = JsonToWdf.call(json_filepath=filemodel.file.path,
@@ -35,7 +36,7 @@ class UploadDataflowInteractor(Interactor):
             cur_dir_tmp = "_CUR_DIR_TMP_"
             _cmd_queue = [
                 F"export {cur_dir_tmp}=$(pwd)",
-                f"cd ant/{self.context.user.username}",
+                f"cd {BASE_DIR}/ant/{self.context.user.username}",
 
                 "ant uploadDataflows",
 

@@ -2,6 +2,7 @@ import os
 
 from libs.amt_helpers import generate_build_file, generate_package
 from libs.interactor.interactor import Interactor
+from core.settings import BASE_DIR
 
 
 class DownloadDataflowInteractor(Interactor):
@@ -16,7 +17,7 @@ class DownloadDataflowInteractor(Interactor):
             cur_dir_tmp = "_CUR_DIR_TMP_"
             _cmd_queue = [
                 F"export {cur_dir_tmp}=$(pwd)",
-                f"cd ant/{self.context.user.username}",
+                f"cd {BASE_DIR}/ant/{self.context.user.username}",
 
                 "ant downloadDataflows",
 
