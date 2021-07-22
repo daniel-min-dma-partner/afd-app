@@ -215,7 +215,7 @@ class Notifications(models.Model):
 
     def set_status(self, string_code: str = "UNREAD_UNCLICKED"):
         _status_map_rev = {_str: num for num, _str in self._STATUS_MAP.items()}
-        self.status = _status_map_rev[string_code]
+        self.status = _status_map_rev[string_code.upper()]
 
     def set_initial_status(self):
         self.set_status()
@@ -223,3 +223,10 @@ class Notifications(models.Model):
     @classmethod
     def get_initial_status(cls):
         return 1
+
+    def set_read_clicked(self):
+        self.set_status('read_clicked')
+
+    @classmethod
+    def get_max_status_level(cls):
+        return 3
