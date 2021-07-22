@@ -83,3 +83,7 @@ textarea {
     overflow: scroll;
     -webkit-overflow-scrolling: touch;
 }
+
+.bg-not-read {
+    background-color: #f3f2f2 !important;
+}

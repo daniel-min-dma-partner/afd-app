@@ -23,7 +23,7 @@
             {% autoescape on %}
                 <div class="list-group">
                     {% for notification in notifications %}
-                        <a class="dropdown-item d-flex align-items-center"
+                        <a class="dropdown-item d-flex align-items-center{% if notification.status != 3 %} bg-not-read{% endif %}"
                            href="{% url 'main:notification-clicked' pk=notification.pk %}">
                             <div class="mr-3">
                                 <div class="icon-circle bg-{{ notification.type }}">
@@ -32,9 +32,8 @@
                             </div>
                             <div>
                                 <div class="small text-gray-500">{{ notification.created_at }}</div>
-                                <span class="font-weight-bold">
-                                    <div class="text-truncate"
-                                         title="{{ notification.message|safe }}">{{ notification.message|safe }}</div>
+                                <span class="">
+                                    <div class="text-truncate">{{ notification.message|safe }}</div>
                                 </span>
                                 <input type="hidden" value="{{ notification.pk }}">
                             </div>
@@ -46,6 +45,6 @@
         {% endif %}
 
         <!-- Show all alerts -->
-        <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+        <a class="dropdown-item text-center small text-gray-500" href="{% url 'main:mark-all' %}">Mark all as read</a>
     </div>
 </li>
