@@ -15,4 +15,4 @@ def remove_prefix(value):
 @register.filter
 def only_unreads(notifications: list):
     return [notification for notification in notifications if
-            isinstance(notification, Notifications) and notification.status == 1]
+            isinstance(notification, Notifications) and notification.status != 3]
