@@ -567,7 +567,7 @@ class DeprecateFieldsView(generic.FormView):
                 for file in ctx.deprecated_json_files:
                     notif_data = {
                         'user': request.user,
-                        'message': f"See deprecation for <code>{file.get_filename()}</code>",
+                        'message': f"See deprecation for <code title=\"{file.get_filename()}\">{file.get_filename()}</code>",
                         'status': Notifications.get_initial_status(),
                         'link': reverse('main:compare-deprecation', kwargs={'pk': file.pk}),
                         'type': 'success'
@@ -577,7 +577,7 @@ class DeprecateFieldsView(generic.FormView):
                     if ctx.exception:
                         raise ctx.exception
 
-                messages.info(request, "Deprecation finished successfully")
+                messages.success(request, "Deprecation finished successfully")
                 return self.form_valid(form)
             else:
                 messages.error(request, form.errors.as_data())
@@ -647,7 +647,26 @@ class MarkNotifAsClickedView(generic.View):
             raise KeyError(f"The <code><strong>pk</strong></code> for the notification clicked was not sent.")
         else:
             notification = get_object_or_404(Notifications, pk=kwargs['pk'], user=request.user)
+            notification.set_read_clicked()
+            notification.save()
             return redirect(notification.link)
+
+
+class NotificationMarkAllAsReadClickedView(generic.View):
+    def get(self, request, *args, **kwargs):
+        try:
+            notifications = Notifications.objects.filter(user=request.user,
+                                                         status__lt=Notifications.get_max_status_level())
+
+            if notifications.exists():
+                for notification in notifications.all():
+                    notification.set_read_clicked()
+                    notification.save()
+                    print('saveado=============')
+        except Exception as e:
+            messages.error(request, str(e))
+
+        return redirect('main:home')
 
 
 def handler500(request, exception=None):
