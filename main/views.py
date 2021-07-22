@@ -539,23 +539,13 @@ class DeprecateFieldsView(generic.FormView):
 
         try:
             if form.is_valid():
-                # Prepare fields
+                # Prepare fields: Each row corresponds to an Object.
                 fields = [field.rstrip() for field in request.POST.get('fields').split('\n') if
                           field.rstrip() not in [None, ""]]
 
-                # Prepare objects
+                # Prepare objects: Each row must specify only one Object.
                 objects = [obj.rstrip() for obj in request.POST.get('objects').split('\n') if
                            obj.rstrip() not in [None, ""]]
-                _objects = []
-
-                for obj in objects:
-                    if "," in obj:
-                        _objects += [_object.strip() for _object in obj.split(',') if _object.strip() not in [None, ""]]
-                        objects.remove(obj)
-                    elif not obj:
-                        objects.remove(obj)
-                objects += _objects
-                objects = list(set(objects))
 
                 # Prepare dataflow contents
                 for file in request.FILES.getlist('files'):
@@ -593,7 +583,7 @@ class ViewDeprecatedFieldsView(generic.ListView):
     def get_queryset(self):
         lst = FileModel.objects.filter(user_id=self.request.user.pk).filter(
             Q(file__icontains="field-deprecations") &
-            ~Q(file__icontains="DEPRECATED__")
+            ~Q(file__icontains="ORIGINAL__")
         ).order_by('-file')
         return lst
 
@@ -614,17 +604,17 @@ class CompareDeprecationView(generic.TemplateView):
             filemodel = get_object_or_404(FileModel, pk=int(kwargs['pk']))
 
             second_fm = FileModel.objects.filter(
-                Q(file__icontains=filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))
+                Q(file__icontains=filemodel.file.name.replace('DEPRECATED__', 'ORIGINAL__'))
             )
 
             if second_fm.exists():
                 second_fm = second_fm.first()
 
                 with filemodel.file.open('r') as f, second_fm.file.open('r') as g:
-                    script = json.load(f)
-                    left_script = json.dumps(script, indent=2)
                     script = json.load(g)
-                    right_script = json.dumps(script, indent=2)
+                    left_script = json.dumps(script, indent=2)  # left shows the original json.
+                    script = json.load(f)
+                    right_script = json.dumps(script, indent=2)  # right shows the modified json.
             else:
                 left_script = "<< Not Found >>"
                 right_script = "<< Not Found >>"
@@ -647,13 +637,13 @@ def ajax_compare_deprecation(request):
             error = None
             status = 200
 
-            filemodel = get_object_or_404(FileModel, pk=int(request.GET.getlist('pk')[0]))
+            filemodel = get_object_or_404(FileModel, pk=int(request.GET.get('pk')))
             second_fm = FileModel.objects.filter(
-                Q(file__icontains=filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))
+                Q(file__icontains=filemodel.file.name.replace('DEPRECATED__', 'ORIGINAL__'))
             )
             if second_fm.exists():
                 second_fm = second_fm.first()
-                show_in_browser(filemodel.file.path, second_fm.file.path)
+                show_in_browser(second_fm.file.path, filemodel.file.path)
                 messages.info(request, "Showing difference in a new tab.")
             else:
                 raise ValueError(f"<code>{os.path.basename(filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))}"
