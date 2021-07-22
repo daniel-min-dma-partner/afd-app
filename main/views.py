@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login as do_login, logout as do_lo
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.views import View, generic
 from django.views.decorators.csrf import csrf_exempt
@@ -23,11 +24,12 @@ from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemo
 from .interactors.deprecate_fields_interactor import FieldDeprecatorInteractor
 from .interactors.download_dataflow_interactor import DownloadDataflowInteractor
 from .interactors.list_dataflow_interactor import DataflowListInteractor
+from .interactors.notification_interactor import SetNotificationInteractor
 from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.upload_dataflow_interactor import UploadDataflowInteractor
 from .interactors.wdf_manager_interactor import *
-from .models import SalesforceEnvironment as SfdcEnv, FileModel
+from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications
 
 
 class Home(generic.TemplateView):
@@ -39,7 +41,6 @@ class Home(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         # login_status = _sfdc_status_check(self.request)
         # context['sfdc_login_status'] = login_status
         return context
@@ -563,7 +564,20 @@ class DeprecateFieldsView(generic.FormView):
                 for fm in df_files:
                     fm.delete()
 
-                messages.info(request, "Ok")
+                for file in ctx.deprecated_json_files:
+                    notif_data = {
+                        'user': request.user,
+                        'message': f"See deprecation for <code>{file.get_filename()}</code>",
+                        'status': Notifications.get_initial_status(),
+                        'link': reverse('main:compare-deprecation', kwargs={'pk': file.pk}),
+                        'type': 'success'
+                    }
+                    ctx = SetNotificationInteractor.call(data=notif_data)
+
+                    if ctx.exception:
+                        raise ctx.exception
+
+                messages.info(request, "Deprecation finished successfully")
                 return self.form_valid(form)
             else:
                 messages.error(request, form.errors.as_data())
@@ -625,6 +639,19 @@ class CompareDeprecationView(generic.TemplateView):
         context['left_script'] = left_script
         context['right_script'] = right_script
         return context
+
+
+class MarkNotifAsClickedView(generic.View):
+    def get(self, request, *args, **kwargs):
+        if 'pk' not in kwargs:
+            raise KeyError(f"The <code><strong>pk</strong></code> for the notification clicked was not sent.")
+        else:
+            notification = get_object_or_404(Notifications, pk=kwargs['pk'], user=request.user)
+            return redirect(notification.link)
+
+
+def handler500(request, exception=None):
+    return render(request, '500.html', {"exception": mark_safe(str(exception))}, status=500)
 
 
 @csrf_exempt

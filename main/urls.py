@@ -19,6 +19,7 @@ from django.urls import path
 import main.views as main
 
 app_name = 'main'
+handler500 = 'main.views.handler500'
 
 urlpatterns = [
     path('', main.Home.as_view(), name='home'),
@@ -51,6 +52,12 @@ urlpatterns = [
         ])),
         url(r'^download/$', main.DownloadDataflowView.as_view(), name='download-dataflow'),
         url(r'^upload/$', main.UploadDataflowView.as_view(), name='upload-dataflow'),
+    ])),
+
+    url(r'^notifications/', include([
+        # url(r'^list/$', main.ListNotificationView.as_view(), name='notification-list'),
+        # url(r'^mark-as-read/(?P<pk>\d+)/$', main.MarkNotifAsReadView.as_view(), name='notification-read'),
+        url(r'^mark-as-clicked/(?P<pk>\d+)/$', main.MarkNotifAsClickedView.as_view(), name='notification-clicked'),
     ])),
 
     url(r'^dataset-manager/', include([
