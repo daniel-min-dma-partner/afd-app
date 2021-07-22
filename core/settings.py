@@ -67,6 +67,7 @@ MIDDLEWARE = [
 
     # Custom Middlewares
     'main.middleware.SfdcCRUDMiddleware',
+    'main.middleware.TimezoneMiddleware',
 ]
 
 # Login
@@ -104,6 +105,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # My custom context processors
+                'main.context_processors.show_notifications',
             ],
         },
     },
