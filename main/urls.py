@@ -58,6 +58,7 @@ urlpatterns = [
         # url(r'^list/$', main.ListNotificationView.as_view(), name='notification-list'),
         # url(r'^mark-as-read/(?P<pk>\d+)/$', main.MarkNotifAsReadView.as_view(), name='notification-read'),
         url(r'^mark-as-clicked/(?P<pk>\d+)/$', main.MarkNotifAsClickedView.as_view(), name='notification-clicked'),
+        url(r'^mark-all-as-read-clicked/$', main.NotificationMarkAllAsReadClickedView.as_view(), name='mark-all'),
     ])),
 
     url(r'^dataset-manager/', include([
