@@ -22,7 +22,7 @@
 
     <title>{% block title %}SB Admin 2 - Dashboard{% endblock title %}</title>
 
-    {% include 'sd-base/_header.html' %}
+    {% include 'sb-base/_header.html' %}
 
     {% block header-scripts %}{% endblock header-scripts %}
 </head>
@@ -32,7 +32,7 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
 
-    {% include 'sd-base/body-components/_sidebar.html' %}
+    {% include 'sb-base/body-components/_sidebar.html' %}
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -40,7 +40,7 @@
         <!-- Main Content -->
         <div id="content">
 
-            {% include 'sd-base/body-components/_toolbar.html' %}
+            {% include 'sb-base/body-components/_toolbar.html' %}
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
@@ -53,13 +53,13 @@
                     {#                    </a>#}
 
                     <!-- Flash Message -->
-                    {% include 'sd-base/body-components/_flash-component.html' %}
+                    {% include 'sb-base/body-components/_flash-component.html' %}
                     <!-- End Flash Message -->
                 </div>
 
                 <!-- Page Content -->
                 {% block page-content %}
-                    {% include 'sd-base/body-components/_page-content.html' %}
+                    {% include 'sb-base/body-components/_page-content.html' %}
                 {% endblock page-content %}
                 <!-- End Page Content -->
 
@@ -69,7 +69,7 @@
         </div>
         <!-- End of Main Content -->
 
-        {% include 'sd-base/body-components/_body-footer.html' %}
+        {% include 'sb-base/body-components/_body-footer.html' %}
 
     </div>
     <!-- End of Content Wrapper -->
@@ -82,9 +82,9 @@
     <i class="fas fa-angle-up"></i>
 </a>
 
-{% include 'sd-base/body-components/_modal.html' %}
+{% include 'sb-base/body-components/_modal.html' %}
 
-{% include 'sd-base/footer-components/_footer.html' %}
+{% include 'sb-base/footer-components/_footer.html' %}
 
 {% block extra-scripts %}{% endblock extra-scripts %}
 </body>
