@@ -47,7 +47,10 @@ class FieldDeprecatorInteractor(Interactor):
             # Prepares fields_to_deprecate.md file
             field_md = []
             for obj in objects:
-                _fields = [field.strip() for field in fields[objects.index(obj)].split(',')]
+                _fields = [
+                    field for field in [field.strip() for field in fields[objects.index(obj)].split(',')]
+                    if field not in [None, ""]
+                ]
                 _defaults = ["x" for _ in _fields]
                 md_row = {
                     "object": obj, "status": "active", "source-node": "",
