@@ -591,7 +591,6 @@ class ViewDeprecatedFieldsView(generic.ListView):
     template_name = 'dataflow-manager/deprecate-fields/list.html'
 
     def get_queryset(self):
-        print(self.request.GET)
         lst = FileModel.objects.filter(user_id=self.request.user.pk).filter(
             Q(file__icontains="field-deprecations") &
             ~Q(file__icontains="DEPRECATED__")
@@ -603,6 +602,39 @@ class SecpredToSaqlView(generic.FormView):
     template_name = 'dataset-manager/secpred-to-saql-converter/form.html'
     form_class = SecpredToSaqlForm
     success_url = '/dataset-manager/security-predicate/convert-to-saql/'
+
+
+class CompareDeprecationView(generic.TemplateView):
+    template_name = 'jdd/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+
+        try:
+            filemodel = get_object_or_404(FileModel, pk=int(kwargs['pk']))
+
+            second_fm = FileModel.objects.filter(
+                Q(file__icontains=filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))
+            )
+
+            if second_fm.exists():
+                second_fm = second_fm.first()
+
+                with filemodel.file.open('r') as f, second_fm.file.open('r') as g:
+                    script = json.load(f)
+                    left_script = json.dumps(script, indent=2)
+                    script = json.load(g)
+                    right_script = json.dumps(script, indent=2)
+            else:
+                left_script = "<< Not Found >>"
+                right_script = "<< Not Found >>"
+        except Exception as e:
+            left_script = str(e)
+            right_script = "<< Not Found >>"
+
+        context['left_script'] = left_script
+        context['right_script'] = right_script
+        return context
 
 
 @csrf_exempt

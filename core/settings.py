@@ -95,6 +95,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / "main/templates",
+            BASE_DIR / "libs",
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -180,8 +181,12 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Recomended by Heroku. This is "production" configuration.
 
 static_dir = os.path.join(BASE_DIR, "main/static")  # Static files for development mode
+jdd_static_dir = os.path.join(BASE_DIR, "libs/jdd")
+jsl_static_dir = os.path.join(BASE_DIR, "libs/jdd/jsl")
 STATICFILES_DIRS = [
     static_dir,
+    jdd_static_dir,
+    jsl_static_dir,
 ]
 
 # File Upload managers
