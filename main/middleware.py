@@ -1,9 +1,11 @@
+import pytz
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.safestring import mark_safe
 
-from .models import SalesforceEnvironment as SfdcEnv
+from .models import SalesforceEnvironment as SfdcEnv, Profile
 
 
 class SfdcCRUDMiddleware:
@@ -41,3 +43,28 @@ class SfdcCRUDMiddleware:
                 messages.warning(request, mark_safe(f"Cannot <strong>{action}</strong> env <code>{sfdc_env.name}"
                                                     f"</code>: The env is used to be connected now. Disconnect first."))
                 return redirect('main:sfdc-env-list')
+
+
+class TimezoneMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        try:
+            profiles = Profile.objects.filter(user=request.user)
+            tzname = None
+
+            if profiles.exists():
+                for profile in profiles:
+                    if profile.key == 'timezone':
+                        tzname = profile.value
+                        break
+
+            if tzname:
+                timezone.activate(pytz.timezone(tzname))
+            else:
+                timezone.deactivate()
+        except Exception as e:
+            raise e
+        finally:
+            return self.get_response(request)
