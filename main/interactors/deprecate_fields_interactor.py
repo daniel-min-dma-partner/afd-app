@@ -105,3 +105,4 @@ class FieldDeprecatorInteractor(Interactor):
             _exc = e
 
         self.context.exception = _exc
+        self.context.deprecated_json_files = deprec_fms
