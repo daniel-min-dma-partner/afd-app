@@ -467,6 +467,8 @@ class UploadDataflowView(generic.FormView):
         try:
             form_class = self.get_form_class()
             form: DataflowUploadForm = form_class(request.POST, request.FILES)
+            notif_msg = None
+            notif_type = 'success'
 
             if form.is_valid():
                 filemodel = form.save(commit=False)
@@ -481,16 +483,34 @@ class UploadDataflowView(generic.FormView):
                     raise ctx.exception
                 else:
                     msg = "Uploading <code>{0}</code> local dataflow to <code>{1}</code> dataflow to " \
-                          "<code>{2}</code> connection has finished."\
+                          "<code>{2}</code> connection has finished." \
                         .format(
-                            os.path.basename(filemodel.file.name), remote_df_name, env.name
-                        )
+                        os.path.basename(filemodel.file.name), remote_df_name, env.name
+                    )
+                    notif_msg = msg
                     messages.info(request, mark_safe(msg))
             else:
                 messages.error(request, form.errors.as_data)
         except Exception as e:
             messages.error(request, str(e))
-            raise e
+            notif_msg = str(e)
+            notif_type = 'error'
+
+        # Push a notification.
+        try:
+            notif_data = {
+                'user': request.user,
+                'message': notif_msg,
+                'status': Notifications.get_initial_status(),
+                'link': "#",
+                'type': notif_type
+            }
+            ctx = SetNotificationInteractor.call(data=notif_data)
+
+            if ctx.exception:
+                raise ctx.exception
+        except Exception as e:
+            messages.error(request, str(e))
 
         return redirect("main:upload-dataflow")
 
