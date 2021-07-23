@@ -764,12 +764,12 @@ def ajax_delete_deprecation(request):
 
             filemodel = get_object_or_404(FileModel, pk=int(request.POST.getlist('id-field')[0]))
             second_fm = FileModel.objects.filter(
-                Q(file__icontains=filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))
+                Q(file__icontains=filemodel.file.name.replace('DEPRECATED__', 'ORIGINAL__'))
             )
             if second_fm.exists():
                 second_fm = second_fm.first()
-                if second_fm.parent_file.file.name == filemodel.file.name:
-                    filemodel.delete()
+                if second_fm.file.name == filemodel.parent_file.file.name:
+                    second_fm.delete()
                     message = "Deprecation deleted successfully."
                     typ = messages.SUCCESS
                 else:
