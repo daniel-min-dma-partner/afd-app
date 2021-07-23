@@ -254,8 +254,13 @@ class DataflowUploadForm(forms.ModelForm):
 
 
 class CompareDataflowForm(forms.ModelForm):
+    _METHOD_CHOICE = (
+        ('jdd', "JDD"),
+        ('d2h', "Diff to HTML"),
+    )
     field1 = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
     field2 = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
+    method = forms.ChoiceField(choices=_METHOD_CHOICE, widget=forms.RadioSelect(), required=True)
 
     class Meta:
         model = DFCompModel

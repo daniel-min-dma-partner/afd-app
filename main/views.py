@@ -515,8 +515,21 @@ class CompareDataflows(generic.FormView):
                 files_model.user = request.user
                 files_model.save()
 
-                show_in_browser(original=files_model.file1.path, compared=files_model.file2.path)
-                files_model.delete()
+                _method = form.cleaned_data['method']
+                if _method == 'd2h':
+                    show_in_browser(original=files_model.file1.path, compared=files_model.file2.path)
+                    files_model.delete()
+                elif _method == 'jdd':
+                    with files_model.file1.open('r') as f, files_model.file2.open('r') as g:
+                        script = json.load(g)
+                        left_script = json.dumps(script, indent=2)  # left shows the original json.
+                        script = json.load(f)
+                        right_script = json.dumps(script, indent=2)  # right shows the modified json.
+
+                    return render(request, 'jdd/index.html', {
+                        'left_script': left_script,
+                        'right_script': right_script,
+                    })
 
                 messages.info(request, "Showing diff in browser.")
                 return self.form_valid(form)
