@@ -7,3 +7,10 @@ ls -al ant | grep ant
 ls -al ant/apache-ant-1.10.11
 echo "======== ANT DOWNLOADED ========"
 echo ""
+
+echo "======== UPDATING 'PATH' ========"
+echo ""
+export _PATH=$PATH
+export PATH=$PATH:/ant/apache-ant-1.10.11/lib:ant/apache-ant-1.10.11/bin
+env
+echo $PATH
