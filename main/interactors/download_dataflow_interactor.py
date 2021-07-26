@@ -1,5 +1,7 @@
 import os
+import shutil
 
+from core.settings import BASE_DIR
 from libs.amt_helpers import generate_build_file, generate_package
 from libs.interactor.interactor import Interactor
 
@@ -8,6 +10,10 @@ class DownloadDataflowInteractor(Interactor):
     def run(self):
         _exc = None
         try:
+            # Deletes first the retrieve folder.
+            if os.path.isdir(f"{BASE_DIR}/ant/{self.context.user.username}/retrieve"):
+                shutil.rmtree(f"{BASE_DIR}/ant/{self.context.user.username}/retrieve")
+
             generate_build_file(self.context.model, self.context.user)
 
             members = [f"<members>{dataflow_name}</members>" for dataflow_name in self.context.dataflow]
@@ -16,7 +22,7 @@ class DownloadDataflowInteractor(Interactor):
             cur_dir_tmp = "_CUR_DIR_TMP_"
             _cmd_queue = [
                 F"export {cur_dir_tmp}=$(pwd)",
-                f"cd ant/{self.context.user.username}",
+                f"cd {BASE_DIR}/ant/{self.context.user.username}",
 
                 "ant downloadDataflows",
 

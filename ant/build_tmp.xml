@@ -4,8 +4,16 @@
     <property environment="env"/>
 
     <condition property="sf.username" value=""> <not> <isset property="sf.username"/> </not> </condition>
-    <condition property="sf.password" value=""> <not> <isset property="sf.password"/> </not> </condition>
-    <condition property="sf.sessionId" value=""> <not> <isset property="sf.sessionId"/> </not> </condition>
+    <condition property="sf.password" value="">
+        <not>
+            <isset property="sf.password"/>
+        </not>
+    </condition>
+    <condition property="sf.sessionId" value="">
+        <not>
+            <isset property="sf.sessionId"/>
+        </not>
+    </condition>
 
     <taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce">
         <classpath>
@@ -14,6 +22,9 @@
     </taskdef>
 
     <target name="downloadDataflows">
+        <mkdir dir=".logs"/>
+        <record name=".logs/download-dataflows.log"/>
+
         <mkdir dir="${sf.retriveAt}"/>
         <sf:retrieve
                 username="${sf.username}"
@@ -27,6 +38,8 @@
     </target>
 
     <target name="uploadDataflows">
+        <mkdir dir=".logs"/>
+        <record name=".logs/upload-dataflows.log"/>
         <sf:deploy
                 username="${sf.username}"
                 password="${sf.password}"
@@ -34,7 +47,7 @@
                 serverurl="${sf.serverurl}"
                 maxPoll="${sf.maxPoll}"
                 pollWaitMillis="${sf.pollWaitMillis}"
-                deployRoot="${sf.retriveAt}"
+                deployRoot="${sf.deployFrom}"
                 rollbackOnError="true"/>
     </target>
 
@@ -52,6 +65,8 @@
     </target>
 
     <target name="listMetadataDf">
+        <mkdir dir=".logs"/>
+        <record name=".logs/list-metadata-dataflows.log"/>
         <mkdir dir="listMetadata"/>
         <sf:listMetadata
                 username="${sf.username}"

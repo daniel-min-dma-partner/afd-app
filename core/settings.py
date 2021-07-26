@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-wi5%3e1_fpxq+fm8sowdg0^(0vz*qv0oryh3ww+adav$+v$e4%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', ]
 
 # Application definition
 
@@ -38,14 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Extra apps
+    'apscheduler',
     'bootstrap4',
-    'channels',
+    # 'channels',
     'django_extensions',
     'libs.interactor.interactor',
     'rest_framework',
 
     # Created apps
-    'chat',
+    # 'chat',
     'libs',
     'libs.diff2htmlcompare',
     'libs.tcrm_automation',
@@ -66,6 +67,7 @@ MIDDLEWARE = [
 
     # Custom Middlewares
     'main.middleware.SfdcCRUDMiddleware',
+    'main.middleware.TimezoneMiddleware',
 ]
 
 # Login
@@ -92,7 +94,10 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [f"{BASE_DIR}/main/templates"],
+        'DIRS': [
+            BASE_DIR / "main/templates",
+            BASE_DIR / "libs",
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -100,6 +105,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # My custom context processors
+                'main.context_processors.show_notifications',
             ],
         },
     },
@@ -117,25 +125,34 @@ REST_FRAMEWORK = {
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-# For Websocket using channels package:
-ASGI_APPLICATION = "core.asgi.application"
-# Channel backing store. You have to start first your redis docker or app.
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('localhost', 6379)],
-        },
-    },
-}
+# # For Websocket using channels package:
+# ASGI_APPLICATION = "core.asgi.application"
+# # Channel backing store. You have to start first your redis docker or app.
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             "hosts": [('localhost', 6379)],
+#         },
+#     },
+# }
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'tcrm_db',
+        'USER': 'tcrm_user',
+        'PASSWORD': '7YjvxvWLC8',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -174,11 +191,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Recomended by Heroku
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Recomended by Heroku. This is "production" configuration.
 
 static_dir = os.path.join(BASE_DIR, "main/static")  # Static files for development mode
+jdd_static_dir = os.path.join(BASE_DIR, "libs/jdd")
+jsl_static_dir = os.path.join(BASE_DIR, "libs/jdd/jsl")
 STATICFILES_DIRS = [
     static_dir,
+    jdd_static_dir,
+    jsl_static_dir,
 ]
 
 # File Upload managers
@@ -193,17 +214,16 @@ DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 # Media files (file uploaded, etc)
 # https://docs.djangoproject.com/en/3.2/ref/files/storage/#django.core.files.storage.FileSystemStorage.location
 # https://docs.djangoproject.com/en/3.2/ref/settings/#media-root
-MEDIA_ROOT = '/tmp/'
-MEDIA_URL = ''  # It must end in a slash if set to a non-empty value.
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'  # It must end in a slash if set to a non-empty value.
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 # Custom configs
-SALESFORCE_INSTANCE_URLS ={
+SALESFORCE_INSTANCE_URLS = {
     'Sandbox': 'https://test.salesforce.com',
     'Production': 'https://login.salesforce.com',
 }

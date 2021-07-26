@@ -4,6 +4,7 @@ from pathlib import Path
 
 from appscript import *
 
+from core.settings import BASE_DIR
 from libs.interactor.interactor import Interactor
 from libs.tcrm_automation.tree_extractor import tree_extractor
 from libs.tcrm_automation.tree_remover import tree_remover
@@ -27,12 +28,12 @@ def _prepare_output_directory(filename: str = None, allow_empty_name: bool = Fal
     return outdir
 
 
-def show_in_browser(original, generated):
-    diff_command = f"python diff_to_html.py -m {original} {generated}"
+def show_in_browser(original, compared):
+    diff_command = f"python diff_to_html.py -m {original} {compared}"
     cur_dir_tmp = "_CUR_DIR_TMP_"
     _cmd_queue = [
         F"export {cur_dir_tmp}=$(pwd)",
-        "cd libs",
+        f"cd {BASE_DIR}/libs",
         diff_command,
         f"cd ${cur_dir_tmp}",
         f"unset {cur_dir_tmp}"

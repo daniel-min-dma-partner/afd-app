@@ -73,3 +73,17 @@ textarea {
 .select2-container .select2-search--inline {
     line-height: inherit;
 }
+
+
+/* Scrollable list group */
+/* Source: https://stackoverflow.com/questions/47256185/bootstrap-list-group-scroll */
+.list-group {
+    max-height: 300px;
+    /*margin-bottom: 10px;*/
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+.bg-not-read {
+    background-color: #f3f2f2 !important;
+}

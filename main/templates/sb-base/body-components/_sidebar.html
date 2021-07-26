@@ -1,0 +1,48 @@
+{% load static %}
+
+{% with request.get_full_path as cur_url %}
+
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'main:home' %}">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fab fa-salesforce"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">TableauCRM Assistant</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    {% url "main:home" as home_url %}
+    <li class="nav-item{% if cur_url == home_url %} active{% endif %}">
+        <a class="nav-link" href="{% url 'main:home' %}">
+            <i class="fas fa-home"></i>
+            <span>Home</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    {% include 'sb-base/body-components/sidebar-items/_salesforce.html' %}
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    {% include 'sb-base/body-components/sidebar-items/_slack.html' %}
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</ul>
+<!-- End of Sidebar -->
+
+{% endwith %}

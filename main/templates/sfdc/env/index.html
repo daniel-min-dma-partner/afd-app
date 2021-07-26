@@ -1,37 +1,74 @@
-{% extends 'sd-base/base.html' %}
+{% extends 'sb-base/base.html' %}
 
 {% load static %}
 
 {% block title %} Salesforce {% endblock title %}
-{% block page-header %} Connection Status {% endblock page-header %}
+{% block page-header %} Salesforce / O-Auth Connections {% endblock page-header %}
 
 {% block page-content %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="form-group">
-                    <a href="{% url 'main:sfdc-env-create' %}" class="btn btn-primary btn-round float-right" id="create-new-env-btn">
-                      <i class="material-icons">add_circle</i>
-                    </a>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group">
+                        <a href="{% url 'main:sfdc-env-create' %}" class="btn btn-success btn-icon-split float-right">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-plus"></i>
+                            </span>
+                            <span class="text">New</span>
+                        </a>
+                    </div>
+
+                    <br/>
+                    <br/>
+
+                    {% include 'sfdc/env/_content.html' %}
                 </div>
-
-                <br/>
-                <br/>
-
-                {% include 'sfdc/env/_content.html' %}
             </div>
         </div>
     </div>
-</div>
 {% endblock page-content %}
 
 {% block extra-scripts %}
-<script>
+    <script type="module">
 
-$('.sfdc-env-delete-btn').click(function() {
-    $('#sfdc-delete-confirmation-md .modal-body').find('input[id="sfdc-id-field"]').val($(this).data('envid')).trigger('change');
-    $('#sfdc-delete-confirmation-md .modal-body').find('input[id="sfdc-name-field"]').val($(this).data('envname')).trigger('change');
-});
-</script>
+        import {
+            popup_notification,
+            show_error_and_popup
+        } from "../../../static/sb-admin/custom-assets/js/mjs/helpers.mjs";
+
+        $('.sfdc-env-delete-btn').click(function () {
+            $('#sfdc-delete-confirmation-md .modal-body').find('input[id="sfdc-id-field"]').val($(this).data('envid')).trigger('change');
+            $('#sfdc-delete-confirmation-md .modal-body').find('input[id="sfdc-name-field"]').val($(this).data('envname')).trigger('change');
+        });
+
+        $('a[id^="id_key"]').click(function (evt) {
+            copy_keysec_to_clipboard($(this), "key");
+        });
+
+        $('a[id^="id_secret"]').click(function (evt) {
+            copy_keysec_to_clipboard($(this), "secret");
+        });
+
+        $('a[id^="id_password"]').click(function (evt) {
+            copy_keysec_to_clipboard($(this), "password");
+        });
+
+        const copy_keysec_to_clipboard = (domEl, field) => {
+            let pk = domEl.parent().parent().find('input[type="hidden"]').val();
+
+            $.ajax({
+                type: "GET",
+                url: "{% url 'main:env-copy-secrets' %}",
+                data: {pk: pk, field: field},
+                success: function (response) {
+                    navigator.clipboard.writeText(response.payload);
+                    popup_notification('Success', '<strong><code>' + field + '</code></strong> value copied successfully.', 'success', true, 700);
+                },
+                error: function (response) {
+                    show_error_and_popup(response);
+                },
+            });
+        };
+    </script>
 {% endblock extra-scripts %}

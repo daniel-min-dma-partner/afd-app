@@ -1,12 +1,59 @@
 import copy
 import datetime as dt
+import os
 
 import tzlocal
 from django.contrib.auth.models import User
 from django.db import models
 
+from core.settings import MEDIA_ROOT
+
 
 # Create your models here.
+
+class FileModel(models.Model):
+    UPLOAD_TO = 'documents/%Y/%m/%d'
+
+    file: models.FileField = models.FileField(upload_to=UPLOAD_TO)
+    parent_file = models.ForeignKey("FileModel", blank=True, null=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def delete(self, using=None, keep_parents=False):
+        _filepath = os.path.join(MEDIA_ROOT, self.file.name)
+        print(f'Trying to delete {_filepath}')
+        if os.path.isfile(_filepath) and not os.path.isdir(_filepath):
+            os.remove(_filepath)
+            print(f"File {_filepath} deleted")
+
+        _filepath = os.path.join(MEDIA_ROOT, self.file.name.replace('ORIGINAL__', '') + '.log')
+        print(f'Trying to delete {_filepath}')
+        if os.path.isfile(_filepath) and not os.path.isdir(_filepath):
+            os.remove(_filepath)
+            print(f"File {_filepath} deleted")
+
+        _filepath = os.path.join(MEDIA_ROOT, self.file.name.replace('ORIGINAL__', 'DEPRECATED__'))
+        print(f'Trying to delete {_filepath}')
+        if os.path.isfile(_filepath) and not os.path.isdir(_filepath):
+            os.remove(_filepath)
+            print(f"File {_filepath} deleted")
+
+        if self.pk:
+            super(self.__class__, self).delete(using=using, keep_parents=keep_parents)
+
+    def get_filename(self):
+        return os.path.basename(self.file.path)
+
+
+class DataflowCompareFilesModel(models.Model):
+    file1: models.FileField = models.FileField(upload_to='documents/%Y/%m/%d')
+    file2: models.FileField = models.FileField(upload_to='documents/%Y/%m/%d')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def delete(self, using=None, keep_parents=False):
+        os.remove(os.path.join(MEDIA_ROOT, self.file1.name))
+        os.remove(os.path.join(MEDIA_ROOT, self.file2.name))
+        super(self.__class__, self).delete(using=using, keep_parents=keep_parents)
+
 
 class Profile(models.Model):
     _TYPE_CHOICE = (
@@ -116,3 +163,70 @@ class SalesforceEnvironment(models.Model):
     def get_environment_name(self):
         inv_map = {key: value for (key, value) in self._ENVIRONMENT_CHOICE}
         return inv_map[self.environment]
+
+
+class Notifications(models.Model):
+    _STATUS_CHOICE = (
+        (1, 'UNREAD_UNCLICKED'),
+        (2, 'READ_UNCLIKED'),
+        (3, 'READ_CLICKED')
+    )
+
+    _TYPE_CHOICE = (
+        ('warning', 'warning'),
+        ('success', 'success'),
+        ('danger', 'danger'),
+        ('info', 'info'),
+        ('primary', 'primary'),
+    )
+
+    _STATUS_CHOICE_STR = ((_str, num) for (num, _str) in _STATUS_CHOICE)
+
+    _STATUS_MAP = {
+        1: 'UNREAD_UNCLICKED',
+        2: 'READ_UNCLIKED',
+        3: 'READ_CLICKED',
+    }
+
+    message = models.CharField(max_length=1024, help_text='', null=False, blank=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.IntegerField(default=1, blank=False, null=False, choices=_STATUS_CHOICE)
+    link = models.CharField(max_length=1024, help_text='', null=False, blank=False, default="#")
+    created_at = models.DateTimeField(auto_now_add=True)
+    type = models.CharField(max_length=10, help_text='', null=False, blank=False, choices=_TYPE_CHOICE,
+                            default='info')
+
+    def __init__(self, *args, **kwargs):
+        super(self.__class__, self).__init__(*args, **kwargs)
+        self.__important_fields = ['status']
+        for field in self.__important_fields:
+            setattr(self, '__original_%s' % field, getattr(self, field))
+
+    def clean_status(self):
+        for field in self.__important_fields:
+            orig = '__original_%s' % field
+            if getattr(self, orig) is not None and getattr(self, orig) > getattr(self, field):
+                msg = f"The status transition of the Notification <code>{self.pk}<code>" \
+                      f" from {getattr(self, orig)} to {getattr(self, field)} is not valid."
+                raise ValueError(msg)
+
+    def get_status(self):
+        return self._STATUS_MAP[self.status] if self.status is not None else None
+
+    def set_status(self, string_code: str = "UNREAD_UNCLICKED"):
+        _status_map_rev = {_str: num for num, _str in self._STATUS_MAP.items()}
+        self.status = _status_map_rev[string_code.upper()]
+
+    def set_initial_status(self):
+        self.set_status()
+
+    @classmethod
+    def get_initial_status(cls):
+        return 1
+
+    def set_read_clicked(self):
+        self.set_status('read_clicked')
+
+    @classmethod
+    def get_max_status_level(cls):
+        return 3

@@ -13,11 +13,6 @@ $('.logout').click(function () {
     $('#logoutModal .modal-body').html("You'll be log-ed out.");
 });
 
-// Closes the notification box when "x" is clicked
-$('.btn-close').click(function (evt) {
-    $(this).parent().parent().hide();
-});
-
 $('.menu-item-finder').on('keyup click', function(evt) {
     var processed_parent = [];
 

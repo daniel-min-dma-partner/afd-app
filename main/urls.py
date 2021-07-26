@@ -19,6 +19,7 @@ from django.urls import path
 import main.views as main
 
 app_name = 'main'
+handler500 = 'main.views.handler500'
 
 urlpatterns = [
     path('', main.Home.as_view(), name='home'),
@@ -41,12 +42,35 @@ urlpatterns = [
     path('slack/interactive-endpoint/', main.slack_interactive_endpoint, name='slack-interactive-endpoint'),
     url(r'^dataflow-manager/', include([
         url(r'^extract-update/$', main.TreeRemover.as_view(), name='extract-update-dataflow'),
+        url(r'^compare/$', main.CompareDataflows.as_view(), name='compare-dataflows'),
+        url(r'^deprecate-fields/', include([
+            url(r'^$', main.DeprecateFieldsView.as_view(), name='deprecate-fields'),
+            url(r'^view/$', main.ViewDeprecatedFieldsView.as_view(), name='view-deprecations'),
+            url(r'^compare/$', main.ajax_compare_deprecation, name='compare-deprecations'),
+            url(r'^compare/(?P<pk>\d+)/$', main.CompareDeprecationView.as_view(), name='compare-deprecation'),
+            url(r'^delete/$', main.ajax_delete_deprecation, name='remove-deprecations'),
+        ])),
         url(r'^download/$', main.DownloadDataflowView.as_view(), name='download-dataflow'),
+        url(r'^upload/$', main.UploadDataflowView.as_view(), name='upload-dataflow'),
+    ])),
+
+    url(r'^notifications/', include([
+        # url(r'^list/$', main.ListNotificationView.as_view(), name='notification-list'),
+        # url(r'^mark-as-read/(?P<pk>\d+)/$', main.MarkNotifAsReadView.as_view(), name='notification-read'),
+        url(r'^mark-as-clicked/(?P<pk>\d+)/$', main.MarkNotifAsClickedView.as_view(), name='notification-clicked'),
+        url(r'^mark-all-as-read-clicked/$', main.NotificationMarkAllAsReadClickedView.as_view(), name='mark-all'),
+    ])),
+
+    url(r'^dataset-manager/', include([
+        url(r'^security-predicate/', include([
+            url(r'^convert-to-saql/$', main.SecpredToSaqlView.as_view(), name='secpred-to-saql'),
+        ])),
     ])),
 
     # Ajax
     url(r'^ajax/', include([
         url(r'^list-dataflows/$', main.ajax_list_dataflows, name='ajax-list-dataflows'),
         url(r'^list-envs/$', main.ajax_list_envs, name='ajax-list-envs'),
+        url(r'^get-env-key-secret/$', main.ajax_copy_key_to_clipboard, name='env-copy-secrets'),
     ])),
 ]

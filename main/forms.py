@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 
-from .models import SalesforceEnvironment
+from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel as DFCompModel
 
 
 class LoginForm(AuthenticationForm):
@@ -166,12 +166,19 @@ class SlackMsgPusherForm(forms.Form):
         "DPARK": {
             "url": "https://hooks.slack.com/services/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",
             "name": "Daniel"
+        },
+        "SFDC_INTERNAL_TCRM": {
+            "url": "https://hooks.slack.com/services/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",
+            "name": "bt-eops-tableau-crm"
         }
     }
 
-    _SLACK_TARGET_CHOICES = [('SFDC_INTERNAL_SUBBARAO', 'Subbarao Talachiru'),
-                             ('SFDF_I_bt-eops-dna-all', 'bt-eops-dna-all'),
-                             ('DPARK', '민 현 기')]
+    _SLACK_TARGET_CHOICES = [
+        ('SFDC_INTERNAL_SUBBARAO', 'Subbarao Talachiru'),
+        ('SFDC_INTERNAL_SAI', 'bt-eops-tableau-crm'),
+        ('SFDF_I_bt-eops-dna-all', 'bt-eops-dna-all'),
+        ('DPARK', '민 현 기'),
+    ]
 
     slack_target = forms.ChoiceField(choices=_SLACK_TARGET_CHOICES, widget=forms.RadioSelect(), required=True)
 
@@ -225,3 +232,61 @@ class SlackCustomerConversationForm(forms.Form):
 
 class DataflowDownloadForm(forms.Form):
     env_selector = forms.IntegerField()
+
+
+class DataflowUploadForm(forms.ModelForm):
+    dataflow_selector = forms.CharField(required=False)
+    env_selector = forms.IntegerField(required=False)
+
+    class Meta:
+        model = FileModel
+        exclude = {}
+        fields = {'file'}
+        REQUIRED_FIELDS = [
+            'file'
+        ]
+
+    def save(self, commit=True):
+        model = super(self.__class__, self).save(commit=False)
+        if commit:
+            model.save()
+        return model
+
+
+class CompareDataflowForm(forms.ModelForm):
+    _METHOD_CHOICE = (
+        ('jdd', "JDD"),
+        ('d2h', "Diff to HTML"),
+    )
+    field1 = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
+    field2 = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
+    method = forms.ChoiceField(choices=_METHOD_CHOICE, widget=forms.RadioSelect(), required=True)
+
+    class Meta:
+        model = DFCompModel
+        exclude = {}
+        fields = {'file1', 'file2'}
+
+    def save(self, commit=True):
+        model = super(self.__class__, self).save(commit=False)
+        if commit:
+            model.save()
+        return model
+
+
+class DeprecateFieldsForm(forms.Form):
+    files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+    objects = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
+    fields = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
+
+
+class SecpredToSaqlForm(forms.Form):
+    dataset = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True,
+                              label="Dataflow API Name")
+    secpred = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': ""}),
+                              required=False, label="Security Predicate")
+    saql = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 10, 'placeholder': "", "readonly": True}),
+        required=False, label="Generated SAQL")

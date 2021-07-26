@@ -2,8 +2,14 @@ import json
 import os
 from pathlib import Path
 
+from core.settings import BASE_DIR
 from libs.interactor.interactor import Interactor
 from libs.utils import current_datetime
+
+# In org62, sfdcDigest nodes can have 'name' key inside 'parameters' property.
+# In Stage, for the moment, doesn't accept 'name' key inside 'parameters' property.
+# The same happens with 'SFDCToken' key in 'parameters'.
+forbidden_keys_in_parms = ['name', 'SFDCtoken']
 
 
 class JsonStructReverterInteractor(Interactor):
@@ -14,6 +20,14 @@ class JsonStructReverterInteractor(Interactor):
             for nn, node in js.items():
                 if node['action'] == 'sfdcDigest':
                     node['action'] = "sobjectDigest"
+
+                    if 'complexFilterConditions' in node['parameters'].keys():
+                        node['parameters']['passthroughFilter'] = node['parameters']['complexFilterConditions']
+                        del node['parameters']['complexFilterConditions']
+
+                    for fbk in forbidden_keys_in_parms:
+                        if fbk in node['parameters']:
+                            del node['parameters'][fbk]
 
                 if node['action'] == "edgemart":
                     node['action'] = 'dataset'
@@ -28,14 +42,16 @@ class JsonStructReverterInteractor(Interactor):
                     new = ['includeSelfId', 'parentField', 'selfField']
                     old = ['include_self_id', 'parent_field', 'self_field']
                     for ok in old:
-                        node['parameters'][new[old.index(ok)]] = node['parameters'][ok]
-                        del node['parameters'][ok]
+                        if ok in node['parameters'].keys():
+                            node['parameters'][new[old.index(ok)]] = node['parameters'][ok]
+                            del node['parameters'][ok]
 
                     corrects = ["multiField", "pathField"]
                     fields = ["multi_field", "path_field"]
                     for key in fields:
-                        node['parameters'][corrects[int(fields.index(key))]] = {"name": node['parameters'][key]}
-                        del node['parameters'][key]
+                        if key in node['parameters'].keys():
+                            node['parameters'][corrects[int(fields.index(key))]] = {"name": node['parameters'][key]}
+                            del node['parameters'][key]
 
                 if node['action'] in ['update', "augment"]:
                     node['sources'] = [node['parameters']['left'], node['parameters']['right']]
@@ -64,6 +80,13 @@ class JsonStructReverterInteractor(Interactor):
                     del node['parameters']['source']
                     del node['parameters']['alias']
 
+                    if 'folderid' in node['parameters']:
+                        node['parameters']['runtime'] = {"folderid": node['parameters']['folderid']}
+                        del node['parameters']['folderid']
+                    elif 'folder' in node['parameters']:
+                        node['parameters']['runtime'] = {"folder": node['parameters']['folder']}
+                        del node['parameters']['folder']
+
                 if node['action'] in ["sliceDataset", "computeRelative", "computeExpression", "filter", "dim2mea",
                                       "flatten"]:
                     if "source" in node['parameters'].keys():
@@ -87,6 +110,14 @@ class JsonStructFixerInteractor(Interactor):
                         for key in node['parameters']['runtime']:
                             node['parameters'][key] = node['parameters']['runtime'][key]
                         del node['parameters']['runtime']
+
+                    if 'passthroughFilter' in node['parameters'].keys():
+                        node['parameters']['complexFilterConditions'] = node['parameters']['passthroughFilter']
+                        del node['parameters']['passthroughFilter']
+
+                    for fbk in forbidden_keys_in_parms:
+                        if fbk in node['parameters']:
+                            del node['parameters'][fbk]
 
                 if node['action'] == "dataset":
                     node['action'] = 'edgemart'
@@ -139,7 +170,11 @@ class JsonStructFixerInteractor(Interactor):
                     del node['parameters']['label']
 
                     if 'runtime' in node['parameters'].keys():
-                        node['parameters']['folderid'] = node['parameters']['runtime']['folderid']
+                        if 'folderid' in node['parameters']['runtime']:
+                            node['parameters']['folderid'] = node['parameters']['runtime']['folderid']
+                        elif 'folder' in node['parameters']['runtime']:
+                            node['parameters']['folder'] = node['parameters']['runtime']['folder']
+
                         del node['parameters']['runtime']
 
                 if node['action'] in ["sliceDataset", "computeRelative", "computeExpression", "filter", "dim2mea",
@@ -223,11 +258,12 @@ class WdfManager(Interactor):
 
     def run(self):
         today = current_datetime()
+        env = self.context.env
         user = self.context.user
         mode = self.context.mode
         klass = self._MODE[mode]
-        wdf_filepath = f"ant/{user.username}/retrieve/dataflow/wave"
-        json_filepath = f"libs/tcrm_automation/{today}/original_dataflows"
+        wdf_filepath = f"{BASE_DIR}/ant/{user.username}/retrieve/dataflow/wave"
+        json_filepath = f"{BASE_DIR}/libs/tcrm_automation/{today}/original_dataflows"
 
         if mode == 'wdfToJson':
             Path(json_filepath).mkdir(parents=True, exist_ok=True)
@@ -235,6 +271,7 @@ class WdfManager(Interactor):
             original_ext = '.wdf'
             output_ext = '.json'
             output_name_prefix = "[FIXED]"
+            env_name = f"[{env.name}] "
 
             files = [f for f in os.listdir(wdf_filepath)
                      if os.path.isfile(os.path.join(wdf_filepath, f)) and f[-4:] == ".wdf"]
@@ -244,13 +281,15 @@ class WdfManager(Interactor):
             original_ext = '.json'
             output_ext = '.wdf'
             output_name_prefix = "[REVERTED]"
+            env_name = ""
 
             files = [f for f in os.listdir(json_filepath)
                      if os.path.isfile(os.path.join(json_filepath, f)) and f[-5:] == ".json"]
 
         for file in files:
-            print(f"processing {file}...")
+            print(f"\n === processing {file}...")
             klass.call(json_filepath=os.path.join(json_filepath, file.replace('.wdf', '.json')),
                        wdf_filepath=os.path.join(wdf_filepath, file.replace('.json', '.wdf')),
                        output_filepath=os.path.join(output_filepath,
-                                                    f"{output_name_prefix} {file.replace(original_ext, output_ext)}"))
+                                                    f"{env_name}{output_name_prefix} {file.replace(original_ext, output_ext)}"))
+            print(f" === end {file}")
