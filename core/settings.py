@@ -75,6 +75,9 @@ MIDDLEWARE = [
     # Global Login required
     'global_login_required.GlobalLoginRequiredMiddleware',
 
+    # Whitenoise for Heroku
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     # Custom Middlewares
     'main.middleware.SfdcCRUDMiddleware',
     'main.middleware.TimezoneMiddleware',
@@ -245,3 +248,4 @@ SALESFORCE_INSTANCE_URLS = {
 django_heroku.settings(locals())
 prod_db = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
