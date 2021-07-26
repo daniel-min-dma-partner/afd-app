@@ -23,7 +23,7 @@
     "fields": {
       "user": 1,
       "key": "timezone",
-      "value": "EDT",
+      "value": "UTC",
       "type": "str"
     }
   },
