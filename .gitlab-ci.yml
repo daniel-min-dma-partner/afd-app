@@ -4,6 +4,8 @@ before_script:
   - python --version
   - pip install -r requirements.txt
   - python3 manage.py collectstatic
+  - curl https://downloads.apache.org/ant/binaries/apache-ant-1.10.11-bin.tar.gz --output ant/apache-ant.bin.tar.gz
+  - tar -xvf ant/apache-ant.bin.tar.gz -C ant
 
 stages:
   - Static Analysis
