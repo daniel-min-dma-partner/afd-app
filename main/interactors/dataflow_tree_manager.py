@@ -1,8 +1,5 @@
 import os
-import platform as pf
 from pathlib import Path
-
-from appscript import *
 
 from core.settings import BASE_DIR
 from libs.interactor.interactor import Interactor
@@ -67,5 +64,3 @@ class TreeExtractorInteractor(Interactor):
         tree_extractor(dataflow=dataflow, registers=registers, output_dir=output, output_filename=filename)
         self.context.output = f"{output}/{filename}"
 
-        if pf.system() == "Darwin":
-            app("Finder").reveal(mactypes.Alias(output).alias)
