@@ -14,3 +14,4 @@ ant/**/*.xml
 ant/**/*.properties
 json_diff_output.html
 media/*
+staticfiles/*

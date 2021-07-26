@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login as do_login, logout as do_lo
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.views import View, generic
 from django.views.decorators.csrf import csrf_exempt
@@ -23,11 +24,12 @@ from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemo
 from .interactors.deprecate_fields_interactor import FieldDeprecatorInteractor
 from .interactors.download_dataflow_interactor import DownloadDataflowInteractor
 from .interactors.list_dataflow_interactor import DataflowListInteractor
+from .interactors.notification_interactor import SetNotificationInteractor
 from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.upload_dataflow_interactor import UploadDataflowInteractor
 from .interactors.wdf_manager_interactor import *
-from .models import SalesforceEnvironment as SfdcEnv, FileModel
+from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications
 
 
 class Home(generic.TemplateView):
@@ -39,7 +41,6 @@ class Home(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         # login_status = _sfdc_status_check(self.request)
         # context['sfdc_login_status'] = login_status
         return context
@@ -435,7 +436,7 @@ class DownloadDataflowView(generic.FormView):
                 download_ctx = DownloadDataflowInteractor.call(dataflow=dataflows, model=env, user=request.user)
 
                 if not download_ctx.exception:
-                    wdf_manager_ctx = WdfManager.call(user=request.user, mode="wdfToJson")
+                    wdf_manager_ctx = WdfManager.call(user=request.user, mode="wdfToJson", env=env)
                 else:
                     raise download_ctx.exception
 
@@ -466,6 +467,8 @@ class UploadDataflowView(generic.FormView):
         try:
             form_class = self.get_form_class()
             form: DataflowUploadForm = form_class(request.POST, request.FILES)
+            notif_msg = None
+            notif_type = 'success'
 
             if form.is_valid():
                 filemodel = form.save(commit=False)
@@ -480,16 +483,34 @@ class UploadDataflowView(generic.FormView):
                     raise ctx.exception
                 else:
                     msg = "Uploading <code>{0}</code> local dataflow to <code>{1}</code> dataflow to " \
-                          "<code>{2}</code> connection has finished."\
+                          "<code>{2}</code> connection has finished." \
                         .format(
-                            os.path.basename(filemodel.file.name), remote_df_name, env.name
-                        )
+                        os.path.basename(filemodel.file.name), remote_df_name, env.name
+                    )
+                    notif_msg = msg
                     messages.info(request, mark_safe(msg))
             else:
                 messages.error(request, form.errors.as_data)
         except Exception as e:
             messages.error(request, str(e))
-            raise e
+            notif_msg = str(e)
+            notif_type = 'error'
+
+        # Push a notification.
+        try:
+            notif_data = {
+                'user': request.user,
+                'message': notif_msg,
+                'status': Notifications.get_initial_status(),
+                'link': "#",
+                'type': notif_type
+            }
+            ctx = SetNotificationInteractor.call(data=notif_data)
+
+            if ctx.exception:
+                raise ctx.exception
+        except Exception as e:
+            messages.error(request, str(e))
 
         return redirect("main:upload-dataflow")
 
@@ -514,8 +535,21 @@ class CompareDataflows(generic.FormView):
                 files_model.user = request.user
                 files_model.save()
 
-                show_in_browser(original=files_model.file1.path, compared=files_model.file2.path)
-                files_model.delete()
+                _method = form.cleaned_data['method']
+                if _method == 'd2h':
+                    show_in_browser(original=files_model.file1.path, compared=files_model.file2.path)
+                    files_model.delete()
+                elif _method == 'jdd':
+                    with files_model.file1.open('r') as f, files_model.file2.open('r') as g:
+                        script = json.load(g)
+                        left_script = json.dumps(script, indent=2)  # left shows the original json.
+                        script = json.load(f)
+                        right_script = json.dumps(script, indent=2)  # right shows the modified json.
+
+                    return render(request, 'jdd/index.html', {
+                        'left_script': left_script,
+                        'right_script': right_script,
+                    })
 
                 messages.info(request, "Showing diff in browser.")
                 return self.form_valid(form)
@@ -539,21 +573,13 @@ class DeprecateFieldsView(generic.FormView):
 
         try:
             if form.is_valid():
-                # Prepare fields
-                fields = [field.rstrip() for field in request.POST.get('fields').split('\n')]
+                # Prepare fields: Each row corresponds to an Object.
+                fields = [field.rstrip() for field in request.POST.get('fields').split('\n') if
+                          field.rstrip() not in [None, ""]]
 
-                # Prepare objects
-                objects = [object.rstrip() for object in request.POST.get('objects').split('\n')]
-                _objects = []
-
-                for object in objects:
-                    if "," in object:
-                        _objects += [_object.strip() for _object in object.split(',') if _object.strip() not in [None, ""]]
-                        objects.remove(object)
-                    elif not object:
-                        objects.remove(object)
-                objects += _objects
-                objects = list(set(objects))
+                # Prepare objects: Each row must specify only one Object.
+                objects = [obj.rstrip() for obj in request.POST.get('objects').split('\n') if
+                           obj.rstrip() not in [None, ""]]
 
                 # Prepare dataflow contents
                 for file in request.FILES.getlist('files'):
@@ -571,7 +597,20 @@ class DeprecateFieldsView(generic.FormView):
                 for fm in df_files:
                     fm.delete()
 
-                messages.info(request, "Ok")
+                for file in ctx.deprecated_json_files:
+                    notif_data = {
+                        'user': request.user,
+                        'message': f"See deprecation for <code title=\"{file.get_filename()}\">{file.get_filename()}</code>",
+                        'status': Notifications.get_initial_status(),
+                        'link': reverse('main:compare-deprecation', kwargs={'pk': file.pk}),
+                        'type': 'success'
+                    }
+                    ctx = SetNotificationInteractor.call(data=notif_data)
+
+                    if ctx.exception:
+                        raise ctx.exception
+
+                messages.success(request, "Deprecation finished successfully")
                 return self.form_valid(form)
             else:
                 messages.error(request, form.errors.as_data())
@@ -589,10 +628,9 @@ class ViewDeprecatedFieldsView(generic.ListView):
     template_name = 'dataflow-manager/deprecate-fields/list.html'
 
     def get_queryset(self):
-        print(self.request.GET)
         lst = FileModel.objects.filter(user_id=self.request.user.pk).filter(
             Q(file__icontains="field-deprecations") &
-            ~Q(file__icontains="DEPRECATED__")
+            ~Q(file__icontains="ORIGINAL__")
         ).order_by('-file')
         return lst
 
@@ -601,6 +639,71 @@ class SecpredToSaqlView(generic.FormView):
     template_name = 'dataset-manager/secpred-to-saql-converter/form.html'
     form_class = SecpredToSaqlForm
     success_url = '/dataset-manager/security-predicate/convert-to-saql/'
+
+
+class CompareDeprecationView(generic.TemplateView):
+    template_name = 'jdd/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+
+        try:
+            filemodel = get_object_or_404(FileModel, pk=int(kwargs['pk']))
+
+            second_fm = FileModel.objects.filter(
+                Q(file__icontains=filemodel.file.name.replace('DEPRECATED__', 'ORIGINAL__'))
+            )
+
+            if second_fm.exists():
+                second_fm = second_fm.first()
+
+                with filemodel.file.open('r') as f, second_fm.file.open('r') as g:
+                    script = json.load(g)
+                    left_script = json.dumps(script, indent=2)  # left shows the original json.
+                    script = json.load(f)
+                    right_script = json.dumps(script, indent=2)  # right shows the modified json.
+            else:
+                left_script = "<< Not Found >>"
+                right_script = "<< Not Found >>"
+        except Exception as e:
+            left_script = str(e)
+            right_script = "<< Not Found >>"
+
+        context['left_script'] = left_script
+        context['right_script'] = right_script
+        return context
+
+
+class MarkNotifAsClickedView(generic.View):
+    def get(self, request, *args, **kwargs):
+        if 'pk' not in kwargs:
+            raise KeyError(f"The <code><strong>pk</strong></code> for the notification clicked was not sent.")
+        else:
+            notification = get_object_or_404(Notifications, pk=kwargs['pk'], user=request.user)
+            notification.set_read_clicked()
+            notification.save()
+            return redirect(notification.link)
+
+
+class NotificationMarkAllAsReadClickedView(generic.View):
+    def get(self, request, *args, **kwargs):
+        try:
+            notifications = Notifications.objects.filter(user=request.user,
+                                                         status__lt=Notifications.get_max_status_level())
+
+            if notifications.exists():
+                for notification in notifications.all():
+                    notification.set_read_clicked()
+                    notification.save()
+                    print('saveado=============')
+        except Exception as e:
+            messages.error(request, str(e))
+
+        return redirect('main:home')
+
+
+def handler500(request, exception=None):
+    return render(request, '500.html', {"exception": mark_safe(str(exception))}, status=500)
 
 
 @csrf_exempt
@@ -613,13 +716,13 @@ def ajax_compare_deprecation(request):
             error = None
             status = 200
 
-            filemodel = get_object_or_404(FileModel, pk=int(request.GET.getlist('pk')[0]))
+            filemodel = get_object_or_404(FileModel, pk=int(request.GET.get('pk')))
             second_fm = FileModel.objects.filter(
-                Q(file__icontains=filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))
+                Q(file__icontains=filemodel.file.name.replace('DEPRECATED__', 'ORIGINAL__'))
             )
             if second_fm.exists():
                 second_fm = second_fm.first()
-                show_in_browser(filemodel.file.path, second_fm.file.path)
+                show_in_browser(second_fm.file.path, filemodel.file.path)
                 messages.info(request, "Showing difference in a new tab.")
             else:
                 raise ValueError(f"<code>{os.path.basename(filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))}"
@@ -661,12 +764,12 @@ def ajax_delete_deprecation(request):
 
             filemodel = get_object_or_404(FileModel, pk=int(request.POST.getlist('id-field')[0]))
             second_fm = FileModel.objects.filter(
-                Q(file__icontains=filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))
+                Q(file__icontains=filemodel.file.name.replace('DEPRECATED__', 'ORIGINAL__'))
             )
             if second_fm.exists():
                 second_fm = second_fm.first()
-                if second_fm.parent_file.file.name == filemodel.file.name:
-                    filemodel.delete()
+                if second_fm.file.name == filemodel.parent_file.file.name:
+                    second_fm.delete()
                     message = "Deprecation deleted successfully."
                     typ = messages.SUCCESS
                 else:
@@ -693,7 +796,7 @@ def ajax_list_dataflows(request):
         ],
     }
     status = 400
-    error = "Is not an ajax or 'q' parm doesn't exist or it's empty."
+    error = "There is an error. Check if the <code>Environment</code> is selected."
 
     if request.is_ajax and request.GET.get('q'):
         try:

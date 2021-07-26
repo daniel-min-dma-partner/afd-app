@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-wi5%3e1_fpxq+fm8sowdg0^(0vz*qv0oryh3ww+adav$+v$e4%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', ]
 
 # Application definition
 
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Extra apps
+    'apscheduler',
     'bootstrap4',
     # 'channels',
     'django_extensions',
@@ -66,6 +67,7 @@ MIDDLEWARE = [
 
     # Custom Middlewares
     'main.middleware.SfdcCRUDMiddleware',
+    'main.middleware.TimezoneMiddleware',
 ]
 
 # Login
@@ -94,6 +96,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / "main/templates",
+            BASE_DIR / "libs",
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -102,6 +105,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # My custom context processors
+                'main.context_processors.show_notifications',
             ],
         },
     },
@@ -135,9 +141,18 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'tcrm_db',
+        'USER': 'tcrm_user',
+        'PASSWORD': '7YjvxvWLC8',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -179,8 +194,12 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Recomended by Heroku. This is "production" configuration.
 
 static_dir = os.path.join(BASE_DIR, "main/static")  # Static files for development mode
+jdd_static_dir = os.path.join(BASE_DIR, "libs/jdd")
+jsl_static_dir = os.path.join(BASE_DIR, "libs/jdd/jsl")
 STATICFILES_DIRS = [
     static_dir,
+    jdd_static_dir,
+    jsl_static_dir,
 ]
 
 # File Upload managers

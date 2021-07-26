@@ -52,7 +52,7 @@ $(document).ready(function(evt) {
                 }
             },
             minimumInputLength: 5,
-            delay: 300,
+            delay: 900,
         }
     });
 });
