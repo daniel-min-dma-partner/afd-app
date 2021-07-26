@@ -4,9 +4,7 @@ before_script:
   - python --version
   - pip install -r requirements.txt
   - python3 manage.py collectstatic
-  - pwd
-  - ls -al
-  - heroku config:get DATABASE_URL -a hidden-gorge-78224
+  - python3 manage.py migrate
 
 stages:
   - Static Analysis
