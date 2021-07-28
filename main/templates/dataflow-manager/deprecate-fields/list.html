@@ -29,11 +29,6 @@
                             <th>Object ID</th>
                             <th>Name</th>
                             <th class="text-center">Action</th>
-                            {#                            <th>Instance</th>#}
-                            {#                            <th>Oauth Flow Status</th>#}
-                            {#                            <th>Access Token Created Date</th>#}
-                            {#                            <th class="text-right">Connect?</th>#}
-                            {#                            <th class="text-right">CRUD</th>#}
                         </tr>
                         </thead>
                         <tbody>
@@ -52,7 +47,7 @@
                         {% for object in list %}
                             <tr>
                                 <td class="pk">{{ object.pk }}</td>
-                                <td title="{{ object.file.path }}">{{ object.file.name }}</td>
+                                <td>{{ object.file_name }}</td>
                                 <td class="text-center">
                                     <a href="{% url 'main:compare-deprecation' pk=object.pk %}"
                                        rel="tooltip" class="btn btn-info btn-circle btn-sm"
@@ -67,7 +62,7 @@
                                     <a href="#"
                                        rel="tooltip" class="btn btn-danger btn-circle btn-sm btn-remove-deprec"
                                        title="Remove deprecation"
-                                       data-id="{{ object.pk }}" data-model-name="{{ object.file.name }}"
+                                       data-id="{{ object.pk }}" data-model-name="{{ object.file_name }}"
                                        data-toggle="modal" data-target="#delete-confirmation-md">
                                         <i class="fas fa-trash"></i>
                                     </a>

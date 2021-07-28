@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 from core.settings import MEDIA_ROOT
+from .modelfields import CompressedJSONField
 
 
 # Create your models here.
@@ -230,3 +231,11 @@ class Notifications(models.Model):
     @classmethod
     def get_max_status_level(cls):
         return 3
+
+
+class DataflowDeprecation(models.Model):
+    file_name = models.CharField(max_length=1024, help_text='', null=False, blank=False)
+    original_dataflow = CompressedJSONField()
+    deprecated_dataflow = CompressedJSONField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
