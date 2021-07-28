@@ -24,7 +24,7 @@ class DownloadDataflowInteractor(Interactor):
                 F"export {cur_dir_tmp}=$(pwd)",
                 f"cd {BASE_DIR}/ant/{self.context.user.username}",
 
-                "ant downloadDataflows",
+                f"{BASE_DIR}/libs/apache_ant/bin/ant downloadDataflows",
 
                 f"cd ${cur_dir_tmp}",
                 f"unset {cur_dir_tmp}"

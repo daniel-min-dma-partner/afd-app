@@ -2,9 +2,10 @@
     <thead>
     <tr>
         <th>Name</th>
+        <th>Instance</th>
         <th>Oauth Flow Status</th>
         <th>Access Token Created Date</th>
-        <th class="text-center">Copy Secrets</th>
+        <th class="text-center">Copy to Clipboard</th>
         <th class="text-right">CRUD</th>
     </tr>
     </thead>
@@ -12,6 +13,7 @@
     {% for env in env_list %}
         <tr>
             <td>{{ env.name }}<input type="hidden" value="{{ env.pk }}"></td>
+            <td>{{ env.instance_url }}</td>
             <td>{{ env.get_oauth_flow_stage_string }}</td>
             <td>{{ env.oauth_access_token_created_date }}</td>
             <td class="text-center">
@@ -26,6 +28,12 @@
                     <i class="fas fa-copy"></i>
                 </span>
                     <span class="text">Secret</span>
+                </a>
+                <a href="#" id="id_username_{{ env.pk }}" class="btn btn-info btn-icon-split btn-sm btn-show-diff">
+                <span class="icon text-white-50">
+                    <i class="fas fa-copy"></i>
+                </span>
+                    <span class="text">Username</span>
                 </a>
                 <a href="#" id="id_password_{{ env.pk }}" class="btn btn-info btn-icon-split btn-sm btn-show-diff">
                 <span class="icon text-white-50">
@@ -44,6 +52,18 @@
                    data-toggle="modal" data-target="#sfdc-delete-confirmation-md"
                    data-envid="{{ env.pk }}" data-envname="{{ env.name }}" title="Delete">
                     <i class="fas fa-trash"></i>
+                </a>
+
+                <a href="{% url 'main:sfdc-connect' pk=env.pk action='login' %}"
+                   class="btn btn-primary btn-circle btn-sm"
+                   title="Edit">
+                    <i class="fas fa-edit"></i>
+                </a>
+
+                <a href="{% url 'main:sfdc-connect' pk=env.pk action='logout' %}"
+                   class="btn btn-primary btn-circle btn-sm"
+                   title="Edit">
+                    <i class="fas fa-edit"></i>
                 </a>
             </td>
         </tr>

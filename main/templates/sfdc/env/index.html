@@ -50,6 +50,10 @@
             copy_keysec_to_clipboard($(this), "secret");
         });
 
+        $('a[id^="id_username"]').click(function (evt) {
+            copy_keysec_to_clipboard($(this), "username");
+        });
+
         $('a[id^="id_password"]').click(function (evt) {
             copy_keysec_to_clipboard($(this), "password");
         });

@@ -1,6 +1,4 @@
 import json as js
-from urllib import parse
-
 import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as do_login, logout as do_logout
@@ -14,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import authentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from urllib import parse
 
 from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
@@ -318,11 +317,10 @@ class SfdcEnvDelete(View):
 
 class SfdcConnectView(View):
     module = 'sfdc-connect'
-    session_var = "request.user.id"
 
     def get(self, request, *args, **kwargs):
         action = kwargs['action']
-        env_nm = kwargs['env_name']
+        pk = kwargs['pk']
         uri = None
         if action == "login":
             uri = '/services/oauth2/authorize'
@@ -333,7 +331,7 @@ class SfdcConnectView(View):
             messages.warning(request, "No action selected. Choose beetwen 'login' or 'logout'.")
         else:
             try:
-                env = SfdcEnv.objects.get(user=request.user, name=env_nm)
+                env = SfdcEnv.objects.get(user=request.user, pk=pk)
 
                 if env.oauth_flow_stage == 0 and action == 'logout':
                     messages.info(request, 'You already have been logout.')
@@ -342,7 +340,8 @@ class SfdcConnectView(View):
                     parms = {
                         "client_id": env.client_key,
                         "redirect_uri": "https://localhost:8080/sfdc/connected-app/oauth2/callback",
-                        "response_type": "code"
+                        "response_type": "code",
+                        "state": f"usrid:{request.user.pk}.envid:{env.pk}"
                     } if action == "login" else {
                         "token": env.oauth_access_token
                     }
@@ -361,9 +360,6 @@ class SfdcConnectView(View):
                         env.set_oauth_flow_stage("LOGOUT")
                         env.save()
 
-                        if self.session_var in self.request.session.keys():
-                            del self.request.session[self.session_var]
-
                         if response.status_code == 200:
                             messages.success(request, mark_safe(
                                 f"Logout connection <code>{env.name}</code> performed successfully"))
@@ -373,7 +369,6 @@ class SfdcConnectView(View):
                         env.flush_oauth_data()
                         env.set_oauth_flow_stage("AUTHORIZATION_CODE_REQUEST")
                         env.save()
-                        self.request.session[self.session_var] = request.user.pk
 
                         return redirect(new_url)
             except Exception as e:
@@ -389,10 +384,11 @@ class SfdcConnectedAppOauth2Callback(APIView):
         """
         Return a list of all users.
         """
-
-        env = SfdcEnv.objects.get(user_id=request.session[SfdcConnectView.session_var],
+        callback_state = request.GET.get('state')
+        user_id = callback_state.split('.')[0].split(':')[1]
+        env_id = callback_state.split('.')[1].split(':')[1]
+        env = SfdcEnv.objects.get(user_id=user_id, pk=env_id,
                                   oauth_flow_stage=SfdcEnv.oauth_flow_stages()["AUTHORIZATION_CODE_REQUEST"])
-        del request.session[SfdcConnectView.session_var]
 
         if 'code' in request.GET:
             env.set_oauth_flow_stage(stage="AUTHORIZATION_CODE_RECEIVE")
