@@ -641,6 +641,12 @@ class SecpredToSaqlView(generic.FormView):
     success_url = '/dataset-manager/security-predicate/convert-to-saql/'
 
 
+class SecpredFixerView(generic.FormView):
+    template_name = 'dataset-manager/security-predicate-fixer/form.html'
+    form_class = SecpredToSaqlForm
+    success_url = '/dataset-manager/security-predicate/fixer/'
+
+
 class CompareDeprecationView(generic.TemplateView):
     template_name = 'jdd/index.html'
 

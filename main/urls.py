@@ -64,6 +64,7 @@ urlpatterns = [
     url(r'^dataset-manager/', include([
         url(r'^security-predicate/', include([
             url(r'^convert-to-saql/$', main.SecpredToSaqlView.as_view(), name='secpred-to-saql'),
+            url(r'^fixer/$', main.SecpredFixerView.as_view(), name='secpred-fixer'),
         ])),
     ])),
 
