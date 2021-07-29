@@ -39,20 +39,20 @@ class RegisterUserForm(forms.ModelForm):
         ]
 
     def clean_email(self):
-        _email = self.cleaned_data['email'].rstrip()
+        _email = self.cleaned_data['email'].strip()
         if User.objects.filter(email=_email).exists():
             raise forms.ValidationError("The email has been already taken.")
         return _email
 
     def clean_password2(self):
-        p1 = self.cleaned_data['password1'].rstrip()
-        p2 = self.cleaned_data['password2'].rstrip()
+        p1 = self.cleaned_data['password1'].strip()
+        p2 = self.cleaned_data['password2'].strip()
         if p1 == p2:
             return p2
         raise forms.ValidationError("Password mismatch")
 
     def clean_username(self):
-        return self.cleaned_data['username'].rstrip()
+        return self.cleaned_data['username'].strip()
 
     def save(self, commit=True):
         user = super(RegisterUserForm, self).save(commit=False)
@@ -73,7 +73,7 @@ class SfdcEnvEditForm(forms.ModelForm):
         ]
 
     def clean_name(self):
-        return ''.join(e for e in self.cleaned_data['name'].rstrip() if e not in self._FORBIDDEN_SYMBOLS) \
+        return ''.join(e for e in self.cleaned_data['name'].strip() if e not in self._FORBIDDEN_SYMBOLS) \
             .replace(' ', "_")
 
     def save(self, commit=True):
