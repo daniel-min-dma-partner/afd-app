@@ -170,6 +170,10 @@ class SlackMsgPusherForm(forms.Form):
         "SFDC_INTERNAL_TCRM": {
             "url": "https://hooks.slack.com/services/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",
             "name": "bt-eops-tableau-crm"
+        },
+        "SFDC_SAI_SURESH": {
+            "url": "https://hooks.slack.com/services/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",
+            "name": "Sai Suresh"
         }
     }
 
@@ -178,6 +182,7 @@ class SlackMsgPusherForm(forms.Form):
         ('SFDC_INTERNAL_SAI', 'bt-eops-tableau-crm'),
         ('SFDF_I_bt-eops-dna-all', 'bt-eops-dna-all'),
         ('DPARK', '민 현 기'),
+        ('SFDC_SAI_SURESH', 'Sai Suresh'),
     ]
 
     slack_target = forms.ChoiceField(choices=_SLACK_TARGET_CHOICES, widget=forms.RadioSelect(), required=True)
