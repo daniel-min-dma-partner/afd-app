@@ -15,3 +15,5 @@ ant/**/*.properties
 json_diff_output.html
 media/*
 staticfiles/*
+ant/apache-ant*
+core/local_settings.py

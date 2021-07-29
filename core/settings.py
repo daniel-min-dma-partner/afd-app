@@ -13,7 +13,14 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
+import dj_database_url
 import django_heroku
+import environ
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,12 +29,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-wi5%3e1_fpxq+fm8sowdg0^(0vz*qv0oryh3ww+adav$+v$e4%'
+# SECRET_KEY = 'django-insecure-wi5%3e1_fpxq+fm8sowdg0^(0vz*qv0oryh3ww+adav$+v$e4%'
+SECRET_KEY = env.str('SECRET_KEY', default='')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -46,6 +54,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'libs.interactor.interactor',
     'rest_framework',
+    'whitenoise.runserver_nostatic',
 
     # Created apps
     # 'chat',
@@ -66,6 +75,9 @@ MIDDLEWARE = [
 
     # Global Login required
     'global_login_required.GlobalLoginRequiredMiddleware',
+
+    # Whitenoise for Heroku
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 
     # Custom Middlewares
     'main.middleware.SfdcCRUDMiddleware',
@@ -158,6 +170,9 @@ DATABASES = {
     }
 }
 
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -230,5 +245,15 @@ SALESFORCE_INSTANCE_URLS = {
     'Production': 'https://login.salesforce.com',
 }
 
-# Activate Django-Heroku.
-django_heroku.settings(locals())
+try:
+    from core.local_settings import *
+except ImportError as e:
+    # Activate Django-Heroku.
+    django_heroku.settings(locals())
+
+    # Configure database for Heroku
+    prod_db = dj_database_url.config(conn_max_age=500)
+    DATABASES['default'].update(prod_db)
+
+    # Static file handler for Heroku
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'

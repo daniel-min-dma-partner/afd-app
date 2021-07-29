@@ -4,7 +4,7 @@ from urllib import parse
 import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as do_login, logout as do_logout
-from django.db.models import Q
+from django.core.files.base import ContentFile
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -29,7 +29,7 @@ from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.upload_dataflow_interactor import UploadDataflowInteractor
 from .interactors.wdf_manager_interactor import *
-from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications
+from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation
 
 
 class Home(generic.TemplateView):
@@ -318,11 +318,10 @@ class SfdcEnvDelete(View):
 
 class SfdcConnectView(View):
     module = 'sfdc-connect'
-    session_var = "request.user.id"
 
     def get(self, request, *args, **kwargs):
         action = kwargs['action']
-        env_nm = kwargs['env_name']
+        pk = kwargs['pk']
         uri = None
         if action == "login":
             uri = '/services/oauth2/authorize'
@@ -333,7 +332,7 @@ class SfdcConnectView(View):
             messages.warning(request, "No action selected. Choose beetwen 'login' or 'logout'.")
         else:
             try:
-                env = SfdcEnv.objects.get(user=request.user, name=env_nm)
+                env = SfdcEnv.objects.get(user=request.user, pk=pk)
 
                 if env.oauth_flow_stage == 0 and action == 'logout':
                     messages.info(request, 'You already have been logout.')
@@ -342,7 +341,8 @@ class SfdcConnectView(View):
                     parms = {
                         "client_id": env.client_key,
                         "redirect_uri": "https://localhost:8080/sfdc/connected-app/oauth2/callback",
-                        "response_type": "code"
+                        "response_type": "code",
+                        "state": f"usrid:{request.user.pk}.envid:{env.pk}"
                     } if action == "login" else {
                         "token": env.oauth_access_token
                     }
@@ -361,9 +361,6 @@ class SfdcConnectView(View):
                         env.set_oauth_flow_stage("LOGOUT")
                         env.save()
 
-                        if self.session_var in self.request.session.keys():
-                            del self.request.session[self.session_var]
-
                         if response.status_code == 200:
                             messages.success(request, mark_safe(
                                 f"Logout connection <code>{env.name}</code> performed successfully"))
@@ -373,7 +370,6 @@ class SfdcConnectView(View):
                         env.flush_oauth_data()
                         env.set_oauth_flow_stage("AUTHORIZATION_CODE_REQUEST")
                         env.save()
-                        self.request.session[self.session_var] = request.user.pk
 
                         return redirect(new_url)
             except Exception as e:
@@ -389,10 +385,11 @@ class SfdcConnectedAppOauth2Callback(APIView):
         """
         Return a list of all users.
         """
-
-        env = SfdcEnv.objects.get(user_id=request.session[SfdcConnectView.session_var],
+        callback_state = request.GET.get('state')
+        user_id = callback_state.split('.')[0].split(':')[1]
+        env_id = callback_state.split('.')[1].split(':')[1]
+        env = SfdcEnv.objects.get(user_id=user_id, pk=env_id,
                                   oauth_flow_stage=SfdcEnv.oauth_flow_stages()["AUTHORIZATION_CODE_REQUEST"])
-        del request.session[SfdcConnectView.session_var]
 
         if 'code' in request.GET:
             env.set_oauth_flow_stage(stage="AUTHORIZATION_CODE_RECEIVE")
@@ -589,18 +586,22 @@ class DeprecateFieldsView(generic.FormView):
                     df_files.append(filemodel)
 
                 # Calls interactor
-                ctx = FieldDeprecatorInteractor.call(df_files=df_files, objects=objects, fields=fields)
+                ctx = FieldDeprecatorInteractor.call(df_files=df_files, objects=objects, fields=fields,
+                                                     user=request.user)
 
                 if ctx.exception:
                     raise ctx.exception
 
+                for deprecation_model in ctx.deprecation_models:
+                    deprecation_model.save()
+
                 for fm in df_files:
                     fm.delete()
 
-                for file in ctx.deprecated_json_files:
+                for file in ctx.deprecation_models:
                     notif_data = {
                         'user': request.user,
-                        'message': f"See deprecation for <code title=\"{file.get_filename()}\">{file.get_filename()}</code>",
+                        'message': f"Ok",
                         'status': Notifications.get_initial_status(),
                         'link': reverse('main:compare-deprecation', kwargs={'pk': file.pk}),
                         'type': 'success'
@@ -618,7 +619,6 @@ class DeprecateFieldsView(generic.FormView):
         except Exception as e:
             for fm in df_files:
                 fm.delete()
-
             messages.error(request, mark_safe(str(e)))
             return redirect("main:deprecate-fields")
 
@@ -628,10 +628,7 @@ class ViewDeprecatedFieldsView(generic.ListView):
     template_name = 'dataflow-manager/deprecate-fields/list.html'
 
     def get_queryset(self):
-        lst = FileModel.objects.filter(user_id=self.request.user.pk).filter(
-            Q(file__icontains="field-deprecations") &
-            ~Q(file__icontains="ORIGINAL__")
-        ).order_by('-file')
+        lst = DataflowDeprecation.objects.filter(user=self.request.user).order_by('-created_at')
         return lst
 
 
@@ -648,23 +645,10 @@ class CompareDeprecationView(generic.TemplateView):
         context = super(self.__class__, self).get_context_data(**kwargs)
 
         try:
-            filemodel = get_object_or_404(FileModel, pk=int(kwargs['pk']))
+            deprecation_model: DataflowDeprecation = get_object_or_404(DataflowDeprecation, pk=kwargs['pk'])
 
-            second_fm = FileModel.objects.filter(
-                Q(file__icontains=filemodel.file.name.replace('DEPRECATED__', 'ORIGINAL__'))
-            )
-
-            if second_fm.exists():
-                second_fm = second_fm.first()
-
-                with filemodel.file.open('r') as f, second_fm.file.open('r') as g:
-                    script = json.load(g)
-                    left_script = json.dumps(script, indent=2)  # left shows the original json.
-                    script = json.load(f)
-                    right_script = json.dumps(script, indent=2)  # right shows the modified json.
-            else:
-                left_script = "<< Not Found >>"
-                right_script = "<< Not Found >>"
+            left_script = json.dumps(deprecation_model.original_dataflow, indent=2)
+            right_script = json.dumps(deprecation_model.deprecated_dataflow, indent=2)
         except Exception as e:
             left_script = str(e)
             right_script = "<< Not Found >>"
@@ -716,17 +700,23 @@ def ajax_compare_deprecation(request):
             error = None
             status = 200
 
-            filemodel = get_object_or_404(FileModel, pk=int(request.GET.get('pk')))
-            second_fm = FileModel.objects.filter(
-                Q(file__icontains=filemodel.file.name.replace('DEPRECATED__', 'ORIGINAL__'))
-            )
-            if second_fm.exists():
-                second_fm = second_fm.first()
-                show_in_browser(second_fm.file.path, filemodel.file.path)
-                messages.info(request, "Showing difference in a new tab.")
-            else:
-                raise ValueError(f"<code>{os.path.basename(filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))}"
-                                 f"</code> doesn't exist.")
+            deprecation_model: DataflowDeprecation = get_object_or_404(DataflowDeprecation, pk=request.GET.get('pk'))
+
+            filemodel = FileModel()
+            filemodel.user = request.user
+            filemodel.file.save('Original.json',
+                                ContentFile(json.dumps(deprecation_model.original_dataflow, indent=2)))
+            second_fm = FileModel()
+            second_fm.user = request.user
+            second_fm.file.save('Deprecated.json',
+                                ContentFile(json.dumps(deprecation_model.deprecated_dataflow, indent=2)))
+
+            show_in_browser(filemodel.file.path, second_fm.file.path)
+
+            filemodel.delete()
+            second_fm.delete()
+
+            messages.info(request, "Showing difference in a new tab.")
     except Exception as e:
         payload = None
         error = mark_safe(str(e))
@@ -761,26 +751,15 @@ def ajax_delete_deprecation(request):
     typ = messages.ERROR
     try:
         if request.method == 'POST' and request.POST.getlist('id-field') is not None:
+            deprecation_name = request.POST.get('name-field')
+            deprecation_model = get_object_or_404(DataflowDeprecation, pk=int(request.POST.get('id-field')))
 
-            filemodel = get_object_or_404(FileModel, pk=int(request.POST.getlist('id-field')[0]))
-            second_fm = FileModel.objects.filter(
-                Q(file__icontains=filemodel.file.name.replace('DEPRECATED__', 'ORIGINAL__'))
-            )
-            if second_fm.exists():
-                second_fm = second_fm.first()
-                if second_fm.file.name == filemodel.parent_file.file.name:
-                    second_fm.delete()
-                    message = "Deprecation deleted successfully."
-                    typ = messages.SUCCESS
-                else:
-                    raise ValueError("For some reason, the main file and the queried parent file aren't the same.")
-            else:
-                raise ValueError(f"<code>{os.path.basename(filemodel.file.name.replace('ORIGINAL__', 'DEPRECATED__'))}"
-                                 f"</code> doesn't exist.")
+            deprecation_model.delete()
+            message = mark_safe(f"Deprecation <strong><code>{deprecation_name}</code></strong> deleted successfully.")
+            typ = messages.SUCCESS
     except Exception as e:
         message = mark_safe(str(e))
         typ = messages.ERROR
-        raise e
 
     messages.add_message(request, typ, message)
     return redirect("main:view-deprecations")

@@ -6,10 +6,10 @@ from pathlib import Path
 from shutil import rmtree
 
 from core.settings import BASE_DIR
+from core.settings import BASE_DIR
 from libs.amt_helpers import generate_build_file
 from libs.interactor.interactor import Interactor
 from main.models import User
-from core.settings import BASE_DIR
 
 _SELECT2_DATA_CACHE_FOLDER = 'select2-data-cache'
 _SELECT2_DATA_CACHE_FN = 'cache.json'
@@ -125,7 +125,7 @@ class DataflowListInteractor(Interactor):
                 F"export {cur_dir_tmp}=$(pwd)",
                 f"cd {BASE_DIR}/ant/{self.context.user.username}",
 
-                "ant listMetadataDf",
+                f"{str(BASE_DIR)}/libs/apache_ant/bin/ant listMetadataDf",
 
                 f"cd ${cur_dir_tmp}",
                 f"unset {cur_dir_tmp}"
