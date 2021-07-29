@@ -26,6 +26,7 @@ from .interactors.download_dataflow_interactor import DownloadDataflowInteractor
 from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.notification_interactor import SetNotificationInteractor
 from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp
+from .interactors.slack_targetlist_interactor import SlackTarListInteractor
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.upload_dataflow_interactor import UploadDataflowInteractor
 from .interactors.wdf_manager_interactor import *
@@ -116,7 +117,8 @@ class RegisterUserView(generic.FormView):
 
         if form.is_valid():
             user: User = form.save(commit=False)  # guarda en el model.
-            user.is_active = 1
+            user.is_active = 0
+            user.is_staff = user.is_superuser = 0
             user.save()
 
             if user is not None:
@@ -798,8 +800,21 @@ def ajax_list_dataflows(request):
 def ajax_list_envs(request):
     try:
         if SfdcEnv.objects.filter(user=request.user.pk).exists():
-            payload = [(model.pk, model.name)
-                       for model in SfdcEnv.objects.filter(user=request.user.pk).all()]
+            payload = {
+                "results": [
+                    {
+                        "id": model.pk,
+                        "text": model.name
+                    }
+                    for model in SfdcEnv.objects.filter(user=request.user.pk).all()
+                ]
+            }
+
+            search = request.GET.get('search')
+
+            if search:
+                payload['results'] = (item for item in payload['results'] if search in item['text'])
+
             status = 200
             error = None
         else:
@@ -821,3 +836,33 @@ def slack_interactive_endpoint(request):
         return JsonResponse({"message": "ok"}, status=200)
     if request.method == "GET":
         return redirect("main:home")
+
+
+def ajax_slack_get_targets(request):
+    payload = {
+        "results": [
+            {
+                "id": "",
+                "text": "Select one",
+            },
+        ],
+    }
+
+    try:
+        if request.is_ajax() and request.method == 'GET':
+            ctx = SlackTarListInteractor.call()
+
+            if ctx.exception:
+                raise ctx.exception
+
+            status = ctx.status
+            error = None
+            payload = ctx.payload
+        else:
+            raise Exception("The type of the request must be either ajax and GET method.")
+    except Exception as e:
+        error = mark_safe(e)
+        status = 400
+
+    print(payload, error, status, "good")
+    return JsonResponse({"payload": payload, "error": error}, status=status)

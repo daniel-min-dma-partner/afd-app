@@ -26,8 +26,9 @@ const build_toast = () => {
 
 const popup_notification = (title = "Default Title", content = "Default Content", type = "success", autohide = false, delay = null) => {
     // Deletes DOM element if exists
-    if ($('div.my-toast').length !== 0) {
-        $('div.my-toast').remove();
+    let toastdiv = $('div.my-toast');
+    if (toastdiv.length !== 0) {
+        toastdiv.remove();
     }
 
     // Html template for Notifications

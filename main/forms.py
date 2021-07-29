@@ -154,7 +154,7 @@ class SlackMsgPusherForm(forms.Form):
         required=False
     )
 
-    _SLACK_WEBHOOK_LINKS = {
+    SLACK_WEBHOOK_LINKS = {
         "SFDC_INTERNAL_SUBBARAO": {
             "url": "https://hooks.slack.com/services/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",
             "name": "Subbarao Talachiru"
@@ -193,10 +193,10 @@ class SlackMsgPusherForm(forms.Form):
 
     @classmethod
     def get_slack_webhook(cls, key):
-        if key not in cls._SLACK_WEBHOOK_LINKS.keys():
+        if key not in cls.SLACK_WEBHOOK_LINKS.keys():
             raise KeyError(f"'{key}' is not a valid Slack target.")
 
-        return cls._SLACK_WEBHOOK_LINKS[key]['url']
+        return cls.SLACK_WEBHOOK_LINKS[key]['url']
 
 
 class SlackCustomerConversationForm(forms.Form):

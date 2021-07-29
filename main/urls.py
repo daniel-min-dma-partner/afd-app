@@ -34,12 +34,17 @@ urlpatterns = [
         url(r'^delete/$', main.SfdcEnvDelete.as_view(), name='sfdc-env-remove'),
     ])),
 
-    path('sfdc/connected-app/oauth2/callback/', main.SfdcConnectedAppOauth2Callback.as_view(), name="sfdc-connected-app-callback"),
+    path('sfdc/connected-app/oauth2/callback/', main.SfdcConnectedAppOauth2Callback.as_view(),
+         name="sfdc-connected-app-callback"),
 
     path('register/', main.RegisterUserView.as_view(), name='register-user'),
 
-    path('slack/', main.SlackIntegrationView.as_view(), name='slack'),
-    path('slack/interactive-endpoint/', main.slack_interactive_endpoint, name='slack-interactive-endpoint'),
+    url(r'^slack/', include([
+        url(r'^$', main.SlackIntegrationView.as_view(), name='slack'),
+        url(r'^interactive-endpoint/$', main.slack_interactive_endpoint, name='slack-interactive-endpoint'),
+        url(r'^get-targets/$', main.ajax_slack_get_targets, name='slack-targets'),
+    ])),
+
     url(r'^dataflow-manager/', include([
         url(r'^extract-update/$', main.TreeRemover.as_view(), name='extract-update-dataflow'),
         url(r'^compare/$', main.CompareDataflows.as_view(), name='compare-dataflows'),

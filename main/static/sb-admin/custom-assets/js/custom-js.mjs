@@ -5,7 +5,7 @@ $(document).ready(function (evt) {
     build_toast();
 
     // Applies Bootstrap Select2 Look & Feel for all select input
-    $('select').select2();
+    // $('select').select2();
 });
 
 $('.logout').click(function () {
