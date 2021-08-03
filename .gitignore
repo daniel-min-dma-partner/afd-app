@@ -17,3 +17,4 @@ media/*
 staticfiles/*
 ant/apache-ant*
 core/local_settings.py
+data/*
