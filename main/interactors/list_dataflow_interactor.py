@@ -6,7 +6,6 @@ from pathlib import Path
 from shutil import rmtree
 
 from core.settings import BASE_DIR
-from core.settings import BASE_DIR
 from libs.amt_helpers import generate_build_file
 from libs.interactor.interactor import Interactor
 from main.models import User
@@ -150,6 +149,8 @@ class DataflowListInteractor(Interactor):
 
                     df_apis = [line.replace('FullName/Id: ', "").split('/')[0]
                                for line in filelines if "FullName/Id:" in line]
+
+                    df_apis.sort()
 
                     payload = {"results": [
                         {"id": api, "text": api} for api in df_apis
