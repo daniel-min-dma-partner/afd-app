@@ -7,7 +7,7 @@ from libs.interactor.interactor import Interactor
 from libs.tcrm_automation.libs.deprecation_libs import delete_fields_of_deleted_node, perform_deprecation
 from libs.tcrm_automation.libs.json_libs import get_nodes_by_action
 from libs.utils import current_datetime
-from main.models import DataflowDeprecation
+from main.models import DataflowDeprecation, Notifications
 
 
 class FieldDeprecatorInteractor(Interactor):
@@ -30,6 +30,9 @@ class FieldDeprecatorInteractor(Interactor):
 
     def run(self):
         _exc = None
+        _original_df_name = None
+        _error_notification = False
+
         deprecation_models = []
 
         try:
@@ -72,28 +75,44 @@ class FieldDeprecatorInteractor(Interactor):
 
                     dataflow = json.load(f)
                     _original = copy.deepcopy(dataflow)
+                    _original_df_name = os.path.basename(df_file.file.path)
 
-                    with open(os.path.join(deprecation_dir, f"{df_name}.log"),
-                              'w') as log_file:
-                        node_list = get_nodes_by_action(df=dataflow, action=['sfdcDigest', 'digest', 'edgemart'])
-                        json_modified = perform_deprecation(df=dataflow, fieldlist=field_md,
-                                                            node_list=node_list, df_name=df_name,
-                                                            log_file=log_file)
-                        json_modified = delete_fields_of_deleted_node(json_modified)
+                    try:
+                        with open(os.path.join(deprecation_dir, f"{df_name}.log"),
+                                  'w') as log_file:
+                            node_list = get_nodes_by_action(df=dataflow, action=['sfdcDigest', 'digest', 'edgemart'])
+                            json_modified = perform_deprecation(df=dataflow, fieldlist=field_md,
+                                                                node_list=node_list, df_name=df_name,
+                                                                log_file=log_file)
+                            json_modified = delete_fields_of_deleted_node(json_modified)
 
-                        equal = json.dumps(_original) == json.dumps(json_modified)
+                            equal = json.dumps(_original) == json.dumps(json_modified)
 
-                        if not equal:
-                            deprecation_model = DataflowDeprecation()
-                            deprecation_model.original_dataflow = _original
-                            deprecation_model.deprecated_dataflow = json_modified
-                            deprecation_model.meta = _field_md_original
-                            deprecation_model.user = user
-                            deprecation_model.file_name = f"[{today}] {df_name}"
-                            deprecation_models.append(deprecation_model)
+                            if not equal:
+                                deprecation_model = DataflowDeprecation()
+                                deprecation_model.original_dataflow = _original
+                                deprecation_model.deprecated_dataflow = json_modified
+                                deprecation_model.meta = _field_md_original
+                                deprecation_model.user = user
+                                deprecation_model.file_name = f"[{today}] {df_name}"
+                                deprecation_models.append(deprecation_model)
+                    except Exception as e:
+                        _error_notification = True
+                        notif = Notifications()
+                        notif.user = self.context.user
+                        notif.status = 1
+                        notif.message = f"Deprecation failed for <code><strong>{_original_df_name}</code></strong>" \
+                                        f"<br/><strong>Reason:</strong><br/>- {str(e)}"
+                        notif.type = 'danger'
+                        notif.save()
+                        notif.link = f'/notifications/view/{notif.pk}'
+                        notif.save()
 
         except Exception as e:
             _exc = e
+
+        if _error_notification:
+            _exc = Exception("Deprecation finishes with error. Check notification.")
 
         self.context.exception = _exc
         self.context.deprecation_models = deprecation_models
