@@ -237,5 +237,6 @@ class DataflowDeprecation(models.Model):
     file_name = models.CharField(max_length=1024, help_text='', null=False, blank=False)
     original_dataflow = CompressedJSONField()
     deprecated_dataflow = CompressedJSONField()
+    meta = CompressedJSONField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
