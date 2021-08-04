@@ -33,6 +33,7 @@ class FieldDeprecatorInteractor(Interactor):
         _original_df_name = None
         _error_notification = False
 
+        deprecation_model = None
         deprecation_models = []
 
         try:
@@ -91,12 +92,13 @@ class FieldDeprecatorInteractor(Interactor):
                             equal = json.dumps(_original) == json.dumps(json_modified)
 
                             if not equal:
-                                deprecation_model = DataflowDeprecation()
-                                deprecation_model.user = user
-                                deprecation_model.name = name if "Case" in name else f"Case {name}"
-                                deprecation_model.org = org
-                                deprecation_model.save()
-                                deprecation_model.refresh_from_db()
+                                if not deprecation_model:
+                                    deprecation_model = DataflowDeprecation()
+                                    deprecation_model.user = user
+                                    deprecation_model.name = name if "Case" in name else f"Case #{name}"
+                                    deprecation_model.org = org
+                                    deprecation_model.save()
+                                    deprecation_model.refresh_from_db()
 
                                 deprecation_detail = DeprecationDetails()
                                 deprecation_detail.file_name = f"[{today}] {df_name}"
