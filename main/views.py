@@ -542,9 +542,9 @@ class CompareDataflows(generic.FormView):
                     files_model.delete()
                 elif _method == 'jdd':
                     with files_model.file1.open('r') as f, files_model.file2.open('r') as g:
-                        script = json.load(g)
-                        left_script = json.dumps(script, indent=2)  # left shows the original json.
                         script = json.load(f)
+                        left_script = json.dumps(script, indent=2)  # left shows the original json.
+                        script = json.load(g)
                         right_script = json.dumps(script, indent=2)  # right shows the modified json.
 
                     return render(request, 'jdd/index.html', {
