@@ -1,4 +1,5 @@
 {% load static %}
+{% load main_extras %}
 
 <div class="row list-group-deprecation">
     <div class="col-md-12">
@@ -7,16 +8,15 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Object ID</th>
-                        <th>Name</th>
+                        <th>File Name</th>
                         <th class="text-center">Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for object in list %}
                     <tr>
-                        <td class="pk">{{ object.pk }}</td>
-                        <td>{{ object.file_name }}</td>
+                        <input type="hidden" class="pk" value="{{ object.pk }}">
+                        <td>{{ object.file_name|basename }}</td>
                         <td class="text-center">
                             <a href="{% url 'main:compare-deprecation' pk=object.pk %}"
                                rel="tooltip" class="btn btn-info btn-circle btn-sm"

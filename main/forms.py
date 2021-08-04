@@ -283,6 +283,7 @@ class DeprecateFieldsForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
     org = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
     files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+    case_url = forms.URLField(label='SupportForce Case URL')
     objects = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
     fields = forms.CharField(

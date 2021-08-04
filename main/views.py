@@ -29,7 +29,7 @@ from .interactors.slack_targetlist_interactor import SlackTarListInteractor
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.upload_dataflow_interactor import UploadDataflowInteractor
 from .interactors.wdf_manager_interactor import *
-from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation
+from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, DeprecationDetails
 
 
 class Home(generic.TemplateView):
@@ -602,7 +602,8 @@ class DeprecateFieldsView(generic.FormView):
                 # Calls interactor
                 ctx = FieldDeprecatorInteractor.call(df_files=df_files, objects=objects, fields=fields,
                                                      user=request.user, name=form.cleaned_data['name'],
-                                                     org=form.cleaned_data['org'])
+                                                     org=form.cleaned_data['org'],
+                                                     case_url=form.cleaned_data['case_url'])
 
                 if ctx.exception:
                     raise ctx.exception
@@ -635,6 +636,20 @@ class ViewDeprecatedFieldsView(generic.ListView):
         return lst
 
 
+class DeprecationDetailsView(generic.ListView):
+    context_object_name = 'list'
+    template_name = 'dataflow-manager/deprecate-fields/details/_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DeprecationDetailsView, self).get_context_data(**kwargs)
+        context['deprecation'] = get_object_or_404(DataflowDeprecation, pk=self.kwargs['pk'])
+        return context
+
+    def get_queryset(self):
+        lst = DeprecationDetails.objects.filter(deprecation_id=self.kwargs['pk']).order_by('file_name')
+        return lst
+
+
 class SecpredToSaqlView(generic.FormView):
     template_name = 'dataset-manager/secpred-to-saql-converter/form.html'
     form_class = SecpredToSaqlForm
@@ -648,7 +663,7 @@ class CompareDeprecationView(generic.TemplateView):
         context = super(self.__class__, self).get_context_data(**kwargs)
 
         try:
-            deprecation_model: DataflowDeprecation = get_object_or_404(DataflowDeprecation, pk=kwargs['pk'])
+            deprecation_model: DeprecationDetails = get_object_or_404(DeprecationDetails, pk=kwargs['pk'])
 
             left_script = json.dumps(deprecation_model.original_dataflow, indent=2)
             right_script = json.dumps(deprecation_model.deprecated_dataflow, indent=2)
@@ -728,7 +743,7 @@ def ajax_compare_deprecation(request):
             error = None
             status = 200
 
-            deprecation_model: DataflowDeprecation = get_object_or_404(DataflowDeprecation, pk=request.GET.get('pk'))
+            deprecation_model: DeprecationDetails = get_object_or_404(DeprecationDetails, pk=request.GET.get('pk'))
 
             filemodel = FileModel()
             filemodel.user = request.user

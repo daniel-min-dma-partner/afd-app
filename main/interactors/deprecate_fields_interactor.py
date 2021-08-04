@@ -43,6 +43,7 @@ class FieldDeprecatorInteractor(Interactor):
             user = self.context.user
             name = self.context.name
             org = self.context.org
+            case_url = self.context.case_url
 
             # Validates input data
             if len(objects) != len(fields):
@@ -97,6 +98,7 @@ class FieldDeprecatorInteractor(Interactor):
                                     deprecation_model.user = user
                                     deprecation_model.name = name if "Case" in name else f"Case #{name}"
                                     deprecation_model.org = org
+                                    deprecation_model.case_url = case_url
                                     deprecation_model.save()
                                     deprecation_model.refresh_from_db()
 

@@ -19,16 +19,22 @@
                         {% csrf_token %}
 
                         <div class="form-row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-3">
                                 <div class="mb-3">
                                     <label for="id_name" class="form-label">Name</label>
                                     <input type="text" class="form-control" name="name" id="id_name" required>
                                 </div>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-2">
                                 <div class="mb-3">
-                                    <label for="id_org" class="form-label">Salesforce Org</label>
-                                    <input type="text" class="form-control" name="org" id="id_org" required>
+                                    <label for="id_org" class="form-label">Case URL</label>
+                                    <input type="text" class="form-control" name="org" id="id_org">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-7">
+                                <div class="mb-3">
+                                    <label for="id_case_url" class="form-label">Salesforce Org</label>
+                                    <input type="url" class="form-control" name="case_url" id="id_case_url" required>
                                 </div>
                             </div>
                         </div>
