@@ -427,13 +427,24 @@ class DownloadDataflowView(generic.FormView):
         form_class = self.get_form_class()
         form = form_class(data=request.POST)
         dataflows = dict(request.POST)['dataflow_selector'] if 'dataflow_selector' in request.POST.keys() else []
+        download_all = 'all' in request.POST.keys() and request.POST.get('all') == 'on'
 
         if form.is_valid():
             try:
+                env = get_object_or_404(SfdcEnv, pk=form.cleaned_data['env_selector'])
+
+                if download_all:
+                    down_all_ctx = DataflowListInteractor.call(model=env, search=None,
+                                                               refresh_cache='true',
+                                                               user=request.user)
+                    if down_all_ctx.error:
+                        raise Exception(down_all_ctx.error)
+
+                    dataflows = [item['id'] for item in down_all_ctx.payload['results']]
+
                 if not dataflows:
                     raise KeyError("No dataflow selected")
 
-                env = get_object_or_404(SfdcEnv, pk=form.cleaned_data['env_selector'])
                 download_ctx = DownloadDataflowInteractor.call(dataflow=dataflows, model=env, user=request.user)
 
                 if not download_ctx.exception:
