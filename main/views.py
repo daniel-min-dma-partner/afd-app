@@ -427,10 +427,13 @@ class DownloadDataflowView(generic.FormView):
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()
         form = form_class(data=request.POST)
-        dataflows = dict(request.POST)['dataflow_selector']
+        dataflows = dict(request.POST)['dataflow_selector'] if 'dataflow_selector' in request.POST.keys() else []
 
         if form.is_valid():
             try:
+                if not dataflows:
+                    raise KeyError("No dataflow selected")
+
                 env = get_object_or_404(SfdcEnv, pk=form.cleaned_data['env_selector'])
                 download_ctx = DownloadDataflowInteractor.call(dataflow=dataflows, model=env, user=request.user)
 
@@ -444,7 +447,6 @@ class DownloadDataflowView(generic.FormView):
                 return redirect("main:download-dataflow")
             except Exception as e:
                 messages.error(request, e)
-                raise e
         else:
             print(form.errors.as_data)
             messages.error(request, form.errors.as_data)
@@ -686,6 +688,20 @@ class NotificationMarkAllAsReadClickedView(generic.View):
             messages.error(request, str(e))
 
         return redirect('main:home')
+
+
+def deprecation_delete_all(request):
+    user = request.user
+    deprecations = DataflowDeprecation.objects.filter(user=user)
+
+    if deprecations.exists():
+        for dep in deprecations.all():
+            dep.delete()
+        messages.success(request, "All deprecation has been removed.")
+    else:
+        messages.info(request, "No deprecation has been found.")
+
+    return redirect('main:view-deprecations')
 
 
 def handler500(request, exception=None):

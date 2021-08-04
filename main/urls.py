@@ -54,6 +54,7 @@ urlpatterns = [
             url(r'^compare/$', main.ajax_compare_deprecation, name='compare-deprecations'),
             url(r'^compare/(?P<pk>\d+)/$', main.CompareDeprecationView.as_view(), name='compare-deprecation'),
             url(r'^delete/$', main.ajax_delete_deprecation, name='remove-deprecations'),
+            url(r'^delete-all/$', main.deprecation_delete_all, name='deprecation-delete-all'),
         ])),
         url(r'^download/$', main.DownloadDataflowView.as_view(), name='download-dataflow'),
         url(r'^upload/$', main.UploadDataflowView.as_view(), name='upload-dataflow'),
