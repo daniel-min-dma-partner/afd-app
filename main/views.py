@@ -592,11 +592,12 @@ class DeprecateFieldsView(generic.FormView):
                 ctx = FieldDeprecatorInteractor.call(df_files=df_files, objects=objects, fields=fields,
                                                      user=request.user)
 
-                if ctx.exception:
-                    raise ctx.exception
-
+                # If the list 'deprecation_model' is not empty, those are deprecations succeeded without issues.
                 for deprecation_model in ctx.deprecation_models:
                     deprecation_model.save()
+
+                if ctx.exception:
+                    raise ctx.exception
 
                 for fm in df_files:
                     fm.delete()
