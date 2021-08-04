@@ -7,7 +7,7 @@ from libs.interactor.interactor import Interactor
 from libs.tcrm_automation.libs.deprecation_libs import delete_fields_of_deleted_node, perform_deprecation
 from libs.tcrm_automation.libs.json_libs import get_nodes_by_action
 from libs.utils import current_datetime
-from main.models import DataflowDeprecation, Notifications
+from main.models import DataflowDeprecation, Notifications, DeprecationDetails
 
 
 class FieldDeprecatorInteractor(Interactor):
@@ -40,6 +40,8 @@ class FieldDeprecatorInteractor(Interactor):
             objects = self.context.objects
             fields = self.context.fields
             user = self.context.user
+            name = self.context.name
+            org = self.context.org
 
             # Validates input data
             if len(objects) != len(fields):
@@ -90,12 +92,19 @@ class FieldDeprecatorInteractor(Interactor):
 
                             if not equal:
                                 deprecation_model = DataflowDeprecation()
-                                deprecation_model.original_dataflow = _original
-                                deprecation_model.deprecated_dataflow = json_modified
-                                deprecation_model.meta = _field_md_original
                                 deprecation_model.user = user
-                                deprecation_model.file_name = f"[{today}] {df_name}"
-                                deprecation_models.append(deprecation_model)
+                                deprecation_model.name = name if "Case" in name else f"Case {name}"
+                                deprecation_model.org = org
+                                deprecation_model.save()
+                                deprecation_model.refresh_from_db()
+
+                                deprecation_detail = DeprecationDetails()
+                                deprecation_detail.file_name = f"[{today}] {df_name}"
+                                deprecation_detail.original_dataflow = _original
+                                deprecation_detail.deprecated_dataflow = json_modified
+                                deprecation_detail.meta = _field_md_original
+                                deprecation_detail.deprecation = deprecation_model
+                                deprecation_detail.save()
                     except Exception as e:
                         _error_notification = True
                         notif = Notifications()

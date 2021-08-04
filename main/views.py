@@ -581,8 +581,8 @@ class DeprecateFieldsView(generic.FormView):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         df_files = []
-
         try:
+            print(request.POST)
             if form.is_valid():
                 # Prepare fields: Each row corresponds to an Object.
                 fields = [field.rstrip() for field in request.POST.get('fields').split('\n') if
@@ -601,41 +601,29 @@ class DeprecateFieldsView(generic.FormView):
 
                 # Calls interactor
                 ctx = FieldDeprecatorInteractor.call(df_files=df_files, objects=objects, fields=fields,
-                                                     user=request.user)
-
-                # If the list 'deprecation_model' is not empty, those are deprecations succeeded without issues.
-                for deprecation_model in ctx.deprecation_models:
-                    deprecation_model.save()
+                                                     user=request.user, name=form.cleaned_data['name'],
+                                                     org=form.cleaned_data['org'])
 
                 if ctx.exception:
                     raise ctx.exception
 
-                for fm in df_files:
-                    fm.delete()
-
-                # for file in ctx.deprecation_models:
-                #     notif_data = {
-                #         'user': request.user,
-                #         'message': f"Ok",
-                #         'status': Notifications.get_initial_status(),
-                #         'link': reverse('main:compare-deprecation', kwargs={'pk': file.pk}),
-                #         'type': 'success'
-                #     }
-                #     ctx = SetNotificationInteractor.call(data=notif_data)
-                #
-                #     if ctx.exception:
-                #         raise ctx.exception
-
-                messages.success(request, "Deprecation finished successfully")
-                return self.form_valid(form)
+                message = "Deprecation finished successfully"
+                flash_type = messages.SUCCESS
+                _return = self.form_valid(form)
             else:
-                messages.error(request, form.errors.as_data())
-                return self.form_invalid(form)
+                message = form.errors.as_data()
+                flash_type = messages.ERROR
+                _return = self.form_invalid(form)
         except Exception as e:
+            message = mark_safe(str(e))
+            flash_type = messages.ERROR
+            _return = redirect("main:deprecate-fields")
+        finally:
             for fm in df_files:
                 fm.delete()
-            messages.error(request, mark_safe(str(e)))
-            return redirect("main:deprecate-fields")
+
+        messages.add_message(request, flash_type, message)
+        return _return
 
 
 class ViewDeprecatedFieldsView(generic.ListView):

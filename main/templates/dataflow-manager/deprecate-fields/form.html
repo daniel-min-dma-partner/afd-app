@@ -19,9 +19,25 @@
                         {% csrf_token %}
 
                         <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" name="name" id="id_name" required>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_org" class="form-label">Salesforce Org</label>
+                                    <input type="text" class="form-control" name="org" id="id_org" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
-                                    <label for="id_{{ form.files.name }}" class="form-label">Select at least one Dataflow</label>
+                                    <label for="id_{{ form.files.name }}" class="form-label">Select at least one
+                                        Dataflow</label>
                                     <input class="form-control" type="file" name="{{ form.files.name }}"
                                            id="id_{{ form.files.name }}" required multiple>
                                 </div>
