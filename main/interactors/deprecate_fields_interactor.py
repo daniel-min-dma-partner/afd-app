@@ -59,6 +59,7 @@ class FieldDeprecatorInteractor(Interactor):
 
             # Call deprecation function
             today = current_datetime(add_time=True)
+            _field_md_original = copy.deepcopy(field_md)
 
             for df_file in df_file_models:
                 with open(df_file.file.path, 'r') as f:
@@ -80,12 +81,16 @@ class FieldDeprecatorInteractor(Interactor):
                                                             log_file=log_file)
                         json_modified = delete_fields_of_deleted_node(json_modified)
 
-                        deprecation_model = DataflowDeprecation()
-                        deprecation_model.original_dataflow = _original
-                        deprecation_model.deprecated_dataflow = json_modified
-                        deprecation_model.user = user
-                        deprecation_model.file_name = f"[{today}] {df_name}"
-                        deprecation_models.append(deprecation_model)
+                        equal = json.dumps(_original) == json.dumps(json_modified)
+
+                        if not equal:
+                            deprecation_model = DataflowDeprecation()
+                            deprecation_model.original_dataflow = _original
+                            deprecation_model.deprecated_dataflow = json_modified
+                            deprecation_model.meta = _field_md_original
+                            deprecation_model.user = user
+                            deprecation_model.file_name = f"[{today}] {df_name}"
+                            deprecation_models.append(deprecation_model)
 
         except Exception as e:
             _exc = e
