@@ -35,5 +35,5 @@ $('.btn-remove-deprec').on('click', function () {
 });
 
 $('#delete-confirmation-md').on('shown.bs.modal', function (e) {
-    $(this).find('button[id="delete-btn"]').focus()
+    $(this).find('button[id^="delete-btn"]').focus()
 })
