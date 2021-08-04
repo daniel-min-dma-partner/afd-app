@@ -7,7 +7,6 @@ from django.contrib.auth import authenticate, login as do_login, logout as do_lo
 from django.core.files.base import ContentFile
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.views import View, generic
 from django.views.decorators.csrf import csrf_exempt
@@ -602,18 +601,18 @@ class DeprecateFieldsView(generic.FormView):
                 for fm in df_files:
                     fm.delete()
 
-                for file in ctx.deprecation_models:
-                    notif_data = {
-                        'user': request.user,
-                        'message': f"Ok",
-                        'status': Notifications.get_initial_status(),
-                        'link': reverse('main:compare-deprecation', kwargs={'pk': file.pk}),
-                        'type': 'success'
-                    }
-                    ctx = SetNotificationInteractor.call(data=notif_data)
-
-                    if ctx.exception:
-                        raise ctx.exception
+                # for file in ctx.deprecation_models:
+                #     notif_data = {
+                #         'user': request.user,
+                #         'message': f"Ok",
+                #         'status': Notifications.get_initial_status(),
+                #         'link': reverse('main:compare-deprecation', kwargs={'pk': file.pk}),
+                #         'type': 'success'
+                #     }
+                #     ctx = SetNotificationInteractor.call(data=notif_data)
+                #
+                #     if ctx.exception:
+                #         raise ctx.exception
 
                 messages.success(request, "Deprecation finished successfully")
                 return self.form_valid(form)
@@ -688,6 +687,17 @@ class NotificationMarkAllAsReadClickedView(generic.View):
             messages.error(request, str(e))
 
         return redirect('main:home')
+
+
+class NotificationDetailsView(generic.TemplateView):
+    template_name = 'notifications/view.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        notification = get_object_or_404(Notifications, pk=kwargs['pk'])
+        context['notification'] = notification
+        # notification.delete()
+        return context
 
 
 def deprecation_delete_all(request):
