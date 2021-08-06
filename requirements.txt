@@ -20,7 +20,7 @@ chardet==3.0.4
 configobj==5.0.6
 constantly==15.1.0
 coverage==5.4
-cryptography==3.1.1
+cryptography==3.4.6
 cx-Oracle==8.1.0
 daphne==3.0.2
 dj-database-url==0.5.0
