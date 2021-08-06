@@ -503,8 +503,8 @@ class UploadDataflowView(generic.FormView):
             else:
                 messages.error(request, form.errors.as_data)
         except Exception as e:
-            messages.error(request, str(e))
-            notif_msg = str(e)
+            messages.error(request, mark_safe(str(e)))
+            notif_msg = mark_safe(str(e))
             notif_type = 'error'
 
         # Push a notification.
@@ -684,7 +684,7 @@ class MarkNotifAsClickedView(generic.View):
             notification = get_object_or_404(Notifications, pk=kwargs['pk'], user=request.user)
             notification.set_read_clicked()
             notification.save()
-            return redirect(notification.link)
+            return redirect(f"/notifications/view/{kwargs['pk']}")
 
 
 class NotificationMarkAllAsReadClickedView(generic.View):
