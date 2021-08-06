@@ -93,6 +93,20 @@ class JsonStructReverterInteractor(Interactor):
                         node['sources'] = [node['parameters']['source']]
                         del node['parameters']['source']
 
+                    if node['action'] in ['computeExpression', 'computeRelative']:
+                        for field in node['parameters']['computedFields']:
+                            idx = node['parameters']['computedFields'].index(field)
+
+                            if 'precision' in field.keys():
+                                del js[nn]['parameters']['computedFields'][idx]['precision']
+
+                            if 'expression' in field.keys():
+                                if 'precision' in field['expression'].keys():
+                                    raise KeyError("Unexpected parameter <code><strong>precision</code></strong> "
+                                                   "for <code>expression</code> parameter of the "
+                                                   f"<code>{idx + 1}th</code> computed field of the node "
+                                                   f"<code>{nn}</code>.")
+
         with open(self.context.output_filepath, 'w') as fixed:
             json.dump(js, fixed, indent=2)
 
