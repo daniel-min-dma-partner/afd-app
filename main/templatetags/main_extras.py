@@ -23,3 +23,11 @@ def only_unreads(notifications: list):
 @register.filter
 def basename(path: str):
     return os.path.basename(path.split(" ")[-1])
+
+
+@register.filter
+def parse_to_color(string: str):
+    string = string.lower()
+    return 'danger' if string in ['error', 'err', 'errors'] else (
+        'success' if string in ['ok', 'good', ] else string
+    )
