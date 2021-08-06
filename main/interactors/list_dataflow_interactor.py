@@ -167,10 +167,11 @@ class DataflowListInteractor(Interactor):
                 payload = json.load(fp=f)
 
         search = self.context.search
-        if search:
+        if search and isinstance(search, str):
             payload = {"results": [
                 {"id": dataflow['id'], "text": dataflow['text']} for dataflow in payload['results']
-                if search.strip().lower() in dataflow['text'].strip().lower()
+                if search.strip().lower() in dataflow['text'].strip().lower() or
+                   search.replace(' ', '_').strip().lower() in dataflow['text'].strip().lower()
             ]}
 
         return payload
