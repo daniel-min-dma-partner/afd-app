@@ -61,7 +61,7 @@
                             </td>
                             <td>
                                 {% if object.case_url != '#' %}
-                                <a href="{{ object.case_url }}">{{ object.case_url }}</a>
+                                <a href="{{ object.case_url }}" target="_blank">{{ object.case_url }}</a>
                                 {% endif %}
                                 <div class="collapse" id="collapseExample_{{ object.pk }}">
                                     {% include 'dataflow-manager/deprecate-fields/details/_detail_form.html' with list=object.deprecationdetails_set.all deprecation=object %}
