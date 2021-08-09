@@ -96,7 +96,7 @@ class FieldDeprecatorInteractor(Interactor):
                                 if not deprecation_model:
                                     deprecation_model = DataflowDeprecation()
                                     deprecation_model.user = user
-                                    deprecation_model.name = name if "Case" in name else f"Case #{name}"
+                                    deprecation_model.name = name
                                     deprecation_model.org = org
                                     deprecation_model.case_url = case_url
                                     deprecation_model.save()
