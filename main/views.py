@@ -5,7 +5,7 @@ import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as do_login, logout as do_logout
 from django.core.files.base import ContentFile
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.safestring import mark_safe
 from django.views import View, generic
@@ -713,6 +713,21 @@ class NotificationDetailsView(generic.TemplateView):
         context['notification'] = notification
         # notification.delete()
         return context
+
+
+def dataflow_download_deprecated(request, pk=None):
+    try:
+        deprecation_detail = get_object_or_404(DeprecationDetails, pk=pk)
+        filename = deprecation_detail.file_name
+        json_str = json.dumps(deprecation_detail.deprecated_dataflow, indent=2)
+        response = HttpResponse(json_str,
+                                content_type='application/json',
+                                headers={'Content-Disposition': f'attachment; filename={filename}.json'})
+    except Exception as e:
+        messages.error(request, mark_safe(str(e)))
+        response = redirect('main:view-deprecations')
+
+    return response
 
 
 def deprecation_delete_all(request):

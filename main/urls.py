@@ -58,6 +58,7 @@ urlpatterns = [
             url(r'^delete-all/$', main.deprecation_delete_all, name='deprecation-delete-all'),
         ])),
         url(r'^download/$', main.DownloadDataflowView.as_view(), name='download-dataflow'),
+        url(r'^download-deprecated/(?P<pk>\d+)$', main.dataflow_download_deprecated, name='download-deprecated'),
         url(r'^upload/$', main.UploadDataflowView.as_view(), name='upload-dataflow'),
     ])),
 
