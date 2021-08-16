@@ -1,5 +1,6 @@
 import json
 import os
+import shutil
 from pathlib import Path
 
 from core.settings import BASE_DIR
@@ -264,10 +265,16 @@ class WdfToJsonConverterInteractor(Interactor):
                                            output_filepath=self.context.output_filepath)
 
 
+class JsonMoveInteractor(Interactor):
+    def run(self):
+        shutil.move(self.context.wdf_filepath, self.context.output_filepath)
+
+
 class WdfManager(Interactor):
     _MODE = {
         "wdfToJson": WdfToJsonConverterInteractor,
-        "jsonToWdf": JsonToWdfConverterInteractor
+        "jsonToWdf": JsonToWdfConverterInteractor,
+        "moveJson": JsonMoveInteractor
     }
 
     def run(self):
@@ -279,12 +286,12 @@ class WdfManager(Interactor):
         wdf_filepath = f"{BASE_DIR}/ant/{user.username}/retrieve/dataflow/wave"
         json_filepath = f"{BASE_DIR}/libs/tcrm_automation/{today}/original_dataflows"
 
-        if mode == 'wdfToJson':
+        if mode in ['moveJson', 'wdfToJson']:
             Path(json_filepath).mkdir(parents=True, exist_ok=True)
             output_filepath = json_filepath
             original_ext = '.wdf'
             output_ext = '.json'
-            output_name_prefix = "[FIXED]"
+            output_name_prefix = "[FIXED]" if mode == 'wdfToJson' else ''
             env_name = f"[{env.name}] "
 
             files = [f for f in os.listdir(wdf_filepath)

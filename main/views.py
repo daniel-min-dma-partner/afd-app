@@ -21,10 +21,10 @@ from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEn
     DeprecateFieldsForm, SecpredToSaqlForm
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser
 from .interactors.deprecate_fields_interactor import FieldDeprecatorInteractor
-from .interactors.download_dataflow_interactor import DownloadDataflowInteractor
+from .interactors.download_dataflow_interactor import DownloadDataflowInteractor, DownloadDataflowInteractorNoAnt
 from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.notification_interactor import SetNotificationInteractor
-from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp
+from .interactors.sfdc_connection_interactor import OAuthLoginInteractor, SfdcConnectWithConnectedApp
 from .interactors.slack_targetlist_interactor import SlackTarListInteractor
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.upload_dataflow_interactor import UploadDataflowInteractor
@@ -334,47 +334,15 @@ class SfdcConnectView(View):
         else:
             try:
                 env = SfdcEnv.objects.get(user=request.user, pk=pk)
+                ctx = OAuthLoginInteractor.call(model=env, mode=action)
 
-                if env.oauth_flow_stage == 0 and action == 'logout':
-                    messages.info(request, 'You already have been logout.')
+                if ctx.exception:
+                    raise ctx.exception
                 else:
-                    url = env.environment + uri
-                    parms = {
-                        "client_id": env.client_key,
-                        "redirect_uri": "https://localhost:8080/sfdc/connected-app/oauth2/callback",
-                        "response_type": "code",
-                        "state": f"usrid:{request.user.pk}.envid:{env.pk}"
-                    } if action == "login" else {
-                        "token": env.oauth_access_token
-                    }
+                    messages.success(request, mark_safe(f"<code>{action.upper()}</code> performed successfully."))
 
-                    url_parse = parse.urlparse(url)
-                    query = url_parse.query
-                    url_dict = dict(parse.parse_qsl(query))
-                    url_dict.update(parms)
-                    url_new_query = parse.urlencode(url_dict)
-                    url_parse = url_parse._replace(query=url_new_query)
-                    new_url = parse.urlunparse(url_parse)
-
-                    if action == 'logout':
-                        response = requests.post(new_url)
-                        env.flush_oauth_data()
-                        env.set_oauth_flow_stage("LOGOUT")
-                        env.save()
-
-                        if response.status_code == 200:
-                            messages.success(request, mark_safe(
-                                f"Logout connection <code>{env.name}</code> performed successfully"))
-                        else:
-                            messages.warning(request, mark_safe(f"Logout response status: {response.status_code}"))
-                    else:
-                        env.flush_oauth_data()
-                        env.set_oauth_flow_stage("AUTHORIZATION_CODE_REQUEST")
-                        env.save()
-
-                        return redirect(new_url)
             except Exception as e:
-                messages.warning(request, e)
+                messages.warning(request, mark_safe(e))
 
         return redirect('main:sfdc-env-list')
 
@@ -445,10 +413,12 @@ class DownloadDataflowView(generic.FormView):
                 if not dataflows:
                     raise KeyError("No dataflow selected")
 
-                download_ctx = DownloadDataflowInteractor.call(dataflow=dataflows, model=env, user=request.user)
+                # download_ctx = DownloadDataflowInteractor.call(dataflow=dataflows, model=env, user=request.user)
+                download_ctx = DownloadDataflowInteractorNoAnt.call(dataflow=dataflows, model=env, user=request.user)
 
                 if not download_ctx.exception:
-                    wdf_manager_ctx = WdfManager.call(user=request.user, mode="wdfToJson", env=env)
+                    # wdf_manager_ctx = WdfManager.call(user=request.user, mode="wdfToJson", env=env)
+                    wdf_manager_ctx = WdfManager.call(user=request.user, mode="moveJson", env=env)
                 else:
                     raise download_ctx.exception
 
@@ -456,7 +426,7 @@ class DownloadDataflowView(generic.FormView):
 
                 return redirect("main:download-dataflow")
             except Exception as e:
-                messages.error(request, e)
+                messages.error(request, mark_safe(e))
         else:
             print(form.errors.as_data)
             messages.error(request, form.errors.as_data)
