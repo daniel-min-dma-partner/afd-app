@@ -4,8 +4,10 @@ import json
 from libs.interactor.interactor import Interactor
 
 _SLACK_MESSAGE_PAYLOAD_TEMPLATE = {
+    "text": "You've received an approval request {{username}}for:",
     "attachments": [
         {
+            "color": "#f2c744",
             "blocks": [
                 {
                     "type": "header",
@@ -86,6 +88,7 @@ class SlackMessagePushInteractor(Interactor):
         print(description)
 
         payload = json.loads(json.dumps(payload)
+                             .replace('{{username}}', f"from {submitter} ")
                              .replace('{{case_header}}', f"Case #{case_number} - {contact}")
                              .replace('{{case_description}}', f"<{url}|_{description}_>".replace('"', "\\\""))
                              .replace('{{case_url}}', url)

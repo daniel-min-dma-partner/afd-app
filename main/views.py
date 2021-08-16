@@ -213,7 +213,7 @@ class SlackIntegrationView(generic.FormView):
                 "case-manager-approval": form.cleaned_data['case_manager_approval'],
                 "case-manager-name": form.cleaned_data['case_manager_name'],
                 "case-contact": form.cleaned_data['case_contact'],
-                "submitter": ""
+                "submitter": request.user.first_name + " " + request.user.last_name
             }
 
             if request.user.is_authenticated and request.user.first_name:
@@ -476,7 +476,6 @@ class UploadDataflowView(generic.FormView):
             messages.error(request, mark_safe(str(e)))
             notif_msg = mark_safe(str(e))
             notif_type = 'error'
-            raise e
 
         # Push a notification.
         try:
