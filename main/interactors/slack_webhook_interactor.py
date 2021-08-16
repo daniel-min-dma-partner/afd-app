@@ -91,11 +91,22 @@ class SlackMessagePushInteractor(Interactor):
                              .replace('{{case_url}}', url)
                              .replace('{{case_business_justification}}', self._set_icon(business_justif))
                              .replace('{{case_manager_approval}}', self._set_icon(manager_approval))
-                             .replace('{{case_manager_name}}', f"_{manager_name}_ :checked:" if manager_name else ":warning:")
+                             .replace('{{case_manager_name}}', f"_{manager_name}_ :checked:" if manager_name else "")
                              .replace('{{submitter}}', submitter))
 
-        if not submitter:
-            del payload['attachments'][0]['blocks'][3]['fields'][3]
+        idx = 0
+        for field in payload['attachments'][0]['blocks'][3]['fields']:
+            if 'Manager Name' in field['text'] and not manager_name:
+                del payload['attachments'][0]['blocks'][3]['fields'][idx]
+                break
+            idx += 1
+
+        idx = 0
+        for field in payload['attachments'][0]['blocks'][3]['fields']:
+            if 'Submiter' in field['text'] and not submitter:
+                del payload['attachments'][0]['blocks'][3]['fields'][idx]
+                break
+            idx += 1
 
         return payload
 
