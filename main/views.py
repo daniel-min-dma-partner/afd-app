@@ -27,7 +27,7 @@ from .interactors.notification_interactor import SetNotificationInteractor
 from .interactors.sfdc_connection_interactor import OAuthLoginInteractor, SfdcConnectWithConnectedApp
 from .interactors.slack_targetlist_interactor import SlackTarListInteractor
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
-from .interactors.upload_dataflow_interactor import UploadDataflowInteractor
+from .interactors.upload_dataflow_interactor import UploadDataflowInteractor, UploadDataflowInteractorNoAnt
 from .interactors.wdf_manager_interactor import *
 from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, DeprecationDetails
 
@@ -458,8 +458,8 @@ class UploadDataflowView(generic.FormView):
 
                 env = get_object_or_404(SfdcEnv, pk=form.cleaned_data['env_selector'])
                 remote_df_name = form.cleaned_data['dataflow_selector']
-                ctx = UploadDataflowInteractor.call(env=env, remote_df_name=remote_df_name, user=request.user,
-                                                    filemodel=filemodel)
+                ctx = UploadDataflowInteractorNoAnt.call(env=env, remote_df_name=remote_df_name, user=request.user,
+                                                         filemodel=filemodel)
                 if ctx.exception:
                     raise ctx.exception
                 else:
@@ -476,6 +476,7 @@ class UploadDataflowView(generic.FormView):
             messages.error(request, mark_safe(str(e)))
             notif_msg = mark_safe(str(e))
             notif_type = 'error'
+            raise e
 
         # Push a notification.
         try:
