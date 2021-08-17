@@ -80,7 +80,6 @@ class DownloadDataflowInteractorNoAnt(Interactor):
                     replaces = [
                         ('&quot;', '\\"'),
                         ('&#92;', '\\\\'),
-                        ('&amp;', '&'),
                     ]
                     for (a, b) in replaces:
                         response = response.replace(a, b)
