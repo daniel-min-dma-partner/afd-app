@@ -87,3 +87,15 @@ textarea {
 .bg-not-read {
     background-color: #f3f2f2 !important;
 }
+
+.bg-login-image {
+  background: url("../img/salesforce-integration.jpg");
+  background-position: center;
+  background-size: cover;
+}
+
+.bg-register-image {
+  background: url("../img/salesforce-register.png");
+  background-position: center;
+  background-size: cover;
+}
