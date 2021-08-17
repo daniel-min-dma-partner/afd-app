@@ -8,18 +8,20 @@
         <i class="fa fa-bars"></i>
     </button>
 
-    <!-- Topbar Search -->
-    <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-        <div class="input-group">
-            <input type="text" class="form-control bg-light border-0 small menu-item-finder" placeholder="Search for..."
-                   aria-label="Search" aria-describedby="basic-addon2">
-            <div class="input-group-append">
-                <a class="btn btn-primary">
-                    <i class="fas fa-search fa-sm"></i>
-                </a>
+    {% if request.user.is_authenticated %}
+        <!-- Topbar Search -->
+        <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+                <input type="text" class="form-control bg-light border-0 small menu-item-finder" placeholder="Search for..."
+                       aria-label="Search" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <a class="btn btn-primary">
+                        <i class="fas fa-search fa-sm"></i>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
@@ -47,9 +49,10 @@
                 </form>
             </div>
         </li>
-
-        <!-- Nav Item - Alerts -->
-        {% include 'sb-base/body-components/alert-items/_items.html' %}
+        {% if request.user.is_authenticated %}
+            <!-- Nav Item - Alerts -->
+            {% include 'sb-base/body-components/alert-items/_items.html' %}
+        {% endif %}
         {#        <li class="nav-item dropdown no-arrow mx-1">#}
         {#            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"#}
         {#               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
@@ -183,28 +186,40 @@
                 <img class="img-profile rounded-circle"
                      src="{% static 'sb-admin/assets/img/undraw_profile.svg' %}">
             </a>
-            <!-- Dropdown - User Information -->
-            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                 aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">
-                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Profile
-                </a>
-                <a class="dropdown-item" href="#">
-                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Settings
-                </a>
-                <a class="dropdown-item" href="#">
-                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Activity Log
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item logout" href="#" data-toggle="modal" data-target="#logoutModal"
-                   data-action="{% url 'main:logout' %}">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Logout
-                </a>
-            </div>
+                <!-- Dropdown - User Information -->
+                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                     aria-labelledby="userDropdown">
+                    {% if request.user.is_authenticated %}
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Profile
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Settings
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Activity Log
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item logout" href="#" data-toggle="modal" data-target="#logoutModal"
+                           data-action="{% url 'main:logout' %}">
+                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Logout
+                        </a>
+                    {% else %}
+                        <a class="dropdown-item logout" href="{% url 'main:login' %}">
+                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Login
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item logout" href="{% url 'main:register-user' %}">
+                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Sign In
+                        </a>
+                    {% endif %}
+                </div>
         </li>
 
     </ul>

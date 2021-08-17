@@ -33,9 +33,9 @@ class RegisterUserForm(forms.ModelForm):
         model = User
         help_texts = {'username': ''}
         exclude = {'id', 'password', 'is_superuser', 'is_staff', 'last_login', 'date_joined',
-                   'user_permissions', 'is_active', 'groups', 'first_name', 'last_name', }
+                   'user_permissions', 'is_active', 'groups'}
         REQUIRED_FIELDS = [
-            'email', 'username', 'password1', 'password2'
+            'email', 'username', 'password1', 'password2', 'first_name', 'last_name'
         ]
 
     def clean_email(self):
