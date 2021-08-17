@@ -1,0 +1,8 @@
+/* Scrollable list group */
+/* Source: https://stackoverflow.com/questions/47256185/bootstrap-list-group-scroll */
+.list-group-deprecation {
+    max-height: 400px;
+    /*margin-bottom: 10px;*/
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+}

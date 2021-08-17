@@ -22,16 +22,9 @@
 
 {% block extra-scripts %}
 <script>
-    {%
-        with "id_" | add:
-        form.case_manager_name.name
-        as
-        manager_name_id %
-    }
-    const manager_name_field_id = "{{manager_name_id}}";
-    {%
-        endwith %
-    }
+    {% with "id_"|add:form.case_manager_name.name as manager_name_id %}
+        const manager_name_field_id = "{{manager_name_id}}";
+    {% endwith %}
 
     const has_manager_approval_field_id = "id_{{ form.case_manager_approval.name }}";
 

@@ -1,5 +1,6 @@
 import json
 import os
+import shutil
 from pathlib import Path
 
 from core.settings import BASE_DIR
@@ -92,6 +93,20 @@ class JsonStructReverterInteractor(Interactor):
                     if "source" in node['parameters'].keys():
                         node['sources'] = [node['parameters']['source']]
                         del node['parameters']['source']
+
+                    if node['action'] in ['computeExpression', 'computeRelative']:
+                        for field in node['parameters']['computedFields']:
+                            idx = node['parameters']['computedFields'].index(field)
+
+                            if 'precision' in field.keys():
+                                del js[nn]['parameters']['computedFields'][idx]['precision']
+
+                            if 'expression' in field.keys():
+                                if 'precision' in field['expression'].keys():
+                                    raise KeyError("Unexpected parameter <code><strong>precision</code></strong> "
+                                                   "for <code>expression</code> parameter of the "
+                                                   f"<code>{idx + 1}th</code> computed field of the node "
+                                                   f"<code>{nn}</code>.")
 
         with open(self.context.output_filepath, 'w') as fixed:
             json.dump(js, fixed, indent=2)
@@ -250,10 +265,16 @@ class WdfToJsonConverterInteractor(Interactor):
                                            output_filepath=self.context.output_filepath)
 
 
+class JsonMoveInteractor(Interactor):
+    def run(self):
+        shutil.move(self.context.wdf_filepath, self.context.output_filepath)
+
+
 class WdfManager(Interactor):
     _MODE = {
         "wdfToJson": WdfToJsonConverterInteractor,
-        "jsonToWdf": JsonToWdfConverterInteractor
+        "jsonToWdf": JsonToWdfConverterInteractor,
+        "moveJson": JsonMoveInteractor
     }
 
     def run(self):
@@ -265,12 +286,12 @@ class WdfManager(Interactor):
         wdf_filepath = f"{BASE_DIR}/ant/{user.username}/retrieve/dataflow/wave"
         json_filepath = f"{BASE_DIR}/libs/tcrm_automation/{today}/original_dataflows"
 
-        if mode == 'wdfToJson':
+        if mode in ['moveJson', 'wdfToJson']:
             Path(json_filepath).mkdir(parents=True, exist_ok=True)
             output_filepath = json_filepath
             original_ext = '.wdf'
             output_ext = '.json'
-            output_name_prefix = "[FIXED]"
+            output_name_prefix = "[FIXED]" if mode == 'wdfToJson' else ''
             env_name = f"[{env.name}] "
 
             files = [f for f in os.listdir(wdf_filepath)

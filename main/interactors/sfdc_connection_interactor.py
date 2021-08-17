@@ -1,6 +1,9 @@
+from urllib import parse
+
 import requests
 
 from libs.interactor.interactor import Interactor
+from main.models import SalesforceEnvironment as Env
 
 SFDC_APIUSER_REQUEST_HEADER = 'sfdc-apiuser-request-header'
 SFDC_APIUSER_REQUEST_INSTANCE = 'sfdc-apiuser-request-instance'
@@ -11,6 +14,56 @@ def clear_session(session):
     for key in [SFDC_APIUSER_REQUEST_HEADER, SFDC_APIUSER_REQUEST_INSTANCE, SFDC_APIUSER_ACCESS_TOKEN]:
         if key in session.keys():
             del session[key]
+
+
+class OAuthLoginInteractor(Interactor):
+    def run(self):
+        env_model: Env = self.context.model
+        mode = self.context.mode
+        exception = None
+
+        try:
+            resource = '/services/oauth2/token' if mode == 'login' else '/services/oauth2/revoke'
+
+            url = env_model.environment + resource
+            parms = {
+                "grant_type": "password",
+                "client_id": env_model.client_key,
+                "client_secret": env_model.client_secret,
+                "username": env_model.client_username,
+                "password": env_model.client_password
+            } if mode == 'login' else {
+                "token": env_model.oauth_access_token
+            }
+
+            url_parse = parse.urlparse(url)
+            query = url_parse.query
+            url_dict = dict(parse.parse_qsl(query))
+            url_dict.update(parms)
+            url_new_query = parse.urlencode(url_dict)
+            url_parse = url_parse._replace(query=url_new_query)
+            new_url = parse.urlunparse(url_parse)
+
+            print(new_url)
+
+            response = requests.post(new_url) if mode == 'login' else requests.get(new_url)
+
+            if mode == 'login' and response.status_code == 200:
+                response = response.json()
+                env_model.instance_url = response['instance_url']
+                env_model.set_oauth_access_token(token=response['access_token'])
+                env_model.set_oauth_flow_stage(Env.STATUS_ACCESS_TOKEN_RECEIVE)
+                # header = {'Authorization': "Bearer " + env_model.oauth_access_token, 'Content-Type': "application/json"}
+            elif mode == 'logout' and response.status_code == 200:
+                env_model.flush_oauth_data()
+            else:
+                raise ConnectionError(f"Response status: <code>{response.status_code}</code>: {response.text}")
+        except Exception as e:
+            exception = e
+            env_model.flush_oauth_data()
+        finally:
+            env_model.save()
+            self.context.exception = exception
 
 
 class SfdcConnectWithConnectedApp(Interactor):

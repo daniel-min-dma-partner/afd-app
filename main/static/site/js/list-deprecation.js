@@ -1,7 +1,8 @@
 import {popup_notification} from "../../sb-admin/custom-assets/js/mjs/helpers.mjs";
 
 $('.btn-show-diff').on('click', function (evt) {
-    let pk = $(this).parent().parent().find('.pk').html();
+    let pk = $(this).parent().parent().find('.pk').val();
+    console.log(pk);
 
     $.ajax({
         type: 'GET',
@@ -9,7 +10,7 @@ $('.btn-show-diff').on('click', function (evt) {
         data: {
             pk: pk,
         },
-        success: function(response) {
+        success: function (response) {
             location.reload();
         },
         error: function(response) {
@@ -35,5 +36,5 @@ $('.btn-remove-deprec').on('click', function () {
 });
 
 $('#delete-confirmation-md').on('shown.bs.modal', function (e) {
-    $(this).find('button[id="delete-btn"]').focus()
+    $(this).find('button[id^="delete-btn"]').focus()
 })

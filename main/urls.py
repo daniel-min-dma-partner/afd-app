@@ -51,11 +51,14 @@ urlpatterns = [
         url(r'^deprecate-fields/', include([
             url(r'^$', main.DeprecateFieldsView.as_view(), name='deprecate-fields'),
             url(r'^view/$', main.ViewDeprecatedFieldsView.as_view(), name='view-deprecations'),
+            url(r'^view/details/(?P<pk>\d+)$', main.DeprecationDetailsView.as_view(), name='view-deprecation-detail'),
             url(r'^compare/$', main.ajax_compare_deprecation, name='compare-deprecations'),
             url(r'^compare/(?P<pk>\d+)/$', main.CompareDeprecationView.as_view(), name='compare-deprecation'),
             url(r'^delete/$', main.ajax_delete_deprecation, name='remove-deprecations'),
+            url(r'^delete-all/$', main.deprecation_delete_all, name='deprecation-delete-all'),
         ])),
         url(r'^download/$', main.DownloadDataflowView.as_view(), name='download-dataflow'),
+        url(r'^download-deprecated/(?P<pk>\d+)$', main.dataflow_download_deprecated, name='download-deprecated'),
         url(r'^upload/$', main.UploadDataflowView.as_view(), name='upload-dataflow'),
     ])),
 
@@ -64,6 +67,7 @@ urlpatterns = [
         # url(r'^mark-as-read/(?P<pk>\d+)/$', main.MarkNotifAsReadView.as_view(), name='notification-read'),
         url(r'^mark-as-clicked/(?P<pk>\d+)/$', main.MarkNotifAsClickedView.as_view(), name='notification-clicked'),
         url(r'^mark-all-as-read-clicked/$', main.NotificationMarkAllAsReadClickedView.as_view(), name='mark-all'),
+        url(r'^view/(?P<pk>\d+)$', main.NotificationDetailsView.as_view(), name='notification-detail'),
     ])),
 
     url(r'^dataset-manager/', include([

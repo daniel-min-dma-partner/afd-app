@@ -6,7 +6,6 @@ from pathlib import Path
 from shutil import rmtree
 
 from core.settings import BASE_DIR
-from core.settings import BASE_DIR
 from libs.amt_helpers import generate_build_file
 from libs.interactor.interactor import Interactor
 from main.models import User
@@ -79,10 +78,11 @@ class DataflowListInteractor(Interactor):
                 ],
             }
             status = 200
+            df_ids_api = {}
 
             try:
                 generate_build_file(self.context.model, user=self.context.user)
-                payload = self._list_metadata_df()
+                payload, df_ids_api = self._list_metadata_df()
 
             except Exception as e:
                 status = 501
@@ -95,6 +95,7 @@ class DataflowListInteractor(Interactor):
             self.context.payload = payload
             self.context.status_code = status
             self.context.error = error
+            self.context.df_ids_api = df_ids_api
 
             del self.context.model
             del self.context.cache_dir
@@ -140,6 +141,8 @@ class DataflowListInteractor(Interactor):
         return self._prepare_data(load_from_cache)
 
     def _prepare_data(self, load_from_cache: bool):
+        df_ids = {}
+
         if not load_from_cache:
             print('============== >> REFRESHING CACHE ==============')
             filename = f'{BASE_DIR}/ant/{self.context.user.username}/listMetadata/list.log'
@@ -150,6 +153,12 @@ class DataflowListInteractor(Interactor):
 
                     df_apis = [line.replace('FullName/Id: ', "").split('/')[0]
                                for line in filelines if "FullName/Id:" in line]
+                    df_ids = {
+                        line.replace('FullName/Id: ', "").split('/')[0]: line.replace('FullName/Id: ', "").split('/')[1]
+                        for line in filelines if "FullName/Id:" in line
+                    }
+
+                    df_apis.sort()
 
                     payload = {"results": [
                         {"id": api, "text": api} for api in df_apis
@@ -166,10 +175,11 @@ class DataflowListInteractor(Interactor):
                 payload = json.load(fp=f)
 
         search = self.context.search
-        if search:
+        if search and isinstance(search, str):
             payload = {"results": [
                 {"id": dataflow['id'], "text": dataflow['text']} for dataflow in payload['results']
-                if search.strip().lower() in dataflow['text'].strip().lower()
+                if search.strip().lower() in dataflow['text'].strip().lower() or
+                   search.replace(' ', '_').strip().lower() in dataflow['text'].strip().lower()
             ]}
 
-        return payload
+        return payload, df_ids
