@@ -94,7 +94,7 @@ class LoginView(generic.FormView):
 def logout(request):
     do_logout(request)
 
-    return render(request, "logout/logout.html")
+    return render(request, "login/loginform.html")
 
 
 class RegisterUserView(generic.FormView):
@@ -121,7 +121,9 @@ class RegisterUserView(generic.FormView):
             user.save()
 
             if user is not None:
-                messages.success(request, f"User '{user.username}' saved successfully.")
+                messages.success(request, mark_safe(f"User <code>{user.username}</code> has been created successfully "
+                                                    f"but it requires to be activated by an admin.<br/><br/>"
+                                                    f"Contact the site admin to request the activation."))
                 return redirect("main:home")
             else:
                 messages.error(request, f"Error saving new user.")
