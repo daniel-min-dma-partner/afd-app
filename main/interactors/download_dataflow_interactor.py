@@ -1,3 +1,4 @@
+import html
 import json
 import os
 import shutil
@@ -75,11 +76,19 @@ class DownloadDataflowInteractorNoAnt(Interactor):
                 response = requests.get(url, headers=header)
 
                 if response.status_code == 200:
-                    response = response.json()
+                    response = response.text
+                    replaces = [
+                        ('&quot;', '\\"'),
+                        ('&#92;', '\\\\'),
+                        ('&amp;', '&'),
+                    ]
+                    for (a, b) in replaces:
+                        response = response.replace(a, b)
+                    response = html.unescape(response)
+                    response = json.loads(response)
                     definition = response['definition']
                     filename = f"{dataflow}.wdf"
                     filepath = output_path + filename
-                    print(filepath)
                     with open(filepath, 'w') as f:
                         json.dump(definition, f, indent=2)
                 else:
