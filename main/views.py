@@ -667,7 +667,6 @@ class NotificationMarkAllAsReadClickedView(generic.View):
                 for notification in notifications.all():
                     notification.set_read_clicked()
                     notification.save()
-                    print('saveado=============')
         except Exception as e:
             messages.error(request, str(e))
 
