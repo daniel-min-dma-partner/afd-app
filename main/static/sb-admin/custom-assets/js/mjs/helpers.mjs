@@ -74,4 +74,10 @@ const block_screen = (mode='show') => {
   $('.screen-blocker').modal(mode);
 };
 
-export {build_toast, popup_notification, show_error_and_popup, block_screen};
+const progress_loader = (message="Progressing...") => {
+    $('.progress-description').append(message);
+    $("div.spanner").addClass("show");
+    $("div.overlay").addClass("show");
+};
+
+export {build_toast, popup_notification, show_error_and_popup, block_screen, progress_loader};

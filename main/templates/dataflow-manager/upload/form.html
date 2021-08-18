@@ -10,6 +10,7 @@
     <script>
         let get_dataflow_list_url = "{% url 'main:ajax-list-dataflows' %}";
         let get_env_list_url = "{% url 'main:ajax-list-envs' %}";
+        let selected_df_name = "";
     </script>
 {% endblock header-scripts %}
 
@@ -111,8 +112,11 @@
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Confirmation to Upload</h5>
+                <div class="modal-header bg-gradient-primary">
+                    <h5 class="modal-title" id="exampleModalLabel" style="color: white">Confirmation to Upload</h5>
+<div class="spinner-border text-primary" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
