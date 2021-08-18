@@ -13,7 +13,7 @@ bandit==1.7.0
 beautifulsoup4==4.9.3
 blessings==1.7
 certifi==2020.12.5
-cffi==1.14.4
+cffi==1.14.6
 channels==3.0.3
 channels-redis==3.2.0
 chardet==3.0.4
@@ -49,6 +49,7 @@ mccabe==0.6.1
 mistune==0.8.4
 msgpack==1.0.2
 multidict==5.1.0
+newrelic==6.6.0.162
 numpy==1.19.5
 packaging==20.8
 pandas==1.2.0
