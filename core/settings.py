@@ -13,14 +13,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
-import dj_database_url
-import django_heroku
 import environ
 
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
+env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,13 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-wi5%3e1_fpxq+fm8sowdg0^(0vz*qv0oryh3ww+adav$+v$e4%'
-SECRET_KEY = env.str('SECRET_KEY', default='')
+SECRET_KEY = env.str('SECRET_KEY', default='django-insecure-wi5%3e1_fpxq+fm8sowdg0^(0vz*qv0oryh3ww+adav$+v$e4%')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = False
+DEBUG = int(os.environ.get("DEBUG", default=1))
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(" ")
 
 # Application definition
 
@@ -54,7 +48,6 @@ INSTALLED_APPS = [
     'django_extensions',
     'libs.interactor.interactor',
     'rest_framework',
-    'whitenoise.runserver_nostatic',
 
     # Created apps
     # 'chat',
@@ -76,8 +69,6 @@ MIDDLEWARE = [
     # Global Login required
     'global_login_required.GlobalLoginRequiredMiddleware',
 
-    # Whitenoise for Heroku
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 
     # Custom Middlewares
     'main.middleware.SfdcCRUDMiddleware',
@@ -155,18 +146,19 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
-
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tcrm_db',
-        'USER': 'tcrm_user',
-        'PASSWORD': '7YjvxvWLC8',
-        'HOST': 'localhost',
-        'PORT': '',
+    "default": {
+        # Add the docker environment SQL_ENGINE variable or for local development use sqlite3 engine
+        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+        # Add the docker environment SQL_DATABASE variable or use the local sqlite database soruce
+        "NAME": os.environ.get("SQL_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
+        # Add the docker SQL_USER environment variable or on need password for sqlite3
+        "USER": os.environ.get("SQL_USER", ""),
+        # Add the docker SQL_PASSWORD environment variable or on need password for sqlite3
+        "PASSWORD": os.environ.get("SQL_PASSWORD", ""),
+        # Add the docker SQL_HOST environment variable or on need host for sqlite3
+        "HOST": os.environ.get("SQL_HOST", ""),
+        # Add the docker SQL_HOST environment variable or on need port for sqlite3
+        "PORT": os.environ.get("SQL_PORT", ""),
     }
 }
 
@@ -244,16 +236,3 @@ SALESFORCE_INSTANCE_URLS = {
     'Sandbox': 'https://test.salesforce.com',
     'Production': 'https://login.salesforce.com',
 }
-
-try:
-    from core.local_settings import *
-except ImportError as e:
-    # Activate Django-Heroku.
-    django_heroku.settings(locals())
-
-    # Configure database for Heroku
-    prod_db = dj_database_url.config(conn_max_age=500)
-    DATABASES['default'].update(prod_db)
-
-    # Static file handler for Heroku
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
