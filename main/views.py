@@ -482,17 +482,18 @@ class UploadDataflowView(generic.FormView):
 
         # Push a notification.
         try:
-            notif_data = {
-                'user': request.user,
-                'message': notif_msg,
-                'status': Notifications.get_initial_status(),
-                'link': "#",
-                'type': notif_type
-            }
-            ctx = SetNotificationInteractor.call(data=notif_data)
+            if notif_msg:
+                notif_data = {
+                    'user': request.user,
+                    'message': notif_msg,
+                    'status': Notifications.get_initial_status(),
+                    'link': "#",
+                    'type': notif_type
+                }
+                ctx = SetNotificationInteractor.call(data=notif_data)
 
-            if ctx.exception:
-                raise ctx.exception
+                if ctx.exception:
+                    raise ctx.exception
         except Exception as e:
             messages.error(request, str(e))
 

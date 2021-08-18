@@ -90,9 +90,11 @@
                         <br/>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-success btn-user float-right">
-                                Proceed
+                            <button type="submit" id="submit-btn" hidden>
                             </button>
+                            <input type="button" value="Upload" id="submit-modal-trigger"
+                                   rel="tooltip" class="btn btn-success btn-user float-right"
+                                   data-toggle="modal" data-target="#id_modal">
                         </div>
                     </form>
 
@@ -102,8 +104,44 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="id_modal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmation to Upload</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure to proceed with the following?
+                    <br/>
+                    <br/>
+                    <table class="table">
+                        <tr>
+                            <th>Upload dataflow</th>
+                            <td id="dataflow"></td>
+                        </tr>
+                        <tr>
+                            <th>To the Salesforce Instance</th>
+                            <td id="sfdcOrg"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary cancel-modal" data-dismiss="modal">Cancel</button>
+                    <input type="button" class="btn btn-primary" id="confirmation-proceed" value="Upload">
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock page-content %}
 
 {% block extra-scripts %}
     <script src="{% static 'site/js/dataflow-download.js' %}" type="module"></script>
+    <script src="{% static 'site/js/dataflow-upload.js' %}" type="module"></script>
 {% endblock extra-scripts %}
