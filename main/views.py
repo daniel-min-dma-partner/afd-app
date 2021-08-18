@@ -216,6 +216,7 @@ class SlackIntegrationView(generic.FormView):
                 "case-manager-name": form.cleaned_data['case_manager_name'],
                 "case-contact": form.cleaned_data['case_contact'],
                 "submitter": request.user.first_name + " " + request.user.last_name
+                             if len(request.user.first_name+request.user.last_name) else ""
             }
 
             if request.user.is_authenticated and request.user.first_name:

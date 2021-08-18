@@ -85,10 +85,9 @@ class SlackMessagePushInteractor(Interactor):
         contact = values['case-contact']
 
         payload = copy.deepcopy(_SLACK_MESSAGE_PAYLOAD_TEMPLATE)
-        print(description)
 
         payload = json.loads(json.dumps(payload)
-                             .replace('{{username}}', f"from {submitter} ")
+                             .replace('{{username}}', f"from {submitter} " if submitter else "")
                              .replace('{{case_header}}', f"Case #{case_number} - {contact}")
                              .replace('{{case_description}}', f"<{url}|_{description}_>".replace('"', "\\\""))
                              .replace('{{case_url}}', url)
