@@ -70,4 +70,8 @@ const show_error_and_popup = (response) => {
     }
 };
 
-export {build_toast, popup_notification, show_error_and_popup};
+const block_screen = (mode='show') => {
+  $('.screen-blocker').modal(mode);
+};
+
+export {build_toast, popup_notification, show_error_and_popup, block_screen};
