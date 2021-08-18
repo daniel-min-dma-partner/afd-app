@@ -75,7 +75,7 @@ const block_screen = (mode='show') => {
 };
 
 const progress_loader = (message="Progressing...") => {
-    $('.progress-description').append(message);
+    $('.progress-description').html(message);
     $("div.spanner").addClass("show");
     $("div.overlay").addClass("show");
 };

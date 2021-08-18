@@ -461,6 +461,9 @@ class UploadDataflowView(generic.FormView):
 
                 env = get_object_or_404(SfdcEnv, pk=form.cleaned_data['env_selector'])
                 remote_df_name = form.cleaned_data['dataflow_selector']
+                if not remote_df_name:
+                    raise KeyError("Missing required field <code>Remote dataflow name</code>.")
+
                 ctx = UploadDataflowInteractorNoAnt.call(env=env, remote_df_name=remote_df_name, user=request.user,
                                                          filemodel=filemodel)
                 if ctx.exception:
@@ -476,7 +479,7 @@ class UploadDataflowView(generic.FormView):
             else:
                 messages.error(request, form.errors.as_data)
         except Exception as e:
-            messages.error(request, mark_safe(str(e)))
+            messages.error(request, mark_safe(e))
             notif_msg = mark_safe(str(e))
             notif_type = 'error'
 

@@ -10,8 +10,8 @@ $("#submit-modal-trigger").on('click', (evt) => {
     envname = envname === 'Select One' ? "" : '<code>' + envname + '</code>';
     dfname = [null, "", undefined].includes(dfname) ? "" : '<code>' + dfname + '</code>';
 
-    $('#dataflow').append(dfname);
-    $('#sfdcOrg').append(envname);
+    $('.confirmation-context').html(`Upload the dataflow ${dfname} to the Salesforce Instance ${envname}.`);
+    $('.modal-title').html("Are you sure to proceed with the following?");
 });
 
 $('#confirmation-proceed').on('click', (evt) => {
