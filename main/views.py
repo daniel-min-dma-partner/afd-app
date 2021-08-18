@@ -471,9 +471,7 @@ class UploadDataflowView(generic.FormView):
                 else:
                     msg = "Uploading <code>{0}</code> local dataflow to <code>{1}</code> dataflow to " \
                           "<code>{2}</code> connection has finished." \
-                        .format(
-                        os.path.basename(filemodel.file.name), remote_df_name, env.name
-                    )
+                        .format(os.path.basename(filemodel.file.name), remote_df_name, env.name)
                     notif_msg = msg
                     messages.info(request, mark_safe(msg))
             else:
