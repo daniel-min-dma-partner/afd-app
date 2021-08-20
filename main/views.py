@@ -430,6 +430,7 @@ class DownloadDataflowView(generic.FormView):
                 return redirect("main:download-dataflow")
             except Exception as e:
                 messages.error(request, mark_safe(e))
+                raise e
         else:
             print(form.errors.as_data)
             messages.error(request, form.errors.as_data)
