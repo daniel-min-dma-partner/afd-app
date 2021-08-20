@@ -91,7 +91,7 @@ class DownloadDataflowInteractorNoAnt(Interactor):
                     with open(filepath, 'w') as f:
                         json.dump(definition, f, indent=2)
                 else:
-                    raise ConnectionError(output_path)
+                    raise ConnectionError(response.text)
 
         except Exception as e:
             _exc = e
