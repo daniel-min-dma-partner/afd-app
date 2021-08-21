@@ -1,11 +1,12 @@
 import json as js
 from urllib import parse
+import zipfile
 
 import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as do_login, logout as do_logout
 from django.core.files.base import ContentFile
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, FileResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.safestring import mark_safe
 from django.views import View, generic
@@ -29,6 +30,7 @@ from .interactors.slack_targetlist_interactor import SlackTarListInteractor
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.upload_dataflow_interactor import UploadDataflowInteractor, UploadDataflowInteractorNoAnt
 from .interactors.wdf_manager_interactor import *
+from .interactors.response_interactor import FileResponseInteractor
 from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, DeprecationDetails
 
 
@@ -416,18 +418,15 @@ class DownloadDataflowView(generic.FormView):
                 if not dataflows:
                     raise KeyError("No dataflow selected")
 
-                # download_ctx = DownloadDataflowInteractor.call(dataflow=dataflows, model=env, user=request.user)
                 download_ctx = DownloadDataflowInteractorNoAnt.call(dataflow=dataflows, model=env, user=request.user)
-
-                if not download_ctx.exception:
-                    # wdf_manager_ctx = WdfManager.call(user=request.user, mode="wdfToJson", env=env)
-                    wdf_manager_ctx = WdfManager.call(user=request.user, mode="moveJson", env=env)
-                else:
+                if download_ctx.exception:
                     raise download_ctx.exception
 
-                messages.info(request, "OK")
+                response_ctx = FileResponseInteractor.call(zipfile_path=download_ctx.output_filepath, env=env)
+                if response_ctx.exception:
+                    raise response_ctx.exception
 
-                return redirect("main:download-dataflow")
+                return response_ctx.response
             except Exception as e:
                 messages.error(request, mark_safe(e))
                 raise e
