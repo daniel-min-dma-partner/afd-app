@@ -70,14 +70,20 @@ const show_error_and_popup = (response) => {
     }
 };
 
-const block_screen = (mode='show') => {
-  $('.screen-blocker').modal(mode);
+const submit_with_screencover = (submit_button, modal=null, confirm_msg="Proceed?", progress_descriptor="Progressing...") => {
+    if ([undefined, "", null].includes(confirm_msg) || confirm(confirm_msg)) {
+        modal ? modal.modal('hide') : null;
+        show_screenplay(100, progress_descriptor);
+        submit_button.click();
+    } else {
+        modal ? modal.modal('hide') : null;
+        show_screenplay(0, progress_descriptor);
+    }
 };
 
-const progress_loader = (message="Progressing...") => {
-    $('.progress-description').html(message);
-    $("div.spanner").addClass("show");
-    $("div.overlay").addClass("show");
+const show_screenplay = (perc=100, msg="") => {
+    document.getElementById("myNav").style.width = `${perc}%`;
+    $('.progress-description').html(msg);
 };
 
-export {build_toast, popup_notification, show_error_and_popup, block_screen, progress_loader};
+export {build_toast, popup_notification, show_error_and_popup, submit_with_screencover, show_screenplay};

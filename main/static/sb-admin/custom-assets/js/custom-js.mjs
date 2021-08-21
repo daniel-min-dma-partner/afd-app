@@ -1,4 +1,4 @@
-import {build_toast} from './mjs/helpers.mjs';
+import {build_toast, show_screenplay} from './mjs/helpers.mjs';
 
 $(document).ready(function (evt) {
     // Shows toasts if exists
@@ -36,4 +36,8 @@ $('.menu-item-finder').on('keyup click', function(evt) {
             processed_parent.push(parent_name);
         }
     });
+});
+
+$('.close-screenplay').on('click', (evt) => {
+    show_screenplay(0);
 });

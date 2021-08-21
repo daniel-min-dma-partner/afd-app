@@ -1,4 +1,7 @@
-import {popup_notification} from '../../sb-admin/custom-assets/js/mjs/helpers.mjs';
+import {
+    popup_notification,
+    submit_with_screencover
+} from '../../sb-admin/custom-assets/js/mjs/helpers.mjs';
 
 $(document).ready(function(evt) {
     // Set the Look&Feel
@@ -82,4 +85,11 @@ $(document).ready(function(evt) {
 // Clears 'Dataflows' when 'Environment' changes
 $("#id_env_selector").on('change', function() {
     $("#id_dataflow_selector").val('').trigger('change');
+});
+
+$('.btn-submit').on('click', (evt) => {
+    let envname = $('#id_env_selector').select2('data')[0].text,
+        dfname = $('#id_dataflow_selector').select2('data')[0].text;
+    submit_with_screencover($('button[type="submit"]'),  null, "Download Now?",
+           `Downloading ${dfname} from ${envname}.`);
 });
