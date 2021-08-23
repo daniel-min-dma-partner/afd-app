@@ -10,3 +10,6 @@
 [submodule "libs/jdd"]
 	path = libs/jdd
 	url = https://Hyungki:810002148github114@github.com/Hyungki/jdd.git
+[submodule "libs/jquery-timeago"]
+	path = libs/jquery-timeago
+	url = https://github.com/rmm5t/jquery-timeago.git
