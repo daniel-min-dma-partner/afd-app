@@ -6,6 +6,10 @@ $(document).ready(function (evt) {
 
     // Applies Bootstrap Select2 Look & Feel for all select input
     // $('select').select2();
+
+    // Initialize Jquery Timeago plugin:
+    jQuery("time.timeago").timeago();
+    jQuery.timeago.settings.allowFuture = true;
 });
 
 $('.logout').click(function () {

@@ -12,6 +12,7 @@ const build_toast = () => {
 
     // Boostrap Toast Construction - Bootstrap 4.6.0
     $('.toast').toast('show');
+    document.querySelector('time.timeago').setAttribute('datetime', new Date().toISOString());
 
     // Closes the notification box when "x" is clicked
     $('.btn-close').click(function (evt) {
@@ -37,7 +38,7 @@ const popup_notification = (title = "Default Title", content = "Default Content"
         "        <div class=\"toast\" role=\"alert\" aria-live=\"assertive\" aria-atomic=\"true\"" + (autohide === false ? ' data-autohide="false"' : "") + (delay === null ? "" : ' data-delay=' + delay) + ">\n" +
         "            <div class=\"toast-header bg-" + type + "\">\n" +
         "                <strong class=\"me-auto\">" + title + "</strong>\n" +
-        "                <small class=\"text-muted\">just now</small>\n" +
+        "                <small class=\"text-muted\"><time class=\"timeago\" datetime=\"\">less than a minute ago</time></small>\n" +
         "                <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"toast\"\n" +
         "                        aria-label=\"Close\"></button>\n" +
         "            </div>\n" +

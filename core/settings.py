@@ -205,10 +205,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Recomended by Heroku. Thi
 static_dir = os.path.join(BASE_DIR, "main/static")  # Static files for development mode
 jdd_static_dir = os.path.join(BASE_DIR, "libs/jdd")
 jsl_static_dir = os.path.join(BASE_DIR, "libs/jdd/jsl")
+jquery_timeago_dir = os.path.join(BASE_DIR, "libs/jquery-timeago")
 STATICFILES_DIRS = [
     static_dir,
     jdd_static_dir,
     jsl_static_dir,
+    jquery_timeago_dir,
 ]
 
 # File Upload managers
