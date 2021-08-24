@@ -21,22 +21,22 @@ class FileModel(models.Model):
 
     def delete(self, using=None, keep_parents=False):
         _filepath = os.path.join(MEDIA_ROOT, self.file.name)
-        print(f'Trying to delete {_filepath}')
+        # print(f'Trying to delete {_filepath}')
         if os.path.isfile(_filepath) and not os.path.isdir(_filepath):
             os.remove(_filepath)
-            print(f"File {_filepath} deleted")
+            # print(f"File {_filepath} deleted")
 
         _filepath = os.path.join(MEDIA_ROOT, self.file.name.replace('ORIGINAL__', '') + '.log')
-        print(f'Trying to delete {_filepath}')
+        # print(f'Trying to delete {_filepath}')
         if os.path.isfile(_filepath) and not os.path.isdir(_filepath):
             os.remove(_filepath)
-            print(f"File {_filepath} deleted")
+            # print(f"File {_filepath} deleted")
 
         _filepath = os.path.join(MEDIA_ROOT, self.file.name.replace('ORIGINAL__', 'DEPRECATED__'))
-        print(f'Trying to delete {_filepath}')
+        # print(f'Trying to delete {_filepath}')
         if os.path.isfile(_filepath) and not os.path.isdir(_filepath):
             os.remove(_filepath)
-            print(f"File {_filepath} deleted")
+            # print(f"File {_filepath} deleted")
 
         if self.pk:
             super(self.__class__, self).delete(using=using, keep_parents=keep_parents)
@@ -189,7 +189,7 @@ class Notifications(models.Model):
         3: 'READ_CLICKED',
     }
 
-    message = models.CharField(max_length=1024, help_text='', null=False, blank=False)
+    message = models.CharField(max_length=4096, help_text='', null=False, blank=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.IntegerField(default=1, blank=False, null=False, choices=_STATUS_CHOICE)
     link = models.CharField(max_length=1024, help_text='', null=False, blank=False, default="#")
