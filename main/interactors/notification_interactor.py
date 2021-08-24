@@ -21,7 +21,13 @@ class SetNotificationInteractor(Interactor):
             notification.message = msg
             notification.type = type
 
+            print(len(msg))
+
             notification.save()
+
+            if link == "__self__":
+                notification.link = f'/notifications/view/{notification.pk}'
+                notification.save()
         except Exception as e:
             exception = e
         finally:
