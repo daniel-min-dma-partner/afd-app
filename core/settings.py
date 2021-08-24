@@ -238,3 +238,9 @@ SALESFORCE_INSTANCE_URLS = {
     'Sandbox': 'https://test.salesforce.com',
     'Production': 'https://login.salesforce.com',
 }
+
+
+try:
+    from core.local_settings import *
+except ImportError:
+    pass
