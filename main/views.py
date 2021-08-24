@@ -556,6 +556,8 @@ class DeprecateFieldsView(generic.FormView):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         df_files = []
+        ctx = None
+
         try:
             print(request.POST)
             if form.is_valid():
@@ -573,7 +575,6 @@ class DeprecateFieldsView(generic.FormView):
                     filemodel.user = request.user
                     filemodel.save()
                     df_files.append(filemodel)
-
                 # Calls interactor
                 ctx = FieldDeprecatorInteractor.call(df_files=df_files, objects=objects, fields=fields,
                                                      user=request.user, name=form.cleaned_data['name'],
@@ -583,7 +584,7 @@ class DeprecateFieldsView(generic.FormView):
                 if ctx.exception:
                     raise ctx.exception
 
-                message = "Deprecation finished successfully"
+                message = "Deprecation finished successfully. Check the latest notifications."
                 flash_type = messages.SUCCESS
                 _return = self.form_valid(form)
             else:
@@ -597,6 +598,20 @@ class DeprecateFieldsView(generic.FormView):
         finally:
             for fm in df_files:
                 fm.delete()
+
+            if ctx and ctx.not_deprecated_dfs:
+                ctx.not_deprecated_dfs.sort()
+                print('entra')
+                msg = f"The following dataflow(s) ({len(ctx.not_deprecated_dfs)}) didn't suffer any deprecation:<br/>" \
+                      f"<code>{'</code><br/><code>'.join(ctx.not_deprecated_dfs)}</code>."
+                _ = SetNotificationInteractor.call(data={"user": request.user,
+                                                         "message": msg,
+                                                         "status": 1,
+                                                         "link": "__self__",
+                                                         "type": "info"})
+
+                if _.exception:
+                    raise _.exception
 
         messages.add_message(request, flash_type, message)
         return _return

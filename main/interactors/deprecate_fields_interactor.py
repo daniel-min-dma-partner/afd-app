@@ -35,6 +35,7 @@ class FieldDeprecatorInteractor(Interactor):
 
         deprecation_model = None
         deprecation_models = []
+        not_deprecated_dfs = []
 
         try:
             df_file_models = self.context.df_files
@@ -109,6 +110,8 @@ class FieldDeprecatorInteractor(Interactor):
                                 deprecation_detail.meta = _field_md_original
                                 deprecation_detail.deprecation = deprecation_model
                                 deprecation_detail.save()
+                            else:
+                                not_deprecated_dfs.append(_original_df_name)
                     except Exception as e:
                         _error_notification = True
                         notif = Notifications()
@@ -129,3 +132,4 @@ class FieldDeprecatorInteractor(Interactor):
 
         self.context.exception = _exc
         self.context.deprecation_models = deprecation_models
+        self.context.not_deprecated_dfs = not_deprecated_dfs
