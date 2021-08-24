@@ -12,7 +12,10 @@ const build_toast = () => {
 
     // Boostrap Toast Construction - Bootstrap 4.6.0
     $('.toast').toast('show');
-    document.querySelector('time.timeago').setAttribute('datetime', new Date().toISOString());
+    let timeago = document.querySelector('time.timeago');
+    if (timeago !== null) {
+        document.querySelector('time.timeago').setAttribute('datetime', new Date().toISOString());
+    }
 
     // Closes the notification box when "x" is clicked
     $('.btn-close').click(function (evt) {

@@ -88,8 +88,18 @@ $("#id_env_selector").on('change', function() {
 });
 
 $('.btn-submit').on('click', (evt) => {
-    let envname = $('#id_env_selector').select2('data')[0].text,
-        dfname = $('#id_dataflow_selector').select2('data')[0].text;
-    submit_with_screencover($('button[type="submit"]'),  null, "Download Now?",
-           `Downloading ${dfname} from ${envname}.`);
+    let env_selector = $('#id_env_selector');
+
+    if (env_selector.val() !== null) {
+        let envname = env_selector.select2('data')[0].text,
+            dfname = $('#id_dataflow_selector').select2('data')[0],
+            progress_msg = "";
+
+        dfname = ![null, "", undefined].includes(dfname) ? dfname.text : dfname;
+        progress_msg = [null, "", undefined].includes(dfname) && $("#id_all")[0].checked ? `Downloading all dataflows from ${envname}.` :
+            `Downloading ${dfname} from ${envname}.`;
+        submit_with_screencover($('button[type="submit"]'), null, "Download Now?", progress_msg);
+    } else {
+        popup_notification("Warning", "Select at least one Salesforce Environment", 'warning');
+    }
 });
