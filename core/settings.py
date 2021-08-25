@@ -242,7 +242,7 @@ SALESFORCE_INSTANCE_URLS = {
 
 
 # Settings.
-environment = os.environ.get('environment', None)
+environment = os.environ.get('ENVIRONMENT', None)
 env_settings_filename = f"{environment}_settings"
 
 if environment and pathlib.Path.is_file(BASE_DIR / f"core/{env_settings_filename}.py"):
