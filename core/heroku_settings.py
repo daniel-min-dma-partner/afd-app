@@ -10,15 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-import os
-from pathlib import Path
-
 import dj_database_url
 import django_heroku
-import environ
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -31,14 +24,12 @@ INSTALLED_APPS = [
     # Extra apps
     'apscheduler',
     'bootstrap4',
-    # 'channels',
     'django_extensions',
     'libs.interactor.interactor',
     'rest_framework',
     'whitenoise.runserver_nostatic',
 
     # Created apps
-    # 'chat',
     'libs',
     'libs.diff2htmlcompare',
     'libs.tcrm_automation',
@@ -47,6 +38,11 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+    # Whitenoise for Heroku
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
+    # Rest of the default middlewares
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -57,9 +53,6 @@ MIDDLEWARE = [
     # Global Login required
     'global_login_required.GlobalLoginRequiredMiddleware',
 
-    # Whitenoise for Heroku
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-
     # Custom Middlewares
     'main.middleware.SfdcCRUDMiddleware',
     'main.middleware.TimezoneMiddleware',
@@ -67,11 +60,6 @@ MIDDLEWARE = [
 
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
-
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'tcrm_db',
