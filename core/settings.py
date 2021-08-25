@@ -241,19 +241,20 @@ SALESFORCE_INSTANCE_URLS = {
 }
 
 
-try:
-    from core.local_settings import *
-except ImportError:
-    environment = os.environ.get('environment', None)
-    env_settings_filename = f"{environment}_settings"
+# Settings.
+environment = os.environ.get('environment', None)
+env_settings_filename = f"{environment}_settings"
 
-    if environment and pathlib.Path.is_file(BASE_DIR / f"core/{env_settings_filename}.py"):
-        print(f">>> Importing {env_settings_filename}...")
+if environment and pathlib.Path.is_file(BASE_DIR / f"core/{env_settings_filename}.py"):
+    print(f">>> Importing {env_settings_filename}...")
 
-        if env_settings_filename == "heroku_settings":
-            from core.heroku_settings import *
-        elif env_settings_filename == f"docker_settings":
-            from core.docker_settings import *
-
-
+    if env_settings_filename == "heroku_settings":
+        from core.heroku_settings import *
+    elif env_settings_filename == f"docker_settings":
+        from core.docker_settings import *
+else:
+    try:
+        from core.local_settings import *
+    except ImportError:
+        pass
 
