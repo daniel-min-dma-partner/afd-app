@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     # Extra apps
     'apscheduler',
     'bootstrap4',
+    'django_apscheduler',
     'django_extensions',
     'libs.interactor.interactor',
     'rest_framework',

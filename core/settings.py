@@ -10,11 +10,19 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import logging
 import os
 import pathlib
 from pathlib import Path
 
 import environ
+
+from .apscheduler_config import scheduler_configure
+
+logging.basicConfig()
+logging.getLogger('apscheduler').setLevel(logging.DEBUG)
+
+sched = scheduler_configure()
 
 env = environ.Env()
 
@@ -46,6 +54,7 @@ INSTALLED_APPS = [
     'apscheduler',
     'bootstrap4',
     # 'channels',
+    'django_apscheduler',
     'django_extensions',
     'libs.interactor.interactor',
     'rest_framework',

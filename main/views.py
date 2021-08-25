@@ -32,6 +32,10 @@ from .interactors.upload_dataflow_interactor import UploadDataflowInteractor, Up
 from .interactors.wdf_manager_interactor import *
 from .interactors.response_interactor import FileResponseInteractor
 from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, DeprecationDetails
+from core.settings import sched
+from main.interactors.jobs_interactor import JobsInteractor
+
+sched.start()
 
 
 class Home(generic.TemplateView):
@@ -418,6 +422,12 @@ class DownloadDataflowView(generic.FormView):
                 if not dataflows:
                     raise KeyError("No dataflow selected")
 
+                _data = {"dataflow": dataflows, "model": env, "user": request.user}
+                ctx = JobsInteractor.call(data=_data, scheduler=sched)
+                messages.success(request, "Job started? Maybe?")
+
+                return redirect("main:download-dataflow")
+
                 download_ctx = DownloadDataflowInteractorNoAnt.call(dataflow=dataflows, model=env, user=request.user)
                 if download_ctx.exception:
                     raise download_ctx.exception
@@ -428,6 +438,7 @@ class DownloadDataflowView(generic.FormView):
 
                 return response_ctx.response
             except Exception as e:
+                raise e
                 messages.error(request, mark_safe(e))
         else:
             print(form.errors.as_data)
