@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'libs.interactor.interactor',
     'rest_framework',
+    'whitenoise.runserver_nostatic',
 
     # Created apps
     # 'chat',
@@ -62,6 +63,11 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+    # Whitenoise for Heroku
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
+    # Rest of the default middlewares
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -71,7 +77,6 @@ MIDDLEWARE = [
 
     # Global Login required
     'global_login_required.GlobalLoginRequiredMiddleware',
-
 
     # Custom Middlewares
     'main.middleware.SfdcCRUDMiddleware',
@@ -329,5 +334,5 @@ prod_db = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
 
 # Static file handler for Heroku
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
