@@ -160,12 +160,7 @@ class DataflowListInteractor(Interactor):
     def _build_select2_items(self, dataflows: list):
         ids = {}
         select2_items = {
-            "results": [
-                {
-                    "id": "",
-                    "text": "Select one",
-                },
-            ],
+            "results": [],
         }
 
         for dataflow in dataflows:
