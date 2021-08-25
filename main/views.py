@@ -429,7 +429,6 @@ class DownloadDataflowView(generic.FormView):
                 return response_ctx.response
             except Exception as e:
                 messages.error(request, mark_safe(e))
-                raise e
         else:
             print(form.errors.as_data)
             messages.error(request, form.errors.as_data)
