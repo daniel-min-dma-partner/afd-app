@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import os
+import pathlib
 from pathlib import Path
 
 import environ
@@ -243,4 +244,13 @@ SALESFORCE_INSTANCE_URLS = {
 try:
     from core.local_settings import *
 except ImportError:
-    pass
+    environment_settings = os.environ.get('environment_settings', None)
+
+    if environment_settings and pathlib.Path.is_file(BASE_DIR / f"core/heroku_settings"):
+        if environment_settings == "heroku_settings":
+            from core.heroku_settings import *
+        elif environment_settings == "docker_settings":
+            from core.docker_settings import *
+
+
+
