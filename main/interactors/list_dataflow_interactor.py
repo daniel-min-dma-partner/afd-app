@@ -5,6 +5,8 @@ from contextlib import contextmanager
 from pathlib import Path
 from shutil import rmtree
 
+import requests
+
 from core.settings import BASE_DIR
 from libs.amt_helpers import generate_build_file
 from libs.interactor.interactor import Interactor
@@ -82,7 +84,7 @@ class DataflowListInteractor(Interactor):
 
             try:
                 generate_build_file(self.context.model, user=self.context.user)
-                payload, df_ids_api = self._list_metadata_df()
+                payload, df_ids_api = self._list_wave_dataflows()
 
             except Exception as e:
                 status = 501
@@ -100,6 +102,84 @@ class DataflowListInteractor(Interactor):
             del self.context.model
             del self.context.cache_dir
             del self.context.cache_filepath
+
+    def _list_wave_dataflows(self):
+        self.context.cache_dir = f'{BASE_DIR}/ant/{self.context.user.username}/{_SELECT2_DATA_CACHE_FOLDER}/{self.context.model.name}'
+        self.context.cache_filepath = f'{self.context.cache_dir}/{_SELECT2_DATA_CACHE_FN}'
+        is_new_file = False
+        load_from_cache = True
+        select2_items = {
+            "results": [
+                {
+                    "id": "",
+                    "text": "Select one",
+                },
+            ],
+        }
+        ids = {}
+        refresh_cache = self.context.refresh_cache and self.context.refresh_cache == 'true'
+
+        if not os.path.isfile(self.context.cache_filepath):
+            Path(self.context.cache_dir).mkdir(parents=True, exist_ok=True)
+            open(self.context.cache_filepath, 'w').close()
+            is_new_file = True
+            load_from_cache = False
+
+        diff = (time.time() - os.path.getmtime(self.context.cache_filepath)) / 3600  # in hours
+
+        if refresh_cache or is_new_file or (diff > 15):
+            env = self.context.model
+            resource = '/services/data/v51.0/wave/dataflows/'
+            url = env.instance_url + resource
+            url = url.strip()
+            header = {'Authorization': "Bearer " + env.oauth_access_token, 'Content-Type': 'application/json'}
+
+            response = requests.get(url, headers=header)
+
+            if response.status_code == 200:
+                select2_items, ids = self._build_select2_items(response.json()['dataflows'])
+                self._update_select2_cache(select2_items, ids)
+            else:
+                raise Exception(response.text)
+        elif load_from_cache:
+            with open(self.context.cache_filepath, 'r') as f:
+                cache = json.load(fp=f)
+                select2_items = cache['select2_items']
+                ids = cache['ids']
+
+        search = self.context.search
+        if search and isinstance(search, str):
+            select2_items = {"results": [
+                {"id": dataflow['id'], "text": dataflow['text']} for dataflow in select2_items['results']
+                if search.strip().lower() in dataflow['text'].strip().lower() or
+                   search.replace(' ', '_').strip().lower() in dataflow['text'].strip().lower()
+            ]}
+
+        return select2_items, ids
+
+    def _build_select2_items(self, dataflows: list):
+        ids = {}
+        select2_items = {
+            "results": [
+                {
+                    "id": "",
+                    "text": "Select one",
+                },
+            ],
+        }
+
+        for dataflow in dataflows:
+            _item = {"id": dataflow['name'], "text": dataflow['label']}
+            select2_items['results'].append(_item)
+            ids[dataflow['name']] = dataflow['id']
+
+        select2_items['results'] = sorted(select2_items['results'], key=lambda k: k['text'])
+
+        return select2_items, ids
+
+    def _update_select2_cache(self, select2_items, ids):
+        with open(self.context.cache_filepath, 'w') as file:
+            json.dump({"select2_items": select2_items, "ids": ids}, file)
 
     def _list_metadata_df(self):
         self.context.cache_dir = f'{BASE_DIR}/ant/{self.context.user.username}/{_SELECT2_DATA_CACHE_FOLDER}/{self.context.model.name}'
