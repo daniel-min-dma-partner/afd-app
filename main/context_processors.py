@@ -4,6 +4,7 @@ from main.models import Notifications, UploadNotifications as UpNotifs
 def show_notifications(request):
     lst = Notifications.objects.filter(user_id=request.user.pk).order_by('status', '-created_at')
     up_notifs = UpNotifs.objects.filter(user_id=request.user.pk).order_by('status', '-created_at')
+    up_notif_ids = [n.id for n in up_notifs]
 
     ### Information ###
     # If you use `user=request.user` and you are not logged in, then it will throws an exception.
@@ -11,6 +12,6 @@ def show_notifications(request):
     # Use `user_id=request.user.pk`
 
     return {
-        'notifications': lst.all(),
+        'notifications': [n for n in lst.all() if n.id not in up_notif_ids],
         'upload_notifications': up_notifs.all()
     }
