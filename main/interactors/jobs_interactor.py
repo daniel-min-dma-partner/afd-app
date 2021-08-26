@@ -1,13 +1,14 @@
 from main.interactors.download_dataflow_interactor import DownloadDataflowInteractorNoAnt
 import logging
 import os
+from typing import Union
 
 from core.apscheduler_config import Scheduler
 from libs.interactor.interactor import Interactor
 from main.interactors.download_dataflow_interactor import DownloadDataflowInteractorNoAnt
 from main.interactors.file_interactor import FileCompressorInteractor
 from main.interactors.notification_interactor import SetNotificationInteractor
-from main.models import Notifications
+from main.models import Notifications, UploadNotifications
 
 logger = logging.getLogger("datafllow-download-job-logger")
 logger.setLevel(logging.INFO)
@@ -17,6 +18,7 @@ def df_down_job(data: dict = None):
     dataflows = data['dataflows']
     model = data['model']
     user = data['user']
+    klass = Notifications
 
     logger.info(">>>> Downloading Dataflow json definitions.")
     download_ctx = DownloadDataflowInteractorNoAnt.call(dataflow=dataflows, model=model, user=user)
@@ -47,14 +49,17 @@ def df_down_job(data: dict = None):
         else:
             try:
                 logger.info(">>>> Creating notifications for zip file.")
-                msg = os.path.isfile(zipfile_path)
+                msg = "The zip file <code></code> has been generated. Click to download."
                 notif_data = {
                     'user': user,
                     'message': msg,
                     'status': Notifications.get_initial_status(),
-                    'link': "__self__",
-                    'type': "success"
+                    'link': "/dataflow-manager/download-zip/{{pk}}",
+                    'type': "success",
+                    'zipfile_path': zipfile_path,
+                    'envname': model.name
                 }
+                klass = UploadNotifications
             except Exception as e:
                 print("internal", e)
                 notif_data = {
@@ -64,8 +69,9 @@ def df_down_job(data: dict = None):
                     'link': "__self__",
                     'type': "error"
                 }
+                klass = Notifications
 
-    ctx = SetNotificationInteractor.call(data=notif_data)
+    ctx = SetNotificationInteractor.call(data=notif_data, klass=klass)
     print("external", ctx.exception)
 
 
