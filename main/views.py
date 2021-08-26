@@ -31,7 +31,8 @@ from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.upload_dataflow_interactor import UploadDataflowInteractor, UploadDataflowInteractorNoAnt
 from .interactors.wdf_manager_interactor import *
 from .interactors.response_interactor import FileResponseInteractor, ZipFileResponseInteractor
-from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, DeprecationDetails
+from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, \
+    DeprecationDetails, UploadNotifications
 from core.settings import sched
 from main.interactors.jobs_interactor import JobsInteractor
 
@@ -439,7 +440,6 @@ class DownloadDataflowView(generic.FormView):
                 # 
                 # return response_ctx.response
             except Exception as e:
-                raise e
                 messages.error(request, mark_safe(e))
         else:
             print(form.errors.as_data)
@@ -709,7 +709,11 @@ class NotificationDetailsView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        notification = get_object_or_404(Notifications, pk=kwargs['pk'])
+        notification = UploadNotifications.objects.filter(pk=kwargs['pk'])
+        if notification.exists():
+            notification = notification.first()
+        else:
+            notification = get_object_or_404(Notifications, pk=kwargs['pk'])
         context['notification'] = notification
         # notification.delete()
         return context
@@ -922,3 +926,24 @@ def ajax_slack_get_targets(request):
 
     print(payload, error, status, "good")
     return JsonResponse({"payload": payload, "error": error}, status=status)
+
+
+def download_df_zip_view(request, pk=None):
+    notif = UploadNotifications.objects.filter(pk=pk)
+
+    if notif.exists():
+        notif = notif.first()
+        zipfile_path = notif.zipfile_path
+        envname = notif.envname
+        print(zipfile_path, envname)
+        ctx = ZipFileResponseInteractor.call(zipfile_path=zipfile_path, envname=envname)
+
+        if ctx.exception:
+            messages.error(request, mark_safe(ctx.exception))
+            return redirect('main:home')
+        else:
+            notif.delete()
+            return ctx.response
+    else:
+        messages.info("The .zip file doesn't exist anymore.")
+        return redirect('main:home')

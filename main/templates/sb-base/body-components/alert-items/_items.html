@@ -3,6 +3,52 @@
 
 <!-- Nav Item - Alerts -->
 <li class="nav-item dropdown no-arrow mx-1">
+    <a class="nav-link dropdown-toggle" href="#" id="uploadDropdown" role="button"
+       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-upload fa-fw"></i>
+        <!-- Counter - Alerts -->
+        {% if upload_notifications|only_unreads_up|length %}
+        <span class="badge badge-danger badge-counter">{{ upload_notifications|only_unreads_up|length }}</span>
+        {% endif %}
+    </a>
+    <!-- Dropdown - Alerts -->
+    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+         aria-labelledby="uploadDropdown">
+        <h6 class="dropdown-header">
+            Upload Notifications
+        </h6>
+
+        <!-- Alert items -->
+        {% autoescape on %}
+        <div class="list-group">
+            {% for notification in upload_notifications %}
+            <a class="dropdown-item d-flex align-items-center{% if notification.status != 3 %} bg-not-read{% endif %}"
+               href="{% url 'main:notification-clicked' pk=notification.pk %}">
+                <div class="mr-3">
+                    <div class="icon-circle bg-{{ notification.type|parse_to_color }}">
+                        <i class="fas fa-file-alt text-white"></i>
+                    </div>
+                </div>
+                <div>
+                    <div class="small text-gray-500">{{ notification.created_at }}</div>
+                    <span class="">
+                                    <div class="text-truncate">{{ notification.message|safe }}</div>
+                                </span>
+                    <input type="hidden" value="{{ notification.pk }}">
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% endautoescape %}
+
+        <!-- Show all alerts -->
+        <a class="dropdown-item text-center small text-gray-500" href="{% url 'main:mark-all' %}">Mark all as
+            read</a>
+    </div>
+</li>
+
+<!-- Nav Item - Alerts -->
+<li class="nav-item dropdown no-arrow mx-1">
     <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-bell fa-fw"></i>
