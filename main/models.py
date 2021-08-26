@@ -198,7 +198,7 @@ class Notifications(models.Model):
                             default='info')
 
     def __init__(self, *args, **kwargs):
-        super(self.__class__, self).__init__(*args, **kwargs)
+        super(Notifications, self).__init__(*args, **kwargs)
         self.__important_fields = ['status']
         for field in self.__important_fields:
             setattr(self, '__original_%s' % field, getattr(self, field))
@@ -248,3 +248,11 @@ class DeprecationDetails(models.Model):
     meta = CompressedJSONField()
     deprecation = models.ForeignKey(DataflowDeprecation, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class UploadNotifications(Notifications):
+    zipfile_path = models.CharField(max_length=2048, help_text='', null=False, blank=False)
+    envname = models.CharField(max_length=128, help_text='', null=False, blank=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
