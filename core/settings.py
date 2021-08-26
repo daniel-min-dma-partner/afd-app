@@ -266,3 +266,8 @@ else:
     except ImportError:
         pass
 
+# Settings status
+print(env_settings_filename)
+print(DATABASES)
+print(MIDDLEWARE)
+print(INSTALLED_APPS)
