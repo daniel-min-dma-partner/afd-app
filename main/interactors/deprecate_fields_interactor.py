@@ -98,7 +98,7 @@ class FieldDeprecatorInteractor(Interactor):
                                     deprecation_model = DataflowDeprecation()
                                     deprecation_model.user = user
                                     deprecation_model.name = name
-                                    deprecation_model.org = org
+                                    deprecation_model.salesforce_org = org
                                     deprecation_model.case_url = case_url
                                     deprecation_model.save()
                                     deprecation_model.refresh_from_db()
