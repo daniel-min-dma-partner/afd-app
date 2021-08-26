@@ -28,3 +28,18 @@ class FileResponseInteractor(Interactor):
             self.context.response = response
             self.context.exception = _exception
 
+
+class ZipFileResponseInteractor(Interactor):
+    def run(self):
+        _exception = None
+
+        try:
+            zipfile = open(self.context.zipfile_path, 'r')
+            response = HttpResponse(zipfile, content_type='application/zip')
+            response['Content-Disposition'] = f'attachment; filename={self.context.envname} dataflows.zip'
+        except Exception as e:
+            _exception = e
+            response = None
+        finally:
+            self.context.response = response
+            self.context.exception = _exception
