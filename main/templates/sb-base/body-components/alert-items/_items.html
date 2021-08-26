@@ -5,10 +5,10 @@
 <li class="nav-item dropdown no-arrow mx-1">
     <a class="nav-link dropdown-toggle" href="#" id="uploadDropdown" role="button"
        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-upload fa-fw"></i>
+        <i class="fas fa-download fa-fw"></i>
         <!-- Counter - Alerts -->
         {% if upload_notifications|only_unreads_up|length %}
-        <span class="badge badge-danger badge-counter">{{ upload_notifications|only_unreads_up|length }}</span>
+            <span class="badge badge-success badge-counter">{{ upload_notifications|only_unreads_up|length }}</span>
         {% endif %}
     </a>
     <!-- Dropdown - Alerts -->
@@ -77,9 +77,7 @@
                 </div>
                 <div>
                     <div class="small text-gray-500">{{ notification.created_at }}</div>
-                    <span class="">
-                                    <div class="text-truncate">{{ notification.message|safe }}</div>
-                                </span>
+                    <span class=""><div class="text-truncate">{{ notification.message|safe }}</div></span>
                     <input type="hidden" value="{{ notification.pk }}">
                 </div>
             </a>
