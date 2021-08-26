@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import json
 import logging
 import os
 import pathlib
@@ -268,6 +268,6 @@ else:
 
 # Settings status
 print(env_settings_filename)
-print(DATABASES)
-print(MIDDLEWARE)
-print(INSTALLED_APPS)
+print(json.dumps(DATABASES, indent=2))
+print(json.dumps(MIDDLEWARE, indent=2))
+print(json.dumps(INSTALLED_APPS, indent=2))
