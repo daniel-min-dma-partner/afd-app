@@ -69,12 +69,11 @@
                         </div>
 
                         <div class="form-row float-right">
-                            <button type="submit" class="btn btn-success btn-icon-split">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-check"></i>
-                            </span>
+                            <button type="submit" hidden></button>
+                            <a href="#" class="btn btn-success btn-icon-split" id="proceed-deprecation">
+                                <span class="icon text-white-50"><i class="fas fa-check"></i></span>
                                 <span class="text">Proceed</span>
-                            </button>
+                            </a>
                         </div>
                     </form>
                 </div>
@@ -82,3 +81,7 @@
         </div>
     </div>
 {% endblock page-content %}
+
+{% block extra-scripts %}
+    <script src="{% static 'site/js/dataflow-deprecate.js' %}" type="module"></script>
+{% endblock extra-scripts %}
