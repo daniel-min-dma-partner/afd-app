@@ -76,6 +76,7 @@ python-engineio==3.14.2
 python-socketio==4.6.1
 pytz==2020.5
 PyYAML==5.4.1
+PyMongo==3.12.0
 requests==2.24.0
 service-identity==21.1.0
 simple-salesforce==1.10.1
@@ -84,6 +85,7 @@ smmap==3.0.5
 soupsieve==2.2.1
 sqlparse==0.4.1
 stevedore==3.3.0
+SQLAlchemy==1.4.23
 toml==0.10.2
 tqdm==4.57.0
 Twisted==21.2.0
