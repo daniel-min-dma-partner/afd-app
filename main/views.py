@@ -1,12 +1,10 @@
 import json as js
-from urllib import parse
-import zipfile
 
 import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as do_login, logout as do_logout
 from django.core.files.base import ContentFile
-from django.http import JsonResponse, HttpResponse, FileResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.safestring import mark_safe
 from django.views import View, generic
@@ -15,26 +13,25 @@ from rest_framework import authentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from core.settings import sched
 from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
 from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
     SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm, \
     DeprecateFieldsForm, SecpredToSaqlForm
+from main.interactors.jobs_interactor import JobsInteractor
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser
 from .interactors.deprecate_fields_interactor import FieldDeprecatorInteractor
-from .interactors.download_dataflow_interactor import DownloadDataflowInteractor, DownloadDataflowInteractorNoAnt
 from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.notification_interactor import SetNotificationInteractor
+from .interactors.response_interactor import ZipFileResponseInteractor, JsonFileResponseInteractor
 from .interactors.sfdc_connection_interactor import OAuthLoginInteractor, SfdcConnectWithConnectedApp
 from .interactors.slack_targetlist_interactor import SlackTarListInteractor
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
-from .interactors.upload_dataflow_interactor import UploadDataflowInteractor, UploadDataflowInteractorNoAnt
+from .interactors.upload_dataflow_interactor import UploadDataflowInteractorNoAnt
 from .interactors.wdf_manager_interactor import *
-from .interactors.response_interactor import FileResponseInteractor, ZipFileResponseInteractor
 from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, \
     DeprecationDetails, UploadNotifications
-from core.settings import sched
-from main.interactors.jobs_interactor import JobsInteractor
 
 sched.start()
 
@@ -173,15 +170,16 @@ class TreeRemover(generic.FormView):
                     ctx = TreeRemoverInteractor.call(dataflow=_dataflow, replacers=_replacers, registers=registers,
                                                      name=name, request=request)
                 else:
+                    name = name or f"[extracted] {dataflow[0].name}"
                     ctx = TreeExtractorInteractor.call(dataflow=_dataflow, registers=registers, output_filename=name)
 
-                print(form.cleaned_data)
-                print(request.POST)
-                message = ctx.output.replace('\\', '')
-                message = mark_safe(f"File generated at <code>{message}</code>")
-                thype = messages.INFO
-            except RuntimeError as rt_e:
-                print(rt_e)
+                response_ctx = JsonFileResponseInteractor.call(filepath=ctx.output)
+
+                if response_ctx.exception:
+                    raise response_ctx.exception
+
+                return response_ctx.response
+            except Exception as rt_e:
                 message = rt_e
                 thype = messages.ERROR
 
