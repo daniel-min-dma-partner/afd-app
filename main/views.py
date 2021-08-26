@@ -30,7 +30,7 @@ from .interactors.slack_targetlist_interactor import SlackTarListInteractor
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.upload_dataflow_interactor import UploadDataflowInteractor, UploadDataflowInteractorNoAnt
 from .interactors.wdf_manager_interactor import *
-from .interactors.response_interactor import FileResponseInteractor
+from .interactors.response_interactor import FileResponseInteractor, ZipFileResponseInteractor
 from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, DeprecationDetails
 from core.settings import sched
 from main.interactors.jobs_interactor import JobsInteractor
@@ -422,21 +422,22 @@ class DownloadDataflowView(generic.FormView):
                 if not dataflows:
                     raise KeyError("No dataflow selected")
 
-                _data = {"dataflow": dataflows, "model": env, "user": request.user}
+                _data = {"dataflows": dataflows, "model": env, "user": request.user}
                 ctx = JobsInteractor.call(data=_data, scheduler=sched)
-                messages.success(request, "Job started? Maybe?")
+                messages.success(request, mark_safe(f"Downloadig dataflow{'s' if len(dataflows) > 0 else ''} from "
+                                          f"<code>{env.name}</code> started. Check the notifications later."))
 
                 return redirect("main:download-dataflow")
 
-                download_ctx = DownloadDataflowInteractorNoAnt.call(dataflow=dataflows, model=env, user=request.user)
-                if download_ctx.exception:
-                    raise download_ctx.exception
-
-                response_ctx = FileResponseInteractor.call(zipfile_path=download_ctx.output_filepath, env=env)
-                if response_ctx.exception:
-                    raise response_ctx.exception
-
-                return response_ctx.response
+                # download_ctx = DownloadDataflowInteractorNoAnt.call(dataflow=dataflows, model=env, user=request.user)
+                # if download_ctx.exception:
+                #     raise download_ctx.exception
+                # 
+                # response_ctx = FileResponseInteractor.call(zipfile_path=download_ctx.output_filepath, env=env)
+                # if response_ctx.exception:
+                #     raise response_ctx.exception
+                # 
+                # return response_ctx.response
             except Exception as e:
                 raise e
                 messages.error(request, mark_safe(e))
