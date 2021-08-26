@@ -1,9 +1,10 @@
 import os.path
 
 from django import template
+from typing import Union
 from django.template.defaultfilters import stringfilter
 
-from main.models import Notifications
+from main.models import Notifications, UploadNotifications
 
 register = template.Library()
 
@@ -15,9 +16,18 @@ def remove_prefix(value):
 
 
 @register.filter
+def only_unreads_up(notifications: list):
+    return [notification for notification in notifications
+            if isinstance(notification, UploadNotifications)
+            and notification.status != 3]
+
+
+@register.filter
 def only_unreads(notifications: list):
-    return [notification for notification in notifications if
-            isinstance(notification, Notifications) and notification.status != 3]
+    return [notification for notification in notifications
+            if isinstance(notification, Notifications)
+            and not UploadNotifications.objects.filter(notifications_ptr_id=notification.pk).exists()
+            and notification.status != 3]
 
 
 @register.filter
@@ -31,3 +41,9 @@ def parse_to_color(string: str):
     return 'danger' if string in ['error', 'err', 'errors'] else (
         'success' if string in ['ok', 'good', ] else string
     )
+
+
+@register.filter
+def is_upload_notif(notification: Union[Notifications, UploadNotifications]):
+    print('checking')
+    return isinstance(notification, UploadNotifications)
