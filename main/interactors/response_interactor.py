@@ -34,7 +34,7 @@ class ZipFileResponseInteractor(Interactor):
         _exception = None
 
         try:
-            zipfile = open(self.context.zipfile_path, 'r')
+            zipfile = open(self.context.zipfile_path, 'rb')
             response = HttpResponse(zipfile, content_type='application/zip')
             response['Content-Disposition'] = f'attachment; filename={self.context.envname} dataflows.zip'
         except Exception as e:
