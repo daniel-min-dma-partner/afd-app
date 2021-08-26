@@ -18,6 +18,7 @@ def df_down_job(data: dict = None):
     model = data['model']
     user = data['user']
 
+    logger.info(">>>> Downloading Dataflow json definitions.")
     download_ctx = DownloadDataflowInteractorNoAnt.call(dataflow=dataflows, model=model, user=user)
 
     if download_ctx.exception:
@@ -29,6 +30,7 @@ def df_down_job(data: dict = None):
             'type': "error"
         }
     else:
+        logger.info(">>>> Compressing all json files into a zip file.")
         path = download_ctx.output_filepath
         files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
         zipfile_path = os.path.join(path, f"{model.name}--dataflows.zip")
@@ -43,16 +45,28 @@ def df_down_job(data: dict = None):
                 'type': "error"
             }
         else:
-            msg = os.path.isfile(zipfile_path)
-            notif_data = {
-                'user': user,
-                'message': msg,
-                'status':   Notifications.get_initial_status(),
-                'link': "__self__",
-                'type': "success"
-            }
+            try:
+                logger.info(">>>> Creating notifications for zip file.")
+                msg = os.path.isfile(zipfile_path)
+                notif_data = {
+                    'user': user,
+                    'message': msg,
+                    'status': Notifications.get_initial_status(),
+                    'link': "__self__",
+                    'type': "success"
+                }
+            except Exception as e:
+                print("internal", e)
+                notif_data = {
+                    'user': user,
+                    'message': str(e),
+                    'status': Notifications.get_initial_status(),
+                    'link': "__self__",
+                    'type': "error"
+                }
 
-    SetNotificationInteractor.call(data=notif_data)
+    ctx = SetNotificationInteractor.call(data=notif_data)
+    print("external", ctx.exception)
 
 
 class JobsInteractor(Interactor):

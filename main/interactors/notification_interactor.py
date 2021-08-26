@@ -6,6 +6,7 @@ class SetNotificationInteractor(Interactor):
     def run(self):
         data = self.context.data
         exception = None
+        print("data from Notif Interactor", data)
 
         try:
             user = data['user']
@@ -20,8 +21,6 @@ class SetNotificationInteractor(Interactor):
             notification.user = user
             notification.message = msg
             notification.type = type
-
-            print(len(msg))
 
             notification.save()
 
