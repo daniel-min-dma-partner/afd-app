@@ -49,7 +49,7 @@ def df_down_job(data: dict = None):
         else:
             try:
                 logger.info(">>>> Creating notifications for zip file.")
-                msg = "The zip file <code></code> has been generated. Click to download."
+                msg = f"The zip file for the {'Dataflow <code>' + dataflows[0] + '</code>' if len(dataflows) == 1 else str(len(dataflows)) + ' dataflows'} from <code>{model.name}</code> is ready for download."
                 notif_data = {
                     'user': user,
                     'message': msg,
