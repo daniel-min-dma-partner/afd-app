@@ -1,4 +1,5 @@
 import json as js
+import os
 
 import requests
 from django.contrib import messages
@@ -928,20 +929,29 @@ def ajax_slack_get_targets(request):
 
 def download_df_zip_view(request, pk=None):
     notif = UploadNotifications.objects.filter(pk=pk)
+    message = ""
+    thype = messages.ERROR
 
     if notif.exists():
         notif = notif.first()
         zipfile_path = notif.zipfile_path
-        envname = notif.envname
-        print(zipfile_path, envname)
-        ctx = ZipFileResponseInteractor.call(zipfile_path=zipfile_path, envname=envname)
 
-        if ctx.exception:
-            messages.error(request, mark_safe(ctx.exception))
-            return redirect('main:home')
-        else:
+        if not os.path.isfile(zipfile_path):
             notif.delete()
-            return ctx.response
+            message = "The file doesn't exist anymore. Try to re-download it."
+        else:
+            envname = notif.envname
+            print(zipfile_path, envname)
+            ctx = ZipFileResponseInteractor.call(zipfile_path=zipfile_path, envname=envname)
+
+            if ctx.exception:
+                message = mark_safe(ctx.exception)
+            else:
+                notif.delete()
+                return ctx.response
     else:
-        messages.info("The .zip file doesn't exist anymore.")
-        return redirect('main:home')
+        message = "The .zip file doesn't exist anymore."
+
+    messages.add_message(request, thype, message)
+    return redirect('main:home')
+
