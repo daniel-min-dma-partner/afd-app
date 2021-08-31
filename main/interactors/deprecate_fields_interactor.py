@@ -100,6 +100,8 @@ class FieldDeprecatorInteractor(Interactor):
                                     deprecation_model.name = name
                                     deprecation_model.salesforce_org = org
                                     deprecation_model.case_url = case_url
+                                    deprecation_model.sobjects = "|".join(objects)
+                                    deprecation_model.fields = "|".join(fields)
                                     deprecation_model.save()
                                     deprecation_model.refresh_from_db()
 

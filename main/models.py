@@ -236,6 +236,8 @@ class Notifications(models.Model):
 class DataflowDeprecation(models.Model):
     name = models.CharField(max_length=1024, help_text='', null=False, blank=False)
     salesforce_org = models.CharField(max_length=1024, help_text='', null=False, blank=False)
+    sobjects = models.TextField(default="<< sfdc objs api >>")
+    fields = models.TextField(default="<< sfdc obj fields api")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     case_url = models.CharField(max_length=1024, help_text='', null=True, blank=True, default="#")
     created_at = models.DateTimeField(auto_now_add=True)

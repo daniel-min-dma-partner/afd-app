@@ -576,7 +576,7 @@ class DeprecateFieldsView(generic.FormView):
                           field.rstrip() not in [None, ""]]
 
                 # Prepare objects: Each row must specify only one Object.
-                objects = [obj.rstrip() for obj in request.POST.get('objects').split('\n') if
+                objects = [obj.rstrip() for obj in request.POST.get('sobjects').split('\n') if
                            obj.rstrip() not in [None, ""]]
 
                 # Prepare dataflow contents
