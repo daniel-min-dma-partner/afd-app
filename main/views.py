@@ -535,6 +535,7 @@ class CompareDataflows(generic.FormView):
                 if _method == 'd2h':
                     show_in_browser(original=files_model.file1.path, compared=files_model.file2.path)
                     files_model.delete()
+                    return render(request, 'json_diff_output.html')
                 elif _method == 'jdd':
                     with files_model.file1.open('r') as f, files_model.file2.open('r') as g:
                         script = json.load(f)
