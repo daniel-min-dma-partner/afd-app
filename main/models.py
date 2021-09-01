@@ -244,12 +244,50 @@ class DataflowDeprecation(models.Model):
 
 
 class DeprecationDetails(models.Model):
+    _STATUS_CHOICES = (
+        (0, 'no-deprecation'),
+        (1, "success"),
+        (2, "info"),
+        (3, "warning"),
+        (4, "danger"),
+    )
+
+    ERROR = 4
+    WARNING = 3
+    INFO = 2
+    SUCCESS = 1
+    NO_DEPRECATION = 0
+
+    _STATUS_MAP = {
+        0: "NO DEPRECATION",
+        1: "DEPRECATION SUCCEEDED",
+        4: "ERROR"
+    }
+
+    _STATUS_BOOSTRAP_COLOR = {
+        0: 'info',
+        1: 'success',
+        2: 'info',
+        3: 'warning',
+        4: 'danger'
+    }
+
     file_name = models.CharField(max_length=1024, help_text='', null=False, blank=False)
     original_dataflow = CompressedJSONField()
     deprecated_dataflow = CompressedJSONField()
     meta = CompressedJSONField()
+    status = models.IntegerField(default=NO_DEPRECATION, blank=False, null=False, choices=_STATUS_CHOICES)
+    message = models.CharField(max_length=4096, help_text='', null=True, blank=True)
     deprecation = models.ForeignKey(DataflowDeprecation, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def get_status_desc(self):
+        if self.status in self._STATUS_MAP.keys():
+            return self._STATUS_MAP[self.status]
+        return self.status
+
+    def get_status_bg_color(self):
+        return self._STATUS_BOOSTRAP_COLOR[self.status]
 
 
 class UploadNotifications(Notifications):
