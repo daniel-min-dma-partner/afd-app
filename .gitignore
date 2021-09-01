@@ -19,4 +19,5 @@ staticfiles/*
 ant/apache-ant*
 core/local_settings.py
 data/*
+main/templates/json_diff_output.html
 *.sqlite
