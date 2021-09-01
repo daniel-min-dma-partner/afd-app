@@ -7,31 +7,31 @@
 {% block page-header %}Tableau CRM Dataflows / Deprecation{% endblock page-header %}
 
 {% block header-scripts %}
-<link href="{% static 'site/css/deprecation-list.css' %}" rel="stylesheet" type="text/css">
-<script>
-    let show_diff_url = "{% url 'main:compare-deprecations' %}";
-    let remove_deprec_url = "{% url 'main:remove-deprecations' %}";
-</script>
+    <link href="{% static 'site/css/deprecation-list.css' %}" rel="stylesheet" type="text/css">
+    <script>
+        let show_diff_url = "{% url 'main:compare-deprecations' %}";
+        let remove_deprec_url = "{% url 'main:remove-deprecations' %}";
+    </script>
 {% endblock header-scripts %}
 
 {% block page-content %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Deprecation list</h6>
-            </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Deprecation list</h6>
+                </div>
 
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Datetime</th>
-                        <th>Name</th>
-                        <th>Case URL</th>
-                        <th class="text-center">Action</th>
-                    </tr>
-                    </thead>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Datetime</th>
+                            <th>Name</th>
+                            <th>Case URL</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                        </thead>
                         <tbody>
                         <div class="form-group">
                             <a href="{% url 'main:deprecate-fields' %}"
@@ -53,42 +53,42 @@
                         <br/>
                         <br/>
                         {% for object in list %}
-                        <tr>
-                            <td>{{ object.created_at }}</td>
-                            <td>
-                                <a data-toggle="collapse" href="#collapseExample_{{ object.pk }}" role="button"
-                                   aria-expanded="false" aria-controls="collapseExample_{{ object.pk }}">
-                                    {{ object.name }} for {{ object.salesforce_org }}
-                                </a>
-                                <div class="collapse" id="collapseExample_{{ object.pk }}">
-                                    {% include 'dataflow-manager/deprecate-fields/details/_detail_form.html' with list=object.deprecationdetails_set.all deprecation=object %}
-                                </div>
-                            </td>
-                            <td>
-                                {% if object.case_url != '#' %}
-                                <a href="{{ object.case_url }}" target="_blank">Click to go</a>
-                                {% endif %}
-                            </td>
-                            <td class="text-center">
-                                <!--                                    <a href="{% url 'main:compare-deprecation' pk=object.pk %}"-->
-                                <!--                                       rel="tooltip" class="btn btn-info btn-circle btn-sm"-->
-                                <!--                                       title="Show with 'JDD'" target="_blank">-->
-                                <!--                                        <i class="fas fa-eye"></i>-->
-                                <!--                                    </a>-->
-                                <!--                                    <a href="#"-->
-                                <!--                                       rel="tooltip" class="btn btn-info btn-circle btn-sm btn-show-diff"-->
-                                <!--                                       title="Show with 'Diff2HtmlCompare'">-->
-                                <!--                                        <i class="fas fa-eye"></i>-->
-                                <!--                                    </a>-->
-                                <a href="#"
-                                   rel="tooltip" class="btn btn-danger btn-circle btn-sm btn-remove-deprec"
-                                   title="Remove deprecation"
-                                   data-id="{{ object.pk }}" data-model-name="{{ object.name }}"
-                                   data-toggle="modal" data-target="#delete-confirmation-md">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>{{ object.created_at }}</td>
+                                <td>
+                                    <a data-toggle="collapse" href="#collapseExample_{{ object.pk }}" role="button"
+                                       aria-expanded="false" aria-controls="collapseExample_{{ object.pk }}">
+                                        {{ object.name }} for {{ object.salesforce_org }}
+                                    </a>
+                                    <div class="collapse" id="collapseExample_{{ object.pk }}">
+                                        {% include 'dataflow-manager/deprecate-fields/details/_detail_form.html' with list=object.deprecationdetails_set.all deprecation=object %}
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if object.case_url != '#' %}
+                                        <a href="{{ object.case_url }}" target="_blank">Click to go</a>
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    <!--                                    <a href="{% url 'main:compare-deprecation' pk=object.pk %}"-->
+                                    <!--                                       rel="tooltip" class="btn btn-info btn-circle btn-sm"-->
+                                    <!--                                       title="Show with 'JDD'" target="_blank">-->
+                                    <!--                                        <i class="fas fa-eye"></i>-->
+                                    <!--                                    </a>-->
+                                    <!--                                    <a href="#"-->
+                                    <!--                                       rel="tooltip" class="btn btn-info btn-circle btn-sm btn-show-diff"-->
+                                    <!--                                       title="Show with 'Diff2HtmlCompare'">-->
+                                    <!--                                        <i class="fas fa-eye"></i>-->
+                                    <!--                                    </a>-->
+                                    <a href="#"
+                                       rel="tooltip" class="btn btn-danger btn-circle btn-sm btn-remove-deprec"
+                                       title="Remove deprecation"
+                                       data-id="{{ object.pk }}" data-model-name="{{ object.name }}"
+                                       data-toggle="modal" data-target="#delete-confirmation-md">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
                         {% endfor %}
                         </tbody>
                     </table>
@@ -147,5 +147,30 @@
 {% endblock page-content %}
 
 {% block extra-scripts %}
+    <script>
+        const filter_deprecation = (el) => {
+            let table = el.parent().parent().parent().parent().parent().find('table.table'),
+                status_fields = table.find('input[type="hidden"].status'),
+                deprecated = el.parent().parent().parent().parent().find('input[name="deprecation-filter"]')[0].checked,
+                no_changes = el.parent().parent().parent().parent().find('input[name="deprecation-no-changes"]')[0].checked,
+                with_error = el.parent().parent().parent().parent().find('input[name="deprecation-only-errors"]')[0].checked,
+
+                status_to_show = [];
+
+            deprecated ? status_to_show.push('1') : null;
+            no_changes ? status_to_show.push('0') : null;
+            with_error ? status_to_show.push('4') : null;
+
+            status_fields.each((idx, element) => {
+                element = $(element);
+
+                if (!status_to_show.length || status_to_show.includes(element.val())) {
+                    element.parent().show();
+                } else {
+                    element.parent().hide();
+                }
+            });
+        };
+    </script>
     <script src="{% static 'site/js/list-deprecation.js' %}" type="module"></script>
 {% endblock extra-scripts %}
