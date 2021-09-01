@@ -3,8 +3,9 @@ import os.path
 from django import template
 from typing import Union
 from django.template.defaultfilters import stringfilter
+from typing import List
 
-from main.models import Notifications, UploadNotifications
+from main.models import Notifications, UploadNotifications, DeprecationDetails
 
 register = template.Library()
 
@@ -47,3 +48,20 @@ def parse_to_color(string: str):
 def is_upload_notif(notification: Union[Notifications, UploadNotifications]):
     print('checking')
     return isinstance(notification, UploadNotifications)
+
+
+@register.filter
+def is_deprecated(obj: DeprecationDetails):
+    return obj.status == DeprecationDetails.SUCCESS
+
+
+@register.filter
+def deprecation_stats(lst: List[DeprecationDetails]):
+    deprecated = no_deprecated = with_error = 0
+
+    for obj in lst:
+        deprecated += 1 if obj.status == DeprecationDetails.SUCCESS else 0
+        no_deprecated += 1 if obj.status == DeprecationDetails.NO_DEPRECATION else 0
+        with_error += 1 if obj.status == DeprecationDetails.ERROR else 0
+
+    return f"{deprecated+no_deprecated+with_error} files: <code>{deprecated}</code> deprecated, <code>{no_deprecated}</code> no changes, <code>{with_error}</code> with errors."
