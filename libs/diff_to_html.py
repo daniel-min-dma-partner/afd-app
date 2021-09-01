@@ -46,10 +46,9 @@ def main():
     else:
         diff = difflib.context_diff(fromlines, tolines, fromfile, tofile, fromdate, todate, n=n)
 
-    output = f'{BASE_DIR}/json_diff_output.html'
+    output = f'{BASE_DIR}/main/templates/json_diff_output.html'
     with open(output, 'w') as f:
         f.writelines(diff)
-    webbrowser.open('file://' + output)
 
 
 if __name__ == '__main__':
