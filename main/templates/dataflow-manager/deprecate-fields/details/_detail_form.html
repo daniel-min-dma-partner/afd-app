@@ -56,6 +56,7 @@
                     <tr>
                         <th>File Name ({{ list|deprecation_stats|safe }})</th>
                         <th>Status</th>
+                        <th>Observation</th>
                         <th class="text-center">Action</th>
                     </tr>
                     </thead>
@@ -67,6 +68,7 @@
                             <td>{{ object.file_name|basename }}</td>
                             <td class="bg-{{ object.get_status_bg_color }}"
                                 style="color: white">{{ object.get_status_desc }}</td>
+                            <td>{{ object.message|safe }}</td>
                             <td class="text-center">
                                 {% if object|is_deprecated %}
                                     <a href="{% url 'main:compare-deprecation' pk=object.pk %}"
