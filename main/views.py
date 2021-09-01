@@ -752,16 +752,18 @@ def handler500(request, exception=None):
 
 
 @csrf_exempt
-def ajax_compare_deprecation(request):
+def compare_deprecation(request, pk=None):
     payload = None
     error = "Code not executed"
     status = 400
+    print(request.method)
+    print(request.GET)
     try:
-        if request.is_ajax() and request.method == 'GET' and request.GET.getlist('pk') is not None:
+        if request.method == 'GET' and pk is not None:
             error = None
             status = 200
 
-            deprecation_model: DeprecationDetails = get_object_or_404(DeprecationDetails, pk=request.GET.get('pk'))
+            deprecation_model: DeprecationDetails = get_object_or_404(DeprecationDetails, pk=pk)
 
             filemodel = FileModel()
             filemodel.user = request.user
@@ -778,12 +780,16 @@ def ajax_compare_deprecation(request):
             second_fm.delete()
 
             messages.info(request, "Showing difference in a new tab.")
+
+            return render(request, 'json_diff_output.html')
+
     except Exception as e:
         payload = None
         error = mark_safe(str(e))
         status = 401
 
-    return JsonResponse({"payload": payload, "error": error}, status=status)
+    messages.error(request, error)
+    return redirect('main:view-deprecations')
 
 
 def ajax_copy_key_to_clipboard(request):

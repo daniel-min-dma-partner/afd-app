@@ -9,7 +9,6 @@
 {% block header-scripts %}
     <link href="{% static 'site/css/deprecation-list.css' %}" rel="stylesheet" type="text/css">
     <script>
-        let show_diff_url = "{% url 'main:compare-deprecations' %}";
         let remove_deprec_url = "{% url 'main:remove-deprecations' %}";
     </script>
 {% endblock header-scripts %}
