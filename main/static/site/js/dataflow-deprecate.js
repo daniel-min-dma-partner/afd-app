@@ -4,7 +4,19 @@ import {
 } from '../../sb-admin/custom-assets/js/mjs/helpers.mjs';
 
 $("#proceed-deprecation").on('click', (evt) => {
-    submit_with_screencover($('button[type="submit"]'), null, "Deprecate Now?", "Deprecation in progress.");
+    let required_fields_completed = true;
+
+    $('input,textarea,select').filter('[required]').each(function (idx, element) {
+        if ([null, undefined, ""].includes(element.value)) {
+            popup_notification("Form Error", "Please complete all required fields (marked with <code><strong>*</strong></code>)", 'warning', true, 3000);
+            required_fields_completed = false;
+            return false;
+        }
+    });
+
+    if (required_fields_completed) {
+        submit_with_screencover($('button[type="submit"]'), null, "Deprecate Now?", "Deprecation in progress.");
+    }
 });
 
 $('#id_from_file').on('click', function (evt) {
@@ -17,5 +29,13 @@ $('#id_from_file').on('click', function (evt) {
 
     if (save_metadata[0].checked) {
         save_metadata.click();
+    }
+
+    if (is_from_file) {
+        $("#id_sobjects").siblings('label').removeClass('required');
+        $("#id_fields").siblings('label').removeClass('required');
+    } else {
+        $("#id_sobjects").siblings('label').addClass('required');
+        $("#id_fields").siblings('label').addClass('required');
     }
 });
