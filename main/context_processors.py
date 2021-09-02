@@ -1,3 +1,5 @@
+import datetime
+
 from main.models import Notifications, UploadNotifications as UpNotifs
 
 
@@ -13,5 +15,6 @@ def show_notifications(request):
 
     return {
         'notifications': [n for n in lst.all() if n.id not in up_notif_ids],
-        'upload_notifications': up_notifs.all()
+        'upload_notifications': up_notifs.all(),
+        'currentYear': datetime.datetime.now().strftime("%Y")
     }
