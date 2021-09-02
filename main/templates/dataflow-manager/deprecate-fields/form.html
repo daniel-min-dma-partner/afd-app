@@ -7,7 +7,7 @@
 
 {% block page-content %}
     <div class="row">
-        <div class="col-xl-8 col-lg-7">
+        <div class="col-xl-12 col-lg-7">
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -29,19 +29,19 @@
                         <div class="form-row">
                             <div class="form-group col-md-3">
                                 <div class="mb-3">
-                                    <label for="id_name" class="form-label">Name</label>
+                                    <label for="id_name" class="form-label required">Name</label>
                                     <input type="text" class="form-control" name="name" id="id_name" required>
                                 </div>
                             </div>
                             <div class="form-group col-md-2">
                                 <div class="mb-3">
-                                    <label for="id_org" class="form-label">Org</label>
+                                    <label for="id_org" class="form-label required">Org</label>
                                     <input type="text" class="form-control" name="org" id="id_org">
                                 </div>
                             </div>
                             <div class="form-group col-md-7">
                                 <div class="mb-3">
-                                    <label for="id_case_url" class="form-label">Case URL</label>
+                                    <label for="id_case_url" class="form-label required">Case URL</label>
                                     <input type="url" class="form-control" name="case_url" id="id_case_url" required>
                                 </div>
                             </div>
@@ -50,7 +50,7 @@
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
-                                    <label for="id_{{ form.files.name }}" class="form-label">Select at least one
+                                    <label for="id_{{ form.files.name }}" class="form-label required">Select at least one
                                         Dataflow</label>
                                     <input class="form-control" type="file" name="{{ form.files.name }}"
                                            id="id_{{ form.files.name }}" required multiple>
@@ -61,7 +61,7 @@
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
-                                    <label for="id_{{ form.file.name }}" class="form-label">Use objects and fields from
+                                    <label for="id_{{ form.file.name }}" class="form-label">Get objects and fields from
                                         a file</label>
                                     <input class="form-control" type="file" name="{{ form.file.name }}"
                                            id="id_{{ form.file.name }}" disabled>
@@ -80,7 +80,7 @@
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
-                                    <label for="id_sobjects" class="form-label">Objects</label>
+                                    <label for="id_sobjects" class="form-label required">Objects</label>
                                     <textarea class="form-control" name="sobjects" id="id_sobjects" rows="3"></textarea>
                                 </div>
                             </div>
@@ -89,7 +89,7 @@
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
-                                    <label for="id_fields" class="form-label">Fields</label>
+                                    <label for="id_fields" class="form-label required">Fields</label>
                                     <textarea class="form-control" name="fields" id="id_fields" rows="6"></textarea>
                                 </div>
                             </div>

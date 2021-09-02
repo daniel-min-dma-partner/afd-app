@@ -158,3 +158,8 @@ textarea {
 .my-toast {
     z-index: 100;
 }
+
+.required:after {
+  content:"*";
+  color: red;
+}
