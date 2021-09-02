@@ -16,3 +16,15 @@ $('button.reset-filter').on('click', function () {
         }
     });
 });
+
+$(".delete-all").on('click', function (evt) {
+    if (confirm("Do you want to delete ALL Deprecations at Once?")) {
+        $.ajax({
+            url: delete_all_url,
+            type: "GET",
+            success: function (response) {
+                location.reload();
+            }
+        });
+    }
+});

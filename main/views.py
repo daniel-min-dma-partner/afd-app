@@ -737,15 +737,20 @@ def dataflow_download_deprecated(request, pk=None):
 def deprecation_delete_all(request):
     user = request.user
     deprecations = DataflowDeprecation.objects.filter(user=user)
+    status = 200
 
-    if deprecations.exists():
-        for dep in deprecations.all():
-            dep.delete()
-        messages.success(request, "All deprecation has been removed.")
+    if user.is_authenticated:
+        if deprecations.exists():
+            for dep in deprecations.all():
+                dep.delete()
+            messages.success(request, "All deprecation has been removed.")
+        else:
+            messages.info(request, "No deprecation has been found.")
     else:
-        messages.info(request, "No deprecation has been found.")
+        status = 500
+        messages.error(request, mark_safe(f"User <code>{user.username}</code> is not authenticated."))
 
-    return redirect('main:view-deprecations')
+    return JsonResponse({"payload": "", "error": ""}, status=status)
 
 
 def handler500(request, exception=None):

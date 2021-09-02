@@ -40,8 +40,8 @@
                                 </span>
                                 <span class="text">New</span>
                             </a>
-                            <a href="{% url 'main:deprecation-delete-all' %}"
-                               class="btn btn-danger btn-icon-split float-right">
+                            <a href="#"
+                               class="btn btn-danger btn-icon-split float-right delete-all">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-trash"></i>
                                 </span>
@@ -147,6 +147,7 @@
 
 {% block extra-scripts %}
     <script>
+        let delete_all_url = "{% url 'main:deprecation-delete-all' %}";
         const filter_deprecation = (el) => {
             let table = el.parent().parent().parent().parent().parent().find('table.table'),
                 status_fields = table.find('input[type="hidden"].status'),
