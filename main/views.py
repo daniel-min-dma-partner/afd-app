@@ -596,7 +596,6 @@ class DeprecateFieldsView(generic.FormView):
                                                 "one and make sure to check the box <code>Save information about "
                                                 "objects and fields into a file?</code> before submit.")
                 else:
-                    print(request.POST)
                     # Prepare fields: Each row corresponds to an Object.
                     self.fields = [field.rstrip() for field in request.POST.get('fields').split('\n') if
                                    field.rstrip() not in [None, ""]]
@@ -645,14 +644,12 @@ class DeprecateFieldsView(generic.FormView):
             message = mark_safe(str(e))
             flash_type = messages.ERROR
             _return = redirect("main:deprecate-fields")
-            raise e
         finally:
             for fm in df_files:
                 fm.delete()
 
             if ctx and ctx.not_deprecated_dfs:
                 ctx.not_deprecated_dfs.sort()
-                print('entra')
                 msg = f"The following dataflow(s) ({len(ctx.not_deprecated_dfs)}) didn't suffer any deprecation:<br/>" \
                       f"<code>{'</code><br/><code>'.join(ctx.not_deprecated_dfs)}</code>."
                 _ = SetNotificationInteractor.call(data={"user": request.user,
