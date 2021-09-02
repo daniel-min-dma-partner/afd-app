@@ -298,14 +298,14 @@ class DeprecateFieldsForm(forms.Form):
         sobjects = self.cleaned_data.get('sobjects')
 
         if not from_file and not sobjects:
-            raise ValidationError("<code><strong>Objects</strong></code> field can't not be empty.")
+            raise ValidationError("<code><strong>Objects</strong></code> field can not be empty if <code>From File?</code> is un-checked.")
 
     def clean_fields(self):
         from_file = self.cleaned_data.get('from_file')
         fields = self.cleaned_data.get('fields')
 
         if not from_file and not fields:
-            raise ValidationError("<code><strong>Fields</strong></code> field can't not be empty.")
+            raise ValidationError("<code><strong>Fields</strong></code> field can not be empty if <code>From File?</code> is un-checked.")
 
 
 class SecpredToSaqlForm(forms.Form):
