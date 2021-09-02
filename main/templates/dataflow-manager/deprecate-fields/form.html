@@ -15,6 +15,14 @@
                 </div>
 
                 <div class="card-body">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger">
+                                {{ error|safe }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+
                     <form method="POST" action="{% url 'main:deprecate-fields' %}" enctype="multipart/form-data">
                         {% csrf_token %}
 
@@ -53,6 +61,25 @@
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
+                                    <label for="id_{{ form.file.name }}" class="form-label">Use objects and fields from
+                                        a file</label>
+                                    <input class="form-control" type="file" name="{{ form.file.name }}"
+                                           id="id_{{ form.file.name }}" disabled>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox"
+                                           id="id_{{ form.from_file.name }}"
+                                           name="{{ form.from_file.name }}">
+                                    <label class="form-check-label" for="id_{{ form.from_file.name }}">
+                                        From File?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <div class="mb-3">
                                     <label for="id_sobjects" class="form-label">Objects</label>
                                     <textarea class="form-control" name="sobjects" id="id_sobjects" rows="3"></textarea>
                                 </div>
@@ -64,6 +91,19 @@
                                 <div class="mb-3">
                                     <label for="id_fields" class="form-label">Fields</label>
                                     <textarea class="form-control" name="fields" id="id_fields" rows="6"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox"
+                                           id="id_{{ form.save_metadata.name }}"
+                                           name="{{ form.save_metadata.name }}">
+                                    <label class="form-check-label" for="id_{{ form.save_metadata.name }}">
+                                        Save information about objects and fields into a file?
+                                    </label>
                                 </div>
                             </div>
                         </div>

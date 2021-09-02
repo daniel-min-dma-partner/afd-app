@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 
 from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel as DFCompModel
+from django.core.exceptions import ValidationError
 
 
 class LoginForm(AuthenticationForm):
@@ -284,10 +285,27 @@ class DeprecateFieldsForm(forms.Form):
     org = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
     files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
     case_url = forms.URLField(label='SupportForce Case URL')
+    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
+    from_file = forms.BooleanField(required=False)
+    save_metadata = forms.BooleanField(required=False)
     sobjects = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
+        widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
     fields = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
+        widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
+
+    def clean_sobjects(self):
+        from_file = self.cleaned_data.get('from_file')
+        sobjects = self.cleaned_data.get('sobjects')
+
+        if not from_file and not sobjects:
+            raise ValidationError("<code><strong>Objects</strong></code> field can't not be empty.")
+
+    def clean_fields(self):
+        from_file = self.cleaned_data.get('from_file')
+        fields = self.cleaned_data.get('fields')
+
+        if not from_file and not fields:
+            raise ValidationError("<code><strong>Fields</strong></code> field can't not be empty.")
 
 
 class SecpredToSaqlForm(forms.Form):

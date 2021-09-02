@@ -1,7 +1,8 @@
+import datetime
 import json as js
-import os
 
 import requests
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as do_login, logout as do_logout
 from django.core.files.base import ContentFile
@@ -563,22 +564,52 @@ class DeprecateFieldsView(generic.FormView):
     template_name = 'dataflow-manager/deprecate-fields/form.html'
     form_class = DeprecateFieldsForm
     success_url = '/dataflow-manager/deprecate-fields/'
+    media_dir = os.path.join(settings.BASE_DIR, 'media/')
+    temp_file_dir = os.path.join(media_dir, "metadatafile-{{user}}-{{datetime}}.json")
+
+    fields = None
+    objects = None
+    filepath = None
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         df_files = []
         ctx = None
 
-        try:
-            print(request.POST)
-            if form.is_valid():
-                # Prepare fields: Each row corresponds to an Object.
-                fields = [field.rstrip() for field in request.POST.get('fields').split('\n') if
-                          field.rstrip() not in [None, ""]]
+        def get_filepath(filepath_template, name, username):
+            now = datetime.datetime.now().strftime(f"%Y-%m-%d-{name}")
+            _filepath = filepath_template.replace("{{user}}", username).replace('{{datetime}}', now)
+            return _filepath
 
-                # Prepare objects: Each row must specify only one Object.
-                objects = [obj.rstrip() for obj in request.POST.get('sobjects').split('\n') if
-                           obj.rstrip() not in [None, ""]]
+        try:
+            if form.is_valid():
+                # User indicated to read metadata from file
+                if form.cleaned_data.get('from_file'):
+                    self.filepath = get_filepath(self.temp_file_dir, form.cleaned_data.get('name'), request.user.username)
+
+                    if os.path.isfile(self.filepath):
+                        metadata = json.load(open(self.filepath, 'r'))
+                        self.fields = [field for _, field in metadata.items()]
+                        self.objects = [obj for obj, _ in metadata.items()]
+                    else:
+                        raise FileNotFoundError("The temmporal file doesn't exist. Specify the objects/fields at least "
+                                                "one and make sure to check the box <code>Save information about "
+                                                "objects and fields into a file?</code> before submit.")
+                else:
+                    print(request.POST)
+                    # Prepare fields: Each row corresponds to an Object.
+                    self.fields = [field.rstrip() for field in request.POST.get('fields').split('\n') if
+                                   field.rstrip() not in [None, ""]]
+
+                    # Prepare objects: Each row must specify only one Object.
+                    self.objects = [obj.rstrip() for obj in request.POST.get('sobjects').split('\n') if
+                                    obj.rstrip() not in [None, ""]]
+
+                # User indicated to save metadata into a file
+                if form.cleaned_data.get('save_metadata'):
+                    metadata = {obj: self.fields[self.objects.index(obj)] for obj in self.objects}
+                    self.filepath = get_filepath(self.temp_file_dir, form.cleaned_data.get('name'), request.user.username)
+                    json.dump(metadata, open(self.filepath, 'w'), indent=2)
 
                 # Prepare dataflow contents
                 for file in request.FILES.getlist('files'):
@@ -586,26 +617,35 @@ class DeprecateFieldsView(generic.FormView):
                     filemodel.user = request.user
                     filemodel.save()
                     df_files.append(filemodel)
+
                 # Calls interactor
-                ctx = FieldDeprecatorInteractor.call(df_files=df_files, objects=objects, fields=fields,
+                ctx = FieldDeprecatorInteractor.call(df_files=df_files, objects=self.objects, fields=self.fields,
                                                      user=request.user, name=form.cleaned_data['name'],
                                                      org=form.cleaned_data['org'],
                                                      case_url=form.cleaned_data['case_url'])
 
-                if ctx.exception:
-                    raise ctx.exception
+                message = "Deprecation finished. Check the latest notifications for more details."
+                flash_type = messages.INFO
 
-                message = "Deprecation finished successfully. Check the latest notifications."
-                flash_type = messages.SUCCESS
-                _return = self.form_valid(form)
+                # Returns a normal response or file-download response
+                if form.cleaned_data.get('save_metadata'):
+                    response_ctx = JsonFileResponseInteractor.call(filepath=self.filepath)
+
+                    if response_ctx.exception:
+                        raise response_ctx.exception
+
+                    _return = response_ctx.response
+                else:
+                    _return = self.form_valid(form)
             else:
                 message = form.errors.as_data()
                 flash_type = messages.ERROR
-                _return = self.form_invalid(form)
+                _return = render(request, 'dataflow-manager/deprecate-fields/form.html', {'form': form})
         except Exception as e:
             message = mark_safe(str(e))
             flash_type = messages.ERROR
             _return = redirect("main:deprecate-fields")
+            raise e
         finally:
             for fm in df_files:
                 fm.delete()
