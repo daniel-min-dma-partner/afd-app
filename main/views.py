@@ -637,7 +637,7 @@ class DeprecateFieldsView(generic.FormView):
                 else:
                     _return = self.form_valid(form)
             else:
-                message = form.errors.as_data()
+                message = "Submitted form contains error. Please review it."
                 flash_type = messages.ERROR
                 _return = render(request, 'dataflow-manager/deprecate-fields/form.html', {'form': form})
         except Exception as e:
