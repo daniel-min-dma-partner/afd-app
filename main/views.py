@@ -607,8 +607,10 @@ class DeprecateFieldsView(generic.FormView):
                 # User indicated to save metadata into a file
                 if form.cleaned_data.get('save_metadata'):
                     metadata = {obj: self.fields[self.objects.index(obj)] for obj in self.objects}
-                    self.filepath = get_filepath(self.temp_file_dir, form.cleaned_data.get('name'), request.user.username)
-                    json.dump(metadata, open(self.filepath, 'w'), indent=2)
+                    filemodel = FileModel()
+                    filemodel.user = request.user
+                    filemodel.file.save("Field-Deprecation-Metadata", ContentFile(json.dumps(metadata, indent=2)))
+                    self.filepath = filemodel.file.path
 
                 # Prepare dataflow contents
                 for file in request.FILES.getlist('files'):
@@ -647,7 +649,6 @@ class DeprecateFieldsView(generic.FormView):
             message = mark_safe(str(e))
             flash_type = messages.ERROR
             _return = redirect("main:deprecate-fields")
-            raise e
         finally:
             for fm in df_files:
                 fm.delete()
