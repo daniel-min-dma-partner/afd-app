@@ -37,12 +37,6 @@ def show_notifications(request):
                            target="_blank">here</a>.""",
                 "color": "success",
                 "icon": "fa-globe-americas"
-            },
-            {
-                "title": "A",
-                "text":"B",
-                "color":"warning",
-                "icon": "fa-galactic-senate"
             }
         ]
         default_context['profile_guidelines'] = profile_guideline
