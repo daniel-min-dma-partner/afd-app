@@ -1,18 +1,11 @@
 import {
     popup_notification,
-    submit_with_screencover
+    submit_with_screencover,
+    alert_if_required_missing
 } from '../../sb-admin/custom-assets/js/mjs/helpers.mjs';
 
 $("#proceed-deprecation").on('click', (evt) => {
-    let required_fields_completed = true;
-
-    $('input,textarea,select').filter('[required]').each(function (idx, element) {
-        if ([null, undefined, ""].includes(element.value)) {
-            popup_notification("Form Error", "Please complete all required fields (marked with <code><strong>*</strong></code>)", 'warning', true, 3000);
-            required_fields_completed = false;
-            return false;
-        }
-    });
+    let required_fields_completed = alert_if_required_missing();
 
     if (required_fields_completed) {
         submit_with_screencover($('button[type="submit"]'), null, "Deprecate Now?", "Deprecation in progress.");
