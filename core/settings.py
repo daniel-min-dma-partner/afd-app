@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django_apscheduler',
     'django_extensions',
     'libs.interactor.interactor',
+    'mathfilters',
     'rest_framework',
 
     # Created apps

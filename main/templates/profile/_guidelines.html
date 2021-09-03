@@ -1,25 +1,33 @@
+{% load mathfilters %}
+
+
 <div class="collapse" id="guideline-box">
-    <div class="col-xl-4 col-md-6 mb-4">
-        <div class="card border-left-success shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                            <strong>#1</strong> Timezone
-                        </div>
-                        <div class="h9 mb-0 font-weight-normal text-gray-500">
-                            You can setup your custom timezone, specifying the key as <code><strong>timezone</strong></code>
-                            and the value as one of the valid timezone strings which you can find
-                            <a href="https://gist.github.com/heyalexej/8bf688fd67d7199be4a1682b3eec7568#file-pytz-time-zones-py"
-                               target="_blank">here</a>.
+    <div class="row">
+        {% with zize=profile_guidelines|length %}
+            {% with col=12|div:zize|floatformat %}
+                {% for guideline in profile_guidelines %}
+                    <div class="col-xl-{{ col }} col-md-6 mb-4">
+                        <div class="card border-left-{{ guideline.color }} shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-{{ guideline.color }} text-uppercase mb-1">
+                                            {{ guideline.title }}
+                                        </div>
+                                        <div class="h9 mb-0 font-weight-normal text-gray-500">
+                                            {{ guideline.text|safe }}
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas {{ guideline.icon }} fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-auto">
-                        <i class="fas fa-globe-americas fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+                {% endfor %}
+            {% endwith %}
+        {% endwith %}
     </div>
 
     <hr/>
