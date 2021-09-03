@@ -74,7 +74,7 @@ class Profile(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['key', 'user_id'], name='Unique Key per User')
+            models.UniqueConstraint(fields=['key', 'user_id'], name='Unique Key constraint per User is enforced')
         ]
 
     def clean_key(self):
