@@ -565,7 +565,7 @@ class DeprecateFieldsView(generic.FormView):
     form_class = DeprecateFieldsForm
     success_url = '/dataflow-manager/deprecate-fields/'
     media_dir = os.path.join(settings.BASE_DIR, 'media/')
-    temp_file_dir = os.path.join(media_dir, "metadatafile-{{user}}-{{datetime}}.json")
+    temp_file_dir = os.path.join(media_dir, "metadatafile-{{user}}-{{datetime}}")
 
     fields = None
     objects = None
@@ -585,16 +585,16 @@ class DeprecateFieldsView(generic.FormView):
             if form.is_valid():
                 # User indicated to read metadata from file
                 if form.cleaned_data.get('from_file'):
-                    self.filepath = get_filepath(self.temp_file_dir, form.cleaned_data.get('name'), request.user.username)
+                    filemodel = FileModel(file=request.FILES.getlist('file')[0])
+                    filemodel.user = request.user
+                    filemodel.save()
 
-                    if os.path.isfile(self.filepath):
-                        metadata = json.load(open(self.filepath, 'r'))
-                        self.fields = [field for _, field in metadata.items()]
-                        self.objects = [obj for obj, _ in metadata.items()]
-                    else:
-                        raise FileNotFoundError("The temmporal file doesn't exist. Specify the objects/fields at least "
-                                                "one and make sure to check the box <code>Save information about "
-                                                "objects and fields into a file?</code> before submit.")
+                    metadata = json.load(open(filemodel.file.path, 'r'))
+                    self.filepath = filemodel.file.path
+                    self.fields = [field for _, field in metadata.items()]
+                    self.objects = [obj for obj, _ in metadata.items()]
+
+                    filemodel.delete()
                 else:
                     # Prepare fields: Each row corresponds to an Object.
                     self.fields = [field.rstrip() for field in request.POST.get('fields').split('\n') if
@@ -633,6 +633,9 @@ class DeprecateFieldsView(generic.FormView):
                     if response_ctx.exception:
                         raise response_ctx.exception
 
+                    # Removes temporal file
+                    os.remove(self.filepath)
+
                     _return = response_ctx.response
                 else:
                     _return = self.form_valid(form)
@@ -644,6 +647,7 @@ class DeprecateFieldsView(generic.FormView):
             message = mark_safe(str(e))
             flash_type = messages.ERROR
             _return = redirect("main:deprecate-fields")
+            raise e
         finally:
             for fm in df_files:
                 fm.delete()
