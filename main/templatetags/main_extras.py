@@ -5,7 +5,7 @@ from typing import Union
 from django.template.defaultfilters import stringfilter
 from typing import List
 
-from main.models import Notifications, UploadNotifications, DeprecationDetails
+from main.models import Notifications, UploadNotifications, DeprecationDetails, Profile
 
 register = template.Library()
 
@@ -65,3 +65,16 @@ def deprecation_stats(lst: List[DeprecationDetails]):
         with_error += 1 if obj.status == DeprecationDetails.ERROR else 0
 
     return f"{deprecated+no_deprecated+with_error} files: <code>{deprecated}</code> deprecated, <code>{no_deprecated}</code> no changes, <code>{with_error}</code> with errors."
+
+
+@register.filter
+@stringfilter
+def profile_type_to_text(thype: str = ""):
+    if not thype:
+        return thype
+
+    for item in Profile.TYPE_CHOICE_SELECT2:
+        if item['id'] == thype:
+            return item['text']
+
+    return thype
