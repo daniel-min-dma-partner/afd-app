@@ -34,6 +34,8 @@ from .interactors.upload_dataflow_interactor import UploadDataflowInteractorNoAn
 from .interactors.wdf_manager_interactor import *
 from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, \
     DeprecationDetails, UploadNotifications, Profile
+from django.forms.utils import ErrorList
+
 
 sched.start()
 
@@ -782,15 +784,18 @@ class ProfileCreateView(generic.FormView):
     def post(self, request, *args, **kwargs):
         form = ProfileForm(request.POST)
 
-        if form.is_valid():
-            model: Profile = form.save(commit=False)
-            model.user = request.user
-            model.save()
+        try:
+            if form.is_valid():
+                model: Profile = form.save(commit=False)
+                model.user = request.user
+                model.save()
 
-            messages.success(request, mark_safe(f"<strong><code>{model.key}</code></strong> stored successfully."))
-            return redirect('main:profile-view')
-        else:
-            return render(request, self.template_name, {"form": form})
+                messages.success(request, mark_safe(f"<strong><code>{model.key}</code></strong> stored successfully."))
+                return redirect('main:profile-view')
+        except Exception as e:
+            form.add_error(None, mark_safe(str(e)))
+
+        return render(request, self.template_name, {"form": form})
 
 
 class ProfileEditView(generic.FormView):
