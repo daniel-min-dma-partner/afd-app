@@ -43,7 +43,7 @@
                                 <td>{{ profile.key }}</td>
                                 <td>{{ profile.value }}</td>
                                 <td>{{ profile.type|profile_type_to_text }}</td>
-                                <td>
+                                <td class="text-center">
                                     <a href="{% url 'main:profile-edit' pk=profile.pk %}"
                                        class="btn btn-info btn-circle btn-sm"
                                        title="Edit">
