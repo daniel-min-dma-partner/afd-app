@@ -40,6 +40,8 @@ $(document).ready(function (evt) {
                 delay: 300
             }
         });
+
+        $("#id_key").focus();
     }
 });
 
