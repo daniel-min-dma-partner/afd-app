@@ -31,13 +31,14 @@ def show_notifications(request):
         profile_guideline = [
             {
                 "title": "Timezone",
-                "text": """You can setup your custom timezone, specifying the key as <code><strong>timezone</strong></code>
-                           and the value as one of the valid timezone strings which you can find
+                "text": """You can localize datetime displayed with your local timezone, specifying the key as
+                           <code><strong>timezone</strong></code>
+                           and the value as one of the <code>valid timezone</code> strings which you can find
                            <a href="https://gist.github.com/heyalexej/8bf688fd67d7199be4a1682b3eec7568#file-pytz-time-zones-py"
                            target="_blank">here</a>.""",
                 "color": "success",
                 "icon": "fa-globe-americas"
-            }
+            },
         ]
         default_context['profile_guidelines'] = profile_guideline
 

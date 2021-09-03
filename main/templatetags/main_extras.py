@@ -78,3 +78,13 @@ def profile_type_to_text(thype: str = ""):
             return item['text']
 
     return thype
+
+
+@register.filter
+def range_list(number: int):
+    return range(number)
+
+
+@register.filter
+def index_of(value: list, arg):
+    return value.index(arg) + 1
