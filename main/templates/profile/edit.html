@@ -25,6 +25,12 @@
                 <div class="card-body">
                     {% include 'profile/_guidelines.html' %}
 
+                    {% for non_field_error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ non_field_error|capfirst }}
+                        </div>
+                    {% endfor %}
+
                     {% for field in form %}
                         {% for error in field.errors %}
                             <div class="alert alert-danger">
@@ -39,21 +45,21 @@
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <div class="mb-3">
-                                    <label for="id_{{ form.key.name }}" class="required">{{ form.key.name|upper }}</label>
+                                    <label for="id_{{ form.key.name }}" class="required">{{ form.key.name|title }}</label>
                                     <input type="text" class="form-control" name="{{ form.key.name }}"
                                            id="id_{{ form.key.name }}" value="{{ form.key.value }}" required>
                                 </div>
                             </div>
                             <div class="form-group col-md-4">
                                 <div class="mb-3">
-                                    <label for="id_{{ form.value.name }}" class="required">{{ form.value.name|upper }}</label>
+                                    <label for="id_{{ form.value.name }}" class="required">{{ form.value.name|title }}</label>
                                     <input type="text" class="form-control" name="{{ form.value.name }}"
                                            id="id_{{ form.value.name }}" value="{{ form.value.value }}" required>
                                 </div>
                             </div>
 
                             <div class="form-group col-md-4">
-                                <label for="id_{{ form.type.name }}" class="required">{{ form.type.name|upper }}</label>
+                                <label for="id_{{ form.type.name }}" class="required">{{ form.type.name|title }}</label>
                                 <select id="id_{{ form.type.name }}" class="form-control-lg"
                                         name="{{ form.type.name }}"
                                         style="width:100%;">
