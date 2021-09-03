@@ -1,11 +1,12 @@
 import copy
 
+import pytz
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 
-from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel as DFCompModel
+from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel as DFCompModel, Profile
 from django.core.exceptions import ValidationError
 
 
@@ -316,3 +317,31 @@ class SecpredToSaqlForm(forms.Form):
     saql = forms.CharField(
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 10, 'placeholder': "", "readonly": True}),
         required=False, label="Generated SAQL")
+
+
+class ProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = Profile
+        fields = ['key', 'value', 'type']
+
+    def clean_key(self):
+        key = self.cleaned_data.get('key').strip().lower()
+
+        return key
+
+    def clean_value(self):
+        value = self.cleaned_data.get('value').strip()
+
+        if self.clean_key() == 'timezone':
+            if value not in pytz.all_timezones:
+                link = '<a href="https://gist.github.com/heyalexej/8bf688fd67d7199be4a1682b3eec7568#file-pytz-time-zones-py" target="_blank">here</a>'
+                raise ValidationError(f"The timezone <code>{value}</code> is not a valid timezone specification. Check valid timezones string {link}.")
+
+        return value
+
+    def save(self, commit=True):
+        model = super(ProfileForm, self).save(commit=False)
+        if commit:
+            model.save()
+        return model

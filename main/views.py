@@ -20,7 +20,7 @@ from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
 from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
     SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm, \
-    DeprecateFieldsForm, SecpredToSaqlForm
+    DeprecateFieldsForm, SecpredToSaqlForm, ProfileForm
 from main.interactors.jobs_interactor import JobsInteractor
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser
 from .interactors.deprecate_fields_interactor import FieldDeprecatorInteractor
@@ -33,7 +33,7 @@ from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.upload_dataflow_interactor import UploadDataflowInteractorNoAnt
 from .interactors.wdf_manager_interactor import *
 from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, \
-    DeprecationDetails, UploadNotifications
+    DeprecationDetails, UploadNotifications, Profile
 
 sched.start()
 
@@ -754,6 +754,123 @@ class NotificationDetailsView(generic.TemplateView):
         context['notification'] = notification
         # notification.delete()
         return context
+
+
+class ProfileCreateView(generic.FormView):
+    form_class = ProfileForm
+    success_url = '/profile/create/'
+    template_name = 'profile/create.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+
+        # Adds extra form context here...
+
+        return context
+
+    def get(self, request, *args, **kwargs):
+        form = ProfileForm()
+
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request, *args, **kwargs):
+        form = ProfileForm(request.POST)
+
+        if form.is_valid():
+            model: Profile = form.save(commit=False)
+            model.user = request.user
+            model.save()
+
+            messages.success(request, mark_safe(f"<strong><code>{model.key}</code></strong> stored successfully."))
+            return redirect('main:profile-view')
+        else:
+            return render(request, self.template_name, {"form": form})
+
+
+class ProfileEditView(generic.FormView):
+    form_class = ProfileForm
+    success_url = '/profile/view/'
+    template_name = 'profile/edit.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        profile = self.get_object()
+        context['form'] = self.form_class(None, instance=profile)
+        context['profile'] = profile
+        return context
+
+    def get_object(self, queryset=None):
+        obj = Profile.objects.filter(pk=self.kwargs['pk']).first()
+        return obj
+
+    def post(self, request, *args, **kwargs):
+        try:
+            profile = get_object_or_404(Profile, pk=kwargs['pk'])
+            form = self.form_class(request.POST, instance=profile)
+
+            print("post", form)
+            if form.is_valid():
+                print("form", form.cleaned_data)
+                model: Profile = form.save(commit=False)
+                model.user = request.user
+                model.save()
+
+                messages.success(request, mark_safe(f"<strong><code>{model.key}</code></strong> stored successfully."))
+                return redirect('main:profile-view')
+            else:
+                return render(request, self.template_name, {"form": form, "profile": profile})
+        except Exception as e:
+            messages.error(request, mark_safe(str(e)))
+            return redirect('main:profile-view')
+
+
+class ProfileShowView(generic.ListView):
+    template_name = 'profile/view.html'
+
+    def get_queryset(self):
+        lst = Profile.objects.filter(user=self.request.user).order_by('key')
+        return lst
+
+
+def profile_delete_view(request, pk=None):
+    user = request.user
+    profile = Profile.objects.filter(user=user, pk=pk)
+    status = 200
+
+    if user.is_authenticated:
+        if profile.exists():
+            profile = profile.first()
+            profile.delete()
+            messages.success(request, mark_safe(f"<code><strong>{profile.key}</strong></code> has been removed."))
+        else:
+            messages.info(request, mark_safe(f"Profile with key <code>{pk}</code> not found"))
+    else:
+        status = 500
+        messages.error(request, mark_safe(f"User <code>{user.username}</code> is not authenticated."))
+
+    return JsonResponse({"payload": "", "error": ""}, status=status)
+
+
+def profile_get_type_list(request):
+    try:
+        payload = {
+            "results": Profile.TYPE_CHOICE_SELECT2
+        }
+
+        search = request.GET.get('search')
+
+        if search:
+            payload['results'] = [item for item in payload['results'] if search.strip().lower() in item['text'].strip().lower()]
+
+        status = 200
+        error = None
+    except Exception as e:
+        error = str(e)
+        status = 500
+        payload = None
+
+    return JsonResponse({"payload": payload, "error": error}, status=status)
 
 
 def dataflow_download_deprecated(request, pk=None):

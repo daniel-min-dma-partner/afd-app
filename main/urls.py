@@ -63,6 +63,16 @@ urlpatterns = [
         url(r'^upload/$', main.UploadDataflowView.as_view(), name='upload-dataflow'),
     ])),
 
+    url(r'^profile/', include([
+        url(r'^create/', main.ProfileCreateView.as_view(), name='profile-create'),
+        url(r'^delete/(?P<pk>\d+)/$', main.profile_delete_view, name='profile-delete'),
+        url(r'^edit/(?P<pk>\d+)/$', main.ProfileEditView.as_view(), name='profile-edit'),
+        url(r'^view/', main.ProfileShowView.as_view(), name='profile-view'),
+        url(r'^$', main.ProfileShowView.as_view(), name='profile-view'),
+
+        url(r'^get-type-list', main.profile_get_type_list, name='profile-get-type-list'),
+    ])),
+
     url(r'^notifications/', include([
         # url(r'^list/$', main.ListNotificationView.as_view(), name='notification-list'),
         # url(r'^mark-as-read/(?P<pk>\d+)/$', main.MarkNotifAsReadView.as_view(), name='notification-read'),

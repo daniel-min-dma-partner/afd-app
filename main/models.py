@@ -2,6 +2,7 @@ import copy
 import datetime as dt
 import os
 
+import pytz
 import tzlocal
 from django.contrib.auth.models import User
 from django.db import models
@@ -61,10 +62,15 @@ class Profile(models.Model):
         ('int', "Integer"),
         ('str', "String")
     )
+
+    TYPE_CHOICE_SELECT2 = [
+        {"id": 'int', 'text': "Integer"},
+        {"id": 'str', 'text': "String"},
+    ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    key = models.CharField(max_length=128, help_text='', null=False, blank=False)
+    key = models.CharField(max_length=128, help_text='', null=False, blank=False, unique=True)
     value = models.CharField(max_length=128, help_text='', null=False, blank=False)
-    type = models.CharField(max_length=4, help_text='', null=False, blank=False, choices=_TYPE_CHOICE)
+    type = models.CharField(max_length=4, help_text='', null=False, blank=False, choices=_TYPE_CHOICE, default='str')
 
     def clean_key(self):
         self.key = self.key.strip()
@@ -75,6 +81,12 @@ class Profile(models.Model):
         self.value = self.value.strip()
 
         return self.value
+
+    def get_type_text(self):
+        for item in self.TYPE_CHOICE_SELECT2:
+            if item['id'] == self.type:
+                return item['text']
+        return None
 
 
 class SalesforceEnvironment(models.Model):
