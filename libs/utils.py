@@ -1,3 +1,5 @@
+import datetime
+import inspect
 import logging
 import os
 import random
@@ -5,6 +7,7 @@ import string
 from datetime import datetime
 from pathlib import Path
 
+import pytz
 import tzlocal
 from django.core.cache import cache
 
@@ -71,3 +74,12 @@ def next_url(action='get', request=None):
 def replace_leading(source, char="&nbsp;"):
     stripped = source.lstrip()
     return char * (len(source) - len(stripped)) + stripped
+
+
+def get_time_localized(date_time=None, timezone=None):
+    local_tz = pytz.timezone('UTC' if not timezone or timezone not in pytz.all_timezones else timezone)
+    date_time = datetime.datetime.now() if not date_time else date_time
+    localized_dt = date_time.replace(tzinfo=pytz.utc).astimezone(local_tz)
+    localized_dt_str = localized_dt.strftime("%Y-%m-%d - %H.%M.%S %z")
+    print(f"From {inspect.stack()[0][3]}():\n - Original: {date_time}\n - Localized: {localized_dt_str}")
+    return localized_dt_str
