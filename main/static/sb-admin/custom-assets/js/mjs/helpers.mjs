@@ -90,4 +90,19 @@ const show_screenplay = (perc=100, msg="") => {
     $('.progress-description').html(msg);
 };
 
-export {build_toast, popup_notification, show_error_and_popup, submit_with_screencover, show_screenplay};
+
+const alert_if_required_missing = () => {
+    let required_fields_completed = true;
+
+    $('input,textarea,select').filter('[required]').each(function (idx, element) {
+        if ([null, undefined, ""].includes(element.value)) {
+            popup_notification("Form Error", "Please complete all required fields (marked with <code><strong>*</strong></code>)", 'warning', true, 3000);
+            required_fields_completed = false;
+            return false;
+        }
+    });
+
+    return required_fields_completed;
+};
+
+export {build_toast, popup_notification, show_error_and_popup, submit_with_screencover, show_screenplay, alert_if_required_missing};
