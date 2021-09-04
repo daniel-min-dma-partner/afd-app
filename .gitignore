@@ -11,9 +11,13 @@ ant/push/*
 ant/**/*.wdf
 ant/**/*.json
 ant/**/*.xml
+ant/**/*.zip
 ant/**/*.properties
 json_diff_output.html
 media/*
 staticfiles/*
 ant/apache-ant*
 core/local_settings.py
+data/*
+main/templates/json_diff_output.html
+*.sqlite

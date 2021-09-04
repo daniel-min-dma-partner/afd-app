@@ -2,49 +2,95 @@
 {% load main_extras %}
 
 <!-- Nav Item - Alerts -->
-{% if notifications and notifications and notifications|only_unreads|length %}
-    <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-bell fa-fw"></i>
-            <!-- Counter - Alerts -->
-            {% if notifications and notifications|only_unreads|length %}
-                <span class="badge badge-danger badge-counter">{{ notifications|only_unreads|length }}</span>
-            {% endif %}
-        </a>
-        <!-- Dropdown - Alerts -->
-        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-             aria-labelledby="alertsDropdown">
-            <h6 class="dropdown-header">
-                Alerts Center
-            </h6>
+<li class="nav-item dropdown no-arrow mx-1">
+    <a class="nav-link dropdown-toggle" href="#" id="uploadDropdown" role="button"
+       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-download fa-fw"></i>
+        <!-- Counter - Alerts -->
+        {% if upload_notifications|only_unreads_up|length %}
+            <span class="badge badge-success badge-counter">{{ upload_notifications|only_unreads_up|length }}</span>
+        {% endif %}
+    </a>
+    <!-- Dropdown - Alerts -->
+    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+         aria-labelledby="uploadDropdown">
+        <h6 class="dropdown-header-success">
+            Dataflow Uploads Alert Center
+        </h6>
 
-            <!-- Alert items -->
-            {% autoescape on %}
-                <div class="list-group">
-                    {% for notification in notifications %}
-                        <a class="dropdown-item d-flex align-items-center{% if notification.status != 3 %} bg-not-read{% endif %}"
-                           href="{% url 'main:notification-clicked' pk=notification.pk %}">
-                            <div class="mr-3">
-                                <div class="icon-circle bg-{{ notification.type }}">
-                                    <i class="fas fa-file-alt text-white"></i>
-                                </div>
+        <!-- Alert items -->
+        {% autoescape on %}
+            <div class="list-group">
+                {% for notification in upload_notifications %}
+                    <a class="dropdown-item d-flex align-items-center{% if notification.status != 3 %} bg-not-read{% endif %}"
+                       href="{% url 'main:notification-clicked' pk=notification.pk %}">
+                        <div class="mr-3">
+                            <div class="icon-circle bg-{{ notification.type|parse_to_color }}">
+                                <i class="fas fa-file-alt text-white"></i>
                             </div>
-                            <div>
-                                <div class="small text-gray-500">{{ notification.created_at }}</div>
-                                <span class="">
+                        </div>
+                        <div>
+                            <div class="small text-gray-500">{{ notification.created_at }}</div>
+                            <span class="">
                                     <div class="text-truncate">{{ notification.message|safe }}</div>
                                 </span>
-                                <input type="hidden" value="{{ notification.pk }}">
-                            </div>
-                        </a>
-                    {% endfor %}
-                </div>
-            {% endautoescape %}
+                            <input type="hidden" value="{{ notification.pk }}">
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endautoescape %}
 
-            <!-- Show all alerts -->
+        <!-- Show all alerts -->
+        {% if upload_notifications|only_unreads_up|length %}
             <a class="dropdown-item text-center small text-gray-500" href="{% url 'main:mark-all' %}">Mark all as
                 read</a>
-        </div>
-    </li>
-{% endif %}
+        {% endif %}
+    </div>
+</li>
+
+<!-- Nav Item - Alerts -->
+<li class="nav-item dropdown no-arrow mx-1">
+    <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-bell fa-fw"></i>
+        <!-- Counter - Alerts -->
+        {% if notifications|only_unreads|length %}
+            <span class="badge badge-danger badge-counter">{{ notifications|only_unreads|length }}</span>
+        {% endif %}
+    </a>
+    <!-- Dropdown - Alerts -->
+    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+         aria-labelledby="alertsDropdown">
+        <h6 class="dropdown-header">
+            Alerts Center
+        </h6>
+
+        <!-- Alert items -->
+        {% autoescape on %}
+            <div class="list-group">
+                {% for notification in notifications %}
+                    <a class="dropdown-item d-flex align-items-center{% if notification.status != 3 %} bg-not-read{% endif %}"
+                       href="{% url 'main:notification-clicked' pk=notification.pk %}">
+                        <div class="mr-3">
+                            <div class="icon-circle bg-{{ notification.type|parse_to_color }}">
+                                <i class="fas fa-file-alt text-white"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="small text-gray-500">{{ notification.created_at }}</div>
+                            <span class=""><div class="text-truncate">{{ notification.message|safe }}</div></span>
+                            <input type="hidden" value="{{ notification.pk }}">
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endautoescape %}
+
+        <!-- Show all alerts -->
+        {% if notifications|only_unreads|length %}
+            <a class="dropdown-item text-center small text-gray-500" href="{% url 'main:mark-all' %}">Mark all as
+                read</a>
+        {% endif %}
+    </div>
+</li>

@@ -21,6 +21,7 @@
 
 
     <title>{% block title %}SB Admin 2 - Dashboard{% endblock title %}</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
     {% include 'sb-base/_header.html' %}
 
@@ -28,6 +29,14 @@
 </head>
 
 <body id="page-top">
+
+{# https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_overlay #}
+<div id="myNav" class="overlay">
+  <a href="javascript:void(0)" class="close-screenplay">&times;</a>
+  <div class="overlay-content">
+    <p class="progress-description"></p>
+  </div>
+</div>
 
 <!-- Page Wrapper -->
 <div id="wrapper">

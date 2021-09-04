@@ -51,19 +51,20 @@ class TimezoneMiddleware:
 
     def __call__(self, request):
         try:
-            profiles = Profile.objects.filter(user=request.user)
-            tzname = None
+            if request.user.is_authenticated:
+                profiles = Profile.objects.filter(user=request.user)
+                tzname = None
 
-            if profiles.exists():
-                for profile in profiles:
-                    if profile.key == 'timezone':
-                        tzname = profile.value
-                        break
+                if profiles.exists():
+                    for profile in profiles:
+                        if profile.key == 'timezone':
+                            tzname = profile.value
+                            break
 
-            if tzname:
-                timezone.activate(pytz.timezone(tzname))
-            else:
-                timezone.deactivate()
+                if tzname:
+                    timezone.activate(pytz.timezone(tzname))
+                else:
+                    timezone.deactivate()
         except Exception as e:
             raise e
         finally:

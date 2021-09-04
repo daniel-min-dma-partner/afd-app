@@ -1,13 +1,13 @@
+import datetime
 import json as js
-from urllib import parse
 
 import requests
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as do_login, logout as do_logout
 from django.core.files.base import ContentFile
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.views import View, generic
 from django.views.decorators.csrf import csrf_exempt
@@ -15,21 +15,29 @@ from rest_framework import authentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from core.settings import sched
 from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
 from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
     SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm, \
-    DeprecateFieldsForm, SecpredToSaqlForm
+    DeprecateFieldsForm, SecpredToSaqlForm, ProfileForm
+from main.interactors.jobs_interactor import JobsInteractor
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser
 from .interactors.deprecate_fields_interactor import FieldDeprecatorInteractor
-from .interactors.download_dataflow_interactor import DownloadDataflowInteractor
 from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.notification_interactor import SetNotificationInteractor
-from .interactors.sfdc_connection_interactor import SfdcConnectWithConnectedApp
+from .interactors.response_interactor import ZipFileResponseInteractor, JsonFileResponseInteractor
+from .interactors.sfdc_connection_interactor import OAuthLoginInteractor, SfdcConnectWithConnectedApp
+from .interactors.slack_targetlist_interactor import SlackTarListInteractor
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
-from .interactors.upload_dataflow_interactor import UploadDataflowInteractor
+from .interactors.upload_dataflow_interactor import UploadDataflowInteractorNoAnt
 from .interactors.wdf_manager_interactor import *
-from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation
+from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, \
+    DeprecationDetails, UploadNotifications, Profile
+from django.forms.utils import ErrorList
+
+
+sched.start()
 
 
 class Home(generic.TemplateView):
@@ -94,7 +102,7 @@ class LoginView(generic.FormView):
 def logout(request):
     do_logout(request)
 
-    return render(request, "logout/logout.html")
+    return render(request, "login/loginform.html")
 
 
 class RegisterUserView(generic.FormView):
@@ -116,11 +124,14 @@ class RegisterUserView(generic.FormView):
 
         if form.is_valid():
             user: User = form.save(commit=False)  # guarda en el model.
-            user.is_active = 1
+            user.is_active = 0
+            user.is_staff = user.is_superuser = 0
             user.save()
 
             if user is not None:
-                messages.success(request, f"User '{user.username}' saved successfully.")
+                messages.success(request, mark_safe(f"User <code>{user.username}</code> has been created successfully "
+                                                    f"but it requires to be activated by an admin.<br/><br/>"
+                                                    f"Contact the site admin to request the activation."))
                 return redirect("main:home")
             else:
                 messages.error(request, f"Error saving new user.")
@@ -163,15 +174,16 @@ class TreeRemover(generic.FormView):
                     ctx = TreeRemoverInteractor.call(dataflow=_dataflow, replacers=_replacers, registers=registers,
                                                      name=name, request=request)
                 else:
+                    name = name or f"[extracted] {dataflow[0].name}"
                     ctx = TreeExtractorInteractor.call(dataflow=_dataflow, registers=registers, output_filename=name)
 
-                print(form.cleaned_data)
-                print(request.POST)
-                message = ctx.output.replace('\\', '')
-                message = mark_safe(f"File generated at <code>{message}</code>")
-                thype = messages.INFO
-            except RuntimeError as rt_e:
-                print(rt_e)
+                response_ctx = JsonFileResponseInteractor.call(filepath=ctx.output)
+
+                if response_ctx.exception:
+                    raise response_ctx.exception
+
+                return response_ctx.response
+            except Exception as rt_e:
                 message = rt_e
                 thype = messages.ERROR
 
@@ -212,7 +224,8 @@ class SlackIntegrationView(generic.FormView):
                 "case-manager-approval": form.cleaned_data['case_manager_approval'],
                 "case-manager-name": form.cleaned_data['case_manager_name'],
                 "case-contact": form.cleaned_data['case_contact'],
-                "submitter": ""
+                "submitter": request.user.first_name + " " + request.user.last_name
+                             if len(request.user.first_name+request.user.last_name) else ""
             }
 
             if request.user.is_authenticated and request.user.first_name:
@@ -333,47 +346,15 @@ class SfdcConnectView(View):
         else:
             try:
                 env = SfdcEnv.objects.get(user=request.user, pk=pk)
+                ctx = OAuthLoginInteractor.call(model=env, mode=action)
 
-                if env.oauth_flow_stage == 0 and action == 'logout':
-                    messages.info(request, 'You already have been logout.')
+                if ctx.exception:
+                    raise ctx.exception
                 else:
-                    url = env.environment + uri
-                    parms = {
-                        "client_id": env.client_key,
-                        "redirect_uri": "https://localhost:8080/sfdc/connected-app/oauth2/callback",
-                        "response_type": "code",
-                        "state": f"usrid:{request.user.pk}.envid:{env.pk}"
-                    } if action == "login" else {
-                        "token": env.oauth_access_token
-                    }
+                    messages.success(request, mark_safe(f"<code>{action.upper()}</code> performed successfully."))
 
-                    url_parse = parse.urlparse(url)
-                    query = url_parse.query
-                    url_dict = dict(parse.parse_qsl(query))
-                    url_dict.update(parms)
-                    url_new_query = parse.urlencode(url_dict)
-                    url_parse = url_parse._replace(query=url_new_query)
-                    new_url = parse.urlunparse(url_parse)
-
-                    if action == 'logout':
-                        response = requests.post(new_url)
-                        env.flush_oauth_data()
-                        env.set_oauth_flow_stage("LOGOUT")
-                        env.save()
-
-                        if response.status_code == 200:
-                            messages.success(request, mark_safe(
-                                f"Logout connection <code>{env.name}</code> performed successfully"))
-                        else:
-                            messages.warning(request, mark_safe(f"Logout response status: {response.status_code}"))
-                    else:
-                        env.flush_oauth_data()
-                        env.set_oauth_flow_stage("AUTHORIZATION_CODE_REQUEST")
-                        env.save()
-
-                        return redirect(new_url)
             except Exception as e:
-                messages.warning(request, e)
+                messages.warning(request, mark_safe(e))
 
         return redirect('main:sfdc-env-list')
 
@@ -425,24 +406,43 @@ class DownloadDataflowView(generic.FormView):
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()
         form = form_class(data=request.POST)
-        dataflows = dict(request.POST)['dataflow_selector']
+        dataflows = dict(request.POST)['dataflow_selector'] if 'dataflow_selector' in request.POST.keys() else []
+        download_all = 'all' in request.POST.keys() and request.POST.get('all') == 'on'
 
         if form.is_valid():
             try:
                 env = get_object_or_404(SfdcEnv, pk=form.cleaned_data['env_selector'])
-                download_ctx = DownloadDataflowInteractor.call(dataflow=dataflows, model=env, user=request.user)
 
-                if not download_ctx.exception:
-                    wdf_manager_ctx = WdfManager.call(user=request.user, mode="wdfToJson", env=env)
-                else:
-                    raise download_ctx.exception
+                if download_all:
+                    down_all_ctx = DataflowListInteractor.call(model=env, search=None,
+                                                               refresh_cache='true',
+                                                               user=request.user)
+                    if down_all_ctx.error:
+                        raise Exception(down_all_ctx.error)
 
-                messages.info(request, "OK")
+                    dataflows = [item['id'] for item in down_all_ctx.payload['results']]
+
+                if not dataflows:
+                    raise KeyError("No dataflow selected")
+
+                _data = {"dataflows": dataflows, "model": env, "user": request.user}
+                ctx = JobsInteractor.call(data=_data, scheduler=sched)
+                messages.success(request, mark_safe(f"Downloadig dataflow{'s' if len(dataflows) > 0 else ''} from "
+                                          f"<code>{env.name}</code> started. Check the notifications later."))
 
                 return redirect("main:download-dataflow")
+
+                # download_ctx = DownloadDataflowInteractorNoAnt.call(dataflow=dataflows, model=env, user=request.user)
+                # if download_ctx.exception:
+                #     raise download_ctx.exception
+                # 
+                # response_ctx = FileResponseInteractor.call(zipfile_path=download_ctx.output_filepath, env=env)
+                # if response_ctx.exception:
+                #     raise response_ctx.exception
+                # 
+                # return response_ctx.response
             except Exception as e:
-                messages.error(request, e)
-                raise e
+                messages.error(request, mark_safe(e))
         else:
             print(form.errors.as_data)
             messages.error(request, form.errors.as_data)
@@ -474,38 +474,40 @@ class UploadDataflowView(generic.FormView):
 
                 env = get_object_or_404(SfdcEnv, pk=form.cleaned_data['env_selector'])
                 remote_df_name = form.cleaned_data['dataflow_selector']
-                ctx = UploadDataflowInteractor.call(env=env, remote_df_name=remote_df_name, user=request.user,
-                                                    filemodel=filemodel)
+                if not remote_df_name:
+                    raise KeyError("Missing required field <code>Remote dataflow name</code>.")
+
+                ctx = UploadDataflowInteractorNoAnt.call(env=env, remote_df_name=remote_df_name, user=request.user,
+                                                         filemodel=filemodel)
                 if ctx.exception:
                     raise ctx.exception
                 else:
                     msg = "Uploading <code>{0}</code> local dataflow to <code>{1}</code> dataflow to " \
                           "<code>{2}</code> connection has finished." \
-                        .format(
-                        os.path.basename(filemodel.file.name), remote_df_name, env.name
-                    )
+                        .format(os.path.basename(filemodel.file.name), remote_df_name, env.name)
                     notif_msg = msg
                     messages.info(request, mark_safe(msg))
             else:
                 messages.error(request, form.errors.as_data)
         except Exception as e:
-            messages.error(request, str(e))
-            notif_msg = str(e)
+            messages.error(request, mark_safe(e))
+            notif_msg = mark_safe(str(e))
             notif_type = 'error'
 
         # Push a notification.
         try:
-            notif_data = {
-                'user': request.user,
-                'message': notif_msg,
-                'status': Notifications.get_initial_status(),
-                'link': "#",
-                'type': notif_type
-            }
-            ctx = SetNotificationInteractor.call(data=notif_data)
+            if notif_msg:
+                notif_data = {
+                    'user': request.user,
+                    'message': notif_msg,
+                    'status': Notifications.get_initial_status(),
+                    'link': "#",
+                    'type': notif_type
+                }
+                ctx = SetNotificationInteractor.call(data=notif_data)
 
-            if ctx.exception:
-                raise ctx.exception
+                if ctx.exception:
+                    raise ctx.exception
         except Exception as e:
             messages.error(request, str(e))
 
@@ -536,11 +538,12 @@ class CompareDataflows(generic.FormView):
                 if _method == 'd2h':
                     show_in_browser(original=files_model.file1.path, compared=files_model.file2.path)
                     files_model.delete()
+                    return render(request, 'json_diff_output.html')
                 elif _method == 'jdd':
                     with files_model.file1.open('r') as f, files_model.file2.open('r') as g:
-                        script = json.load(g)
-                        left_script = json.dumps(script, indent=2)  # left shows the original json.
                         script = json.load(f)
+                        left_script = json.dumps(script, indent=2)  # left shows the original json.
+                        script = json.load(g)
                         right_script = json.dumps(script, indent=2)  # right shows the modified json.
 
                     return render(request, 'jdd/index.html', {
@@ -563,20 +566,53 @@ class DeprecateFieldsView(generic.FormView):
     template_name = 'dataflow-manager/deprecate-fields/form.html'
     form_class = DeprecateFieldsForm
     success_url = '/dataflow-manager/deprecate-fields/'
+    media_dir = os.path.join(settings.BASE_DIR, 'media/')
+    temp_file_dir = os.path.join(media_dir, "metadatafile-{{user}}-{{datetime}}")
+
+    fields = None
+    objects = None
+    filepath = None
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         df_files = []
+        ctx = None
+
+        def get_filepath(filepath_template, name, username):
+            now = datetime.datetime.now().strftime(f"%Y-%m-%d-{name}")
+            _filepath = filepath_template.replace("{{user}}", username).replace('{{datetime}}', now)
+            return _filepath
 
         try:
             if form.is_valid():
-                # Prepare fields: Each row corresponds to an Object.
-                fields = [field.rstrip() for field in request.POST.get('fields').split('\n') if
-                          field.rstrip() not in [None, ""]]
+                # User indicated to read metadata from file
+                if form.cleaned_data.get('from_file'):
+                    filemodel = FileModel(file=request.FILES.getlist('file')[0])
+                    filemodel.user = request.user
+                    filemodel.save()
 
-                # Prepare objects: Each row must specify only one Object.
-                objects = [obj.rstrip() for obj in request.POST.get('objects').split('\n') if
-                           obj.rstrip() not in [None, ""]]
+                    metadata = json.load(open(filemodel.file.path, 'r'))
+                    self.filepath = filemodel.file.path
+                    self.fields = [field for _, field in metadata.items()]
+                    self.objects = [obj for obj, _ in metadata.items()]
+
+                    filemodel.delete()
+                else:
+                    # Prepare fields: Each row corresponds to an Object.
+                    self.fields = [field.rstrip() for field in request.POST.get('fields').split('\n') if
+                                   field.rstrip() not in [None, ""]]
+
+                    # Prepare objects: Each row must specify only one Object.
+                    self.objects = [obj.rstrip() for obj in request.POST.get('sobjects').split('\n') if
+                                    obj.rstrip() not in [None, ""]]
+
+                # User indicated to save metadata into a file
+                if form.cleaned_data.get('save_metadata'):
+                    metadata = {obj: self.fields[self.objects.index(obj)] for obj in self.objects}
+                    filemodel = FileModel()
+                    filemodel.user = request.user
+                    filemodel.file.save("Field-Deprecation-Metadata", ContentFile(json.dumps(metadata, indent=2)))
+                    self.filepath = filemodel.file.path
 
                 # Prepare dataflow contents
                 for file in request.FILES.getlist('files'):
@@ -586,41 +622,54 @@ class DeprecateFieldsView(generic.FormView):
                     df_files.append(filemodel)
 
                 # Calls interactor
-                ctx = FieldDeprecatorInteractor.call(df_files=df_files, objects=objects, fields=fields,
-                                                     user=request.user)
+                ctx = FieldDeprecatorInteractor.call(df_files=df_files, objects=self.objects, fields=self.fields,
+                                                     user=request.user, name=form.cleaned_data['name'],
+                                                     org=form.cleaned_data['org'],
+                                                     case_url=form.cleaned_data['case_url'])
 
-                if ctx.exception:
-                    raise ctx.exception
+                message = "Deprecation finished. Check the latest notifications for more details."
+                flash_type = messages.INFO
 
-                for deprecation_model in ctx.deprecation_models:
-                    deprecation_model.save()
+                # Returns a normal response or file-download response
+                if form.cleaned_data.get('save_metadata'):
+                    response_ctx = JsonFileResponseInteractor.call(filepath=self.filepath)
 
-                for fm in df_files:
-                    fm.delete()
+                    if response_ctx.exception:
+                        raise response_ctx.exception
 
-                for file in ctx.deprecation_models:
-                    notif_data = {
-                        'user': request.user,
-                        'message': f"Ok",
-                        'status': Notifications.get_initial_status(),
-                        'link': reverse('main:compare-deprecation', kwargs={'pk': file.pk}),
-                        'type': 'success'
-                    }
-                    ctx = SetNotificationInteractor.call(data=notif_data)
+                    # Removes temporal file
+                    os.remove(self.filepath)
 
-                    if ctx.exception:
-                        raise ctx.exception
-
-                messages.success(request, "Deprecation finished successfully")
-                return self.form_valid(form)
+                    _return = response_ctx.response
+                else:
+                    _return = self.form_valid(form)
             else:
-                messages.error(request, form.errors.as_data())
-                return self.form_invalid(form)
+                message = "Submitted form contains error. Please review it."
+                flash_type = messages.ERROR
+                _return = render(request, 'dataflow-manager/deprecate-fields/form.html', {'form': form})
         except Exception as e:
+            message = mark_safe(str(e))
+            flash_type = messages.ERROR
+            _return = redirect("main:deprecate-fields")
+        finally:
             for fm in df_files:
                 fm.delete()
-            messages.error(request, mark_safe(str(e)))
-            return redirect("main:deprecate-fields")
+
+            if ctx and ctx.not_deprecated_dfs:
+                ctx.not_deprecated_dfs.sort()
+                msg = f"The following dataflow(s) ({len(ctx.not_deprecated_dfs)}) didn't suffer any deprecation:<br/>" \
+                      f"<code>{'</code><br/><code>'.join(ctx.not_deprecated_dfs)}</code>."
+                _ = SetNotificationInteractor.call(data={"user": request.user,
+                                                         "message": msg,
+                                                         "status": 1,
+                                                         "link": "__self__",
+                                                         "type": "info"})
+
+                if _.exception:
+                    raise _.exception
+
+        messages.add_message(request, flash_type, message)
+        return _return
 
 
 class ViewDeprecatedFieldsView(generic.ListView):
@@ -629,6 +678,20 @@ class ViewDeprecatedFieldsView(generic.ListView):
 
     def get_queryset(self):
         lst = DataflowDeprecation.objects.filter(user=self.request.user).order_by('-created_at')
+        return lst
+
+
+class DeprecationDetailsView(generic.ListView):
+    context_object_name = 'list'
+    template_name = 'dataflow-manager/deprecate-fields/details/_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DeprecationDetailsView, self).get_context_data(**kwargs)
+        context['deprecation'] = get_object_or_404(DataflowDeprecation, pk=self.kwargs['pk'])
+        return context
+
+    def get_queryset(self):
+        lst = DeprecationDetails.objects.filter(deprecation_id=self.kwargs['pk']).order_by('file_name')
         return lst
 
 
@@ -645,7 +708,7 @@ class CompareDeprecationView(generic.TemplateView):
         context = super(self.__class__, self).get_context_data(**kwargs)
 
         try:
-            deprecation_model: DataflowDeprecation = get_object_or_404(DataflowDeprecation, pk=kwargs['pk'])
+            deprecation_model: DeprecationDetails = get_object_or_404(DeprecationDetails, pk=kwargs['pk'])
 
             left_script = json.dumps(deprecation_model.original_dataflow, indent=2)
             right_script = json.dumps(deprecation_model.deprecated_dataflow, indent=2)
@@ -666,7 +729,7 @@ class MarkNotifAsClickedView(generic.View):
             notification = get_object_or_404(Notifications, pk=kwargs['pk'], user=request.user)
             notification.set_read_clicked()
             notification.save()
-            return redirect(notification.link)
+            return redirect(f"/notifications/view/{kwargs['pk']}")
 
 
 class NotificationMarkAllAsReadClickedView(generic.View):
@@ -679,11 +742,179 @@ class NotificationMarkAllAsReadClickedView(generic.View):
                 for notification in notifications.all():
                     notification.set_read_clicked()
                     notification.save()
-                    print('saveado=============')
         except Exception as e:
             messages.error(request, str(e))
 
         return redirect('main:home')
+
+
+class NotificationDetailsView(generic.TemplateView):
+    template_name = 'notifications/view.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        notification = UploadNotifications.objects.filter(pk=kwargs['pk'])
+        if notification.exists():
+            notification = notification.first()
+        else:
+            notification = get_object_or_404(Notifications, pk=kwargs['pk'])
+        context['notification'] = notification
+        # notification.delete()
+        return context
+
+
+class ProfileCreateView(generic.FormView):
+    form_class = ProfileForm
+    success_url = '/profile/create/'
+    template_name = 'profile/create.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+
+        # Adds extra form context here...
+
+        return context
+
+    def get(self, request, *args, **kwargs):
+        form = ProfileForm()
+
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request, *args, **kwargs):
+        form = ProfileForm(request.POST)
+
+        try:
+            if form.is_valid():
+                model: Profile = form.save(commit=False)
+                model.user = request.user
+                model.save()
+
+                messages.success(request, mark_safe(f"<strong><code>{model.key}</code></strong> stored successfully."))
+                return redirect('main:profile-view')
+        except Exception as e:
+            form.add_error(None, mark_safe(str(e)))
+
+        return render(request, self.template_name, {"form": form})
+
+
+class ProfileEditView(generic.FormView):
+    form_class = ProfileForm
+    success_url = '/profile/view/'
+    template_name = 'profile/edit.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        profile = self.get_object()
+        context['form'] = self.form_class(None, instance=profile)
+        context['profile'] = profile
+        return context
+
+    def get_object(self, queryset=None):
+        obj = Profile.objects.filter(pk=self.kwargs['pk']).first()
+        return obj
+
+    def post(self, request, *args, **kwargs):
+        try:
+            profile = get_object_or_404(Profile, pk=kwargs['pk'])
+            form = self.form_class(request.POST, instance=profile)
+
+            print("post", form)
+            if form.is_valid():
+                print("form", form.cleaned_data)
+                model: Profile = form.save(commit=False)
+                model.user = request.user
+                model.save()
+
+                messages.success(request, mark_safe(f"<strong><code>{model.key}</code></strong> stored successfully."))
+                return redirect('main:profile-view')
+            else:
+                return render(request, self.template_name, {"form": form, "profile": profile})
+        except Exception as e:
+            messages.error(request, mark_safe(str(e)))
+            return redirect('main:profile-view')
+
+
+class ProfileShowView(generic.ListView):
+    template_name = 'profile/view.html'
+
+    def get_queryset(self):
+        lst = Profile.objects.filter(user=self.request.user).order_by('key')
+        return lst
+
+
+def profile_delete_view(request, pk=None):
+    user = request.user
+    profile = Profile.objects.filter(user=user, pk=pk)
+    status = 200
+
+    if user.is_authenticated:
+        if profile.exists():
+            profile = profile.first()
+            profile.delete()
+            messages.success(request, mark_safe(f"<code><strong>{profile.key}</strong></code> has been removed."))
+        else:
+            messages.info(request, mark_safe(f"Profile with key <code>{pk}</code> not found"))
+    else:
+        status = 500
+        messages.error(request, mark_safe(f"User <code>{user.username}</code> is not authenticated."))
+
+    return JsonResponse({"payload": "", "error": ""}, status=status)
+
+
+def profile_get_type_list(request):
+    try:
+        payload = {
+            "results": Profile.TYPE_CHOICE_SELECT2
+        }
+
+        search = request.GET.get('search')
+
+        if search:
+            payload['results'] = [item for item in payload['results'] if search.strip().lower() in item['text'].strip().lower()]
+
+        status = 200
+        error = None
+    except Exception as e:
+        error = str(e)
+        status = 500
+        payload = None
+
+    return JsonResponse({"payload": payload, "error": error}, status=status)
+
+
+def dataflow_download_deprecated(request, pk=None):
+    try:
+        deprecation_detail = get_object_or_404(DeprecationDetails, pk=pk)
+        filename = deprecation_detail.file_name
+        json_str = json.dumps(deprecation_detail.deprecated_dataflow, indent=2)
+        response = HttpResponse(json_str,
+                                content_type='application/json',
+                                headers={'Content-Disposition': f'attachment; filename={filename}.json'})
+    except Exception as e:
+        messages.error(request, mark_safe(str(e)))
+        response = redirect('main:view-deprecations')
+
+    return response
+
+
+def deprecation_delete_all(request):
+    user = request.user
+    deprecations = DataflowDeprecation.objects.filter(user=user)
+    status = 200
+
+    if user.is_authenticated:
+        if deprecations.exists():
+            for dep in deprecations.all():
+                dep.delete()
+            messages.success(request, "All deprecation has been removed.")
+        else:
+            messages.info(request, "No deprecation has been found.")
+    else:
+        status = 500
+        messages.error(request, mark_safe(f"User <code>{user.username}</code> is not authenticated."))
+
+    return JsonResponse({"payload": "", "error": ""}, status=status)
 
 
 def handler500(request, exception=None):
@@ -691,16 +922,18 @@ def handler500(request, exception=None):
 
 
 @csrf_exempt
-def ajax_compare_deprecation(request):
+def compare_deprecation(request, pk=None):
     payload = None
     error = "Code not executed"
     status = 400
+    print(request.method)
+    print(request.GET)
     try:
-        if request.is_ajax() and request.method == 'GET' and request.GET.getlist('pk') is not None:
+        if request.method == 'GET' and pk is not None:
             error = None
             status = 200
 
-            deprecation_model: DataflowDeprecation = get_object_or_404(DataflowDeprecation, pk=request.GET.get('pk'))
+            deprecation_model: DeprecationDetails = get_object_or_404(DeprecationDetails, pk=pk)
 
             filemodel = FileModel()
             filemodel.user = request.user
@@ -717,12 +950,16 @@ def ajax_compare_deprecation(request):
             second_fm.delete()
 
             messages.info(request, "Showing difference in a new tab.")
+
+            return render(request, 'json_diff_output.html')
+
     except Exception as e:
         payload = None
         error = mark_safe(str(e))
         status = 401
 
-    return JsonResponse({"payload": payload, "error": error}, status=status)
+    messages.error(request, error)
+    return redirect('main:view-deprecations')
 
 
 def ajax_copy_key_to_clipboard(request):
@@ -798,8 +1035,21 @@ def ajax_list_dataflows(request):
 def ajax_list_envs(request):
     try:
         if SfdcEnv.objects.filter(user=request.user.pk).exists():
-            payload = [(model.pk, model.name)
-                       for model in SfdcEnv.objects.filter(user=request.user.pk).all()]
+            payload = {
+                "results": [
+                    {
+                        "id": model.pk,
+                        "text": model.name
+                    }
+                    for model in SfdcEnv.objects.filter(user=request.user.pk).all()
+                ]
+            }
+
+            search = request.GET.get('search')
+
+            if search:
+                payload['results'] = (item for item in payload['results'] if search in item['text'])
+
             status = 200
             error = None
         else:
@@ -821,3 +1071,63 @@ def slack_interactive_endpoint(request):
         return JsonResponse({"message": "ok"}, status=200)
     if request.method == "GET":
         return redirect("main:home")
+
+
+def ajax_slack_get_targets(request):
+    payload = {
+        "results": [
+            {
+                "id": "",
+                "text": "Select one",
+            },
+        ],
+    }
+
+    try:
+        if request.is_ajax() and request.method == 'GET':
+            ctx = SlackTarListInteractor.call()
+
+            if ctx.exception:
+                raise ctx.exception
+
+            status = ctx.status
+            error = None
+            payload = ctx.payload
+        else:
+            raise Exception("The type of the request must be either ajax and GET method.")
+    except Exception as e:
+        error = mark_safe(e)
+        status = 400
+
+    print(payload, error, status, "good")
+    return JsonResponse({"payload": payload, "error": error}, status=status)
+
+
+def download_df_zip_view(request, pk=None):
+    notif = UploadNotifications.objects.filter(pk=pk)
+    message = ""
+    thype = messages.ERROR
+
+    if notif.exists():
+        notif = notif.first()
+        zipfile_path = notif.zipfile_path
+
+        if not os.path.isfile(zipfile_path):
+            notif.delete()
+            message = "The file doesn't exist anymore. Try to re-download it."
+        else:
+            envname = notif.envname
+            print(zipfile_path, envname)
+            ctx = ZipFileResponseInteractor.call(zipfile_path=zipfile_path, envname=envname)
+
+            if ctx.exception:
+                message = mark_safe(ctx.exception)
+            else:
+                notif.delete()
+                return ctx.response
+    else:
+        message = "The .zip file doesn't exist anymore."
+
+    messages.add_message(request, thype, message)
+    return redirect('main:home')
+

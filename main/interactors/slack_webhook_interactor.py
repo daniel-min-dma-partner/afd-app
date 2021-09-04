@@ -4,8 +4,10 @@ import json
 from libs.interactor.interactor import Interactor
 
 _SLACK_MESSAGE_PAYLOAD_TEMPLATE = {
+    "text": "You've received an approval request {{username}}for:",
     "attachments": [
         {
+            "color": "#f2c744",
             "blocks": [
                 {
                     "type": "header",
@@ -83,19 +85,30 @@ class SlackMessagePushInteractor(Interactor):
         contact = values['case-contact']
 
         payload = copy.deepcopy(_SLACK_MESSAGE_PAYLOAD_TEMPLATE)
-        print(description)
 
         payload = json.loads(json.dumps(payload)
+                             .replace('{{username}}', f"from {submitter} " if submitter else "")
                              .replace('{{case_header}}', f"Case #{case_number} - {contact}")
                              .replace('{{case_description}}', f"<{url}|_{description}_>".replace('"', "\\\""))
                              .replace('{{case_url}}', url)
                              .replace('{{case_business_justification}}', self._set_icon(business_justif))
                              .replace('{{case_manager_approval}}', self._set_icon(manager_approval))
-                             .replace('{{case_manager_name}}', f"_{manager_name}_ :checked:" if manager_name else ":warning:")
+                             .replace('{{case_manager_name}}', f"_{manager_name}_ :checked:" if manager_name else "")
                              .replace('{{submitter}}', submitter))
 
-        if not submitter:
-            del payload['attachments'][0]['blocks'][3]['fields'][3]
+        idx = 0
+        for field in payload['attachments'][0]['blocks'][3]['fields']:
+            if 'Manager Name' in field['text'] and not manager_name:
+                del payload['attachments'][0]['blocks'][3]['fields'][idx]
+                break
+            idx += 1
+
+        idx = 0
+        for field in payload['attachments'][0]['blocks'][3]['fields']:
+            if 'Submiter' in field['text'] and not submitter:
+                del payload['attachments'][0]['blocks'][3]['fields'][idx]
+                break
+            idx += 1
 
         return payload
 

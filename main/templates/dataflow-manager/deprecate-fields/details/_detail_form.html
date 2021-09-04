@@ -1,0 +1,98 @@
+{% load static %}
+{% load main_extras %}
+
+<div class="row list-group-deprecation">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input deprecation-filter" type="checkbox"
+                                       id="deprecation-filter-{{ object.pk }}"
+                                       name="deprecation-filter" onclick="filter_deprecation($(this));">
+                                <label class="form-check-label" for="deprecation-filter-{{ object.pk }}">
+                                    Only Deprecated?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input deprecation-filter" type="checkbox"
+                                       id="deprecation-only-errors-{{ object.pk }}"
+                                       name="deprecation-only-errors" onclick="filter_deprecation($(this));">
+                                <label class="form-check-label" for="deprecation-only-errors-{{ object.pk }}">
+                                    Only Errors?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input deprecation-filter" type="checkbox"
+                                       id="deprecation-no-changes-{{ object.pk }}"
+                                       name="deprecation-no-changes" onclick="filter_deprecation($(this));">
+                                <label class="form-check-label" for="deprecation-no-changes-{{ object.pk }}">
+                                    No changes?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <button class="btn btn-info float-right reset-filter">Reset Filter</button>
+                    </div>
+                </div>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>File Name ({{ list|deprecation_stats|safe }})</th>
+                        <th>Status</th>
+                        <th>Observation</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for object in list %}
+                        <tr>
+                            <input type="hidden" class="pk" value="{{ object.pk }}">
+                            <input type="hidden" class="status" value="{{ object.status }}">
+                            <td>{{ object.file_name|basename }}</td>
+                            <td class="bg-{{ object.get_status_bg_color }}"
+                                style="color: white">{{ object.get_status_desc }}</td>
+                            <td>{{ object.message|safe }}</td>
+                            <td class="text-center">
+                                {% if object|is_deprecated %}
+                                    <a href="{% url 'main:compare-deprecation' pk=object.pk %}"
+                                       rel="tooltip" class="btn btn-info btn-circle btn-sm"
+                                       title="Show with 'JDD'" target="_blank">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'main:compare-side-by-side' pk=object.pk %}"
+                                       rel="tooltip" class="btn btn-info btn-circle btn-sm btn-show-diff"
+                                       title="Show with 'Diff2HtmlCompare'" target="_blank">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                {% endif %}
+                                <a href="{% url 'main:download-deprecated' pk=object.pk %}" target="_blank"
+                                   rel="tooltip" class="btn btn-success btn-circle btn-sm"
+                                   title="Download'">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

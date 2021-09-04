@@ -2,6 +2,7 @@ import copy
 import datetime as dt
 import os
 
+import pytz
 import tzlocal
 from django.contrib.auth.models import User
 from django.db import models
@@ -21,22 +22,22 @@ class FileModel(models.Model):
 
     def delete(self, using=None, keep_parents=False):
         _filepath = os.path.join(MEDIA_ROOT, self.file.name)
-        print(f'Trying to delete {_filepath}')
+        # print(f'Trying to delete {_filepath}')
         if os.path.isfile(_filepath) and not os.path.isdir(_filepath):
             os.remove(_filepath)
-            print(f"File {_filepath} deleted")
+            # print(f"File {_filepath} deleted")
 
         _filepath = os.path.join(MEDIA_ROOT, self.file.name.replace('ORIGINAL__', '') + '.log')
-        print(f'Trying to delete {_filepath}')
+        # print(f'Trying to delete {_filepath}')
         if os.path.isfile(_filepath) and not os.path.isdir(_filepath):
             os.remove(_filepath)
-            print(f"File {_filepath} deleted")
+            # print(f"File {_filepath} deleted")
 
         _filepath = os.path.join(MEDIA_ROOT, self.file.name.replace('ORIGINAL__', 'DEPRECATED__'))
-        print(f'Trying to delete {_filepath}')
+        # print(f'Trying to delete {_filepath}')
         if os.path.isfile(_filepath) and not os.path.isdir(_filepath):
             os.remove(_filepath)
-            print(f"File {_filepath} deleted")
+            # print(f"File {_filepath} deleted")
 
         if self.pk:
             super(self.__class__, self).delete(using=using, keep_parents=keep_parents)
@@ -61,10 +62,20 @@ class Profile(models.Model):
         ('int', "Integer"),
         ('str', "String")
     )
+
+    TYPE_CHOICE_SELECT2 = [
+        {"id": 'int', 'text': "Integer"},
+        {"id": 'str', 'text': "String"},
+    ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     key = models.CharField(max_length=128, help_text='', null=False, blank=False)
     value = models.CharField(max_length=128, help_text='', null=False, blank=False)
-    type = models.CharField(max_length=4, help_text='', null=False, blank=False, choices=_TYPE_CHOICE)
+    type = models.CharField(max_length=4, help_text='', null=False, blank=False, choices=_TYPE_CHOICE, default='str')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['key', 'user_id'], name='Unique Key constraint per User is enforced')
+        ]
 
     def clean_key(self):
         self.key = self.key.strip()
@@ -75,6 +86,12 @@ class Profile(models.Model):
         self.value = self.value.strip()
 
         return self.value
+
+    def get_type_text(self):
+        for item in self.TYPE_CHOICE_SELECT2:
+            if item['id'] == self.type:
+                return item['text']
+        return None
 
 
 class SalesforceEnvironment(models.Model):
@@ -189,7 +206,7 @@ class Notifications(models.Model):
         3: 'READ_CLICKED',
     }
 
-    message = models.CharField(max_length=1024, help_text='', null=False, blank=False)
+    message = models.CharField(max_length=4096, help_text='', null=False, blank=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.IntegerField(default=1, blank=False, null=False, choices=_STATUS_CHOICE)
     link = models.CharField(max_length=1024, help_text='', null=False, blank=False, default="#")
@@ -198,7 +215,7 @@ class Notifications(models.Model):
                             default='info')
 
     def __init__(self, *args, **kwargs):
-        super(self.__class__, self).__init__(*args, **kwargs)
+        super(Notifications, self).__init__(*args, **kwargs)
         self.__important_fields = ['status']
         for field in self.__important_fields:
             setattr(self, '__original_%s' % field, getattr(self, field))
@@ -234,8 +251,65 @@ class Notifications(models.Model):
 
 
 class DataflowDeprecation(models.Model):
+    name = models.CharField(max_length=1024, help_text='', null=False, blank=False)
+    salesforce_org = models.CharField(max_length=1024, help_text='', null=False, blank=False)
+    sobjects = models.TextField(default="<< sfdc objs api >>")
+    fields = models.TextField(default="<< sfdc obj fields api")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    case_url = models.CharField(max_length=1024, help_text='', null=True, blank=True, default="#")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class DeprecationDetails(models.Model):
+    _STATUS_CHOICES = (
+        (0, 'no-deprecation'),
+        (1, "success"),
+        (2, "info"),
+        (3, "warning"),
+        (4, "danger"),
+    )
+
+    ERROR = 4
+    WARNING = 3
+    INFO = 2
+    SUCCESS = 1
+    NO_DEPRECATION = 0
+
+    _STATUS_MAP = {
+        0: "NO DEPRECATION",
+        1: "DEPRECATION SUCCEEDED",
+        4: "ERROR"
+    }
+
+    _STATUS_BOOSTRAP_COLOR = {
+        0: 'info',
+        1: 'success',
+        2: 'info',
+        3: 'warning',
+        4: 'danger'
+    }
+
     file_name = models.CharField(max_length=1024, help_text='', null=False, blank=False)
     original_dataflow = CompressedJSONField()
     deprecated_dataflow = CompressedJSONField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    meta = CompressedJSONField()
+    status = models.IntegerField(default=NO_DEPRECATION, blank=False, null=False, choices=_STATUS_CHOICES)
+    message = models.CharField(max_length=4096, help_text='', null=True, blank=True)
+    deprecation = models.ForeignKey(DataflowDeprecation, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def get_status_desc(self):
+        if self.status in self._STATUS_MAP.keys():
+            return self._STATUS_MAP[self.status]
+        return self.status
+
+    def get_status_bg_color(self):
+        return self._STATUS_BOOSTRAP_COLOR[self.status]
+
+
+class UploadNotifications(Notifications):
+    zipfile_path = models.CharField(max_length=2048, help_text='', null=False, blank=False)
+    envname = models.CharField(max_length=128, help_text='', null=False, blank=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

@@ -105,11 +105,15 @@
 
             <div class="dropdown-divider"></div>
 
-            <label for="id_slack_target">Send To</label>
-            <div class="form-row" id="id_slack_target">
-                {% include 'slack/_slack_target_list.html' %}
+            <div class="form-row">
+                <div class="form-group col-md-8">
+                    <label for="id_slack_target">Request approval to: </label>
+                    <br/>
+                    <select id="id_slack_target" class="js-example-basic-single form-select-sm"
+                            name="slack_target" style="width:50%; " multiple>
+                    </select>
+                </div>
             </div>
-
 
             <br/>
             <br/>

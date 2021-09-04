@@ -1,11 +1,13 @@
 import copy
 
+import pytz
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 
-from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel as DFCompModel
+from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel as DFCompModel, Profile
+from django.core.exceptions import ValidationError
 
 
 class LoginForm(AuthenticationForm):
@@ -33,26 +35,26 @@ class RegisterUserForm(forms.ModelForm):
         model = User
         help_texts = {'username': ''}
         exclude = {'id', 'password', 'is_superuser', 'is_staff', 'last_login', 'date_joined',
-                   'user_permissions', 'is_active', 'groups', 'first_name', 'last_name', }
+                   'user_permissions', 'is_active', 'groups'}
         REQUIRED_FIELDS = [
-            'email', 'username', 'password1', 'password2'
+            'email', 'username', 'password1', 'password2', 'first_name', 'last_name'
         ]
 
     def clean_email(self):
-        _email = self.cleaned_data['email'].rstrip()
+        _email = self.cleaned_data['email'].strip()
         if User.objects.filter(email=_email).exists():
             raise forms.ValidationError("The email has been already taken.")
         return _email
 
     def clean_password2(self):
-        p1 = self.cleaned_data['password1'].rstrip()
-        p2 = self.cleaned_data['password2'].rstrip()
+        p1 = self.cleaned_data['password1'].strip()
+        p2 = self.cleaned_data['password2'].strip()
         if p1 == p2:
             return p2
         raise forms.ValidationError("Password mismatch")
 
     def clean_username(self):
-        return self.cleaned_data['username'].rstrip()
+        return self.cleaned_data['username'].strip()
 
     def save(self, commit=True):
         user = super(RegisterUserForm, self).save(commit=False)
@@ -73,7 +75,7 @@ class SfdcEnvEditForm(forms.ModelForm):
         ]
 
     def clean_name(self):
-        return ''.join(e for e in self.cleaned_data['name'].rstrip() if e not in self._FORBIDDEN_SYMBOLS) \
+        return ''.join(e for e in self.cleaned_data['name'].strip() if e not in self._FORBIDDEN_SYMBOLS) \
             .replace(' ', "_")
 
     def save(self, commit=True):
@@ -154,7 +156,7 @@ class SlackMsgPusherForm(forms.Form):
         required=False
     )
 
-    _SLACK_WEBHOOK_LINKS = {
+    SLACK_WEBHOOK_LINKS = {
         "SFDC_INTERNAL_SUBBARAO": {
             "url": "https://hooks.slack.com/services/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",
             "name": "Subbarao Talachiru"
@@ -170,6 +172,10 @@ class SlackMsgPusherForm(forms.Form):
         "SFDC_INTERNAL_TCRM": {
             "url": "https://hooks.slack.com/services/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",
             "name": "bt-eops-tableau-crm"
+        },
+        "SFDC_SAI_SURESH": {
+            "url": "https://hooks.slack.com/services/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",
+            "name": "Sai Suresh"
         }
     }
 
@@ -178,6 +184,7 @@ class SlackMsgPusherForm(forms.Form):
         ('SFDC_INTERNAL_SAI', 'bt-eops-tableau-crm'),
         ('SFDF_I_bt-eops-dna-all', 'bt-eops-dna-all'),
         ('DPARK', '민 현 기'),
+        ('SFDC_SAI_SURESH', 'Sai Suresh'),
     ]
 
     slack_target = forms.ChoiceField(choices=_SLACK_TARGET_CHOICES, widget=forms.RadioSelect(), required=True)
@@ -188,10 +195,10 @@ class SlackMsgPusherForm(forms.Form):
 
     @classmethod
     def get_slack_webhook(cls, key):
-        if key not in cls._SLACK_WEBHOOK_LINKS.keys():
+        if key not in cls.SLACK_WEBHOOK_LINKS.keys():
             raise KeyError(f"'{key}' is not a valid Slack target.")
 
-        return cls._SLACK_WEBHOOK_LINKS[key]['url']
+        return cls.SLACK_WEBHOOK_LINKS[key]['url']
 
 
 class SlackCustomerConversationForm(forms.Form):
@@ -275,11 +282,31 @@ class CompareDataflowForm(forms.ModelForm):
 
 
 class DeprecateFieldsForm(forms.Form):
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
+    org = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
     files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
-    objects = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
+    case_url = forms.URLField(label='SupportForce Case URL')
+    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
+    from_file = forms.BooleanField(required=False)
+    save_metadata = forms.BooleanField(required=False)
+    sobjects = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
     fields = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
+        widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
+
+    def clean_sobjects(self):
+        from_file = self.cleaned_data.get('from_file')
+        sobjects = self.cleaned_data.get('sobjects')
+
+        if not from_file and not sobjects:
+            raise ValidationError("<code><strong>Objects</strong></code> field can not be empty if <code>From File?</code> is un-checked.")
+
+    def clean_fields(self):
+        from_file = self.cleaned_data.get('from_file')
+        fields = self.cleaned_data.get('fields')
+
+        if not from_file and not fields:
+            raise ValidationError("<code><strong>Fields</strong></code> field can not be empty if <code>From File?</code> is un-checked.")
 
 
 class SecpredToSaqlForm(forms.Form):
@@ -290,3 +317,31 @@ class SecpredToSaqlForm(forms.Form):
     saql = forms.CharField(
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 10, 'placeholder': "", "readonly": True}),
         required=False, label="Generated SAQL")
+
+
+class ProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = Profile
+        fields = ['key', 'value', 'type']
+
+    def clean_key(self):
+        key = self.cleaned_data.get('key').strip().lower()
+
+        return key
+
+    def clean_value(self):
+        value = self.cleaned_data.get('value').strip()
+
+        if self.clean_key() == 'timezone':
+            if value not in pytz.all_timezones:
+                link = '<a href="https://gist.github.com/heyalexej/8bf688fd67d7199be4a1682b3eec7568#file-pytz-time-zones-py" target="_blank">here</a>'
+                raise ValidationError(f"The timezone <code>{value}</code> is not a valid timezone specification. Check valid timezones string {link}.")
+
+        return value
+
+    def save(self, commit=True):
+        model = super(ProfileForm, self).save(commit=False)
+        if commit:
+            model.save()
+        return model

@@ -1,11 +1,15 @@
-import {build_toast} from './mjs/helpers.mjs';
+import {build_toast, show_screenplay} from './mjs/helpers.mjs';
 
 $(document).ready(function (evt) {
     // Shows toasts if exists
     build_toast();
 
     // Applies Bootstrap Select2 Look & Feel for all select input
-    $('select').select2();
+    // $('select').select2();
+
+    // Initialize Jquery Timeago plugin:
+    jQuery("time.timeago").timeago();
+    jQuery.timeago.settings.allowFuture = true;
 });
 
 $('.logout').click(function () {
@@ -36,4 +40,8 @@ $('.menu-item-finder').on('keyup click', function(evt) {
             processed_parent.push(parent_name);
         }
     });
+});
+
+$('.close-screenplay').on('click', (evt) => {
+    show_screenplay(0);
 });

@@ -1,11 +1,13 @@
 from libs.interactor.interactor import Interactor
-from main.models import Notifications
+from main.models import Notifications, UploadNotifications
 
 
 class SetNotificationInteractor(Interactor):
     def run(self):
         data = self.context.data
+        klass = self.context.klass if 'klass' in self.context.__dict__.keys() else Notifications
         exception = None
+        print("data from Notif Interactor", data)
 
         try:
             user = data['user']
@@ -14,7 +16,9 @@ class SetNotificationInteractor(Interactor):
             status = data['status']
             type = data['type']
 
-            notification = Notifications()
+            print('ok')
+            notification = klass()
+            print('ok expected')
             notification.status = status
             notification.link = link
             notification.user = user
@@ -22,6 +26,15 @@ class SetNotificationInteractor(Interactor):
             notification.type = type
 
             notification.save()
+
+            if link == "__self__":
+                notification.link = f'/notifications/view/{notification.pk}'
+                notification.save()
+            elif isinstance(notification, UploadNotifications):
+                notification.link = link.replace("{{pk}}", str(notification.pk))
+                notification.envname = data['envname']
+                notification.zipfile_path = data['zipfile_path']
+                notification.save()
         except Exception as e:
             exception = e
         finally:

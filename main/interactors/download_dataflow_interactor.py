@@ -1,9 +1,15 @@
+import html
+import json
 import os
 import shutil
+
+import requests
 
 from core.settings import BASE_DIR
 from libs.amt_helpers import generate_build_file, generate_package
 from libs.interactor.interactor import Interactor
+from main.interactors.list_dataflow_interactor import DataflowListInteractor
+from main.interactors.file_interactor import FileCompressorInteractor as FCompressor
 
 
 class DownloadDataflowInteractor(Interactor):
@@ -34,3 +40,70 @@ class DownloadDataflowInteractor(Interactor):
             _exc = e
 
         self.context.exception = _exc
+
+
+class DownloadDataflowInteractorNoAnt(Interactor):
+    def run(self):
+        _exc = None
+        output_path = None
+        user = self.context.user
+        model = self.context.model
+        dataflows = self.context.dataflow
+
+        downloaded_dataflows_defs = {}
+
+        try:
+            # Verifies whether the instance object is logged in.
+            if not model.instance_url:
+                raise ConnectionError(f"The instance <code>{model.name}</code> is not loged in. Please login first.")
+
+            # Downloads all dataflows name list
+            down_all_ctx = DataflowListInteractor.call(model=model, search=None,
+                                                       refresh_cache='true',
+                                                       user=user)
+            if down_all_ctx.error:
+                raise Exception(down_all_ctx.error)
+
+            # Deletes first the retrieve folder.
+            if os.path.isdir(f"{BASE_DIR}/ant/{self.context.user.username}/retrieve"):
+                shutil.rmtree(f"{BASE_DIR}/ant/{self.context.user.username}/retrieve")
+
+            # Makedirs the output_path.
+            output_path = f"{BASE_DIR}/ant/{self.context.user.username}/retrieve/dataflow/wave/"
+            os.makedirs(output_path)
+
+            # Downloads each dataflow listed in 'dataflows' list.
+            for dataflow in dataflows:
+                resource = '/services/data/v51.0/wave/dataflows/'
+                url = model.instance_url + resource + down_all_ctx.df_ids_api[dataflow]
+                url = url.strip()
+                header = {'Authorization': "Bearer " + model.oauth_access_token, 'Content-Type': 'application/json'}
+
+                response = requests.get(url, headers=header)
+
+                if response.status_code == 200:
+                    response = response.text
+                    replaces = [
+                        ('&quot;', '\\"'),
+                        ('&#92;', '\\\\'),
+                    ]
+                    for (a, b) in replaces:
+                        response = response.replace(a, b)
+                    response = html.unescape(response)
+                    response = json.loads(response)
+                    definition = response['definition']
+                    filename = f"{dataflow}.json"
+                    filepath = output_path + filename
+                    with open(filepath, 'w') as f:
+                        json.dump(definition, f, indent=2)
+                else:
+                    raise ConnectionError(response.text)
+
+        except Exception as e:
+            _exc = e
+            output_path = None
+            downloaded_dataflows_defs = {}
+        finally:
+            self.context.exception = _exc
+            self.context.downloaded_df_defs = downloaded_dataflows_defs
+            self.context.output_filepath = output_path

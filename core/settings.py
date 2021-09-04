@@ -9,18 +9,22 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import json
+import logging
 import os
+import pathlib
 from pathlib import Path
 
-import dj_database_url
-import django_heroku
 import environ
 
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
+from .apscheduler_config import scheduler_configure
+
+logging.basicConfig()
+logging.getLogger('apscheduler').setLevel(logging.DEBUG)
+
+sched = scheduler_configure()
+
+env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,13 +33,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-wi5%3e1_fpxq+fm8sowdg0^(0vz*qv0oryh3ww+adav$+v$e4%'
-SECRET_KEY = env.str('SECRET_KEY', default='')
+SECRET_KEY = env.str('SECRET_KEY', default='django-insecure-wi5%3e1_fpxq+fm8sowdg0^(0vz*qv0oryh3ww+adav$+v$e4%')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = False
+DEBUG = int(os.environ.get("DEBUG", default=1))
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(" ")
 
 # Application definition
 
@@ -51,10 +54,11 @@ INSTALLED_APPS = [
     'apscheduler',
     'bootstrap4',
     # 'channels',
+    'django_apscheduler',
     'django_extensions',
     'libs.interactor.interactor',
+    'mathfilters',
     'rest_framework',
-    'whitenoise.runserver_nostatic',
 
     # Created apps
     # 'chat',
@@ -75,9 +79,6 @@ MIDDLEWARE = [
 
     # Global Login required
     'global_login_required.GlobalLoginRequiredMiddleware',
-
-    # Whitenoise for Heroku
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 
     # Custom Middlewares
     'main.middleware.SfdcCRUDMiddleware',
@@ -155,18 +156,19 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
-
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tcrm_db',
-        'USER': 'tcrm_user',
-        'PASSWORD': '7YjvxvWLC8',
-        'HOST': 'localhost',
-        'PORT': '',
+    "default": {
+        # Add the docker environment SQL_ENGINE variable or for local development use sqlite3 engine
+        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+        # Add the docker environment SQL_DATABASE variable or use the local sqlite database soruce
+        "NAME": os.environ.get("SQL_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
+        # Add the docker SQL_USER environment variable or on need password for sqlite3
+        "USER": os.environ.get("SQL_USER", ""),
+        # Add the docker SQL_PASSWORD environment variable or on need password for sqlite3
+        "PASSWORD": os.environ.get("SQL_PASSWORD", ""),
+        # Add the docker SQL_HOST environment variable or on need host for sqlite3
+        "HOST": os.environ.get("SQL_HOST", ""),
+        # Add the docker SQL_HOST environment variable or on need port for sqlite3
+        "PORT": os.environ.get("SQL_PORT", ""),
     }
 }
 
@@ -213,10 +215,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Recomended by Heroku. Thi
 static_dir = os.path.join(BASE_DIR, "main/static")  # Static files for development mode
 jdd_static_dir = os.path.join(BASE_DIR, "libs/jdd")
 jsl_static_dir = os.path.join(BASE_DIR, "libs/jdd/jsl")
+jquery_timeago_dir = os.path.join(BASE_DIR, "libs/jquery-timeago")
 STATICFILES_DIRS = [
     static_dir,
     jdd_static_dir,
     jsl_static_dir,
+    jquery_timeago_dir,
 ]
 
 # File Upload managers
@@ -245,15 +249,26 @@ SALESFORCE_INSTANCE_URLS = {
     'Production': 'https://login.salesforce.com',
 }
 
-try:
-    from core.local_settings import *
-except ImportError as e:
-    # Activate Django-Heroku.
-    django_heroku.settings(locals())
 
-    # Configure database for Heroku
-    prod_db = dj_database_url.config(conn_max_age=500)
-    DATABASES['default'].update(prod_db)
+# Settings.
+environment = os.environ.get('ENVIRONMENT', None)
+env_settings_filename = f"{environment}_settings"
 
-    # Static file handler for Heroku
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+if environment and pathlib.Path.is_file(BASE_DIR / f"core/{env_settings_filename}.py"):
+    print(f">>> Importing {env_settings_filename}...")
+
+    if env_settings_filename == "heroku_settings":
+        from core.heroku_settings import *
+    elif env_settings_filename == f"docker_settings":
+        from core.docker_settings import *
+else:
+    try:
+        from core.local_settings import *
+    except ImportError:
+        pass
+
+# Settings status
+print(env_settings_filename)
+print(json.dumps(DATABASES, indent=2))
+print(json.dumps(MIDDLEWARE, indent=2))
+print(json.dumps(INSTALLED_APPS, indent=2))

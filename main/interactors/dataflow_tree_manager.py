@@ -49,8 +49,8 @@ class TreeRemoverInteractor(Interactor):
 
         # Lands a page to show the difference due to the removal
         original = self.context.request.FILES['dataflow'].temporary_file_path().replace(' ', "\\ ")
-        _output = _output.replace(' ', "\\ ")
-        show_in_browser(original, _output)
+        output = _output.replace(' ', "\\ ")
+        show_in_browser(original, output)
         self.context.output = _output
 
 
