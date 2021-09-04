@@ -328,7 +328,7 @@ class Job(models.Model):
     )
 
     message = models.CharField(max_length=4096, help_text='', null=False, blank=False, default="New Job Created")
-    status = models.CharField(default='created', blank=False, null=False, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=10, default='created', blank=False, null=False, choices=STATUS_CHOICES)
     progress = models.IntegerField(default=0, blank=False, null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     started_at = models.DateTimeField(auto_now_add=False, blank=True, null=True)
@@ -358,7 +358,7 @@ class Job(models.Model):
 
 class JobStage(models.Model):
     message = models.CharField(max_length=4096, help_text='', null=False, blank=False, default="New Job Created")
-    status = models.CharField(default='created', blank=False, null=False, choices=Job.STATUS_CHOICES)
+    status = models.CharField(max_length=10, default='created', blank=False, null=False, choices=Job.STATUS_CHOICES)
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
     started_at = models.DateTimeField(auto_now_add=False, blank=True, null=True)
     finished_at = models.DateTimeField(auto_now_add=False, blank=True, null=True)
