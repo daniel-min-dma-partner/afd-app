@@ -1,4 +1,5 @@
 import copy
+import datetime
 import datetime as dt
 import os
 
@@ -313,3 +314,65 @@ class UploadNotifications(Notifications):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+
+class Job(models.Model):
+    STATUS_CHOICES = (
+        ('created', "Created"),
+        ('started', "Started"),
+        ('started', "Started"),
+        ('progress', 'In Progress'),
+        ('failed', 'Failed'),
+        ('success', 'Succeeded'),
+        ('warning', 'Warning'),
+    )
+
+    message = models.CharField(max_length=4096, help_text='', null=False, blank=False, default="New Job Created")
+    status = models.CharField(default='created', blank=False, null=False, choices=STATUS_CHOICES)
+    progress = models.IntegerField(default=0, blank=False, null=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    started_at = models.DateTimeField(auto_now_add=False, blank=True, null=True)
+    finished_at = models.DateTimeField(auto_now_add=False, blank=True, null=True)
+
+    def duration(self):
+        return self.finished_at - self.started_at
+
+    def set(self, **descriptor):
+        self.message = descriptor['message'] if 'message' in descriptor else self.message
+        self.status = descriptor['status'] if 'status' in descriptor else self.status
+        self.progress = descriptor['progress'] if 'progress' in descriptor else self.progress
+        self.user = descriptor['user'] if 'user' in descriptor else self.user
+        self.started_at = descriptor['started_at'] if 'started_at' in descriptor else self.started_at
+        self.finished_at = descriptor['finished_at'] if 'finished_at' in descriptor else self.finished_at
+
+    def generate_stages(self, stage_descriptors=None):
+        if self._state.adding:
+            raise SystemError("Unsaved Job can't generate and/or associate itself new stages.")
+
+        if stage_descriptors and isinstance(stage_descriptors, list):
+            for descriptor in stage_descriptors:
+                job_stage = JobStage()
+                job_stage.set(descriptor)
+                job_stage.save()
+
+
+class JobStage(models.Model):
+    message = models.CharField(max_length=4096, help_text='', null=False, blank=False, default="New Job Created")
+    status = models.CharField(default='created', blank=False, null=False, choices=Job.STATUS_CHOICES)
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    started_at = models.DateTimeField(auto_now_add=False, blank=True, null=True)
+    finished_at = models.DateTimeField(auto_now_add=False, blank=True, null=True)
+
+    def set(self, descriptor):
+        self.message = descriptor['message'] if 'message' in descriptor else self.message
+        self.status = descriptor['status'] if 'status' in descriptor else self.status
+        self.job = descriptor['job'] if 'job' in descriptor else self.job
+        self.started_at = descriptor['started_at'] if 'started_at' in descriptor else self.started_at
+        self.finished_at = descriptor['finished_at'] if 'finished_at' in descriptor else self.finished_at
+
+    def set_started(self):
+        self.started_at = datetime.datetime.now() if not self.started_at else self.started_at
+
+    def set_finished(self):
+        self.finished_at = datetime.datetime.now() if not self.finished_at else self.finished_at
+
