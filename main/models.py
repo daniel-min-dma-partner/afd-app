@@ -335,7 +335,7 @@ class Job(models.Model):
     finished_at = models.DateTimeField(auto_now_add=False, blank=True, null=True)
 
     def duration(self):
-        return self.finished_at - self.started_at
+        return self.finished_at - self.started_at if self.started_at and self.finished_at else None
 
     def set(self, **descriptor):
         self.message = descriptor['message'] if 'message' in descriptor else self.message
@@ -353,7 +353,14 @@ class Job(models.Model):
             for descriptor in stage_descriptors:
                 job_stage = JobStage()
                 job_stage.set(descriptor)
+                job_stage.job = self
                 job_stage.save()
+
+    def set_started(self):
+        self.started_at = datetime.datetime.now() if not self.started_at else self.started_at
+
+    def set_finished(self):
+        self.finished_at = datetime.datetime.now() if not self.finished_at else self.finished_at
 
 
 class JobStage(models.Model):
@@ -363,10 +370,12 @@ class JobStage(models.Model):
     started_at = models.DateTimeField(auto_now_add=False, blank=True, null=True)
     finished_at = models.DateTimeField(auto_now_add=False, blank=True, null=True)
 
+    def duration(self):
+        return self.finished_at - self.started_at if self.started_at and self.finished_at else None
+
     def set(self, descriptor):
         self.message = descriptor['message'] if 'message' in descriptor else self.message
         self.status = descriptor['status'] if 'status' in descriptor else self.status
-        self.job = descriptor['job'] if 'job' in descriptor else self.job
         self.started_at = descriptor['started_at'] if 'started_at' in descriptor else self.started_at
         self.finished_at = descriptor['finished_at'] if 'finished_at' in descriptor else self.finished_at
 
@@ -376,3 +385,5 @@ class JobStage(models.Model):
     def set_finished(self):
         self.finished_at = datetime.datetime.now() if not self.finished_at else self.finished_at
 
+    def __str__(self):
+        return f"Job '{self.message}' at '{self.status}' status."

@@ -8,7 +8,7 @@ from libs.interactor.interactor import Interactor
 from main.interactors.download_dataflow_interactor import DownloadDataflowInteractorNoAnt
 from main.interactors.file_interactor import FileCompressorInteractor
 from main.interactors.notification_interactor import SetNotificationInteractor
-from main.models import Notifications, UploadNotifications
+from main.models import Notifications, UploadNotifications, Job, JobStage
 
 logger = logging.getLogger("datafllow-download-job-logger")
 logger.setLevel(logging.INFO)
@@ -80,3 +80,24 @@ class JobsInteractor(Interactor):
         data = self.context.data
         sched: Scheduler = self.context.scheduler
         sched.add_job(df_down_job, _id="df_down_job", data=data)
+
+
+class BackgroundJobsInteractor(Interactor):
+    def run(self):
+        self.context.exception = None
+        
+        try:
+            stages_descriptor = self.context.stages_descriptor
+            job = self.context.job
+
+            if not job.pk:
+                raise SystemError("Unsaved Job can't generate and/or associate itself new stages.")
+
+            if stages_descriptor and isinstance(stages_descriptor, list):
+                for descriptor in stages_descriptor:
+                    job_stage = JobStage()
+                    job_stage.set(descriptor)
+                    job_stage.job = job
+                    job_stage.save()
+        except Exception as e:
+            self.context.exception = e

@@ -87,6 +87,10 @@ urlpatterns = [
         ])),
     ])),
 
+    url(r'^job/', include([
+        url(r'^list', main.JobListView.as_view(), name="job-list")
+    ])),
+
     # Ajax
     url(r'^ajax/', include([
         url(r'^list-dataflows/$', main.ajax_list_dataflows, name='ajax-list-dataflows'),

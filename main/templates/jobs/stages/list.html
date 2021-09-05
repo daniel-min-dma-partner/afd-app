@@ -1,0 +1,40 @@
+{% load static %}
+
+
+<div class="row">
+    <div class="col-xl-12 col-lg-7">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-pri    mary">Stages of the Job <code>{{ job.message }}</code>.</h6>
+            </div>
+
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="text-right">#</th>
+                        <th>Status</th>
+                        <th>Message</th>
+                        <th>Started At</th>
+                        <th>Duration</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for job_stage in job.jobstage_set.all %}
+                        <tr>
+                            <td class="text-right">{{ job_stage.pk }}</td>
+                            <td>{{ job_stage.status }}</td>
+                            <td>
+                                {{ job_stage.message }}
+                            </td>
+                            <td>{{ job_stage.started_at }}</td>
+                            <td>{{ job_stage.duration }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

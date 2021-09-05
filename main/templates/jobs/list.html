@@ -1,0 +1,69 @@
+{% extends 'sb-base/base.html' %}
+
+{% load static %}
+
+{% block title %}Jobs{% endblock title %}
+{% block page-header %}Job List{% endblock page-header %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xl-12 col-lg-7">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">List of Jobs</h6>
+                </div>
+
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Message</th>
+                            <th>Progress</th>
+                            <th>Started At</th>
+                            <th>Duration</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for job in object_list %}
+                            <tr>
+                                <td>{{ job.status }}</td>
+                                <td>
+                                    <a class="job-collapse-trigger" data-toggle="collapse"
+                                       href="#collapseJob_{{ job.pk }}" role="button"
+                                       aria-expanded="false" aria-controls="collapseJob_{{ job.pk }}"
+                                       data-jobid="{{ job.pk }}">
+                                        {{ job.message }}
+                                    </a>
+                                </td>
+                                <td>{{ job.progress }}</td>
+                                <td>{{ job.started_at }}</td>
+                                <td>{{ job.duration }}</td>
+                            </tr>
+                            <tr class="job-collapse-tr-{{ job.pk }}" hidden>
+                                <td colspan="5">
+                                    <div class="collapse" id="collapseJob_{{ job.pk }}">
+                                        {% include 'jobs/stages/list.html' with job=job %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock page-content %}
+
+{% block extra-scripts %}
+    <script>
+        $('.job-collapse-trigger').on('click', function (evt) {
+            let job_id = $(this).data('jobid'),
+                job_collapse_tr = $(`.job-collapse-tr-${job_id}`);
+
+            job_collapse_tr.prop('hidden', !(job_collapse_tr.prop('hidden') === true));
+        });
+    </script>
+{% endblock extra-scripts %}

@@ -33,7 +33,7 @@ from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.upload_dataflow_interactor import UploadDataflowInteractorNoAnt
 from .interactors.wdf_manager_interactor import *
 from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, \
-    DeprecationDetails, UploadNotifications, Profile
+    DeprecationDetails, UploadNotifications, Profile, Job
 from django.forms.utils import ErrorList
 
 
@@ -841,6 +841,14 @@ class ProfileShowView(generic.ListView):
     def get_queryset(self):
         lst = Profile.objects.filter(user=self.request.user).order_by('key')
         return lst
+
+
+class JobListView(generic.ListView):
+    template_name = 'jobs/list.html'
+
+    def get_queryset(self):
+        queryset = Job.objects.filter(user_id=self.request.user.pk)
+        return queryset
 
 
 def profile_delete_view(request, pk=None):
