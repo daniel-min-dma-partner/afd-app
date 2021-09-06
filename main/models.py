@@ -320,7 +320,6 @@ class Job(models.Model):
     STATUS_CHOICES = (
         ('created', "Created"),
         ('started', "Started"),
-        ('started', "Started"),
         ('progress', 'In Progress'),
         ('failed', 'Failed'),
         ('success', 'Succeeded'),

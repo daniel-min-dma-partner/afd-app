@@ -1,6 +1,7 @@
 {% extends 'sb-base/base.html' %}
 
 {% load static %}
+{% load main_extras %}
 
 {% block title %}Jobs{% endblock title %}
 {% block page-header %}Job List{% endblock page-header %}
@@ -18,6 +19,7 @@
                     <table class="table">
                         <thead>
                         <tr>
+                            <th class="text-right">#</th>
                             <th>Status</th>
                             <th>Message</th>
                             <th>Progress</th>
@@ -28,7 +30,11 @@
                         <tbody>
                         {% for job in object_list %}
                             <tr>
-                                <td>{{ job.status }}</td>
+                            <td class="text-right">Job-{{ job.pk }}</td>
+                                <td>
+                                    <span class="{% if job.status == 'progress' %}spinner-grow spinner-grow-sm{% endif %}
+                                                 dot-wo-text-{{ job.status|get_status_badge }}"></span>
+                                </td>
                                 <td>
                                     <a class="job-collapse-trigger" data-toggle="collapse"
                                        href="#collapseJob_{{ job.pk }}" role="button"
@@ -42,7 +48,7 @@
                                 <td>{{ job.duration }}</td>
                             </tr>
                             <tr class="job-collapse-tr-{{ job.pk }}" hidden>
-                                <td colspan="5">
+                                <td colspan="6">
                                     <div class="collapse" id="collapseJob_{{ job.pk }}">
                                         {% include 'jobs/stages/list.html' with job=job %}
                                     </div>
