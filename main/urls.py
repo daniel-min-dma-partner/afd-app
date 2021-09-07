@@ -91,6 +91,11 @@ urlpatterns = [
         url(r'^list', main.JobListView.as_view(), name="job-list")
     ])),
 
+    url(r'^release/', include([
+        url(r'^create/', main.ReleaseCreateView.as_view(), name='release-create'),
+        url(r'^view/', main.ReleaseView.as_view(), name='release-view'),
+    ])),
+
     # Ajax
     url(r'^ajax/', include([
         url(r'^list-dataflows/$', main.ajax_list_dataflows, name='ajax-list-dataflows'),

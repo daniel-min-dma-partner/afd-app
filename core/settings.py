@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'libs.interactor.interactor',
     'mathfilters',
     'rest_framework',
+    'tinymce',
 
     # Created apps
     # 'chat',
@@ -247,6 +248,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SALESFORCE_INSTANCE_URLS = {
     'Sandbox': 'https://test.salesforce.com',
     'Production': 'https://login.salesforce.com',
+}
+
+# TinyMCE Settings
+TINYMCE_DEFAULT_CONFIG = {
+    "theme": "silver",
+    "height": 500,
+    "menubar": True,
+    "menu": {
+        "file": {"title": "File", "items": 'preview'}
+    },
+    "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
+               "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,paste,"
+               "code,help,wordcount",
+    "toolbar": "undo redo | formatselect | bold italic backcolor forecolor | "
+               "alignleft aligncenter alignright alignjustify | "
+               "bullist numlist outdent indent | removeformat | help",
 }
 
 

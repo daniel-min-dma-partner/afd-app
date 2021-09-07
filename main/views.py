@@ -20,7 +20,7 @@ from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
 from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
     SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm, \
-    DeprecateFieldsForm, SecpredToSaqlForm, ProfileForm
+    DeprecateFieldsForm, SecpredToSaqlForm, ProfileForm, ReleaseForm
 from main.interactors.jobs_interactor import JobsInteractor
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser
 from .interactors.deprecate_fields_interactor import FieldDeprecatorInteractor
@@ -33,7 +33,7 @@ from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.upload_dataflow_interactor import UploadDataflowInteractorNoAnt
 from .interactors.wdf_manager_interactor import *
 from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, \
-    DeprecationDetails, UploadNotifications, Profile, Job
+    DeprecationDetails, UploadNotifications, Profile, Job, Release
 from django.forms.utils import ErrorList
 
 
@@ -849,6 +849,40 @@ class JobListView(generic.ListView):
 
     def get_queryset(self):
         queryset = Job.objects.filter(user_id=self.request.user.pk).order_by('-started_at', '-pk')
+        return queryset
+
+
+class ReleaseCreateView(generic.FormView):
+    form_class = ReleaseForm
+    template_name = 'release/create.html'
+    success_url = '/release/create/'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            model = form.save(commit=False)
+            model.publisher = request.user
+            model.save()
+            messages.success(request, "Release note stored successfully.")
+
+            form = self.form_class()
+        else:
+            messages.error(request, "Release wasn't able to create new entry. Check the form.")
+
+        return render(request, self.template_name, {"form": form})
+
+
+class ReleaseView(generic.ListView):
+    template_name = 'release/view.html'
+
+    def get_queryset(self):
+        queryset = Release.objects.order_by('-created_at')
         return queryset
 
 

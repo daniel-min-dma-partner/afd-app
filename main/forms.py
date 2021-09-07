@@ -6,8 +6,10 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 
-from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel as DFCompModel, Profile
+from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel as DFCompModel, Profile, Release
 from django.core.exceptions import ValidationError
+from tinymce.widgets import TinyMCE
+
 
 
 class LoginForm(AuthenticationForm):
@@ -344,4 +346,20 @@ class ProfileForm(forms.ModelForm):
         model = super(ProfileForm, self).save(commit=False)
         if commit:
             model.save()
+        return model
+
+
+class ReleaseForm(forms.ModelForm):
+    title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
+    description = forms.CharField(widget=TinyMCE(attrs={'cols': 200, 'rows': 30}))
+
+    class Meta:
+        model = Release
+        fields = {'title', 'description'}
+
+    def save(self, commit=False):
+        model = super(ReleaseForm, self).save(commit=False)
+        if commit:
+            model.save()
+
         return model
