@@ -1,43 +1,39 @@
 {% load static %}
 {% load main_extras %}
 
-
-<div class="row">
-    <div class="col-xl-12 col-lg-7">
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-pri    mary">Stages of the Job <code>{{ job.message }}</code>.</h6>
-            </div>
-
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th class="text-right">#</th>
-                        <th>Status</th>
-                        <th>Message</th>
-                        <th>Started At</th>
-                        <th>Duration</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for job_stage in job.jobstage_set.all %}
+<div class="list-group">
+    <div class="row">
+        <div class="col-xl-12 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-body bg-translucent-primary">
+                    <table class="table">
+                        <thead>
                         <tr>
-                            <td class="text-right">Stage-{{ job_stage.pk }}</td>
-                            <td>
-                                <span class="{% if job_stage.status == 'progress' %}spinner-grow spinner-grow-sm{% endif %}
-                                 dot-wo-text-{{ job_stage.status|get_status_badge }}"></span>
-                            </td>
-                            <td>
-                                {{ job_stage.message }}
-                            </td>
-                            <td>{{ job_stage.started_at }}</td>
-                            <td>{{ job_stage.duration }}</td>
+                            {#                            <th class="text-right"># ({{ job.jobstage_set.all|length }})</th>#}
+                            <th>Status</th>
+                            <th>Message</th>
+                            <th>Started At</th>
+                            <th>Duration</th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {% for job_stage in job.jobstage_set.all|dictsort:"pk" %}
+                            <tr>
+                                {#                                <td class="text-right">Stage-{{ job_stage.pk }}</td>#}
+                                <td class="text-center">
+                                    <span class="{% if job_stage.status == 'progress' %}spinner-grow spinner-grow-sm{% endif %}
+                                                 dot-wo-text-{{ job_stage.status|get_status_badge }}"></span>
+                                </td>
+                                <td>
+                                    {{ job_stage.message|safe }}
+                                </td>
+                                <td>{{ job_stage.started_at }}</td>
+                                <td>{{ job_stage.duration }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

@@ -205,3 +205,19 @@ textarea {
   font-size: 0.65rem;
   color: white;
 }
+
+.bg-translucent-primary {
+    background-color: #f0f7ff;
+}
+
+.bg-translucent-warning {
+    background-color: #fff8e5;
+}
+
+.bg-translucent-danger {
+    background-color: #fff6f6;
+}
+
+.bg-translucent-success {
+    background-color: #f6fffb;
+}
