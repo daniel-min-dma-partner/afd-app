@@ -3,6 +3,7 @@
     --spinner-success: #4bca80;
     --spinner-danger: #ff0000;
     --spinner-off: #b3b3b3;
+    --spinner-primary: #2196f3;
 }
 
 .toast-header {
@@ -34,6 +35,30 @@ textarea {
     height: 15px;
     width: 15px;
     background-color: var(--spinner-warning);
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-wo-text-gray {
+    height: 15px;
+    width: 15px;
+    background-color: var(--spinner-off);
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-wo-text-primary {
+    height: 15px;
+    width: 15px;
+    background-color: var(--spinner-primary);
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-wo-text-danger {
+    height: 15px;
+    width: 15px;
+    background-color: var(--spinner-danger);
     border-radius: 50%;
     display: inline-block;
 }
@@ -179,4 +204,20 @@ textarea {
   font-weight: 800;
   font-size: 0.65rem;
   color: white;
+}
+
+.bg-translucent-primary {
+    background-color: #f0f7ff;
+}
+
+.bg-translucent-warning {
+    background-color: #fff8e5;
+}
+
+.bg-translucent-danger {
+    background-color: #fff6f6;
+}
+
+.bg-translucent-success {
+    background-color: #f6fffb;
 }

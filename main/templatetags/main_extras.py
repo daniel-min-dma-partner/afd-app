@@ -88,3 +88,17 @@ def range_list(number: int):
 @register.filter
 def index_of(value: list, arg):
     return value.index(arg) + 1
+
+
+@register.filter
+def get_status_badge(status: str):
+    status_badges = {
+        'created': "gray",
+        'started': "primary",
+        'progress': 'primary',
+        'failed': 'danger',
+        'success': 'success',
+        'warning': 'warning',
+    }
+
+    return status_badges[status]

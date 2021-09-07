@@ -33,7 +33,7 @@ from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.upload_dataflow_interactor import UploadDataflowInteractorNoAnt
 from .interactors.wdf_manager_interactor import *
 from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, \
-    DeprecationDetails, UploadNotifications, Profile
+    DeprecationDetails, UploadNotifications, Profile, Job
 from django.forms.utils import ErrorList
 
 
@@ -425,12 +425,13 @@ class DownloadDataflowView(generic.FormView):
                 if not dataflows:
                     raise KeyError("No dataflow selected")
 
-                _data = {"dataflows": dataflows, "model": env, "user": request.user}
+                _data = {"dataflows": dataflows, "model": env, "user": request.user,
+                         'job-message': f"Download dataflows from {env.name}"}
                 ctx = JobsInteractor.call(data=_data, scheduler=sched)
                 messages.success(request, mark_safe(f"Downloadig dataflow{'s' if len(dataflows) > 0 else ''} from "
                                           f"<code>{env.name}</code> started. Check the notifications later."))
 
-                return redirect("main:download-dataflow")
+                return redirect("main:job-list")
 
                 # download_ctx = DownloadDataflowInteractorNoAnt.call(dataflow=dataflows, model=env, user=request.user)
                 # if download_ctx.exception:
@@ -841,6 +842,14 @@ class ProfileShowView(generic.ListView):
     def get_queryset(self):
         lst = Profile.objects.filter(user=self.request.user).order_by('key')
         return lst
+
+
+class JobListView(generic.ListView):
+    template_name = 'jobs/list.html'
+
+    def get_queryset(self):
+        queryset = Job.objects.filter(user_id=self.request.user.pk).order_by('-started_at', '-pk')
+        return queryset
 
 
 def profile_delete_view(request, pk=None):

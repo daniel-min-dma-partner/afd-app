@@ -1,4 +1,5 @@
 import copy
+import datetime
 import datetime as dt
 import os
 
@@ -9,6 +10,7 @@ from django.db import models
 
 from core.settings import MEDIA_ROOT
 from .modelfields import CompressedJSONField
+from django.utils import timezone
 
 
 # Create your models here.
@@ -313,3 +315,211 @@ class UploadNotifications(Notifications):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+
+class Job(models.Model):
+    STATUS_CHOICES = (
+        ('created', "Created"),
+        ('started', "Started"),
+        ('progress', 'In Progress'),
+        ('failed', 'Failed'),
+        ('success', 'Succeeded'),
+        ('warning', 'Warning'),
+    )
+
+    message = models.CharField(max_length=4096, help_text='', null=False, blank=False, default="New Job Created")
+    status = models.CharField(max_length=10, default='created', blank=False, null=False, choices=STATUS_CHOICES)
+    progress = models.IntegerField(default=0, blank=False, null=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    started_at = models.DateTimeField(auto_now_add=False, blank=True, null=True)
+    finished_at = models.DateTimeField(auto_now_add=False, blank=True, null=True)
+
+    @classmethod
+    def format_duration(cls, duration: datetime.timedelta = None):
+        if duration:
+            ts = duration.total_seconds()
+
+            days = int(ts // 86400) if ts >= 86400 else 0
+            ts -= days * 86400
+
+            hours = int(ts // 3600) if ts >= 3600 else 0
+            ts -= hours * 3600
+
+            minutes = int(ts // 60) if ts >= 60 else 0
+            ts -= minutes * 60
+
+            seconds = round(ts)
+
+            duration = "{} days, {}:{}:{}".format(days, hours, minutes, seconds) if days else "{}:{}:{}".format(hours,
+                                                                                                                minutes,
+                                                                                                                seconds)
+
+        return duration
+
+    def duration(self):
+        duration = Job.format_duration(
+            self.finished_at - self.started_at if self.started_at and self.finished_at else None
+        )
+
+        return duration
+
+    def set(self, **descriptor):
+        self.message = descriptor['message'] if 'message' in descriptor else self.message
+        self.status = descriptor['status'] if 'status' in descriptor else self.status
+        self.progress = descriptor['progress'] if 'progress' in descriptor else self.progress
+        self.user = descriptor['user'] if 'user' in descriptor else self.user
+        self.started_at = descriptor['started_at'] if 'started_at' in descriptor else self.started_at
+        self.finished_at = descriptor['finished_at'] if 'finished_at' in descriptor else self.finished_at
+
+    def generate_stages(self, stage_descriptors=None):
+        _job_stages_ids = []
+
+        if self._state.adding:
+            raise SystemError("Unsaved Job can't generate and/or associate itself new stages.")
+
+        if stage_descriptors and isinstance(stage_descriptors, list):
+            for descriptor in stage_descriptors:
+                job_stage = JobStage()
+                job_stage.set(descriptor)
+                job_stage.job = self
+                job_stage.save()
+                _job_stages_ids.append(job_stage.pk)
+
+        return _job_stages_ids
+
+    def set_started(self, save=False):
+        self.status = 'started'
+        self.started_at = timezone.now() if not self.started_at else self.started_at
+
+        if save:
+            self.save()
+
+    def set_finished(self, save=False):
+        self.finished_at = timezone.now() if not self.finished_at else self.finished_at
+
+        if save:
+            self.save()
+
+    def set_progress(self, save=False):
+        self.status = 'progress'
+
+        if not self.started_at:
+            self.started_at = timezone.now() if not self.started_at else self.started_at
+
+        if save:
+            self.save()
+
+    def set_successful(self, save=False):
+        self.status = 'success'
+        self.finished_at = timezone.now() if not self.finished_at else self.finished_at
+
+        if save:
+            self.save()
+
+    def set_warning(self, save=False, msg: str = None):
+        self.status = 'warning'
+        self.finished_at = timezone.now() if not self.finished_at else self.finished_at
+
+        if msg:
+            self.message = msg
+
+        if save:
+            self.save()
+
+    def set_failed(self, save=False, msg: str = None):
+        self.status = 'failed'
+        self.finished_at = timezone.now() if not self.finished_at else self.finished_at
+
+        if msg:
+            self.message = msg
+
+        if save:
+            self.save()
+
+    def get_progress(self):
+        all_stages = self.jobstage_set.count()
+        succeeded = self.jobstage_set.filter(status='success').count()
+        progress = 100 * (succeeded / all_stages)
+
+        return progress
+
+    def add_stage(self, stage_descriptor):
+        job_stage = JobStage()
+        job_stage.set(stage_descriptor)
+        job_stage.job = self
+        job_stage.save()
+
+        return [stage.pk for stage in self.jobstage_set.order_by('pk').all()]
+
+
+class JobStage(models.Model):
+    message = models.CharField(max_length=4096, help_text='', null=False, blank=False, default="New Job Created")
+    status = models.CharField(max_length=10, default='created', blank=False, null=False, choices=Job.STATUS_CHOICES)
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    started_at = models.DateTimeField(auto_now_add=False, blank=True, null=True)
+    finished_at = models.DateTimeField(auto_now_add=False, blank=True, null=True)
+
+    def duration(self):
+        duration = Job.format_duration(
+            self.finished_at - self.started_at if self.started_at and self.finished_at else None
+        )
+
+        return duration
+
+    def set(self, descriptor):
+        self.message = descriptor['message'] if 'message' in descriptor else self.message
+        self.status = descriptor['status'] if 'status' in descriptor else self.status
+        self.started_at = descriptor['started_at'] if 'started_at' in descriptor else self.started_at
+        self.finished_at = descriptor['finished_at'] if 'finished_at' in descriptor else self.finished_at
+
+    def set_started(self, save=False):
+        self.status = 'started'
+        self.started_at = timezone.now() if not self.started_at else self.started_at
+
+        if save:
+            self.save()
+
+    def set_finished(self, save=False):
+        self.finished_at = timezone.now() if not self.finished_at else self.finished_at
+
+        if save:
+            self.save()
+
+    def set_progress(self, save=False):
+        self.status = 'progress'
+
+        if not self.started_at:
+            self.started_at = timezone.now() if not self.started_at else self.started_at
+
+        if save:
+            self.save()
+
+    def set_successful(self, save=False):
+        self.status = 'success'
+        self.finished_at = timezone.now() if not self.finished_at else self.finished_at
+
+        if save:
+            self.save()
+
+    def set_warning(self, save=False, msg: str = None):
+        self.status = 'warning'
+        self.finished_at = timezone.now() if not self.finished_at else self.finished_at
+
+        if msg:
+            self.message = msg
+
+        if save:
+            self.save()
+
+    def set_failed(self, save=False, msg: str = None):
+        self.status = 'failed'
+        self.finished_at = timezone.now() if not self.finished_at else self.finished_at
+
+        if msg:
+            self.message = msg
+
+        if save:
+            self.save()
+
+    def __str__(self):
+        return f"Job '{self.message}' at '{self.status}' status."

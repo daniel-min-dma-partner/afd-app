@@ -25,7 +25,8 @@ class Scheduler:
     def add_job(self, func, _id=None, **kwargs):
         logger.info(f">>>> Adding {_id} job")
         _name = _id or str(random.getrandbits(64))
-        self.scheduler.add_job(func, id=_name or str(random.getrandbits(64)), kwargs=kwargs, name=_name)
+        self.scheduler.add_job(func, id=f"{_name}-by-{kwargs['data']['user'].username}",
+                               kwargs=kwargs, name=_name)
 
     def start(self):
         print('>>>> scheduler started.')

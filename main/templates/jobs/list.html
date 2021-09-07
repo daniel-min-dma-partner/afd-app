@@ -1,0 +1,97 @@
+{% extends 'sb-base/base.html' %}
+
+{% load static %}
+{% load main_extras %}
+
+{% block title %}Jobs{% endblock title %}
+{% block page-header %}Job List{% endblock page-header %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xl-12 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <div class="text-right">
+                        <a href="#" onclick="location.reload();" class="btn btn-info btn-circle btn-sm" title="Reload">
+                            <i class="fas fa-undo"></i>
+                        </a>
+
+                        <br/>
+                        <br/>
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            {#                            <th class="text-right">#</th>#}
+                            <th class="text-center">Status</th>
+                            <th>Message</th>
+                            <th class="text-center">Progress</th>
+                            <th>Started At</th>
+                            <th>Duration</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for job in object_list %}
+                            <tr>
+                                {#                                <td class="text-right">Job-{{ job.pk }}</td>#}
+                                <td class="text-center">
+                                    <span class="{% if job.status == 'progress' %}spinner-grow spinner-grow-sm{% endif %}
+                                                 dot-wo-text-{{ job.status|get_status_badge }}"></span>
+                                </td>
+                                <td>
+                                    <a class="job-collapse-trigger" data-toggle="collapse"
+                                       href="#collapseJob_{{ job.pk }}" role="button"
+                                       aria-expanded="false" aria-controls="collapseJob_{{ job.pk }}"
+                                       data-jobid="{{ job.pk }}">
+                                        {{ job.message|safe }}
+                                    </a>
+                                </td>
+                                <td class="text-center align-middle">
+                                    {% if job.status == 'success' %}
+                                        <i class="fas fa-check text-success"></i>
+                                    {% else %}
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-{{ job.status|get_status_badge }}"
+                                                 role="progressbar"
+                                                 style="width: {{ job.get_progress|floatformat }}%"
+                                                 aria-valuenow="{{ job.get_progress|floatformat }}"
+                                                 aria-valuemin="0"
+                                                 aria-valuemax="100">
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </td>
+                                <td>{{ job.started_at }}</td>
+                                <td>{{ job.duration }}</td>
+                            </tr>
+                            <tr class="job-collapse-tr-{{ job.pk }}" hidden>
+                                <td colspan="6">
+                                    <div class="collapse" id="collapseJob_{{ job.pk }}">
+                                        {% include 'jobs/stages/list.html' with job=job %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock page-content %}
+
+{% block extra-scripts %}
+    <script>
+        $(document).ready(function (evt) {
+            $("#sidebarToggle").click();
+        });
+
+        $('.job-collapse-trigger').on('click', function (evt) {
+            let job_id = $(this).data('jobid'),
+                job_collapse_tr = $(`.job-collapse-tr-${job_id}`);
+
+            job_collapse_tr.prop('hidden', !(job_collapse_tr.prop('hidden') === true));
+        });
+    </script>
+{% endblock extra-scripts %}
