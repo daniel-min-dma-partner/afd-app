@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'mathfilters',
     'rest_framework',
     'whitenoise.runserver_nostatic',
+    'tinymce',
 
     # Created apps
     'libs',
