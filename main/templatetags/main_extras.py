@@ -100,5 +100,5 @@ def get_status_badge(status: str):
         'success': 'success',
         'warning': 'warning',
     }
-    print(f"Received: '{status}, Returned: '{status_badges[status]}'")
+
     return status_badges[status]

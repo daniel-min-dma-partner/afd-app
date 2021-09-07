@@ -27,10 +27,6 @@ def show_notifications(request):
     profile_edit_url = '/'.join(profile_edit_url)
     current_url = request.path
 
-    print(current_url)
-    print(profile_create_url)
-    print(profile_edit_url)
-
     if current_url == profile_create_url or profile_edit_url in current_url:
         profile_guideline = [
             {
