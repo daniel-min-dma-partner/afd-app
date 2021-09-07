@@ -1,4 +1,8 @@
 {
+  "app": {
+    "region":  "virginia"
+  },
+  "addons": ["heroku-postgresql:hobby-dev"],
   "environments": {
     "review": {
       "addons": [
