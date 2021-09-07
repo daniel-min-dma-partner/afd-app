@@ -269,6 +269,4 @@ else:
 
 # Settings status
 print(env_settings_filename)
-print(json.dumps(DATABASES, indent=2))
-print(json.dumps(MIDDLEWARE, indent=2))
-print(json.dumps(INSTALLED_APPS, indent=2))
+print("Installed app: ", json.dumps(INSTALLED_APPS, indent=2))
