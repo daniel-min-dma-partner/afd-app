@@ -1,0 +1,23 @@
+{% extends 'sb-base/base.html' %}
+
+{% load static %}
+{% load main_extras %}
+
+
+{% block title %}Release{% endblock title %}
+{% block page-header %}Release Notes{% endblock page-header %}
+
+
+{% block page-content %}
+    <div class="container-fluid">
+        {% for release in object_list %}
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        {{ release.description|safe }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock page-content %}

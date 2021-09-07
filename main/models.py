@@ -11,6 +11,7 @@ from django.db import models
 from core.settings import MEDIA_ROOT
 from .modelfields import CompressedJSONField
 from django.utils import timezone
+from tinymce.models import HTMLField
 
 
 # Create your models here.
@@ -523,3 +524,17 @@ class JobStage(models.Model):
 
     def __str__(self):
         return f"Job '{self.message}' at '{self.status}' status."
+
+
+class Release(models.Model):
+    title = models.CharField(max_length=1024, help_text='', null=False, blank=False)
+    description = HTMLField(blank=False, null=False)
+    publisher = models.ForeignKey(User, models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, blank=False, null=False)
+    modified_at = models.DateTimeField(auto_now_add=True, blank=False, null=False)
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding:
+            self.modified_at = timezone.now()
+
+        super(Release, self).save(*args, **kwargs)

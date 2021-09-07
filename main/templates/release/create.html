@@ -1,0 +1,79 @@
+{% extends 'sb-base/base.html' %}
+
+{% load static %}
+{% load main_extras %}
+
+{% block title %}Release{% endblock title %}
+{% block page-header %}Create Release{% endblock page-header %}
+
+{% block header-scripts %}
+    {{ form.media }}
+{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xl-9 col-lg-7">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Release Create Form</h6>
+                </div>
+
+                <div class="card-body">
+                    {% for non_field_error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ non_field_error|capfirst }}
+                        </div>
+                    {% endfor %}
+
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ field.name|title }}</strong>: {{ error|safe }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+
+                    <form method="POST" action="{% url 'main:release-create' %}">
+                        {% csrf_token %}
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label class="required" for="{{ form.title.auto_id }}">{{ form.title.name|capfirst }}</label>
+                                {{ form.title }}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <div class="mb-3">
+                                    <label class="required" for="{{ form.description.auto_id }}">{{ form.description.name|capfirst }}</label>
+                                    {{ form.description }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row float-right">
+                            <button type="submit" hidden></button>
+                            <a href="#" class="btn btn-success btn-icon-split" id="proceed">
+                                <span class="icon text-white-50"><i class="fas fa-check"></i></span>
+                                <span class="text">Save</span>
+                            </a>
+                        </div>
+
+{#                        <div class="form-row float-left">#}
+{#                            <a href="{% url 'main:profile-view' %}" class="btn btn-info btn-icon-split">#}
+{#                                <span class="icon text-white-50"><i class="fas fa-list"></i></span>#}
+{#                                <span class="text">Back to list</span>#}
+{#                            </a>#}
+{#                        </div>#}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock page-content %}
+
+{% block extra-scripts %}
+    <script src="{% static 'site/js/release.js' %}" type="module"></script>
+{% endblock extra-scripts %}

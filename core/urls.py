@@ -22,6 +22,7 @@ urlpatterns = [
 
     path('', include('main.urls')),
     path('chat/', include('chat.urls')),
+    path('tinymce/', include('tinymce.urls')),
 ]
 
 scheduler = scheduler_configure()
