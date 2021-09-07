@@ -92,8 +92,8 @@ urlpatterns = [
     ])),
 
     url(r'^release/', include([
-        url(r'^create/', main.ReleaseCreateView.as_view(), name='release-create'),
-        url(r'^view/', main.ReleaseView.as_view(), name='release-view'),
+        url(r'^create/$', main.ReleaseCreateView.as_view(), name='release-create'),
+        url(r'^view/$', main.ReleaseView.as_view(), name='release-view'),
     ])),
 
     # Ajax
