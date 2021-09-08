@@ -285,5 +285,7 @@ else:
         pass
 
 # Settings status
+print("DEBUG:", DEBUG)
+print("ALLOWED HOSTS:", ALLOWED_HOSTS)
 print(env_settings_filename)
 print("Installed app: ", json.dumps(INSTALLED_APPS, indent=2))

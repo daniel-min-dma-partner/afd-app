@@ -3,15 +3,14 @@ import datetime
 import datetime as dt
 import os
 
-import pytz
 import tzlocal
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
+from tinymce.models import HTMLField
 
 from core.settings import MEDIA_ROOT
 from .modelfields import CompressedJSONField
-from django.utils import timezone
-from tinymce.models import HTMLField
 
 
 # Create your models here.
