@@ -19,7 +19,6 @@ from django.urls import path
 import main.views as main
 
 app_name = 'main'
-handler500 = 'main.views.handler500'
 
 urlpatterns = [
     path('', main.Home.as_view(), name='home'),

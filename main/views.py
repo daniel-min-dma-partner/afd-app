@@ -964,6 +964,10 @@ def handler500(request, exception=None):
     return render(request, '500.html', {"exception": mark_safe(str(exception))}, status=500)
 
 
+def handler403(request, exception=None):
+    return render(request, '403.html', {"exception": mark_safe(str(exception))}, status=403)
+
+
 @csrf_exempt
 def compare_deprecation(request, pk=None):
     payload = None
