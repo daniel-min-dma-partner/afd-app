@@ -19,7 +19,6 @@ from django.urls import path
 import main.views as main
 
 app_name = 'main'
-handler500 = 'main.views.handler500'
 
 urlpatterns = [
     path('', main.Home.as_view(), name='home'),
@@ -92,7 +91,9 @@ urlpatterns = [
     ])),
 
     url(r'^release/', include([
+        url(r'^delete/(?P<pk>\d+)/$', main.release_delete_view, name='release-delete'),
         url(r'^create/$', main.ReleaseCreateView.as_view(), name='release-create'),
+        url(r'^edit/(?P<pk>\d+)$', main.ReleaseEditView.as_view(), name='release-edit'),
         url(r'^view/$', main.ReleaseView.as_view(), name='release-view'),
     ])),
 

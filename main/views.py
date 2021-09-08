@@ -35,6 +35,10 @@ from .interactors.wdf_manager_interactor import *
 from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, \
     DeprecationDetails, UploadNotifications, Profile, Job, Release
 from django.forms.utils import ErrorList
+from django.contrib.auth.mixins import PermissionRequiredMixin
+import sys, traceback
+from django.contrib.auth.decorators import permission_required
+
 
 
 sched.start()
@@ -852,10 +856,11 @@ class JobListView(generic.ListView):
         return queryset
 
 
-class ReleaseCreateView(generic.FormView):
+class ReleaseCreateView(PermissionRequiredMixin, generic.FormView):
     form_class = ReleaseForm
+    permission_required = ('main.add_release',)
+    success_url = '/release/view/'
     template_name = 'release/create.html'
-    success_url = '/release/create/'
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
@@ -871,11 +876,44 @@ class ReleaseCreateView(generic.FormView):
             model.save()
             messages.success(request, "Release note stored successfully.")
 
-            form = self.form_class()
+            return redirect("main:release-view")
         else:
             messages.error(request, "Release wasn't able to create new entry. Check the form.")
 
         return render(request, self.template_name, {"form": form})
+
+
+class ReleaseEditView(PermissionRequiredMixin, generic.FormView):
+    form_class = ReleaseForm
+    permission_required = ('main.change_release',)
+    success_url = '/release/view/'
+    template_name = 'release/edit.html'
+
+    def get_object(self, queryset=None):
+        obj = get_object_or_404(Release, pk=self.kwargs['pk'])
+        return obj
+
+    def get(self, request, *args, **kwargs):
+        release = self.get_object()
+        form = self.form_class(None, instance=release)
+
+        return render(request, self.template_name, {"form": form, "release": release})
+
+    def post(self, request, *args, **kwargs):
+        release = self.get_object()
+        form = self.form_class(request.POST, instance=release)
+
+        if form.is_valid():
+            model = form.save(commit=False)
+            model.save()
+            messages.success(request, "Release note stored successfully.")
+
+            form = self.form_class()
+            return redirect("main:release-view")
+        else:
+            messages.error(request, "Release wasn't able to create new entry. Check the form.")
+
+        return render(request, self.template_name, {"form": form, "release": release})
 
 
 class ReleaseView(generic.ListView):
@@ -884,6 +922,16 @@ class ReleaseView(generic.ListView):
     def get_queryset(self):
         queryset = Release.objects.order_by('-created_at')
         return queryset
+
+
+@permission_required("main.delete_release", raise_exception=True)
+def release_delete_view(request, pk=None):
+    print('entered')
+    release = get_object_or_404(Release, pk=pk)
+    release.delete()
+    messages.success(request, mark_safe(f"Release <code>{release.title}</code> deleted successfully"))
+
+    return redirect("main:release-view")
 
 
 def profile_delete_view(request, pk=None):
@@ -962,6 +1010,10 @@ def deprecation_delete_all(request):
 
 def handler500(request, exception=None):
     return render(request, '500.html', {"exception": mark_safe(str(exception))}, status=500)
+
+
+def handler403(request, exception=None):
+    return render(request, '403.html', {"exception": mark_safe(str(exception))}, status=403)
 
 
 @csrf_exempt

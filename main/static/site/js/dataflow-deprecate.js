@@ -4,6 +4,10 @@ import {
     alert_if_required_missing
 } from '../../sb-admin/custom-assets/js/mjs/helpers.mjs';
 
+$(document).ready(function (evt) {
+    $('#id_name').focus();
+});
+
 $("#proceed-deprecation").on('click', (evt) => {
     let required_fields_completed = alert_if_required_missing();
 

@@ -1,5 +1,9 @@
 import {popup_notification} from "../../sb-admin/custom-assets/js/mjs/helpers.mjs";
 
+$(document).ready(function (evt) {
+    $("#id_dataset").focus();
+});
+
 $('#id_secpred').keyup(function (e) {
     generate_saql($(this), $("#id_saql"), $("#id_dataset"));
     generate_saql2($(this), $("#id_saql2"));

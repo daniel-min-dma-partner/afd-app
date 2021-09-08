@@ -1,0 +1,16 @@
+{% extends 'sb-base/base.html' %}
+
+{% load static %}
+
+{% block title %}403 Error{% endblock title %}
+{% block page-header %}403 Error{% endblock page-header %}
+
+{% block page-content %}
+    <!-- 403 Error Text -->
+    <div class="text-center">
+        <div class="error mx-auto" data-text="403">403</div>
+        <p class="lead text-gray-800 mb-5">Forbidden</p>
+        <p class="text-gray-500 mb-0">{{ exception }}</p>
+        <a href="{% url 'main:home' %}">&larr; Back to Dashboard</a>
+    </div>
+{% endblock page-content %}
