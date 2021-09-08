@@ -1,4 +1,6 @@
 import datetime
+import os
+
 from django.urls import reverse
 
 from main.models import Notifications, UploadNotifications as UpNotifs
@@ -41,5 +43,9 @@ def show_notifications(request):
             },
         ]
         default_context['profile_guidelines'] = profile_guideline
+
+    # Used to show an alert banner
+    heroku_app_env = os.environ.get('HEROKU_APP_ENV', "")
+    default_context['heroku_app_env'] = heroku_app_env.lower()
 
     return default_context
