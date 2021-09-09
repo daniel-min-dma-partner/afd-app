@@ -4,12 +4,12 @@ import pytz
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
-from django.utils.safestring import mark_safe
-
-from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel as DFCompModel, Profile, Release
 from django.core.exceptions import ValidationError
+from django.utils.safestring import mark_safe
 from tinymce.widgets import TinyMCE
 
+from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel as DFCompModel, Profile, Release, \
+    Parameter
 
 
 class LoginForm(AuthenticationForm):
@@ -359,6 +359,21 @@ class ReleaseForm(forms.ModelForm):
 
     def save(self, commit=False):
         model = super(ReleaseForm, self).save(commit=False)
+        if commit:
+            model.save()
+
+        return model
+
+
+class ParameterForm(forms.ModelForm):
+    parameter = forms.CharField(widget=forms.Textarea())
+
+    class Meta:
+        model = Parameter
+        fields = {'parameter'}
+
+    def save(self, commit=False):
+        model = super(ParameterForm, self).save(commit=False)
         if commit:
             model.save()
 
