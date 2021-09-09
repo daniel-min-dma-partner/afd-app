@@ -537,3 +537,15 @@ class Release(models.Model):
             self.modified_at = timezone.now()
 
         super(Release, self).save(*args, **kwargs)
+
+
+class Parameter(models.Model):
+    parameter = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True, blank=False, null=False)
+    modified_at = models.DateTimeField(auto_now_add=True, blank=False, null=False)
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding:
+            self.modified_at = timezone.now()
+
+        super(Parameter, self).save(*args, **kwargs)
