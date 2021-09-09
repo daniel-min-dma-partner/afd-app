@@ -36,3 +36,8 @@ $("#proceed").on('click', (evt) => {
     }
 });
 
+$('.delete-parameter').on('click', function (evt) {
+    if (confirm("Are you sure?") === true) {
+        $("#delete-parameter")[0].click();
+    }
+});

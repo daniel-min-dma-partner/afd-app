@@ -20,7 +20,7 @@ from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
 from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
     SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm, \
-    DeprecateFieldsForm, SecpredToSaqlForm, ProfileForm, ReleaseForm
+    DeprecateFieldsForm, SecpredToSaqlForm, ProfileForm, ReleaseForm, ParameterForm
 from main.interactors.jobs_interactor import JobsInteractor
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser
 from .interactors.deprecate_fields_interactor import FieldDeprecatorInteractor
@@ -33,7 +33,7 @@ from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.upload_dataflow_interactor import UploadDataflowInteractorNoAnt
 from .interactors.wdf_manager_interactor import *
 from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, \
-    DeprecationDetails, UploadNotifications, Profile, Job, Release
+    DeprecationDetails, UploadNotifications, Profile, Job, Release, Parameter
 from django.forms.utils import ErrorList
 from django.contrib.auth.mixins import PermissionRequiredMixin
 import sys, traceback
@@ -924,6 +924,83 @@ class ReleaseView(generic.ListView):
         return queryset
 
 
+class ParameterCreateView(PermissionRequiredMixin, generic.FormView):
+    form_class = ParameterForm
+    permission_required = ('main.add_parameter',)
+    success_url = '/parameter/view/'
+    template_name = 'parameters/create.html'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request, *args, **kwargs):
+        if Parameter.objects.exists():
+            messages.warning(request, "There is a system parameter JSON schema already defined. "
+                                      "Update it to add new parmameters.")
+            return redirect('main:parameter-view')
+
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            model = form.save(commit=False)
+            model.save()
+            messages.success(request, "Parameter stored successfully.")
+
+            return redirect("main:parameter-view")
+        else:
+            messages.error(request, "Parameter wasn't able to create new entry. Check the form.")
+
+        return render(request, self.template_name, {"form": form})
+
+
+class ParameterEditView(PermissionRequiredMixin, generic.FormView):
+    form_class = ParameterForm
+    permission_required = ('main.change_parameter',)
+    success_url = '/parameter/view/'
+    template_name = 'parameters/edit.html'
+
+    def get_object(self, queryset=None):
+        obj = get_object_or_404(Parameter, pk=self.kwargs['pk'])
+        return obj
+
+    def get(self, request, *args, **kwargs):
+        parameter = self.get_object()
+        form = self.form_class(None, instance=parameter)
+
+        return render(request, self.template_name, {"form": form, "parameter": parameter})
+
+    def post(self, request, *args, **kwargs):
+        parameter = self.get_object()
+        form = self.form_class(request.POST, instance=parameter)
+
+        if form.is_valid():
+            model = form.save(commit=False)
+            model.save()
+            messages.success(request, "Parameter note stored successfully.")
+
+            form = self.form_class()
+            return redirect("main:parameter-view")
+        else:
+            messages.error(request, "Parameter wasn't able to create new entry. Check the form.")
+
+        return render(request, self.template_name, {"form": form, "parameter": parameter})
+
+
+class ParameterView(generic.ListView):
+    template_name = 'parameters/view.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ParameterView, self).get_context_data(**kwargs)
+        context['parameter_exists'] = Parameter.objects.exists()
+        return context
+
+    def get_queryset(self):
+        queryset = Parameter.objects.order_by('-created_at')
+        return queryset
+
+
 @permission_required("main.delete_release", raise_exception=True)
 def release_delete_view(request, pk=None):
     print('entered')
@@ -932,6 +1009,15 @@ def release_delete_view(request, pk=None):
     messages.success(request, mark_safe(f"Release <code>{release.title}</code> deleted successfully"))
 
     return redirect("main:release-view")
+
+
+@permission_required("main.delete_release", raise_exception=True)
+def parameter_delete_view(request, pk=None):
+    parameter = get_object_or_404(Parameter, pk=pk)
+    parameter.delete()
+    messages.success(request, mark_safe(f"Parameter deleted successfully"))
+
+    return redirect("main:parameter-view")
 
 
 def profile_delete_view(request, pk=None):
