@@ -632,7 +632,9 @@ class DeprecateFieldsView(generic.FormView):
                                                      org=form.cleaned_data['org'],
                                                      case_url=form.cleaned_data['case_url'])
 
-                message = "Deprecation finished. Check the latest notifications for more details."
+                message = f"Deprecation <code><strong>{form.cleaned_data['name']}</strong></code> for " \
+                          f"<code>{form.cleaned_data['org']}</code> finished. " \
+                          f"Check the latest notifications for more details."
                 flash_type = messages.INFO
 
                 # Returns a normal response or file-download response
@@ -647,7 +649,7 @@ class DeprecateFieldsView(generic.FormView):
 
                     _return = response_ctx.response
                 else:
-                    _return = self.form_valid(form)
+                    _return = redirect('main:view-deprecations')
             else:
                 message = "Submitted form contains error. Please review it."
                 flash_type = messages.ERROR
@@ -673,7 +675,7 @@ class DeprecateFieldsView(generic.FormView):
                 if _.exception:
                     raise _.exception
 
-        messages.add_message(request, flash_type, message)
+        messages.add_message(request, flash_type, mark_safe(message))
         return _return
 
 

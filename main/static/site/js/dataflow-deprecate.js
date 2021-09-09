@@ -27,6 +27,7 @@ $('#id_from_file').on('click', function (evt) {
     if (save_metadata[0].checked) {
         save_metadata.click();
     }
+    save_metadata.prop('disabled', is_from_file);
 
     if (is_from_file) {
         $("#id_sobjects").siblings('label').removeClass('required');
