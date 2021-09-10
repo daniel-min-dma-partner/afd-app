@@ -17,7 +17,7 @@ $(document).ready(function (evt) {
     }
 
     // initialize
-    var editor = new JsonEditor('#json-display', getJson());
+    var editor = new JsonEditor('#json-display', getJson(), {"editable": false});
 
     // enable translate button
     $("#id_parameter")
