@@ -6,26 +6,30 @@ import {
 
 
 $(document).ready(function (evt) {
+    let container = document.getElementById("parameter-editor");
 
-    // get JSON
-    function getJson() {
-        try {
-            return JSON.parse($('#id_parameter').val().replaceAll("'", "\""));
-        } catch (ex) {
-            return "";
+    let options = {
+        mainMenuBar: mainMenuBar,
+        modes: modes,
+        search: false,
+
+        onChange: function (evt) {
+            try {
+                let json = editor.get();
+                document.getElementById("id_parameter").value = $.trim(JSON.stringify(json));
+            } catch (error) {
+                return false;
+            }
         }
+    };
+
+    let editor = new JSONEditor(container, options);
+    let json = JSON.parse($.trim($('#id_parameter').html()));
+    editor.set(json);
+
+    if (expandAll) {
+        editor.expandAll();
     }
-
-    // initialize
-    var editor = new JsonEditor('#json-display', getJson(), {"editable": false});
-
-    // enable translate button
-    $("#id_parameter")
-        .focus()
-        .on('keyup', function () {
-            editor.load(getJson());
-        });
-
 });
 
 $("#proceed").on('click', (evt) => {

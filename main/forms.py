@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
 from tinymce.widgets import TinyMCE
+from jsoneditor.forms import JSONEditor
 
 from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel as DFCompModel, Profile, Release, \
     Parameter
@@ -366,7 +367,7 @@ class ReleaseForm(forms.ModelForm):
 
 
 class ParameterForm(forms.ModelForm):
-    parameter = forms.CharField(widget=forms.Textarea())
+    parameter = JSONEditor()
 
     class Meta:
         model = Parameter
