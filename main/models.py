@@ -12,6 +12,8 @@ from tinymce.models import HTMLField
 from core.settings import MEDIA_ROOT
 from .modelfields import CompressedJSONField
 
+from jsoneditor.fields.django_jsonfield import JSONField
+
 
 # Create your models here.
 
@@ -537,3 +539,15 @@ class Release(models.Model):
             self.modified_at = timezone.now()
 
         super(Release, self).save(*args, **kwargs)
+
+
+class Parameter(models.Model):
+    parameter = JSONField()
+    created_at = models.DateTimeField(auto_now_add=True, blank=False, null=False)
+    modified_at = models.DateTimeField(auto_now_add=True, blank=False, null=False)
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding:
+            self.modified_at = timezone.now()
+
+        super(Parameter, self).save(*args, **kwargs)

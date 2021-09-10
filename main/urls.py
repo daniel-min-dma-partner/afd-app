@@ -97,6 +97,13 @@ urlpatterns = [
         url(r'^view/$', main.ReleaseView.as_view(), name='release-view'),
     ])),
 
+    url(r'^parameter/', include([
+        url(r'^delete/(?P<pk>\d+)/$', main.parameter_delete_view, name='parameter-delete'),
+        url(r'^create/$', main.ParameterCreateView.as_view(), name='parameter-create'),
+        url(r'^edit/(?P<pk>\d+)$', main.ParameterEditView.as_view(), name='parameter-edit'),
+        url(r'^view/$', main.ParameterView.as_view(), name='parameter-view'),
+    ])),
+
     # Ajax
     url(r'^ajax/', include([
         url(r'^list-dataflows/$', main.ajax_list_dataflows, name='ajax-list-dataflows'),

@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     # 'channels',
     'django_apscheduler',
     'django_extensions',
+    'jsoneditor',
     'libs.interactor.interactor',
     'mathfilters',
     'rest_framework',
@@ -265,6 +266,12 @@ TINYMCE_DEFAULT_CONFIG = {
                "alignleft aligncenter alignright alignjustify | "
                "bullist numlist outdent indent | removeformat | help",
 }
+
+
+# Json Editor
+JSON_EDITOR_CSS = "https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.5.5/jsoneditor.css"
+JSON_EDITOR_JS = "https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.5.5/jsoneditor.js"
+JSON_EDITOR_INIT_JS = "django-jsoneditor/jsoneditor-init.js"
 
 
 # Settings.
