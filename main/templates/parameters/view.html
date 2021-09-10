@@ -6,6 +6,11 @@
 {% block title %}Parameters{% endblock title %}
 {% block page-header %}View Parameters{% endblock page-header %}
 
+{% block header-scripts %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.5.5/jsoneditor.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.5.5/jsoneditor.js"></script>
+{% endblock header-scripts %}
+
 {% block page-content %}
     <div class="row">
         <div class="col-xl-9 col-lg-7">
@@ -17,29 +22,32 @@
 
                 <div class="card-body">
 
-                    {% if not parameter_exists %}
+                    {% if not parameter_exists and perms.main.create_parameter%}
                         <a href="{% url 'main:parameter-create' %}" class="btn btn-success float-right">Create</a>
                     {% endif %}
 
                     {% for object in object_list %}
-                        <div class="form-group">
-                            <a href="{% url 'main:parameter-edit' pk=object.pk %}"
-                               class="btn btn-primary btn-icon-split float-right">
+                        {% if perms.main.change_parameter and perms.main.delete_parameter %}
+                            <div class="form-group">
+                                <a href="{% url 'main:parameter-edit' pk=object.pk %}"
+                                   class="btn btn-primary btn-icon-split float-right">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-plus"></i>
                                 </span>
-                                <span class="text">Edit</span>
-                            </a>
+                                    <span class="text">Edit</span>
+                                </a>
 
-                            <a href="{% url 'main:parameter-delete' pk=object.pk %}" id="delete-parameter" hidden></a>
-                            <a href="#"
-                               class="btn btn-danger btn-icon-split float-right delete-parameter">
+                                <a href="{% url 'main:parameter-delete' pk=object.pk %}" id="delete-parameter"
+                                   hidden></a>
+                                <a href="#"
+                                   class="btn btn-danger btn-icon-split float-right delete-parameter">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-trash"></i>
                                 </span>
-                                <span class="text">Delete all</span>
-                            </a>
-                        </div>
+                                    <span class="text">Delete all</span>
+                                </a>
+                            </div>
+                        {% endif %}
 
                         <div class="form-row">
                             <div class="form-group col-auto">
