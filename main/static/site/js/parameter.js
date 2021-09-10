@@ -20,7 +20,13 @@ $(document).ready(function (evt) {
             } catch (error) {
                 return false;
             }
-        }
+        },
+
+        onModeChange: function (endMode, oldMode) {
+            if (endMode === 'tree') {
+                editor.expandAll();
+            }
+        },
     };
 
     let editor = new JSONEditor(container, options);
