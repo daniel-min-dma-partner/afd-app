@@ -15,6 +15,12 @@ while ! python3 manage.py loaddata /home/app/web/main/fixtures/initial-data-2.js
 done
 
 # Wait for few minute and run db fixture load
+while ! python3 manage.py loaddata /home/app/web/main/fixtures/system-parameter.json  2>&1; do
+   echo "Fixture is in progress status"
+   sleep 3
+done
+
+# Wait for few minute and run db fixture load
 while ! python3 manage.py collectstatic --no-input --clear  2>&1; do
    echo "Fixture is in progress status"
    sleep 3
