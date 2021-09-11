@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'django_apscheduler',
     'django_extensions',
+    'jsoneditor',
     'libs.interactor.interactor',
     'mathfilters',
     'rest_framework',
