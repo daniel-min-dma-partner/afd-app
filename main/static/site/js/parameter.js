@@ -32,6 +32,8 @@ $(document).ready(function (evt) {
 
         let editor = new JSONEditor(container, options);
         let json = JSON.parse($.trim($('#id_parameter').html()));
+        let text = json['profile-guidelines'][0]['text'];
+        json['profile-guidelines'][0]['text'] = jQuery('<div />').html(text).text();  // Converts strings to HTML tag.
         editor.set(json);
 
         if (expandAll) {
