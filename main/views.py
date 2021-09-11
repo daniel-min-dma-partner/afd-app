@@ -934,8 +934,10 @@ class ParameterCreateView(PermissionRequiredMixin, generic.FormView):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
+        sample = '{"Samples": {"Number":1,"String": "sample-text", "Boolean": true, "Array": [1,2,"three"],' \
+                 '"Object": {"Number":2,"String": "sample-text-two", "Boolean": false, "Array": [4,5,"six"]}}}'
 
-        return render(request, self.template_name, {"form": form})
+        return render(request, self.template_name, {"form": form, "sample": sample})
 
     def post(self, request, *args, **kwargs):
         if Parameter.objects.exists():

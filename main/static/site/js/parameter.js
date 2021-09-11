@@ -9,35 +9,45 @@ $(document).ready(function (evt) {
     let container = document.getElementById("parameter-editor");
 
     if (container) {
+        // UI options.
         let options = {
             mainMenuBar: mainMenuBar,
             modes: modes,
             search: false,
-
-            onChange: function (evt) {
-                try {
-                    let json = editor.get();
-                    document.getElementById("id_parameter").value = $.trim(JSON.stringify(json));
-                } catch (error) {
-                    return false;
-                }
-            },
-
-            onModeChange: function (endMode, oldMode) {
-                if (endMode === 'tree') {
-                    editor.expandAll();
-                }
-            },
         };
 
-        let editor = new JSONEditor(container, options);
+        // Converts strings to HTML tag.
         let json = JSON.parse($.trim($('#id_parameter').html()));
-        let text = json['profile-guidelines'][0]['text'];
-        json['profile-guidelines'][0]['text'] = jQuery('<div />').html(text).text();  // Converts strings to HTML tag.
+        let text = {};
+        if (![undefined, null, ""].includes(json['profile-guidelines'])) {
+            text = json['profile-guidelines'][0]['text'];
+            json['profile-guidelines'][0]['text'] = jQuery('<div />').html(text).text();
+        }
+
+        // Set data.
+        let editor = new JSONEditor(container, options);
         editor.set(json);
 
+        // Event setup.
+        editor.options.onModeChange = function (endMode, oldMode) {
+            if (endMode === 'tree') {
+                editor.expandAll();
+            }
+        };
+        editor.options.onChange = function (evt) {
+            try {
+                let json = editor.get();
+                document.getElementById("id_parameter").value = $.trim(JSON.stringify(json));
+            } catch (error) {
+                return false;
+            }
+        };
+
+        // Initial expansion method.
         if (expandAll) {
-            editor.expandAll();
+            if (mode === 'tree') {
+                editor.expandAll();
+            }
         }
     }
 });
