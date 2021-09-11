@@ -8,33 +8,35 @@ import {
 $(document).ready(function (evt) {
     let container = document.getElementById("parameter-editor");
 
-    let options = {
-        mainMenuBar: mainMenuBar,
-        modes: modes,
-        search: false,
+    if (container) {
+        let options = {
+            mainMenuBar: mainMenuBar,
+            modes: modes,
+            search: false,
 
-        onChange: function (evt) {
-            try {
-                let json = editor.get();
-                document.getElementById("id_parameter").value = $.trim(JSON.stringify(json));
-            } catch (error) {
-                return false;
-            }
-        },
+            onChange: function (evt) {
+                try {
+                    let json = editor.get();
+                    document.getElementById("id_parameter").value = $.trim(JSON.stringify(json));
+                } catch (error) {
+                    return false;
+                }
+            },
 
-        onModeChange: function (endMode, oldMode) {
-            if (endMode === 'tree') {
-                editor.expandAll();
-            }
-        },
-    };
+            onModeChange: function (endMode, oldMode) {
+                if (endMode === 'tree') {
+                    editor.expandAll();
+                }
+            },
+        };
 
-    let editor = new JSONEditor(container, options);
-    let json = JSON.parse($.trim($('#id_parameter').html()));
-    editor.set(json);
+        let editor = new JSONEditor(container, options);
+        let json = JSON.parse($.trim($('#id_parameter').html()));
+        editor.set(json);
 
-    if (expandAll) {
-        editor.expandAll();
+        if (expandAll) {
+            editor.expandAll();
+        }
     }
 });
 
