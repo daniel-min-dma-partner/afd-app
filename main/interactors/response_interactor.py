@@ -56,7 +56,10 @@ class JsonFileResponseInteractor(Interactor):
             file = open(filepath, 'rb')
             response = HttpResponse(file,
                                     content_type='application/json',
-                                    headers={'Content-Disposition': f'attachment; filename={filename}.json'})
+                                    headers={
+                                        'Content-Disposition': f"attachment; filename={filename}"
+                                                               f"{'.json' if filename[-5:] != '.json' else ''}"
+                                    })
         except Exception as e:
             _exception = e
             response = None
