@@ -1,0 +1,65 @@
+{% extends 'sb-base/base.html' %}
+
+{% load static %}
+{% load main_extras %}
+
+
+{% block title %}Release{% endblock title %}
+{% block page-header %}Release Notes{% endblock page-header %}
+
+
+{% block page-content %}
+    <div class="container-fluid">
+        {% if perms.main.add_release %}
+            <a href="{% url 'main:release-create' %}"
+               class="btn btn-success btn-icon-split float-right">
+                <span class="icon text-white-50">
+                    <i class="fas fa-plus"></i>
+                </span>
+
+                <span class="text">Publish new Release</span>
+            </a>
+            <br/>
+            <br/>
+        {% endif %}
+
+        {% for release in object_list %}
+            <div class="col-xl-9 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-lg font-weight-bold text-primary text-uppercase mb-1">
+                                    {{ release.title|capfirst }}
+
+                                    {% if perms.main.change_release %}
+                                        <a href="{% url 'main:release-edit' pk=release.pk %}" class="float-right">
+                                            <i class="fas fa-pencil-alt fa-2x text-gray-300"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+
+                                <div class="h8 mb-0 font-weight-bold text-gray-800">{{ release.created_at }}</div>
+
+                                <div class="dropdown-divider"></div>
+
+                                <br/>
+
+                                <div class="form-row">
+                                    <div class="form-group col-12">
+                                        {{ release.description|safe }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock page-content %}
+
+
+{% block extra-scripts %}
+    <script src="{% static 'site/js/release.js' %}" type="module"></script>
+{% endblock extra-scripts %}

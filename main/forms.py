@@ -4,10 +4,13 @@ import pytz
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
-from django.utils.safestring import mark_safe
-
-from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel as DFCompModel, Profile
 from django.core.exceptions import ValidationError
+from django.utils.safestring import mark_safe
+from tinymce.widgets import TinyMCE
+from jsoneditor.forms import JSONEditor
+
+from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel as DFCompModel, Profile, Release, \
+    Parameter
 
 
 class LoginForm(AuthenticationForm):
@@ -285,7 +288,7 @@ class DeprecateFieldsForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
     org = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
     files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
-    case_url = forms.URLField(label='SupportForce Case URL')
+    case_url = forms.URLField(label='SupportForce Case URL', required=False)
     file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
     from_file = forms.BooleanField(required=False)
     save_metadata = forms.BooleanField(required=False)
@@ -344,4 +347,35 @@ class ProfileForm(forms.ModelForm):
         model = super(ProfileForm, self).save(commit=False)
         if commit:
             model.save()
+        return model
+
+
+class ReleaseForm(forms.ModelForm):
+    title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
+    description = forms.CharField(widget=TinyMCE(attrs={'cols': 200, 'rows': 30}))
+
+    class Meta:
+        model = Release
+        fields = {'title', 'description'}
+
+    def save(self, commit=False):
+        model = super(ReleaseForm, self).save(commit=False)
+        if commit:
+            model.save()
+
+        return model
+
+
+class ParameterForm(forms.ModelForm):
+    parameter = JSONEditor()
+
+    class Meta:
+        model = Parameter
+        fields = {'parameter'}
+
+    def save(self, commit=False):
+        model = super(ParameterForm, self).save(commit=False)
+        if commit:
+            model.save()
+
         return model

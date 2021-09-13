@@ -65,3 +65,11 @@
 
     </div>
 {% endblock page-content %}
+
+{% block extra-scripts %}
+    <script>
+        $(document).ready(function (evt) {
+            $('#id_username').focus();
+        });
+    </script>
+{% endblock extra-scripts %}

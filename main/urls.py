@@ -19,7 +19,6 @@ from django.urls import path
 import main.views as main
 
 app_name = 'main'
-handler500 = 'main.views.handler500'
 
 urlpatterns = [
     path('', main.Home.as_view(), name='home'),
@@ -85,6 +84,24 @@ urlpatterns = [
         url(r'^security-predicate/', include([
             url(r'^convert-to-saql/$', main.SecpredToSaqlView.as_view(), name='secpred-to-saql'),
         ])),
+    ])),
+
+    url(r'^job/', include([
+        url(r'^list', main.JobListView.as_view(), name="job-list")
+    ])),
+
+    url(r'^release/', include([
+        url(r'^delete/(?P<pk>\d+)/$', main.release_delete_view, name='release-delete'),
+        url(r'^create/$', main.ReleaseCreateView.as_view(), name='release-create'),
+        url(r'^edit/(?P<pk>\d+)$', main.ReleaseEditView.as_view(), name='release-edit'),
+        url(r'^view/$', main.ReleaseView.as_view(), name='release-view'),
+    ])),
+
+    url(r'^parameter/', include([
+        url(r'^delete/(?P<pk>\d+)/$', main.parameter_delete_view, name='parameter-delete'),
+        url(r'^create/$', main.ParameterCreateView.as_view(), name='parameter-create'),
+        url(r'^edit/(?P<pk>\d+)$', main.ParameterEditView.as_view(), name='parameter-edit'),
+        url(r'^view/$', main.ParameterView.as_view(), name='parameter-view'),
     ])),
 
     # Ajax

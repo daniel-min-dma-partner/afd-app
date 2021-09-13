@@ -7,7 +7,6 @@ class SetNotificationInteractor(Interactor):
         data = self.context.data
         klass = self.context.klass if 'klass' in self.context.__dict__.keys() else Notifications
         exception = None
-        print("data from Notif Interactor", data)
 
         try:
             user = data['user']
@@ -16,9 +15,7 @@ class SetNotificationInteractor(Interactor):
             status = data['status']
             type = data['type']
 
-            print('ok')
             notification = klass()
-            print('ok expected')
             notification.status = status
             notification.link = link
             notification.user = user

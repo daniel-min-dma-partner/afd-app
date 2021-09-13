@@ -46,9 +46,12 @@ class DownloadDataflowInteractorNoAnt(Interactor):
     def run(self):
         _exc = None
         output_path = None
+        job = self.context.job  # Receive Job object
         user = self.context.user
         model = self.context.model
         dataflows = self.context.dataflow
+
+        _job_stages_ids = job.generate_stages([{'message': f"Download <code>{dataflow}.json</code>"} for dataflow in dataflows])  # Create Stages
 
         downloaded_dataflows_defs = {}
 
@@ -72,6 +75,8 @@ class DownloadDataflowInteractorNoAnt(Interactor):
             output_path = f"{BASE_DIR}/ant/{self.context.user.username}/retrieve/dataflow/wave/"
             os.makedirs(output_path)
 
+            job.set_progress(save=True)
+
             # Downloads each dataflow listed in 'dataflows' list.
             for dataflow in dataflows:
                 resource = '/services/data/v51.0/wave/dataflows/'
@@ -79,6 +84,7 @@ class DownloadDataflowInteractorNoAnt(Interactor):
                 url = url.strip()
                 header = {'Authorization': "Bearer " + model.oauth_access_token, 'Content-Type': 'application/json'}
 
+                job.jobstage_set.filter(pk=_job_stages_ids[dataflows.index(dataflow)]).first().set_progress(save=True)  # Set stage as 'in progress'
                 response = requests.get(url, headers=header)
 
                 if response.status_code == 200:
@@ -96,10 +102,17 @@ class DownloadDataflowInteractorNoAnt(Interactor):
                     filepath = output_path + filename
                     with open(filepath, 'w') as f:
                         json.dump(definition, f, indent=2)
+
+                    job.jobstage_set.filter(pk=_job_stages_ids[dataflows.index(dataflow)]).first().set_successful(save=True)  # Set stage as 'successful'
                 else:
+                    stage = job.jobstage_set.filter(pk=_job_stages_ids[dataflows.index(dataflow)]).first()
+                    stage.set_failed(save=True, msg=f"Failed to download <code>{dataflow}</code>: {str(response.text)}")  # Set stage as failed
+
                     raise ConnectionError(response.text)
 
+            job.set_successful(save=True)
         except Exception as e:
+            job.set_failed(save=True, msg=f"Failed downloading dataflows: {str(e)}")  # Fail the job
             _exc = e
             output_path = None
             downloaded_dataflows_defs = {}

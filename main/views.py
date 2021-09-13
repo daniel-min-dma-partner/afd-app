@@ -20,7 +20,7 @@ from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
 from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
     SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm, \
-    DeprecateFieldsForm, SecpredToSaqlForm, ProfileForm
+    DeprecateFieldsForm, SecpredToSaqlForm, ProfileForm, ReleaseForm, ParameterForm
 from main.interactors.jobs_interactor import JobsInteractor
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser
 from .interactors.deprecate_fields_interactor import FieldDeprecatorInteractor
@@ -33,8 +33,12 @@ from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.upload_dataflow_interactor import UploadDataflowInteractorNoAnt
 from .interactors.wdf_manager_interactor import *
 from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, \
-    DeprecationDetails, UploadNotifications, Profile
+    DeprecationDetails, UploadNotifications, Profile, Job, Release, Parameter
 from django.forms.utils import ErrorList
+from django.contrib.auth.mixins import PermissionRequiredMixin
+import sys, traceback
+from django.contrib.auth.decorators import permission_required
+
 
 
 sched.start()
@@ -425,12 +429,13 @@ class DownloadDataflowView(generic.FormView):
                 if not dataflows:
                     raise KeyError("No dataflow selected")
 
-                _data = {"dataflows": dataflows, "model": env, "user": request.user}
+                _data = {"dataflows": dataflows, "model": env, "user": request.user,
+                         'job-message': f"Download dataflows from {env.name}"}
                 ctx = JobsInteractor.call(data=_data, scheduler=sched)
                 messages.success(request, mark_safe(f"Downloadig dataflow{'s' if len(dataflows) > 0 else ''} from "
                                           f"<code>{env.name}</code> started. Check the notifications later."))
 
-                return redirect("main:download-dataflow")
+                return redirect("main:job-list")
 
                 # download_ctx = DownloadDataflowInteractorNoAnt.call(dataflow=dataflows, model=env, user=request.user)
                 # if download_ctx.exception:
@@ -627,7 +632,9 @@ class DeprecateFieldsView(generic.FormView):
                                                      org=form.cleaned_data['org'],
                                                      case_url=form.cleaned_data['case_url'])
 
-                message = "Deprecation finished. Check the latest notifications for more details."
+                message = f"Deprecation <code><strong>{form.cleaned_data['name']}</strong></code> for " \
+                          f"<code>{form.cleaned_data['org']}</code> finished. " \
+                          f"Check the latest notifications for more details."
                 flash_type = messages.INFO
 
                 # Returns a normal response or file-download response
@@ -642,7 +649,7 @@ class DeprecateFieldsView(generic.FormView):
 
                     _return = response_ctx.response
                 else:
-                    _return = self.form_valid(form)
+                    _return = redirect('main:view-deprecations')
             else:
                 message = "Submitted form contains error. Please review it."
                 flash_type = messages.ERROR
@@ -668,7 +675,7 @@ class DeprecateFieldsView(generic.FormView):
                 if _.exception:
                     raise _.exception
 
-        messages.add_message(request, flash_type, message)
+        messages.add_message(request, flash_type, mark_safe(message))
         return _return
 
 
@@ -843,6 +850,180 @@ class ProfileShowView(generic.ListView):
         return lst
 
 
+class JobListView(generic.ListView):
+    template_name = 'jobs/list.html'
+
+    def get_queryset(self):
+        queryset = Job.objects.filter(user_id=self.request.user.pk).order_by('-started_at', '-pk')
+        return queryset
+
+
+class ReleaseCreateView(PermissionRequiredMixin, generic.FormView):
+    form_class = ReleaseForm
+    permission_required = ('main.add_release',)
+    success_url = '/release/view/'
+    template_name = 'release/create.html'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            model = form.save(commit=False)
+            model.publisher = request.user
+            model.save()
+            messages.success(request, "Release note stored successfully.")
+
+            return redirect("main:release-view")
+        else:
+            messages.error(request, "Release wasn't able to create new entry. Check the form.")
+
+        return render(request, self.template_name, {"form": form})
+
+
+class ReleaseEditView(PermissionRequiredMixin, generic.FormView):
+    form_class = ReleaseForm
+    permission_required = ('main.change_release',)
+    success_url = '/release/view/'
+    template_name = 'release/edit.html'
+
+    def get_object(self, queryset=None):
+        obj = get_object_or_404(Release, pk=self.kwargs['pk'])
+        return obj
+
+    def get(self, request, *args, **kwargs):
+        release = self.get_object()
+        form = self.form_class(None, instance=release)
+
+        return render(request, self.template_name, {"form": form, "release": release})
+
+    def post(self, request, *args, **kwargs):
+        release = self.get_object()
+        form = self.form_class(request.POST, instance=release)
+
+        if form.is_valid():
+            model = form.save(commit=False)
+            model.save()
+            messages.success(request, "Release note stored successfully.")
+
+            form = self.form_class()
+            return redirect("main:release-view")
+        else:
+            messages.error(request, "Release wasn't able to create new entry. Check the form.")
+
+        return render(request, self.template_name, {"form": form, "release": release})
+
+
+class ReleaseView(generic.ListView):
+    template_name = 'release/view.html'
+
+    def get_queryset(self):
+        queryset = Release.objects.order_by('-created_at')
+        return queryset
+
+
+class ParameterCreateView(PermissionRequiredMixin, generic.FormView):
+    form_class = ParameterForm
+    permission_required = ('main.add_parameter',)
+    success_url = '/parameter/view/'
+    template_name = 'parameters/create.html'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        sample = '{"Samples": {"Number":1,"String": "sample-text", "Boolean": true, "Array": [1,2,"three"],' \
+                 '"Object": {"Number":2,"String": "sample-text-two", "Boolean": false, "Array": [4,5,"six"]}}}'
+
+        return render(request, self.template_name, {"form": form, "sample": sample})
+
+    def post(self, request, *args, **kwargs):
+        if Parameter.objects.exists():
+            messages.warning(request, "There is a system parameter JSON schema already defined. "
+                                      "Update it to add new parmameters.")
+            return redirect('main:parameter-view')
+
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            model = form.save(commit=False)
+            model.save()
+            messages.success(request, "Parameter stored successfully.")
+
+            return redirect("main:parameter-view")
+        else:
+            messages.error(request, "Parameter wasn't able to create new entry. Check the form.")
+
+        return render(request, self.template_name, {"form": form})
+
+
+class ParameterEditView(PermissionRequiredMixin, generic.FormView):
+    form_class = ParameterForm
+    permission_required = ('main.change_parameter',)
+    success_url = '/parameter/view/'
+    template_name = 'parameters/edit.html'
+
+    def get_object(self, queryset=None):
+        obj = get_object_or_404(Parameter, pk=self.kwargs['pk'])
+        return obj
+
+    def get(self, request, *args, **kwargs):
+        parameter = self.get_object()
+        form = self.form_class(None, instance=parameter)
+
+        return render(request, self.template_name, {"form": form, "parameter": parameter})
+
+    def post(self, request, *args, **kwargs):
+        parameter = self.get_object()
+        form = self.form_class(request.POST, instance=parameter)
+
+        if form.is_valid():
+            model = form.save(commit=False)
+            model.save()
+            messages.success(request, "Parameter note stored successfully.")
+
+            form = self.form_class()
+            return redirect("main:parameter-view")
+        else:
+            messages.error(request, "Parameter wasn't able to create new entry. Check the form.")
+
+        return render(request, self.template_name, {"form": form, "parameter": parameter})
+
+
+class ParameterView(generic.ListView):
+    template_name = 'parameters/view.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ParameterView, self).get_context_data(**kwargs)
+        context['parameter_exists'] = Parameter.objects.exists()
+        return context
+
+    def get_queryset(self):
+        queryset = Parameter.objects.order_by('-created_at')
+        return queryset
+
+
+@permission_required("main.delete_release", raise_exception=True)
+def release_delete_view(request, pk=None):
+    print('entered')
+    release = get_object_or_404(Release, pk=pk)
+    release.delete()
+    messages.success(request, mark_safe(f"Release <code>{release.title}</code> deleted successfully"))
+
+    return redirect("main:release-view")
+
+
+@permission_required("main.delete_release", raise_exception=True)
+def parameter_delete_view(request, pk=None):
+    parameter = get_object_or_404(Parameter, pk=pk)
+    parameter.delete()
+    messages.success(request, mark_safe(f"Parameter deleted successfully"))
+
+    return redirect("main:parameter-view")
+
+
 def profile_delete_view(request, pk=None):
     user = request.user
     profile = Profile.objects.filter(user=user, pk=pk)
@@ -919,6 +1100,10 @@ def deprecation_delete_all(request):
 
 def handler500(request, exception=None):
     return render(request, '500.html', {"exception": mark_safe(str(exception))}, status=500)
+
+
+def handler403(request, exception=None):
+    return render(request, '403.html', {"exception": mark_safe(str(exception))}, status=403)
 
 
 @csrf_exempt

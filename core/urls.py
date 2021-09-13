@@ -22,6 +22,10 @@ urlpatterns = [
 
     path('', include('main.urls')),
     path('chat/', include('chat.urls')),
+    path('tinymce/', include('tinymce.urls')),
 ]
+
+handler500 = 'main.views.handler500'
+handler403 = 'main.views.handler403'
 
 scheduler = scheduler_configure()

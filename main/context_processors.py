@@ -1,7 +1,11 @@
 import datetime
-from django.urls import reverse
+import json
+import os
 
-from main.models import Notifications, UploadNotifications as UpNotifs
+from django.urls import reverse
+from django.utils.safestring import mark_safe
+
+from main.models import Notifications, UploadNotifications as UpNotifs, Parameter
 
 
 def show_notifications(request):
@@ -20,30 +24,28 @@ def show_notifications(request):
         'currentYear': datetime.datetime.now().strftime("%Y")
     }
 
-    profile_create_url = reverse("main:profile-create")
-    profile_edit_url = reverse("main:profile-edit", kwargs={"pk": 1})
-    profile_edit_url = profile_edit_url.split('/')[:-2]
-    profile_edit_url = profile_edit_url + ['']
-    profile_edit_url = '/'.join(profile_edit_url)
-    current_url = request.path
+    if request.user.is_authenticated:
+        parameters = Parameter.objects
 
-    print(current_url)
-    print(profile_create_url)
-    print(profile_edit_url)
+        if parameters.exists():
+            parameter: Parameter = parameters.first()
 
-    if current_url == profile_create_url or profile_edit_url in current_url:
-        profile_guideline = [
-            {
-                "title": "Timezone",
-                "text": """You can localize datetime displayed with your local timezone, specifying the key as
-                           <code><strong>timezone</strong></code>
-                           and the value as one of the <code>valid timezone</code> strings which you can find
-                           <a href="https://gist.github.com/heyalexej/8bf688fd67d7199be4a1682b3eec7568#file-pytz-time-zones-py"
-                           target="_blank">here</a>.""",
-                "color": "success",
-                "icon": "fa-globe-americas"
-            },
-        ]
-        default_context['profile_guidelines'] = profile_guideline
+            profile_create_url = reverse("main:profile-create")
+            profile_edit_url = reverse("main:profile-edit", kwargs={"pk": 1})
+            profile_edit_url = profile_edit_url.split('/')[:-2]
+            profile_edit_url = profile_edit_url + ['']
+            profile_edit_url = '/'.join(profile_edit_url)
+            current_url = request.path
+
+            if current_url == profile_create_url or profile_edit_url in current_url:
+                key = 'profile-guidelines'
+                param = json.loads(parameter.parameter)
+                profile_guideline = param[key] if key in param.keys() else []
+
+                default_context['profile_guidelines'] = profile_guideline
+
+    # Used to show an alert banner
+    heroku_app_env = os.environ.get('HEROKU_APP_ENV', "")
+    default_context['heroku_app_env'] = heroku_app_env.lower()
 
     return default_context

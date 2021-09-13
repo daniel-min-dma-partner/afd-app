@@ -4,6 +4,10 @@ import {
     alert_if_required_missing
 } from '../../sb-admin/custom-assets/js/mjs/helpers.mjs';
 
+$(document).ready(function (evt) {
+    $('#id_name').focus();
+});
+
 $("#proceed-deprecation").on('click', (evt) => {
     let required_fields_completed = alert_if_required_missing();
 
@@ -23,6 +27,7 @@ $('#id_from_file').on('click', function (evt) {
     if (save_metadata[0].checked) {
         save_metadata.click();
     }
+    save_metadata.prop('disabled', is_from_file);
 
     if (is_from_file) {
         $("#id_sobjects").siblings('label').removeClass('required');

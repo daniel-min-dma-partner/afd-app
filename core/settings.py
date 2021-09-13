@@ -56,9 +56,11 @@ INSTALLED_APPS = [
     # 'channels',
     'django_apscheduler',
     'django_extensions',
+    'jsoneditor',
     'libs.interactor.interactor',
     'mathfilters',
     'rest_framework',
+    'tinymce',
 
     # Created apps
     # 'chat',
@@ -249,6 +251,28 @@ SALESFORCE_INSTANCE_URLS = {
     'Production': 'https://login.salesforce.com',
 }
 
+# TinyMCE Settings
+TINYMCE_DEFAULT_CONFIG = {
+    "theme": "silver",
+    "height": 500,
+    "menubar": True,
+    "menu": {
+        "file": {"title": "File", "items": 'preview'}
+    },
+    "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
+               "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,paste,"
+               "code,help,wordcount",
+    "toolbar": "undo redo | formatselect | bold italic backcolor forecolor | "
+               "alignleft aligncenter alignright alignjustify | "
+               "bullist numlist outdent indent | removeformat | help",
+}
+
+
+# Json Editor
+JSON_EDITOR_CSS = "https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.5.5/jsoneditor.css"
+JSON_EDITOR_JS = "https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.5.5/jsoneditor.js"
+JSON_EDITOR_INIT_JS = "django-jsoneditor/jsoneditor-init.js"
+
 
 # Settings.
 environment = os.environ.get('ENVIRONMENT', None)
@@ -268,7 +292,7 @@ else:
         pass
 
 # Settings status
+print("DEBUG:", DEBUG)
+print("ALLOWED HOSTS:", ALLOWED_HOSTS)
 print(env_settings_filename)
-print(json.dumps(DATABASES, indent=2))
-print(json.dumps(MIDDLEWARE, indent=2))
-print(json.dumps(INSTALLED_APPS, indent=2))
+print("Installed app: ", json.dumps(INSTALLED_APPS, indent=2))
