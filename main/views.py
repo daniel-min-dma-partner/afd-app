@@ -179,6 +179,9 @@ class TreeRemover(generic.FormView):
                                                      name=name, request=request)
                 else:
                     name = name or f"[extracted] {dataflow[0].name}"
+                    ext = name[-5:] if len(name) > 5 else None
+                    if not ext or ext != '.json':
+                        name = (name if name else f"[extracted] {dataflow[0].name}".strip()) + '.json'
                     ctx = TreeExtractorInteractor.call(dataflow=_dataflow, registers=registers, output_filename=name)
 
                 response_ctx = JsonFileResponseInteractor.call(filepath=ctx.output)
