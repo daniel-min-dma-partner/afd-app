@@ -458,9 +458,10 @@ class DownloadDataflowView(generic.FormView):
         return self.form_invalid(form)
 
 
-class UploadDataflowView(generic.FormView):
+class UploadDataflowView(PermissionRequiredMixin, generic.FormView):
     form_class = DataflowUploadForm
     module = 'dataflow-upload'
+    permission_required = ['main.special_permission_upload_dataflows']
     template_name = 'dataflow-manager/upload/form.html'
 
     def get_context_data(self, **kwargs):

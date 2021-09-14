@@ -551,3 +551,18 @@ class Parameter(models.Model):
             self.modified_at = timezone.now()
 
         super(Parameter, self).save(*args, **kwargs)
+
+
+class SpecialPermissions(models.Model):
+    """
+    Used to add custom permissions into database.
+    """
+
+    class Meta:
+        managed = False  # No database table creation or deletion operations will be performed for this model.
+
+        default_permissions = []  # disable "add", "change", "delete" and "view" default permissions
+
+        permissions = [
+            ('special_permission_upload_dataflows', 'Can upload dataflows'),
+        ]
