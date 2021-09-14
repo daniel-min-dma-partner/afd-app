@@ -1,4 +1,5 @@
 import copy
+import json
 
 import pytz
 from django import forms
@@ -159,49 +160,31 @@ class SlackMsgPusherForm(forms.Form):
         required=False
     )
 
-    SLACK_WEBHOOK_LINKS = {
-        "SFDC_INTERNAL_SUBBARAO": {
-            "url": "https://hooks.slack.com/services/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",
-            "name": "Subbarao Talachiru"
-        },
-        "SFDF_I_bt-eops-dna-all": {
-            "url": "https://hooks.slack.com/services/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",
-            "name": "bt-eops-dna-all"
-        },
-        "DPARK": {
-            "url": "https://hooks.slack.com/services/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",
-            "name": "Daniel"
-        },
-        "SFDC_INTERNAL_TCRM": {
-            "url": "https://hooks.slack.com/services/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",
-            "name": "bt-eops-tableau-crm"
-        },
-        "SFDC_SAI_SURESH": {
-            "url": "https://hooks.slack.com/services/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",
-            "name": "Sai Suresh"
-        }
-    }
-
-    _SLACK_TARGET_CHOICES = [
-        ('SFDC_INTERNAL_SUBBARAO', 'Subbarao Talachiru'),
-        ('SFDC_INTERNAL_SAI', 'bt-eops-tableau-crm'),
-        ('SFDF_I_bt-eops-dna-all', 'bt-eops-dna-all'),
-        ('DPARK', '민 현 기'),
-        ('SFDC_SAI_SURESH', 'Sai Suresh'),
-    ]
-
-    slack_target = forms.ChoiceField(choices=_SLACK_TARGET_CHOICES, widget=forms.RadioSelect(), required=True)
+    slack_target = forms.CharField(required=True)
 
     @classmethod
     def slack_target_choices(cls):
-        return copy.deepcopy(cls._SLACK_TARGET_CHOICES)
+        choices = [(key, value['name']) for key, value in cls.slack_webhook_links().items()]
+        return choices
+
+    @classmethod
+    def slack_webhook_links(cls):
+        sysparm = Parameter.objects
+        if sysparm.exists():
+            sysparm = sysparm.first()
+            parm = json.loads(sysparm.parameter)
+            if 'SLACK_WEBHOOK_LINKS' in parm.keys():
+                return parm['SLACK_WEBHOOK_LINKS']
+
+        return {}
 
     @classmethod
     def get_slack_webhook(cls, key):
-        if key not in cls.SLACK_WEBHOOK_LINKS.keys():
+        SLACK_WEBHOOK_LINKS = cls.slack_webhook_links()
+        if key not in SLACK_WEBHOOK_LINKS.keys():
             raise KeyError(f"'{key}' is not a valid Slack target.")
 
-        return cls.SLACK_WEBHOOK_LINKS[key]['url']
+        return SLACK_WEBHOOK_LINKS[key]['url']
 
 
 class SlackCustomerConversationForm(forms.Form):
@@ -302,14 +285,16 @@ class DeprecateFieldsForm(forms.Form):
         sobjects = self.cleaned_data.get('sobjects')
 
         if not from_file and not sobjects:
-            raise ValidationError("<code><strong>Objects</strong></code> field can not be empty if <code>From File?</code> is un-checked.")
+            raise ValidationError(
+                "<code><strong>Objects</strong></code> field can not be empty if <code>From File?</code> is un-checked.")
 
     def clean_fields(self):
         from_file = self.cleaned_data.get('from_file')
         fields = self.cleaned_data.get('fields')
 
         if not from_file and not fields:
-            raise ValidationError("<code><strong>Fields</strong></code> field can not be empty if <code>From File?</code> is un-checked.")
+            raise ValidationError(
+                "<code><strong>Fields</strong></code> field can not be empty if <code>From File?</code> is un-checked.")
 
 
 class SecpredToSaqlForm(forms.Form):
@@ -323,7 +308,6 @@ class SecpredToSaqlForm(forms.Form):
 
 
 class ProfileForm(forms.ModelForm):
-
     class Meta:
         model = Profile
         fields = ['key', 'value', 'type']
@@ -339,7 +323,8 @@ class ProfileForm(forms.ModelForm):
         if self.clean_key() == 'timezone':
             if value not in pytz.all_timezones:
                 link = '<a href="https://gist.github.com/heyalexej/8bf688fd67d7199be4a1682b3eec7568#file-pytz-time-zones-py" target="_blank">here</a>'
-                raise ValidationError(f"The timezone <code>{value}</code> is not a valid timezone specification. Check valid timezones string {link}.")
+                raise ValidationError(
+                    f"The timezone <code>{value}</code> is not a valid timezone specification. Check valid timezones string {link}.")
 
         return value
 
