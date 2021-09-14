@@ -1,5 +1,31 @@
 import {popup_notification} from "../../sb-admin/custom-assets/js/mjs/helpers.mjs";
 
+$(document).ready(function (evt) {
+    let container = document.getElementById("parameter-editor");
+
+    if (container) {
+        // UI options.
+        let options = {
+            mainMenuBar: false,
+            mode: 'tree',
+            search: false,
+        };
+
+        // Converts strings to HTML tag.
+        let json = JSON.parse($.trim($('#id_parameter').html()));
+        let text = {};
+        if (![undefined, null, ""].includes(json['profile-guidelines'])) {
+            text = json['profile-guidelines'][0]['text'];
+            json['profile-guidelines'][0]['text'] = jQuery('<div />').html(text).text();
+        }
+
+        // Set data.
+        let editor = new JSONEditor(container, options);
+        editor.set(json);
+        editor.expandAll();
+    }
+});
+
 $('.btn-remove-deprec').on('click', function () {
     $('#delete-confirmation-md .modal-body').find('input[id="id-field"]').val($(this).data('id')).trigger('change');
     $('#delete-confirmation-md .modal-body').find('input[id="name-field"]').val($(this).data('model-name')).trigger('change');
@@ -26,5 +52,25 @@ $(".delete-all").on('click', function (evt) {
                 location.reload();
             }
         });
+    }
+});
+
+$('div.collapse').on('hide.bs.collapse', function (evt) {
+    $('div.details-divider').empty();
+});
+
+$('div[id^="object_fields_"]').on('shown.bs.collapse', function () {
+    let detail_div = $(this).parent().find('.detail');
+
+    if (detail_div && detail_div.hasClass('show')) {
+        $('div.details-divider').append('<br/></br>');
+    }
+});
+
+$('div[id^="collapseExample_"]').on('shown.bs.collapse', function () {
+    let of_div = $(this).parent().find('.object-fields');
+
+    if (of_div && of_div.hasClass('show')) {
+        $('div.details-divider').append('<br/></br>');
     }
 });

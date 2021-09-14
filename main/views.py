@@ -1009,6 +1009,14 @@ class ParameterView(generic.ListView):
         return queryset
 
 
+def download_obj_fields_md(request, deprecation_pk=None):
+    deprecation = get_object_or_404(DataflowDeprecation, pk=deprecation_pk)
+    md_json = deprecation.get_objects_fields_metadata()
+    return HttpResponse(md_json,
+                        content_type='application/json',
+                        headers={'Content-Disposition': f"attachment; filename=Objects & fields.json"})
+
+
 @permission_required("main.delete_release", raise_exception=True)
 def release_delete_view(request, pk=None):
     print('entered')

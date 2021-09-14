@@ -1,6 +1,7 @@
 import copy
 import datetime
 import datetime as dt
+import json
 import os
 
 import tzlocal
@@ -262,6 +263,14 @@ class DataflowDeprecation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     case_url = models.CharField(max_length=1024, help_text='', null=True, blank=True, default="#")
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def get_objects_fields_metadata(self):
+        md = {}
+
+        for idx, obj in enumerate(self.sobjects.split('|')):
+            md[obj] = self.fields.split('|')[idx].split(',')
+
+        return json.dumps(md)
 
 
 class DeprecationDetails(models.Model):
