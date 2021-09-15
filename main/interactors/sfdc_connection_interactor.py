@@ -44,8 +44,6 @@ class OAuthLoginInteractor(Interactor):
             url_parse = url_parse._replace(query=url_new_query)
             new_url = parse.urlunparse(url_parse)
 
-            print(new_url)
-
             response = requests.post(new_url) if mode == 'login' else requests.get(new_url)
 
             if mode == 'login' and response.status_code == 200:

@@ -46,7 +46,6 @@ def parse_to_color(string: str):
 
 @register.filter
 def is_upload_notif(notification: Union[Notifications, UploadNotifications]):
-    print('checking')
     return isinstance(notification, UploadNotifications)
 
 

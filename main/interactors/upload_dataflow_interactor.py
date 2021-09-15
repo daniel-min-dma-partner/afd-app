@@ -87,12 +87,10 @@ class UploadDataflowInteractorNoAnt(Interactor):
                     "historyLabel": "TCRM - Automation Web Upload"
                 }
 
-            print(data)
             response = requests.patch(url, json=data, headers=header)
 
             if response.status_code == 200:
                 response = response.json()
-                print("response: ", response)
                 if 'historiesUrl' not in response.keys():
                     raise ConnectionError(response)
             else:
