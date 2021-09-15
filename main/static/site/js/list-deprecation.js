@@ -1,18 +1,21 @@
 import {popup_notification} from "../../sb-admin/custom-assets/js/mjs/helpers.mjs";
 
 $(document).ready(function (evt) {
-    let container = document.getElementById("parameter-editor");
+    let containers = document.getElementsByClassName("parameter-editor-div");
 
-    if (container) {
+    $.each(containers, (index, element) => {
+        let container = $(element),
+            pk = container.data('pk');
+
         // UI options.
         let options = {
-            mainMenuBar: false,
+            mainMenuBar: true,
             mode: 'tree',
-            search: false,
+            search: true,
         };
 
         // Converts strings to HTML tag.
-        let json = JSON.parse($.trim($('#id_parameter').html()));
+        let json = JSON.parse($.trim($(`#id_parameter-${pk}`).html()));
         let text = {};
         if (![undefined, null, ""].includes(json['profile-guidelines'])) {
             text = json['profile-guidelines'][0]['text'];
@@ -20,10 +23,10 @@ $(document).ready(function (evt) {
         }
 
         // Set data.
-        let editor = new JSONEditor(container, options);
+        let editor = new JSONEditor(element, options);
         editor.set(json);
         editor.expandAll();
-    }
+    });
 });
 
 $('.btn-remove-deprec').on('click', function () {
@@ -85,9 +88,9 @@ $(".delete-all").on('click', function (evt) {
 //
 $('tr[id^="object_fields_"]').on('shown.bs.collapse', function () {
     let this_ = $(this),
-        detail_div = this_.parent().find('.detail'),
-        name = this_.data('name'),
-        pk = this_.data('pk');
+        pk = this_.data('pk'),
+        detail_div = $(`#collapseExample_${pk}`),
+        name = this_.data('name');
 
     if (detail_div && detail_div.hasClass('show')) {
         // $('.title-' + pk).append(name);
@@ -99,9 +102,9 @@ $('tr[id^="object_fields_"]').on('shown.bs.collapse', function () {
 
 $('tr[id^="collapseExample_"]').on('shown.bs.collapse', function () {
     let this_ = $(this),
-        of_div = this_.parent().find('.object-fields'),
-        name = this_.data('name'),
-        pk = this_.data('pk');
+        pk = this_.data('pk'),
+        of_div = $(`#object_fields_${pk}`),
+        name = this_.data('name');
 
     if (of_div && of_div.hasClass('show')) {
         // $('.title-' + pk).append(name);
