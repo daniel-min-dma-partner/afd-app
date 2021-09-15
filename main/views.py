@@ -458,9 +458,10 @@ class DownloadDataflowView(generic.FormView):
         return self.form_invalid(form)
 
 
-class UploadDataflowView(generic.FormView):
+class UploadDataflowView(PermissionRequiredMixin, generic.FormView):
     form_class = DataflowUploadForm
     module = 'dataflow-upload'
+    permission_required = ['main.special_permission_upload_dataflows']
     template_name = 'dataflow-manager/upload/form.html'
 
     def get_context_data(self, **kwargs):
@@ -1006,6 +1007,22 @@ class ParameterView(generic.ListView):
     def get_queryset(self):
         queryset = Parameter.objects.order_by('-created_at')
         return queryset
+
+
+def download_obj_fields_md(request, deprecation_pk=None):
+    deprecation = get_object_or_404(DataflowDeprecation, pk=deprecation_pk)
+    md_json = deprecation.get_objects_fields_metadata()
+    return HttpResponse(md_json,
+                        content_type='application/json',
+                        headers={'Content-Disposition': f"attachment; filename=Objects & fields.json"})
+
+
+def download_selected_dfs(request, ids=""):
+    print(request.body, ids)
+    zipfile = open('/Users/dmin/Downloads/Deprecated - to - customers/Dataflows modified by deprecation.zip', 'rb')
+    return HttpResponse(zipfile,
+                        content_type='application/zip',
+                        headers={'Content-Disposition': f"attachment; filename=Objects & fields.zip"})
 
 
 @permission_required("main.delete_release", raise_exception=True)
