@@ -7,9 +7,9 @@
             <div class="card-body bg-translucent-primary">
                 <div class="form-row">
                     <div class="form-group col-12">
-                        <h5 class="title-{{ deprecation.pk }} float-left"></h5>
+                        <h5 class="title-{{ object.pk }} float-left"></h5>
 
-                        <a href="{% url 'main:download-obj-fields' deprecation_pk=deprecation.pk %}"
+                        <a href="{% url 'main:download-removed-field-list' deprecation_detail_pk=object.pk %}"
                            class="btn btn-primary btn-icon-split float-right">
                             <span class="icon text-white-50">
                                 <i class="fas fa-download"></i>
@@ -18,10 +18,11 @@
                         </a>
                     </div>
                 </div>
-                <div id="parameter-editor-{{ deprecation.pk }}" style="width: 100%; height: 1000px;" data-pk="{{ deprecation.id }}" class="parameter-editor-div"></div>
+                <div id="removedfields-{{ object.pk }}" style="width: 100%; height: 1000px;" data-pk="{{ object.id }}"
+                     class="removed-fields-div"></div>
 
-                <textarea name="parameter" id="id_parameter-{{ deprecation.pk }}" hidden>
-                    {{ deprecation.get_objects_fields_metadata|safe }}
+                <textarea name="removed-fields" id="removedfields-{{ object.pk }}" hidden>
+                    {{ object.get_removed_fields|safe }}
                 </textarea>
             </div>
         </div>

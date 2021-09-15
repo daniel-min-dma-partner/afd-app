@@ -82,7 +82,17 @@
                         <tr>
                             <input type="hidden" class="pk" value="{{ object.pk }}">
                             <input type="hidden" class="status" value="{{ object.status }}">
-                            <td>{{ object.file_name|basename }}</td>
+                            <td>
+                                {% if object.removed_fields %}
+                                    <a data-toggle="collapse" href="#removed-fields-{{ object.pk }}" role="button"
+                                       aria-expanded="false" aria-controls="removed-fields-{{ object.pk }}"
+                                       class="removed-fields-{{ object.pk }}">
+                                        {{ object.file_name|basename }}
+                                    </a>
+                                {% else %}
+                                    {{ object.file_name|basename }}
+                                {% endif %}
+                            </td>
                             <td class="status-cell">{{ object.get_status_badge|safe }}</td>
                             <td>{{ object.message|safe }}</td>
                             <td class="text-center">
@@ -105,6 +115,10 @@
                                 </a>
                             </td>
                         </tr>
+                        <tr class="collapse removed-fields" id="removed-fields-{{ object.pk }}"
+                            data-pk="{{ object.pk }}"><td colspan="4">
+                            {% include 'dataflow-manager/deprecate-fields/details/_removed_fields.html' with object=object %}
+                        </td></tr>
                     {% endfor %}
                     </tbody>
                 </table>
