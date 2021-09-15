@@ -1017,6 +1017,14 @@ def download_obj_fields_md(request, deprecation_pk=None):
                         headers={'Content-Disposition': f"attachment; filename=Objects & fields.json"})
 
 
+def download_selected_dfs(request, ids=""):
+    print(request.body, ids)
+    zipfile = open('/Users/dmin/Downloads/Deprecated - to - customers/Dataflows modified by deprecation.zip', 'rb')
+    return HttpResponse(zipfile,
+                        content_type='application/zip',
+                        headers={'Content-Disposition': f"attachment; filename=Objects & fields.zip"})
+
+
 @permission_required("main.delete_release", raise_exception=True)
 def release_delete_view(request, pk=None):
     print('entered')
