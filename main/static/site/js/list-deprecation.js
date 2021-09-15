@@ -88,9 +88,9 @@ $(".delete-all").on('click', function (evt) {
 //
 $('tr[id^="object_fields_"]').on('shown.bs.collapse', function () {
     let this_ = $(this),
-        detail_div = this_.parent().find('.detail'),
-        name = this_.data('name'),
-        pk = this_.data('pk');
+        pk = this_.data('pk'),
+        detail_div = $(`#collapseExample_${pk}`),
+        name = this_.data('name');
 
     if (detail_div && detail_div.hasClass('show')) {
         // $('.title-' + pk).append(name);
@@ -102,9 +102,9 @@ $('tr[id^="object_fields_"]').on('shown.bs.collapse', function () {
 
 $('tr[id^="collapseExample_"]').on('shown.bs.collapse', function () {
     let this_ = $(this),
-        of_div = this_.parent().find('.object-fields'),
-        name = this_.data('name'),
-        pk = this_.data('pk');
+        pk = this_.data('pk'),
+        of_div = $(`#object_fields_${pk}`),
+        name = this_.data('name');
 
     if (of_div && of_div.hasClass('show')) {
         // $('.title-' + pk).append(name);
