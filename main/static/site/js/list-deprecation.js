@@ -16,11 +16,28 @@ $(document).ready(function (evt) {
 
         // Converts strings to HTML tag.
         let json = JSON.parse($.trim($(`#id_parameter-${pk}`).html()));
-        let text = {};
-        if (![undefined, null, ""].includes(json['profile-guidelines'])) {
-            text = json['profile-guidelines'][0]['text'];
-            json['profile-guidelines'][0]['text'] = jQuery('<div />').html(text).text();
-        }
+
+        // Set data.
+        let editor = new JSONEditor(element, options);
+        editor.set(json);
+        editor.expandAll();
+    });
+
+    containers = document.getElementsByClassName("removed-fields-div");
+
+    $.each(containers, (index, element) => {
+        let container = $(element),
+            pk = container.data('pk');
+
+        // UI options.
+        let options = {
+            mainMenuBar: true,
+            mode: 'tree',
+            search: true,
+        };
+
+        // Converts strings to HTML tag.
+        let json = JSON.parse($.trim($(`textarea#removedfields-${pk}`).html()));
 
         // Set data.
         let editor = new JSONEditor(element, options);
