@@ -598,7 +598,7 @@ class DeprecateFieldsView(generic.FormView):
 
                     metadata = json.load(open(filemodel.file.path, 'r'))
                     self.filepath = filemodel.file.path
-                    self.fields = [field for _, field in metadata.items()]
+                    self.fields = list(set([field for _, field in metadata.items()]))
                     self.objects = [obj for obj, _ in metadata.items()]
 
                     filemodel.delete()
@@ -1008,7 +1008,7 @@ def download_removed_field_list(request, deprecation_detail_pk=None):
     md_json = deprecation.get_removed_fields()
     return HttpResponse(md_json,
                         content_type='application/json',
-                        headers={'Content-Disposition': f"attachment; filename=List of removed fields from {deprecation.deprecation.name} dataflow.json"})
+                        headers={'Content-Disposition': f"attachment; filename=List of removed fields from '{os.path.basename(deprecation.file_name).replace('.json', '')}' dataflow.json"})
 
 
 def download_obj_fields_md(request, deprecation_pk=None):
