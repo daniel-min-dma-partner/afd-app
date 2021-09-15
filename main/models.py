@@ -269,6 +269,7 @@ class DataflowDeprecation(models.Model):
 
         for idx, obj in enumerate(self.sobjects.split('|')):
             md[obj] = self.fields.split('|')[idx].split(',')
+            md[obj].sort()
 
         return json.dumps(md)
 
@@ -313,7 +314,15 @@ class DeprecationDetails(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_removed_fields(self):
-        return json.dumps({} if not self.removed_fields else self.removed_fields)
+        removed_fields = self.removed_fields
+
+        if removed_fields:
+            for key in removed_fields.keys():
+                ordered_list = removed_fields[key]
+                ordered_list.sort()
+                removed_fields[key] = ordered_list
+
+        return json.dumps({} if not removed_fields else removed_fields)
 
     def get_status_desc(self):
         if self.status in self._STATUS_MAP.keys():
