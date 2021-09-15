@@ -18,9 +18,9 @@
                         </a>
                     </div>
                 </div>
-                <div id="parameter-editor" style="width: 100%; height: 1000px;"></div>
+                <div id="parameter-editor-{{ deprecation.pk }}" style="width: 100%; height: 1000px;" data-pk="{{ deprecation.id }}" class="parameter-editor-div"></div>
 
-                <textarea name="parameter" id="id_parameter" hidden>
+                <textarea name="parameter" id="id_parameter-{{ deprecation.pk }}" hidden>
                     {{ deprecation.get_objects_fields_metadata|safe }}
                 </textarea>
             </div>

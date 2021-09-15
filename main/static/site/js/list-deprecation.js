@@ -1,9 +1,12 @@
 import {popup_notification} from "../../sb-admin/custom-assets/js/mjs/helpers.mjs";
 
 $(document).ready(function (evt) {
-    let container = document.getElementById("parameter-editor");
+    let containers = document.getElementsByClassName("parameter-editor-div");
 
-    if (container) {
+    $.each(containers, (index, element) => {
+        let container = $(element),
+            pk = container.data('pk');
+
         // UI options.
         let options = {
             mainMenuBar: false,
@@ -12,7 +15,7 @@ $(document).ready(function (evt) {
         };
 
         // Converts strings to HTML tag.
-        let json = JSON.parse($.trim($('#id_parameter').html()));
+        let json = JSON.parse($.trim($(`#id_parameter-${pk}`).html()));
         let text = {};
         if (![undefined, null, ""].includes(json['profile-guidelines'])) {
             text = json['profile-guidelines'][0]['text'];
@@ -20,10 +23,10 @@ $(document).ready(function (evt) {
         }
 
         // Set data.
-        let editor = new JSONEditor(container, options);
+        let editor = new JSONEditor(element, options);
         editor.set(json);
         editor.expandAll();
-    }
+    });
 });
 
 $('.btn-remove-deprec').on('click', function () {
