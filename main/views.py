@@ -1009,6 +1009,14 @@ class ParameterView(generic.ListView):
         return queryset
 
 
+def download_removed_field_list(request, deprecation_detail_pk=None):
+    deprecation = get_object_or_404(DeprecationDetails, pk=deprecation_detail_pk)
+    md_json = deprecation.get_removed_fields()
+    return HttpResponse(md_json,
+                        content_type='application/json',
+                        headers={'Content-Disposition': f"attachment; filename=List of removed fields from {deprecation.deprecation.name} dataflow.json"})
+
+
 def download_obj_fields_md(request, deprecation_pk=None):
     deprecation = get_object_or_404(DataflowDeprecation, pk=deprecation_pk)
     md_json = deprecation.get_objects_fields_metadata()
