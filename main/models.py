@@ -316,6 +316,16 @@ class DeprecationDetails(models.Model):
             return self._STATUS_MAP[self.status]
         return self.status
 
+    def get_status_badge(self):
+        html = """<i class="fas fa-{{icon}} text-{{type}}"></i>"""
+        icon_map = {
+            0: ["info-circle", 'info'],
+            1: ["check", 'success'],
+            4: ["times-circle", 'danger']
+        }
+
+        return html.replace('{{icon}}', icon_map[self.status][0]).replace('{{type}}', icon_map[self.status][1])
+
     def get_status_bg_color(self):
         return self._STATUS_BOOSTRAP_COLOR[self.status]
 

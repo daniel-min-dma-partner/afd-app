@@ -61,18 +61,19 @@
                                 <td>{{ object.created_at }}</td>
                                 <td>
                                     <a data-toggle="collapse" href="#collapseExample_{{ object.pk }}" role="button"
-                                       aria-expanded="false" aria-controls="collapseExample_{{ object.pk }}">
+                                       aria-expanded="false" aria-controls="collapseExample_{{ object.pk }}"
+                                       class="name-{{ object.pk }}">
                                         {{ object.name }} for {{ object.salesforce_org }}
                                     </a>
-                                    <div class="collapse detail" id="collapseExample_{{ object.pk }}">
-                                        {% include 'dataflow-manager/deprecate-fields/details/_detail_form.html' with list=object.deprecationdetails_set.all deprecation=object %}
-                                    </div>
+{#                                    <div class="collapse detail" id="collapseExample_{{ object.pk }}">#}
+{#                                        {% include 'dataflow-manager/deprecate-fields/details/_detail_form.html' with list=object.deprecationdetails_set.all deprecation=object %}#}
+{#                                    </div>#}
 
-                                    <div class="details-divider"></div>
+{#                                    <div class="details-divider"></div>#}
 
-                                    <div class="collapse object-fields" id="object_fields_{{ object.pk }}">
-                                        {% include 'dataflow-manager/deprecate-fields/details/_object_fields_view.html' with deprecation=object %}
-                                    </div>
+{#                                    <div class="collapse object-fields" id="object_fields_{{ object.pk }}">#}
+{#                                        {% include 'dataflow-manager/deprecate-fields/details/_object_fields_view.html' with deprecation=object %}#}
+{#                                    </div>#}
                                 </td>
                                 <td>
                                     {% if object.case_url != '#' %}
@@ -90,11 +91,19 @@
 
                                     <a data-toggle="collapse" href="#object_fields_{{ object.pk }}" role="button"
                                        aria-expanded="false" aria-controls="object_fields_{{ object.pk }}"
-                                       class="btn btn-info btn-sm">
+                                       class="btn btn-info btn-sm of-{{ object.pk }}">
                                         <i class="fas fa-file-alt"></i>
                                     </a>
                                 </td>
                             </tr>
+                            <tr class="collapse detail" id="collapseExample_{{ object.pk }}"
+                                data-name="{{ object.name }}" data-pk="{{ object.pk }}"><td colspan="4">
+                                {% include 'dataflow-manager/deprecate-fields/details/_detail_form.html' with list=object.deprecationdetails_set.all deprecation=object %}
+                            </td></tr>
+                            <tr class="collapse object-fields" id="object_fields_{{ object.pk }}"
+                                data-name="{{ object.name }}" data-pk="{{ object.pk }}"><td colspan="4">
+                                {% include 'dataflow-manager/deprecate-fields/details/_object_fields_view.html' with deprecation=object %}
+                            </td></tr>
                         {% endfor %}
                         </tbody>
                     </table>
@@ -154,7 +163,8 @@
 
 {% block extra-scripts %}
     <script>
-        let delete_all_url = "{% url 'main:deprecation-delete-all' %}";
+        let delete_all_url = "{% url 'main:deprecation-delete-all' %}",
+            download_selected_dfs = "{% url 'main:download-selected-dfs' ids='0000' %}";
         const filter_deprecation = (el) => {
             let table = el.parent().parent().parent().parent().parent().find('table.table'),
                 status_fields = table.find('input[type="hidden"].status'),
