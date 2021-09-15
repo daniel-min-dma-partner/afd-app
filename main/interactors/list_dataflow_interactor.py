@@ -54,7 +54,6 @@ class DataflowListInteractor(Interactor):
 
     @classmethod
     def reset_status(cls, user: User):
-        print('resetting status')
         status_filenm = f'{BASE_DIR}/ant/{user.username}/status.json'
 
         if os.path.isfile(status_filenm):
@@ -65,8 +64,6 @@ class DataflowListInteractor(Interactor):
 
             with open(status_filenm, 'w') as f:
                 json.dump(jf, f, indent=2)
-
-        print('status reseted')
 
     def run(self):
         with status_wrapper(self.context.user, self.context.refresh_cache and self.context.refresh_cache == 'true'):

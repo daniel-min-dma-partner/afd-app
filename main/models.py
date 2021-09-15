@@ -313,7 +313,6 @@ class DeprecationDetails(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_removed_fields(self):
-        print(not self.removed_fields)
         return json.dumps({} if not self.removed_fields else self.removed_fields)
 
     def get_status_desc(self):
