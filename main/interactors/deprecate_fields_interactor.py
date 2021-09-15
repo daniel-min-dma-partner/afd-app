@@ -99,7 +99,7 @@ class FieldDeprecatorInteractor(Interactor):
                                 deprecation_model.refresh_from_db()
 
                             deprecation_detail = DeprecationDetails()
-                            deprecation_detail.file_name = f"[{today}] {df_name}"
+                            deprecation_detail.file_name = f"{df_name}"
                             deprecation_detail.original_dataflow = _original
                             deprecation_detail.deprecated_dataflow = _original
                             deprecation_detail.meta = _field_md_original
@@ -116,6 +116,9 @@ class FieldDeprecatorInteractor(Interactor):
                             equal = json.dumps(_original) == json.dumps(json_modified)
 
                             if not equal:
+                                for key, item in removed_fields.items():
+                                    _fl_ = copy.deepcopy(removed_fields[key])
+                                    removed_fields[key] = list(set(_fl_))
                                 deprecation_detail.deprecated_dataflow = json_modified
                                 deprecation_detail.removed_fields = removed_fields
                                 deprecation_detail.status = DeprecationDetails.SUCCESS
