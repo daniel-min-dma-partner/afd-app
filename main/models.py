@@ -1,6 +1,7 @@
 import copy
 import datetime
 import datetime as dt
+import json
 import os
 
 import tzlocal
@@ -263,6 +264,14 @@ class DataflowDeprecation(models.Model):
     case_url = models.CharField(max_length=1024, help_text='', null=True, blank=True, default="#")
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def get_objects_fields_metadata(self):
+        md = {}
+
+        for idx, obj in enumerate(self.sobjects.split('|')):
+            md[obj] = self.fields.split('|')[idx].split(',')
+
+        return json.dumps(md)
+
 
 class DeprecationDetails(models.Model):
     _STATUS_CHOICES = (
@@ -306,6 +315,16 @@ class DeprecationDetails(models.Model):
         if self.status in self._STATUS_MAP.keys():
             return self._STATUS_MAP[self.status]
         return self.status
+
+    def get_status_badge(self):
+        html = """<i class="fas fa-{{icon}} text-{{type}}"></i>"""
+        icon_map = {
+            0: ["info-circle", 'info'],
+            1: ["check", 'success'],
+            4: ["times-circle", 'danger']
+        }
+
+        return html.replace('{{icon}}', icon_map[self.status][0]).replace('{{type}}', icon_map[self.status][1])
 
     def get_status_bg_color(self):
         return self._STATUS_BOOSTRAP_COLOR[self.status]
@@ -551,3 +570,18 @@ class Parameter(models.Model):
             self.modified_at = timezone.now()
 
         super(Parameter, self).save(*args, **kwargs)
+
+
+class SpecialPermissions(models.Model):
+    """
+    Used to add custom permissions into database.
+    """
+
+    class Meta:
+        managed = False  # No database table creation or deletion operations will be performed for this model.
+
+        default_permissions = []  # disable "add", "change", "delete" and "view" default permissions
+
+        permissions = [
+            ('special_permission_upload_dataflows', 'Can upload dataflows'),
+        ]

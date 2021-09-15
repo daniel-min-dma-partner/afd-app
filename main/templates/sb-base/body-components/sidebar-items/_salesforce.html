@@ -53,7 +53,11 @@
             <h6 class="collapse-header">Remote Connection:</h6>
             <a class="collapse-item{% if cur_url == url_down_df %} active{% endif %}"
                href="{{ url_down_df }}">Download</a>
-            <a class="collapse-item{% if cur_url == url_up_df %} active{% endif %}" href="{{ url_up_df }}">Upload</a>
+            {% if perms.main.special_permission_upload_dataflows %}
+                <a class="collapse-item{% if cur_url == url_up_df %} active{% endif %}" href="{{ url_up_df }}">
+                    Upload
+                </a>
+            {% endif %}
         </div>
     </div>
 </li>

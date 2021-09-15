@@ -4,7 +4,7 @@
 <div class="row list-group-deprecation">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-body">
+            <div class="card-body bg-translucent-primary">
 
                 <div class="form-row">
                     <div class="form-group col-md-3">
@@ -46,15 +46,32 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-md-3">
-                        <button class="btn btn-info float-right reset-filter">Reset Filter</button>
+                    <div class="form-group col-md-1">
+                        <button class="btn btn-primary float-right btn-icon-split download-selected">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-download"></i>
+                            </span>
+                            <span class="text">Download</span>
+                        </button>
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <button class="btn btn-info float-right btn-icon-split reset-filter">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-undo"></i>
+                            </span>
+                            <span class="text">Reset Filter</span>
+                        </button>
                     </div>
                 </div>
 
-                <table class="table">
+                <p class="float-right">
+                    {{ list|deprecation_stats|safe }}
+                </p>
+                <table class="table table-responsive">
                     <thead>
                     <tr>
-                        <th>File Name ({{ list|deprecation_stats|safe }})</th>
+                        <th>File Name</th>
                         <th>Status</th>
                         <th>Observation</th>
                         <th class="text-center">Action</th>
@@ -66,8 +83,7 @@
                             <input type="hidden" class="pk" value="{{ object.pk }}">
                             <input type="hidden" class="status" value="{{ object.status }}">
                             <td>{{ object.file_name|basename }}</td>
-                            <td class="bg-{{ object.get_status_bg_color }}"
-                                style="color: white">{{ object.get_status_desc }}</td>
+                            <td class="status-cell">{{ object.get_status_badge|safe }}</td>
                             <td>{{ object.message|safe }}</td>
                             <td class="text-center">
                                 {% if object|is_deprecated %}

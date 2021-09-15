@@ -60,6 +60,8 @@ urlpatterns = [
         url(r'^download-zip/(?P<pk>\d+)$', main.download_df_zip_view, name='download-zip'),
         url(r'^download-deprecated/(?P<pk>\d+)$', main.dataflow_download_deprecated, name='download-deprecated'),
         url(r'^upload/$', main.UploadDataflowView.as_view(), name='upload-dataflow'),
+        url(r'^download-obj-fields/(?P<deprecation_pk>\d+)/$', main.download_obj_fields_md, name='download-obj-fields'),
+        url(r'^download-selected-dfs/(?P<ids>\w+)/$', main.download_selected_dfs, name='download-selected-dfs'),
     ])),
 
     url(r'^profile/', include([
