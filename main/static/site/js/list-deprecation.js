@@ -11,7 +11,7 @@ $(document).ready(function (evt) {
         let options = {
             mainMenuBar: true,
             mode: 'tree',
-            search: false,
+            search: true,
         };
 
         // Converts strings to HTML tag.
