@@ -9,7 +9,7 @@ $(document).ready(function (evt) {
 
         // UI options.
         let options = {
-            mainMenuBar: false,
+            mainMenuBar: true,
             mode: 'tree',
             search: false,
         };
