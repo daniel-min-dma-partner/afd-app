@@ -97,7 +97,6 @@ class LoginView(generic.FormView):
             else:
                 messages.error(request, mark_safe(f"<code>{username}</code> user doesn't exist."))
         else:
-            print('not valid', form.errors.as_data)
             messages.error(request, form.errors.as_data)
         # Si llegamos al final renderizamos el formulario
         return self.form_invalid(form)
@@ -140,7 +139,6 @@ class RegisterUserView(generic.FormView):
             else:
                 messages.error(request, f"Error saving new user.")
         else:
-            print('form no valid', form.errors.as_data, request.POST)
             messages.error(request, form.errors.as_data)
 
         return self.form_invalid(form)
@@ -246,7 +244,6 @@ class SlackIntegrationView(generic.FormView):
             response = requests.post(url=_url, data=_payload, headers=_header, json=True)
 
             if response.status_code != 200:
-                print(response.text)
                 messages.error(request, response.text)
                 return self.form_invalid(form)
             else:
@@ -452,7 +449,6 @@ class DownloadDataflowView(generic.FormView):
             except Exception as e:
                 messages.error(request, mark_safe(e))
         else:
-            print(form.errors.as_data)
             messages.error(request, form.errors.as_data)
 
         return self.form_invalid(form)
@@ -830,9 +826,7 @@ class ProfileEditView(generic.FormView):
             profile = get_object_or_404(Profile, pk=kwargs['pk'])
             form = self.form_class(request.POST, instance=profile)
 
-            print("post", form)
             if form.is_valid():
-                print("form", form.cleaned_data)
                 model: Profile = form.save(commit=False)
                 model.user = request.user
                 model.save()
@@ -1009,6 +1003,14 @@ class ParameterView(generic.ListView):
         return queryset
 
 
+def download_removed_field_list(request, deprecation_detail_pk=None):
+    deprecation = get_object_or_404(DeprecationDetails, pk=deprecation_detail_pk)
+    md_json = deprecation.get_removed_fields()
+    return HttpResponse(md_json,
+                        content_type='application/json',
+                        headers={'Content-Disposition': f"attachment; filename=List of removed fields from {deprecation.deprecation.name} dataflow.json"})
+
+
 def download_obj_fields_md(request, deprecation_pk=None):
     deprecation = get_object_or_404(DataflowDeprecation, pk=deprecation_pk)
     md_json = deprecation.get_objects_fields_metadata()
@@ -1018,7 +1020,6 @@ def download_obj_fields_md(request, deprecation_pk=None):
 
 
 def download_selected_dfs(request, ids=""):
-    print(request.body, ids)
     zipfile = open('/Users/dmin/Downloads/Deprecated - to - customers/Dataflows modified by deprecation.zip', 'rb')
     return HttpResponse(zipfile,
                         content_type='application/zip',
@@ -1027,7 +1028,6 @@ def download_selected_dfs(request, ids=""):
 
 @permission_required("main.delete_release", raise_exception=True)
 def release_delete_view(request, pk=None):
-    print('entered')
     release = get_object_or_404(Release, pk=pk)
     release.delete()
     messages.success(request, mark_safe(f"Release <code>{release.title}</code> deleted successfully"))
@@ -1131,8 +1131,6 @@ def compare_deprecation(request, pk=None):
     payload = None
     error = "Code not executed"
     status = 400
-    print(request.method)
-    print(request.GET)
     try:
         if request.method == 'GET' and pk is not None:
             error = None
@@ -1304,7 +1302,6 @@ def ajax_slack_get_targets(request):
         error = mark_safe(e)
         status = 400
 
-    print(payload, error, status, "good")
     return JsonResponse({"payload": payload, "error": error}, status=status)
 
 
@@ -1322,7 +1319,6 @@ def download_df_zip_view(request, pk=None):
             message = "The file doesn't exist anymore. Try to re-download it."
         else:
             envname = notif.envname
-            print(zipfile_path, envname)
             ctx = ZipFileResponseInteractor.call(zipfile_path=zipfile_path, envname=envname)
 
             if ctx.exception:

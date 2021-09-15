@@ -80,7 +80,6 @@ def _job(data: dict = None, job: Job = None):
                 }
                 klass = UploadNotifications
             except Exception as e:
-                print("internal", e)
                 notif_data = {
                     'user': user,
                     'message': str(e),
@@ -91,7 +90,6 @@ def _job(data: dict = None, job: Job = None):
                 klass = Notifications
 
     ctx = SetNotificationInteractor.call(data=notif_data, klass=klass)
-    print("external", ctx.exception)
 
 
 class JobsInteractor(Interactor):

@@ -62,6 +62,7 @@ urlpatterns = [
         url(r'^upload/$', main.UploadDataflowView.as_view(), name='upload-dataflow'),
         url(r'^download-obj-fields/(?P<deprecation_pk>\d+)/$', main.download_obj_fields_md, name='download-obj-fields'),
         url(r'^download-selected-dfs/(?P<ids>\w+)/$', main.download_selected_dfs, name='download-selected-dfs'),
+        url(r'^download-removed-field-list/(?P<deprecation_detail_pk>\d+)/$', main.download_removed_field_list, name='download-removed-field-list'),
     ])),
 
     url(r'^profile/', include([

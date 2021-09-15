@@ -306,10 +306,14 @@ class DeprecationDetails(models.Model):
     original_dataflow = CompressedJSONField()
     deprecated_dataflow = CompressedJSONField()
     meta = CompressedJSONField()
+    removed_fields = CompressedJSONField(null=True, blank=True)
     status = models.IntegerField(default=NO_DEPRECATION, blank=False, null=False, choices=_STATUS_CHOICES)
     message = models.CharField(max_length=4096, help_text='', null=True, blank=True)
     deprecation = models.ForeignKey(DataflowDeprecation, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def get_removed_fields(self):
+        return json.dumps({} if not self.removed_fields else self.removed_fields)
 
     def get_status_desc(self):
         if self.status in self._STATUS_MAP.keys():
