@@ -678,7 +678,7 @@ class DeprecateFieldsView(generic.FormView):
 
 class ViewDeprecatedFieldsView(generic.ListView):
     context_object_name = 'list'
-    template_name = 'dataflow-manager/deprecate-fields/list.html'
+    template_name = 'dataflow-manager/deprecate-fields/list2.html'
 
     def get_queryset(self):
         lst = DataflowDeprecation.objects.filter(user=self.request.user).order_by('-created_at')

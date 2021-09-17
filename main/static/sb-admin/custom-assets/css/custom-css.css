@@ -1,3 +1,5 @@
+/*@import "table-css.css";*/
+
 :root {
     --spinner-warning: #FB8C00;
     --spinner-success: #4bca80;
@@ -221,3 +223,14 @@ textarea {
 .bg-translucent-success {
     background-color: #f6fffb;
 }
+
+.bg-translucent-yellow {
+    background-color: #fffede;
+}
+
+.bg-translucent-water {
+    /*background-color: #defdff;*/
+    /*background-color: #ebfeff;*/
+    background-color: #f0fcfc;
+}
+

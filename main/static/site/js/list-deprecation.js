@@ -1,6 +1,15 @@
 import {popup_notification} from "../../sb-admin/custom-assets/js/mjs/helpers.mjs";
 
 $(document).ready(function (evt) {
+    let dataTable = $("#dataTable").DataTable({
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+    });
+
+    // #myInput is a <input type="text"> element
+    $('input[type="search"]').on('keyup', function () {
+        dataTable.search( this.value.trim() ).draw();
+    });
+
     let containers = document.getElementsByClassName("parameter-editor-div");
 
     $.each(containers, (index, element) => {
@@ -32,7 +41,7 @@ $(document).ready(function (evt) {
         // UI options.
         let options = {
             mainMenuBar: true,
-            mode: 'tree',
+            mode: 'form',
             search: true,
         };
 

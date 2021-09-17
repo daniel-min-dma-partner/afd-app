@@ -55,30 +55,15 @@
                     </div>
 
                     <div class="form-group col-md-4">
-                        <button class="btn btn-primary float-right btn-icon-split download-selected ml-2"
-                                data-pk="{{ object.pk }}">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-download"></i>
-                            </span>
-                            <span class="text">Download</span>
+                        <button class="btn btn-primary float-right download-selected ml-2"
+                                data-pk="{{ object.pk }}" title="Download displayed dataflows">
+                            <i class="fas fa-download"></i>
                         </button>
 
-                        <button class="btn btn-info float-right btn-icon-split reset-filter ml-2">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-undo"></i>
-                            </span>
-                            <span class="text">Reset Filter</span>
+                        <button class="btn btn-info float-right reset-filter ml-2" title="Reset Filter">
+                            <i class="fas fa-undo"></i>
                         </button>
                     </div>
-
-{#                    <div class="form-group col-md-2">#}
-{#                        <button class="btn btn-info float-right btn-icon-split reset-filter">#}
-{#                            <span class="icon text-white-50">#}
-{#                                <i class="fas fa-undo"></i>#}
-{#                            </span>#}
-{#                            <span class="text">Reset Filter</span>#}
-{#                        </button>#}
-{#                    </div>#}
                 </div>
 
                 <table class="table table-responsive">
@@ -95,7 +80,7 @@
                         <tr>
                             <input type="hidden" class="pk" value="{{ object.pk }}">
                             <input type="hidden" class="status" value="{{ object.status }}">
-                            <td>
+                            <td style="word-wrap: break-word;max-width: 220px;width: 200px;">
                                 {% if object.removed_fields %}
                                     <a data-toggle="collapse" href="#removed-fields-{{ object.pk }}" role="button"
                                        aria-expanded="false" aria-controls="removed-fields-{{ object.pk }}"
@@ -106,7 +91,7 @@
                                     {{ object.file_name|basename }}
                                 {% endif %}
                             </td>
-                            <td class="status-cell">{{ object.get_status_badge|safe }}</td>
+                            <td class="status-cell text-center">{{ object.get_status_badge|safe }}</td>
                             <td>{{ object.message|safe }}</td>
                             <td class="text-center">
                                 {% if object|is_deprecated %}
@@ -123,7 +108,7 @@
                                 {% endif %}
                                 <a href="{% url 'main:download-deprecated' pk=object.pk %}" target="_blank"
                                    rel="tooltip" class="btn btn-success btn-circle btn-sm"
-                                   title="Download'">
+                                   title="Download dataflow">
                                     <i class="fas fa-download"></i>
                                 </a>
                             </td>
