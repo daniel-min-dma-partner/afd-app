@@ -86,7 +86,7 @@ simple-salesforce==1.10.1
 six==1.15.0
 smmap==3.0.5
 soupsieve==2.2.1
-sqlparse==0.4.1
+sqlparse==0.4.2
 stevedore==3.3.0
 SQLAlchemy==1.4.23
 toml==0.10.2
