@@ -598,7 +598,7 @@ class DeprecateFieldsView(generic.FormView):
 
                     metadata = json.load(open(filemodel.file.path, 'r'))
                     self.filepath = filemodel.file.path
-                    self.fields = list(set([field for _, field in metadata.items()]))
+                    self.fields = [field for _, field in metadata.items()]
                     self.objects = [obj for obj, _ in metadata.items()]
 
                     filemodel.delete()
