@@ -273,6 +273,11 @@ class DataflowDeprecation(models.Model):
 
         return json.dumps(md)
 
+    def get_details_for_template(self):
+        details = self.deprecationdetails_set.order_by('file_name').all()
+
+        return details
+
 
 class DeprecationDetails(models.Model):
     _STATUS_CHOICES = (
