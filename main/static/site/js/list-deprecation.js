@@ -64,27 +64,44 @@ $('button.reset-filter').on('click', function () {
 });
 
 $('button.download-selected').on('click', function (evt) {
-    alert("To be implemented soon");
+    let pk = $(this).data('pk'),
+        only_dep = $(`#deprecation-filter-${pk}`)[0].checked,
+        errors = $(`#deprecation-only-errors-${pk}`)[0].checked,
+        no_changes = $(`#deprecation-no-changes-${pk}`)[0].checked;
 
-    // var request = new XMLHttpRequest();
-    // request.open('POST', download_selected_dfs, true);
-    // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-    // request.responseType = 'blob';
-    //
-    // request.onload = function (e) {
-    //     if (this.status === 200) {
-    //         var blob = this.response;
-    //
-    //         var downloadLink = window.document.createElement('a');
-    //         var contentTypeHeader = request.getResponseHeader("Content-Type");
-    //         downloadLink.href = window.URL.createObjectURL(new Blob([blob], {type: contentTypeHeader}));
-    //         downloadLink.download = "che.zip";
-    //         document.body.appendChild(downloadLink);
-    //         downloadLink.click();
-    //         document.body.removeChild(downloadLink);
-    //     }
-    // };
-    // request.send(JSON.stringify({"a": "mongo"}));
+    if (!(only_dep || errors || no_changes)) {
+        popup_notification("Information", "First select one of the checkbox option and then click again.", "info", true, 5000);
+    } else if (only_dep+errors+no_changes > 1) {
+        popup_notification("Warning", "Select only one option to download.", "warning", true, 5000);
+    } else {
+        let request = new XMLHttpRequest(),
+            url = download_selected_dfs.replace('xxx', only_dep)
+                                        .replace('yyy', errors)
+                                        .replace('zzz', no_changes)
+                                        .replace('0', pk),
+            filename = only_dep ? 'Only Deprecated' : (errors ? "With Errors" : "No Deprecated");
+
+        request.open('GET', url, true);
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        request.responseType = 'blob';
+
+        request.onload = function (e) {
+            if (this.status === 200) {
+                let blob = this.response;
+                let downloadLink = window.document.createElement('a');
+                let contentTypeHeader = request.getResponseHeader("Content-Type");
+                downloadLink.href = window.URL.createObjectURL(new Blob([blob], {type: contentTypeHeader}));
+                downloadLink.download = `${filename}.zip`;
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            }
+        };
+        request.onerror = function (response) {
+            location.reload();
+        };
+        request.send();
+    }
 });
 
 $(".delete-all").on('click', function (evt) {
