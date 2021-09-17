@@ -5,6 +5,8 @@ import requests
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as do_login, logout as do_logout
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.files.base import ContentFile
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -26,7 +28,8 @@ from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemo
 from .interactors.deprecate_fields_interactor import FieldDeprecatorInteractor
 from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.notification_interactor import SetNotificationInteractor
-from .interactors.response_interactor import ZipFileResponseInteractor, JsonFileResponseInteractor
+from .interactors.response_interactor import ZipFileResponseInteractor, JsonFileResponseInteractor, \
+    FileResponseInteractor
 from .interactors.sfdc_connection_interactor import OAuthLoginInteractor, SfdcConnectWithConnectedApp
 from .interactors.slack_targetlist_interactor import SlackTarListInteractor
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
@@ -34,12 +37,6 @@ from .interactors.upload_dataflow_interactor import UploadDataflowInteractorNoAn
 from .interactors.wdf_manager_interactor import *
 from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, \
     DeprecationDetails, UploadNotifications, Profile, Job, Release, Parameter
-from django.forms.utils import ErrorList
-from django.contrib.auth.mixins import PermissionRequiredMixin
-import sys, traceback
-from django.contrib.auth.decorators import permission_required
-
-
 
 sched.start()
 
@@ -1019,11 +1016,45 @@ def download_obj_fields_md(request, deprecation_pk=None):
                         headers={'Content-Disposition': f"attachment; filename=Objects & fields.json"})
 
 
-def download_selected_dfs(request, ids=""):
-    zipfile = open('/Users/dmin/Downloads/Deprecated - to - customers/Dataflows modified by deprecation.zip', 'rb')
-    return HttpResponse(zipfile,
-                        content_type='application/zip',
-                        headers={'Content-Disposition': f"attachment; filename=Objects & fields.zip"})
+def download_selected_dfs(request, only_dep="", errors="", none="", pk=None):
+    # Generates a name for the file, based on the type of download
+    filename = 'Deprecated' if only_dep == 'true' else (
+        'With Error' if errors == 'true' else ('No deprecated' if none == 'true' else None)
+    )
+    # This filename actually isn't being used at the end of the process
+    # since the name is determined at client-side by XMLHtmlResponse response object in j-query.
+
+    # Returns error if deprecation model doesn't exist
+    queryset = DeprecationDetails.objects.filter(deprecation_id=pk)
+    if not queryset.exists():
+        messages.error(request, 'Deprecation not found')
+        return JsonResponse({"payload": "", "error": ""}, status=500)
+
+    # Gets deprecation detail based on the user selection
+    details = queryset.filter(status=DeprecationDetails.SUCCESS if only_dep == 'true' else
+                                DeprecationDetails.ERROR if errors == 'true' else
+                                DeprecationDetails.NO_DEPRECATION if none == 'true' else -1).all()
+
+    # Creates temporal media directory
+    media_dir = os.getcwd() + f"/media/{datetime.datetime.now().strftime('%Y/%m/%d')}/{request.user.username}/"
+    if not os.path.exists(media_dir):
+        os.makedirs(media_dir)
+
+    # Dumps the dataflows to the media directory
+    for detail in details:
+        json.dump(detail.deprecated_dataflow, open(media_dir+os.path.basename(detail.file_name), 'w+'))
+
+    # Calls interactor to create .zip response
+    response_ctx = FileResponseInteractor.call(zipfile_path=media_dir, zipfile_name=filename)
+    if response_ctx.exception:
+        messages.error(request, mark_safe(f"Something went wrong: {str(response_ctx.exception)}"))
+        return JsonResponse({"payload": "", "error": ""}, status=500)
+
+    # Removes the media directory
+    shutil.rmtree(media_dir)
+
+    # Return final response
+    return response_ctx.response
 
 
 @permission_required("main.delete_release", raise_exception=True)

@@ -21,7 +21,7 @@ class FileResponseInteractor(Interactor):
                 with open(f"{mypath}{file}") as f:
                     json_str = json.dumps(json.load(f), indent=2)
                     zf.writestr(file, json_str)
-            response['Content-Disposition'] = f'attachment; filename={self.context.env.name} dataflows.zip'
+            response['Content-Disposition'] = f'attachment; filename={self.context.zipfile_name} dataflows.zip'
         except Exception as e:
             _exception = e
             response = None
