@@ -24,7 +24,7 @@ cryptography==3.4.6
 cx-Oracle==8.1.0
 daphne==3.0.2
 dj-database-url==0.5.0
-Django==3.2.3
+Django==3.2.7
 django-appconf==1.0.4
 django-apscheduler==0.6.0
 django-bootstrap4==3.0.1
