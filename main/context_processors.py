@@ -48,7 +48,7 @@ def show_notifications(request):
                 default_context['profile_guidelines'] = profile_guideline
 
     # Flag to show alert banner for Stage env.
-    heroku_app_env = os.environ.get('HEROKU_APP_ENV', "")
+    heroku_app_env = os.environ.get('HEROKU_APP_ENV', "non-production")
     default_context['heroku_app_env'] = heroku_app_env.lower()
 
     # Custom title for the app

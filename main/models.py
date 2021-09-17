@@ -269,8 +269,14 @@ class DataflowDeprecation(models.Model):
 
         for idx, obj in enumerate(self.sobjects.split('|')):
             md[obj] = self.fields.split('|')[idx].split(',')
+            md[obj].sort()
 
         return json.dumps(md)
+
+    def get_details_for_template(self):
+        details = self.deprecationdetails_set.order_by('file_name').all()
+
+        return details
 
 
 class DeprecationDetails(models.Model):

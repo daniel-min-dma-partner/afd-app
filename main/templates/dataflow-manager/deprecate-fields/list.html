@@ -98,7 +98,7 @@
                             </tr>
                             <tr class="collapse detail" id="collapseExample_{{ object.pk }}"
                                 data-name="{{ object.name }}" data-pk="{{ object.pk }}"><td colspan="4">
-                                {% include 'dataflow-manager/deprecate-fields/details/_detail_form.html' with list=object.deprecationdetails_set.all deprecation=object %}
+                                {% include 'dataflow-manager/deprecate-fields/details/_detail_form.html' with list=object.get_details_for_template deprecation=object %}
                             </td></tr>
                             <tr class="collapse object-fields" id="object_fields_{{ object.pk }}"
                                 data-name="{{ object.name }}" data-pk="{{ object.pk }}"><td colspan="4">

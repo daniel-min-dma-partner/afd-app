@@ -107,7 +107,7 @@ class FieldDeprecatorInteractor(Interactor):
                             deprecation_detail.save()
 
                             node_list = get_nodes_by_action(df=dataflow, action=['sfdcDigest', 'digest', 'edgemart'])
-                            json_modified = perform_deprecation(df=dataflow, fieldlist=field_md,
+                            json_modified, collection = perform_deprecation(df=dataflow, fieldlist=field_md,
                                                                 node_list=node_list, df_name=df_name,
                                                                 log_file=log_file)
                             json_modified = delete_fields_of_deleted_node(json_modified)
