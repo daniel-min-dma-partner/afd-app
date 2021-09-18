@@ -2,7 +2,8 @@ import {popup_notification} from "../../sb-admin/custom-assets/js/mjs/helpers.mj
 
 $(document).ready(function (evt) {
     let dataTable = $("#dataTable").DataTable({
-        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "order": [[ 0, "desc" ]],
     });
 
     // #myInput is a <input type="text"> element
