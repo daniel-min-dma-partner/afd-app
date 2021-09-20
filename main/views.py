@@ -20,6 +20,7 @@ from rest_framework.views import APIView
 from core.settings import sched
 from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
+from main import forms
 from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
     SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm, \
     DeprecateFieldsForm, SecpredToSaqlForm, ProfileForm, ReleaseForm, ParameterForm
@@ -998,6 +999,38 @@ class ParameterView(generic.ListView):
     def get_queryset(self):
         queryset = Parameter.objects.order_by('-created_at')
         return queryset
+
+
+class DataflowFileSelectorView(generic.FormView):
+    template_name = 'dataflow-manager/edit/edit-form.html'
+    form_class = forms.DataflowEditForm
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        dataflow_file = request.FILES.get('dataflow_file_selector_field')
+        dataflow = json.dumps(str_to_json(byte_to_str(dataflow_file.read())), indent=2)
+
+        return render(request, self.template_name, {'form': form, 'dataflow': dataflow, 'filename': dataflow_file.name})
+
+
+class DataflowEditorView(generic.FormView):
+    template_name = 'dataflow-manager/edit/edit-form.html'
+    form_class = forms.DataflowEditForm
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        filename = request.POST.get('filename')
+
+        if form.is_valid():
+            dataflow = request.POST.get('dataflow')
+            return HttpResponse(dataflow,
+                                content_type='application/json',
+                                headers={
+                                    'Content-Disposition': f"attachment; filename={filename}"
+                                })
+        else:
+            return render(request, self.template_name, {'form': form, 'filename': filename})
 
 
 def download_removed_field_list(request, deprecation_detail_pk=None):
