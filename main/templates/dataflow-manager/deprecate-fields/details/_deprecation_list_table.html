@@ -1,0 +1,68 @@
+<div class="table-responsive">
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+        <tr>
+            <th>Datetime</th>
+            <th>Name</th>
+            <th class="text-center">Action</th>
+        </tr>
+        </thead>
+
+        <tfoot>
+        <tr>
+            <th>Datetime</th>
+            <th>Name</th>
+            <th class="text-center">Action</th>
+        </tr>
+        </tfoot>
+
+        <tbody>
+        {% for object in list %}
+            <tr>
+                <td style="word-wrap: break-word;max-width: 220px;width: 200px;">{{ object.created_at }}</td>
+                <td>
+                    <a data-toggle="collapse" href="#collapseExample_{{ object.pk }}" role="button"
+                       aria-expanded="false" aria-controls="collapseExample_{{ object.pk }}"
+                       class="name-{{ object.pk }}">
+                        {{ object.name }} for {{ object.salesforce_org }}
+                    </a>
+
+                    <div class="collapse detail" id="collapseExample_{{ object.pk }}"
+                         data-name="{{ object.name }}" data-pk="{{ object.pk }}">
+                        {% include 'dataflow-manager/deprecate-fields/details/_dataflows_list_table.html' with list=object.get_details_for_template deprecation=object %}
+                    </div>
+
+                    <div class="collapse object-fields" id="object_fields_{{ object.pk }}"
+                         data-name="{{ object.name }}" data-pk="{{ object.pk }}">
+                        {% include 'dataflow-manager/deprecate-fields/details/_object_fields_view.html' with deprecation=object %}
+                    </div>
+                </td>
+                <td class="text-center" style="max-width: 180px;width: 180px;">
+                    <a href="#"
+                       rel="tooltip" class="btn btn-danger btn-circle btn-sm btn-remove-deprec"
+                       title="Remove deprecation"
+                       data-id="{{ object.pk }}" data-model-name="{{ object.name }}"
+                       data-toggle="modal" data-target="#delete-confirmation-md">
+                        <i class="fas fa-trash"></i>
+                    </a>
+
+                    {% if object.case_url != '#' %}
+                        <a href="{{ object.case_url }}"
+                           class="btn btn-primary btn-circle btn-sm"
+                           title="Open Supportforce case">
+                            <i class="fas fa-link"></i>
+                        </a>
+                    {% endif %}
+
+                    <a data-toggle="collapse" href="#object_fields_{{ object.pk }}" role="button"
+                       aria-expanded="false" aria-controls="object_fields_{{ object.pk }}"
+                       class="btn btn-info btn-sm of-{{ object.pk }}"
+                        title="View initial objects & fields">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

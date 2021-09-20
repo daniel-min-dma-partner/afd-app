@@ -221,3 +221,14 @@ textarea {
 .bg-translucent-success {
     background-color: #f6fffb;
 }
+
+.bg-translucent-yellow {
+    background-color: #fffede;
+}
+
+.bg-translucent-water {
+    /*background-color: #defdff;*/
+    /*background-color: #ebfeff;*/
+    background-color: #f0fcfc;
+}
+
