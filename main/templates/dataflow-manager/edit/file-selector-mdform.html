@@ -1,0 +1,44 @@
+{% load static %}
+
+
+<div class="modal fade" id="file-selector-md" tabindex="-1" role="dialog" aria-labelledby="file-selector-ModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="file-selector-ModalLabel">Dataflow file</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form method="POST" action="{% url 'main:df-file-selector' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="mb-3">
+                                <label for="id_dataflow_file_selector_field" class="form-label">Select a dataflow</label>
+                                <input class="form-control" type="file" name="dataflow_file_selector_field"
+                                       id="id_dataflow_file_selector_field">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submit-form" hidden></button>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-success" type="button" id="submit-df-selection">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('button#submit-df-selection').click(function (evt) {
+        $('#submit-form').click();
+    });
+</script>

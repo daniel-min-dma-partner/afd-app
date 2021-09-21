@@ -27,6 +27,7 @@
 <li class="nav-item">
     {% url 'main:download-dataflow' as url_down_df %}
     {% url 'main:compare-dataflows' as url_comp_df %}
+    {% url 'main:edit-dataflow' as url_edit_df %}
     {% url 'main:deprecate-fields' as url_depr_df %}
     {% url 'main:view-deprecations' as url_view_dp %}
     {% url 'main:upload-dataflow' as url_up_df %}
@@ -46,6 +47,8 @@
             <a class="collapse-item{% if cur_url == url_view_dp %} active{% endif %}" href="{{ url_view_dp }}">View
                 deprecations</a>
             <h6 class="collapse-header">Modification:</h6>
+            <a class="collapse-item{% if cur_url == url_edit_df %} active{% endif %}"
+               href="#"  data-toggle="modal" data-target="#file-selector-md">Edit</a>
             <a class="collapse-item{% if cur_url == url_comp_df %} active{% endif %}"
                href="{{ url_comp_df }}">Compare</a>
             <a class="collapse-item{% if cur_url == url_mng_df %} active{% endif %}" href="{{ url_mng_df }}">Extract |
@@ -81,3 +84,5 @@
         </div>
     </div>
 </li>
+
+{% include 'dataflow-manager/edit/file-selector-mdform.html' %}

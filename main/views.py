@@ -17,9 +17,11 @@ from rest_framework import authentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+import main.interactors as interactor
 from core.settings import sched
 from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
+from main import forms
 from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
     SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm, \
     DeprecateFieldsForm, SecpredToSaqlForm, ProfileForm, ReleaseForm, ParameterForm
@@ -28,8 +30,7 @@ from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemo
 from .interactors.deprecate_fields_interactor import FieldDeprecatorInteractor
 from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.notification_interactor import SetNotificationInteractor
-from .interactors.response_interactor import ZipFileResponseInteractor, JsonFileResponseInteractor, \
-    FileResponseInteractor
+from .interactors.response_interactor import ZipFileResponseInteractor, JsonFileResponseInteractor
 from .interactors.sfdc_connection_interactor import OAuthLoginInteractor, SfdcConnectWithConnectedApp
 from .interactors.slack_targetlist_interactor import SlackTarListInteractor
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
@@ -1000,6 +1001,38 @@ class ParameterView(generic.ListView):
         return queryset
 
 
+class DataflowFileSelectorView(generic.FormView):
+    template_name = 'dataflow-manager/edit/edit-form.html'
+    form_class = forms.DataflowEditForm
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        dataflow_file = request.FILES.get('dataflow_file_selector_field')
+        dataflow = json.dumps(str_to_json(byte_to_str(dataflow_file.read())), indent=2)
+
+        return render(request, self.template_name, {'form': form, 'dataflow': dataflow, 'filename': dataflow_file.name})
+
+
+class DataflowEditorView(generic.FormView):
+    template_name = 'dataflow-manager/edit/edit-form.html'
+    form_class = forms.DataflowEditForm
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        filename = request.POST.get('filename')
+
+        if form.is_valid():
+            dataflow = request.POST.get('dataflow')
+            return HttpResponse(dataflow,
+                                content_type='application/json',
+                                headers={
+                                    'Content-Disposition': f"attachment; filename={filename}"
+                                })
+        else:
+            return render(request, self.template_name, {'form': form, 'filename': filename})
+
+
 def download_removed_field_list(request, deprecation_detail_pk=None):
     deprecation = get_object_or_404(DeprecationDetails, pk=deprecation_detail_pk)
     md_json = deprecation.get_removed_fields()
@@ -1017,44 +1050,18 @@ def download_obj_fields_md(request, deprecation_pk=None):
 
 
 def download_selected_dfs(request, only_dep="", errors="", none="", pk=None):
-    # Generates a name for the file, based on the type of download
-    filename = 'Deprecated' if only_dep == 'true' else (
-        'With Error' if errors == 'true' else ('No deprecated' if none == 'true' else None)
-    )
-    # This filename actually isn't being used at the end of the process
-    # since the name is determined at client-side by XMLHtmlResponse response object in j-query.
-
-    # Returns error if deprecation model doesn't exist
-    queryset = DeprecationDetails.objects.filter(deprecation_id=pk)
-    if not queryset.exists():
-        messages.error(request, 'Deprecation not found')
-        return JsonResponse({"payload": "", "error": ""}, status=500)
-
-    # Gets deprecation detail based on the user selection
-    details = queryset.filter(status=DeprecationDetails.SUCCESS if only_dep == 'true' else
-                                DeprecationDetails.ERROR if errors == 'true' else
-                                DeprecationDetails.NO_DEPRECATION if none == 'true' else -1).all()
-
-    # Creates temporal media directory
-    media_dir = os.getcwd() + f"/media/{datetime.datetime.now().strftime('%Y/%m/%d')}/{request.user.username}/"
-    if not os.path.exists(media_dir):
-        os.makedirs(media_dir)
-
-    # Dumps the dataflows to the media directory
-    for detail in details:
-        json.dump(detail.deprecated_dataflow, open(media_dir+os.path.basename(detail.file_name), 'w+'))
-
-    # Calls interactor to create .zip response
-    response_ctx = FileResponseInteractor.call(zipfile_path=media_dir, zipfile_name=filename)
-    if response_ctx.exception:
-        messages.error(request, mark_safe(f"Something went wrong: {str(response_ctx.exception)}"))
-        return JsonResponse({"payload": "", "error": ""}, status=500)
-
-    # Removes the media directory
-    shutil.rmtree(media_dir)
+    InteractorClass = interactor.download_dataflow_interactor.DownloadSelectedDataflowInteractor
+    request_data = {
+        "only_dep": only_dep,
+        "errors": errors,
+        "none": none,
+        "pk": pk,
+        "request": request
+    }
+    ctx = InteractorClass.call(data=request_data)
 
     # Return final response
-    return response_ctx.response
+    return ctx.response
 
 
 @permission_required("main.delete_release", raise_exception=True)
@@ -1119,10 +1126,29 @@ def dataflow_download_deprecated(request, pk=None):
     try:
         deprecation_detail = get_object_or_404(DeprecationDetails, pk=pk)
         filename = deprecation_detail.file_name
-        json_str = json.dumps(deprecation_detail.deprecated_dataflow, indent=2)
-        response = HttpResponse(json_str,
-                                content_type='application/json',
-                                headers={'Content-Disposition': f'attachment; filename={filename}.json'})
+        print(deprecation_detail.status, ', ', DeprecationDetails.SUCCESS, ', ', deprecation_detail.status == DeprecationDetails.SUCCESS)
+        if deprecation_detail.status != DeprecationDetails.SUCCESS:
+            json_str = json.dumps(deprecation_detail.deprecated_dataflow, indent=2)
+            response = HttpResponse(json_str,
+                                    content_type='application/json',
+                                    headers={'Content-Disposition': f'attachment; filename={filename}.json'})
+        else:
+            # Creates temporal media directory
+            basedir = f"{os.getcwd()}/media/{datetime.datetime.now().strftime('%Y/%m/%d')}/{request.user.username}/"
+            media_dir = basedir + 'download-selected-dfs/'
+            if not os.path.exists(media_dir):
+                os.makedirs(media_dir)
+
+            zipfile_path = interactor.download_dataflow_interactor.dump_deprecated(
+                detail=deprecation_detail, media_dir=media_dir
+            )
+            zipfile = open(zipfile_path, 'rb')
+            response = HttpResponse(zipfile, content_type='application/zip')
+            filename = filename.replace('.json', '.zip')
+            response['Content-Disposition'] = f'attachment; filename={filename}'
+
+            # Removes the media directory
+            shutil.rmtree(basedir)
     except Exception as e:
         messages.error(request, mark_safe(str(e)))
         response = redirect('main:view-deprecations')
