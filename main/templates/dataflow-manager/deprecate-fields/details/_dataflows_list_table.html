@@ -55,8 +55,13 @@
                     </div>
 
                     <div class="form-group col-md-4">
-                        <button class="btn btn-primary float-right download-selected ml-2"
-                                data-pk="{{ object.pk }}" title="Download displayed dataflows">
+                        <button class="download-selected download-selected-{{ object.pk }}"
+                                data-pk="{{ object.pk }}"
+                                data-name="{{ object.name }}" hidden>
+                        </button>
+                        <button class="btn btn-primary float-right ml-2 download-selected-clicker"
+                                data-pk="{{ object.pk }}" title="Download displayed dataflows"
+                                data-name="{{ object.name }}">
                             <i class="fas fa-download"></i>
                         </button>
 

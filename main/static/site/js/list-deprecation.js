@@ -1,4 +1,4 @@
-import {popup_notification} from "../../sb-admin/custom-assets/js/mjs/helpers.mjs";
+import {popup_notification, submit_with_screencover} from "../../sb-admin/custom-assets/js/mjs/helpers.mjs";
 
 $(document).ready(function (evt) {
     let dataTable = $("#dataTable").DataTable({
@@ -73,11 +73,22 @@ $('button.reset-filter').on('click', function () {
     });
 });
 
+$('button.download-selected-clicker').on('click', function (evt) {
+    let pk = $(this).data('pk'),
+        only_dep = $(`#deprecation-filter-${pk}`)[0].checked,
+        errors = $(`#deprecation-only-errors-${pk}`)[0].checked,
+        no_changes = $(`#deprecation-no-changes-${pk}`)[0].checked,
+        filename = only_dep ? 'Only Deprecated' : (errors ? "With Errors" : "No Deprecated");
+
+    submit_with_screencover($(`button.download-selected-${pk}`), null, "Do you want to download it?", `Downloading ${filename}. It can take up to 30 seconds. Please wait.`);
+});
+
 $('button.download-selected').on('click', function (evt) {
     let pk = $(this).data('pk'),
         only_dep = $(`#deprecation-filter-${pk}`)[0].checked,
         errors = $(`#deprecation-only-errors-${pk}`)[0].checked,
-        no_changes = $(`#deprecation-no-changes-${pk}`)[0].checked;
+        no_changes = $(`#deprecation-no-changes-${pk}`)[0].checked,
+        dep_name = $(this).data('name');
 
     if (!(only_dep || errors || no_changes)) {
         popup_notification("Information", "First select one of the checkbox option and then click again.", "info", true, 5000);
@@ -91,6 +102,7 @@ $('button.download-selected').on('click', function (evt) {
                                         .replace('0', pk),
             filename = only_dep ? 'Only Deprecated' : (errors ? "With Errors" : "No Deprecated");
 
+        filename = `${filename} of ${dep_name}`;
         request.open('GET', url, true);
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         request.responseType = 'blob';
@@ -105,6 +117,19 @@ $('button.download-selected').on('click', function (evt) {
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
+            } else {
+                if (this.responseJSON !== null && this.responseJSON !== undefined) {
+                    if ('error' in this.responseJSON) {
+                        popup_notification("Warning", this.responseJSON['error'], 'warning');
+                    } else {
+                        popup_notification("Warning", JSON.stringify(this.responseJSON), 'warning');
+                    }
+                } else {
+                    if (!(this.statusText in [null, '', undefined]) && this.statusText === 'abort') {
+                        return false;
+                    }
+                    popup_notification("Warning", this.statusText, 'warning');
+                }
             }
         };
         request.onerror = function (response) {
