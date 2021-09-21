@@ -105,4 +105,41 @@ const alert_if_required_missing = () => {
     return required_fields_completed;
 };
 
-export {build_toast, popup_notification, show_error_and_popup, submit_with_screencover, show_screenplay, alert_if_required_missing};
+const jsonEditor = (container, json_field, mainMenuBar=true, modes=['code', 'tree']) => {
+    if (container) {
+        // UI options.
+        let options = {
+            mainMenuBar: mainMenuBar,
+            modes: modes,
+            search: false,
+        };
+
+        // Converts strings to HTML tag.
+        let json = JSON.parse($.trim(json_field.html()));
+
+        // Set data.
+        let editor = new JSONEditor(container, options);
+        editor.set(json);
+
+        // Event setup.
+        editor.options.onModeChange = function (endMode, oldMode) {
+            if (['tree', 'code'].includes(endMode)) {
+                editor.expandAll();
+            }
+        };
+        editor.options.onChange = function (evt) {
+            try {
+                let json = editor.get();
+                json_field[0].value = $.trim(JSON.stringify(json));
+                console.log(json_field[0].value);
+            } catch (error) {
+                return false;
+            }
+        };
+    }
+};
+
+export {
+    build_toast, popup_notification, show_error_and_popup, submit_with_screencover, show_screenplay,
+    alert_if_required_missing, jsonEditor
+};

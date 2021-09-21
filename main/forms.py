@@ -7,8 +7,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
-from tinymce.widgets import TinyMCE
 from jsoneditor.forms import JSONEditor
+from tinymce.widgets import TinyMCE
 
 from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel as DFCompModel, Profile, Release, \
     Parameter
@@ -364,3 +364,8 @@ class ParameterForm(forms.ModelForm):
             model.save()
 
         return model
+
+
+class DataflowEditForm(forms.Form):
+    dataflow = JSONEditor()
+    filename = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)

@@ -46,10 +46,10 @@
                         <i class="fas fa-trash"></i>
                     </a>
 
-                    {% if object.case_url != '#' %}
+                    {% if object.case_url and object.case_url != '#' %}
                         <a href="{{ object.case_url }}"
                            class="btn btn-primary btn-circle btn-sm"
-                           title="Open Supportforce case">
+                           title="Open Supportforce case" target="_blank">
                             <i class="fas fa-link"></i>
                         </a>
                     {% endif %}

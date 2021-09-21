@@ -45,6 +45,8 @@ urlpatterns = [
     ])),
 
     re_path(r'^dataflow-manager/', include([
+        re_path(r'^select-df-file/$', main.DataflowFileSelectorView.as_view(), name='df-file-selector'),
+        re_path(r'^edit/$', main.DataflowEditorView.as_view(), name='edit-dataflow'),
         re_path(r'^extract-update/$', main.TreeRemover.as_view(), name='extract-update-dataflow'),
         re_path(r'^compare/$', main.CompareDataflows.as_view(), name='compare-dataflows'),
         re_path(r'^deprecate-fields/', include([
