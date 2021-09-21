@@ -1,15 +1,22 @@
+import datetime
 import html
 import json
 import os
 import shutil
 
 import requests
+from django.contrib import messages
+from django.http import HttpResponse
+from django.http import JsonResponse
+from django.utils.safestring import mark_safe
 
 from core.settings import BASE_DIR
 from libs.amt_helpers import generate_build_file, generate_package
 from libs.interactor.interactor import Interactor
+from main.interactors.dataflow_tree_manager import show_in_browser
 from main.interactors.list_dataflow_interactor import DataflowListInteractor
-from main.interactors.file_interactor import FileCompressorInteractor as FCompressor
+from main.interactors.response_interactor import FileResponseInteractor
+from main.models import DeprecationDetails
 
 
 class DownloadDataflowInteractor(Interactor):
@@ -120,3 +127,104 @@ class DownloadDataflowInteractorNoAnt(Interactor):
             self.context.exception = _exc
             self.context.downloaded_df_defs = downloaded_dataflows_defs
             self.context.output_filepath = output_path
+
+
+class DownloadSelectedDataflowInteractor(Interactor):
+    def run(self):
+        data = self.context.data
+        only_dep = data["only_dep"] == 'true'
+        errors = data["errors"] == 'true'
+        none = data["none"] == 'true'
+        request = data["request"]
+        pk = data["pk"]
+
+        username = request.user.username
+        response = None
+
+        try:
+
+            # Generates a name for the file, based on the type of download
+            filename = "filename"
+            # This filename actually isn't being used at the end of the process
+            # since the name is determined at client-side by XMLHtmlResponse response object in j-query.
+
+            # Returns error if deprecation model doesn't exist
+            queryset = DeprecationDetails.objects.filter(deprecation_id=pk)
+            if not queryset.exists():
+                raise Exception('Deprecation not found')
+
+            # Gets deprecation detail based on the user selection
+            status = (
+                DeprecationDetails.SUCCESS if only_dep else
+                DeprecationDetails.ERROR if errors else
+                DeprecationDetails.NO_DEPRECATION if none else -1
+            )
+            details = queryset.filter(status=status).all()
+
+            # Creates temporal media directory
+            basepath = f"{os.getcwd()}/media/{datetime.datetime.now().strftime('%Y/%m/%d')}/{username}/"
+            media_dir = f"{basepath}download-selected-dfs/"
+            if not os.path.exists(media_dir):
+                os.makedirs(media_dir)
+
+            if not only_dep:
+                # Dumps the dataflows to the media directory
+                for detail in details:
+                    json.dump(detail.deprecated_dataflow, open(media_dir + os.path.basename(detail.file_name), 'w+'))
+
+                # Calls interactor to create .zip response
+                ctx = FileResponseInteractor.call(zipfile_path=media_dir, zipfile_name=filename)
+                if ctx.exception:
+                    messages.error(request, mark_safe(f"Something went wrong: {str(ctx.exception)}"))
+                    response = JsonResponse({"payload": "", "error": ""}, status=500)
+
+                response = ctx.response
+            else:
+                # Dumps the dataflows to its own folder
+                # Along with the list of removed fields.
+                for detail in details:
+                    zipfile_path = dump_deprecated(detail=detail, media_dir=media_dir)
+                    zipfile = open(zipfile_path, 'rb')
+                    response = HttpResponse(zipfile, content_type='application/zip')
+                    response['Content-Disposition'] = f'attachment; filename={filename}'
+
+            # Removes the media directory
+            shutil.rmtree(basepath)
+        except Exception as e:
+            messages.error(request, mark_safe(str(e)))
+            response = JsonResponse({"payload": "", "error": mark_safe(str(e))}, status=500)
+        finally:
+            self.context.response = response
+
+
+def dump_deprecated(detail: DeprecationDetails, media_dir: str):
+    df_name = os.path.basename(detail.file_name).replace('.json', '')
+    df_own_folder = media_dir + df_name + "/"
+    if not os.path.exists(df_own_folder):
+        os.makedirs(df_own_folder)
+    else:
+        shutil.rmtree(media_dir)
+        os.makedirs(df_own_folder)
+
+    deprecated_path = df_own_folder + df_name + '--modified.json'
+    original_path = df_own_folder + df_name + '.json'
+    json.dump(detail.deprecated_dataflow, open(deprecated_path, 'w+'), indent=2)
+    json.dump(detail.original_dataflow, open(original_path, 'w+'), indent=2)
+    while not os.path.isfile(original_path) or not os.path.isfile(deprecated_path):
+        pass
+
+    show_in_browser(original_path, deprecated_path)
+    html_filepath = f'{BASE_DIR}/main/templates/json_diff_output.html'
+    while not os.path.isfile(html_filepath):
+        pass
+    shutil.copy(html_filepath, df_own_folder + 'diff_visualizer.html')
+    os.remove(html_filepath)
+
+    removed_fields = detail.removed_fields
+    json.dump(removed_fields, open(f"{df_own_folder}Removed fields from {df_name}.json", 'w+'),
+              indent=2)
+
+    zipfile_path = media_dir + "../Only Deprecated.zip"
+    shutil.make_archive(zipfile_path.replace('.zip', ''), 'zip', media_dir)
+
+    return zipfile_path
