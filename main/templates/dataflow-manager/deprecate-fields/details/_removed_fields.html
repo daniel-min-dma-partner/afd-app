@@ -7,24 +7,50 @@
             <div class="card-body bg-translucent-yellow">
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <h5 class="title float-left">Removed fields</h5>
-
-                        <br/>
-                        <hr/>
+                        <a href="#" class="h5 title float-left" data-pk="{{ object.pk }}" id="h5-{{ object.pk }}">
+                            {{ object.file_name|basename }} Metainformation
+                        </a>
 
                         <a href="{% url 'main:download-removed-field-list' deprecation_detail_pk=object.pk %}"
                            class="btn btn-primary float-right" title="Download removed fields list">
                             <i class="fas fa-download"></i>
                         </a>
+
+                        <br/>
+                        <hr/>
                     </div>
                 </div>
 
-                <div id="removedfields-{{ object.pk }}" style="width: 100%; height: 1000px;" data-pk="{{ object.id }}"
-                     class="removed-fields-div"></div>
+                <div class="form-row">
+                    <div class="form-group col-{% if object.registers %}6{% else %}12{% endif %}">
+                        <h6 class="title float-left">Removed Fields</h6>
+                        <hr/>
 
-                <textarea name="removed-fields" id="removedfields-{{ object.pk }}" hidden>
-                    {{ object.get_removed_fields|safe }}
-                </textarea>
+                        <div id="removedfields-{{ object.pk }}" style="width: 100%; height: 600px;"
+                             data-pk="{{ object.id }}"
+                             class="removed-fields-div"></div>
+
+                        <textarea name="removed-fields" id="removedfields-{{ object.pk }}" hidden>
+                            {{ object.get_removed_fields|safe }}
+                        </textarea>
+                    </div>
+
+                    {% if object.registers %}
+                        <div class="form-group col-6">
+                            <h6 class="title float-right">Affected <code><strong>sfdcRegister</strong></code> nodes and dataset names</h6>
+                            <hr/>
+
+                            <div id="registers-{{ object.pk }}" style="width: 100%; height: 600px;"
+                                 data-pk="{{ object.id }}"
+                                 class="registers-div"></div>
+
+                            <textarea name="registers" id="registers-{{ object.pk }}" hidden>
+                            {{ object.get_registers|safe }}
+                        </textarea>
+                        </div>
+                    {% endif %}
+                </div>
+
             </div>
         </div>
     </div>

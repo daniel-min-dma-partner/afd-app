@@ -5,11 +5,12 @@ $(document).ready(function (evt) {
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
         "order": [[ 0, "desc" ]],
     });
-
     // #myInput is a <input type="text"> element
     $('input[type="search"]').on('keyup', function () {
         dataTable.search( this.value.trim() ).draw();
     });
+
+    // dataTable = $("#df-list-table").DataTable({searching: false, paging: false, info: false});
 
     let containers = document.getElementsByClassName("parameter-editor-div");
 
@@ -48,6 +49,28 @@ $(document).ready(function (evt) {
 
         // Converts strings to HTML tag.
         let json = JSON.parse($.trim($(`textarea#removedfields-${pk}`).html()));
+
+        // Set data.
+        let editor = new JSONEditor(element, options);
+        editor.set(json);
+        editor.expandAll();
+    });
+
+    containers = document.getElementsByClassName("registers-div");
+
+    $.each(containers, (index, element) => {
+        let container = $(element),
+            pk = container.data('pk');
+
+        // UI options.
+        let options = {
+            mainMenuBar: true,
+            mode: 'form',
+            search: true,
+        };
+
+        // Converts strings to HTML tag.
+        let json = JSON.parse($.trim($(`textarea#registers-${pk}`).html()));
 
         // Set data.
         let editor = new JSONEditor(element, options);
@@ -181,4 +204,9 @@ $('tr[id^="collapseExample_"]').on('shown.bs.collapse', function () {
     } else {
         $('.title-' + pk).empty();
     }
+});
+
+$('a.h5').click(function (evt) {
+    let pk = $(this).data('pk');
+    $(`a.removed-fields-${pk}`)[0].click();
 });
