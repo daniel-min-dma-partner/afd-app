@@ -4,7 +4,7 @@ import os.path
 from pathlib import Path
 
 from libs.interactor.interactor import Interactor
-from libs.tcrm_automation.libs.deprecation_libs import delete_fields_of_deleted_node, perform_deprecation
+from libs.tcrm_automation.libs.deprecation_libs import delete_fields_of_deleted_node, perform_deprecation, get_registers
 from libs.tcrm_automation.libs.json_libs import get_nodes_by_action
 from libs.utils import current_datetime
 from main.models import DataflowDeprecation, Notifications, DeprecationDetails
@@ -114,11 +114,14 @@ class FieldDeprecatorInteractor(Interactor):
                             )
                             json_modified = delete_fields_of_deleted_node(json_modified)
 
+                            registers = get_registers(nodes=collection.get_affected_nodes(), df=_original)
+
                             equal = json.dumps(_original) == json.dumps(json_modified)
 
                             if not equal:
                                 deprecation_detail.deprecated_dataflow = json_modified
                                 deprecation_detail.removed_fields = collection.get()
+                                deprecation_detail.registers = registers
                                 deprecation_detail.status = DeprecationDetails.SUCCESS
                                 deprecation_detail.save()
                             else:
