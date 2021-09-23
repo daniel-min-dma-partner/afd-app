@@ -1042,12 +1042,20 @@ class DigestNodeGeneratorView(generic.TemplateView):
             "Digest-Node-Name": {
                 "action": "sfdcDigest",
                 "parameters": {
+                    "object": "Account",
                     "fields": [
                         {
                             "name": "Field-Name"
                         }
-                    ],
-                    "object": "Account"
+                    ]
+                }
+            },
+            "Register-Dataset": {
+                "action": "sfdcRegister",
+                "parameters": {
+                    "name": "Dataset-Name",
+                    "alias": "Dataset-Alias",
+                    "source": "Digest-Node-Name"
                 }
             }
         }
