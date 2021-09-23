@@ -34,7 +34,6 @@ from .interactors.response_interactor import ZipFileResponseInteractor, JsonFile
 from .interactors.sfdc_connection_interactor import OAuthLoginInteractor, SfdcConnectWithConnectedApp
 from .interactors.slack_targetlist_interactor import SlackTarListInteractor
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
-from .interactors.upload_dataflow_interactor import UploadDataflowInteractorNoAnt
 from .interactors.wdf_manager_interactor import *
 from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, \
     DeprecationDetails, UploadNotifications, Profile, Job, Release, Parameter
@@ -427,23 +426,16 @@ class DownloadDataflowView(generic.FormView):
                 if not dataflows:
                     raise KeyError("No dataflow selected")
 
+                _n_of_dataflows = len(dataflows)
+                _context_aware_msg = f"<strong>{dataflows[0]}</strong> dataflow" if _n_of_dataflows == 1 else \
+                    str(_n_of_dataflows) + ' dataflows'
                 _data = {"dataflows": dataflows, "model": env, "user": request.user,
-                         'job-message': f"Download dataflows from {env.name}"}
-                ctx = JobsInteractor.call(data=_data, scheduler=sched)
+                         'job-message': f"Download {_context_aware_msg} from <strong>{env.name}</strong>"}
+                ctx = JobsInteractor.call(data=_data, function="_download_dataflow", scheduler=sched)
                 messages.success(request, mark_safe(f"Downloadig dataflow{'s' if len(dataflows) > 0 else ''} from "
                                           f"<code>{env.name}</code> started. Check the notifications later."))
 
                 return redirect("main:job-list")
-
-                # download_ctx = DownloadDataflowInteractorNoAnt.call(dataflow=dataflows, model=env, user=request.user)
-                # if download_ctx.exception:
-                #     raise download_ctx.exception
-                # 
-                # response_ctx = FileResponseInteractor.call(zipfile_path=download_ctx.output_filepath, env=env)
-                # if response_ctx.exception:
-                #     raise response_ctx.exception
-                # 
-                # return response_ctx.response
             except Exception as e:
                 messages.error(request, mark_safe(e))
         else:
@@ -467,8 +459,6 @@ class UploadDataflowView(PermissionRequiredMixin, generic.FormView):
         try:
             form_class = self.get_form_class()
             form: DataflowUploadForm = form_class(request.POST, request.FILES)
-            notif_msg = None
-            notif_type = 'success'
 
             if form.is_valid():
                 filemodel = form.save(commit=False)
@@ -480,41 +470,16 @@ class UploadDataflowView(PermissionRequiredMixin, generic.FormView):
                 if not remote_df_name:
                     raise KeyError("Missing required field <code>Remote dataflow name</code>.")
 
-                ctx = UploadDataflowInteractorNoAnt.call(env=env, remote_df_name=remote_df_name, user=request.user,
-                                                         filemodel=filemodel)
-                if ctx.exception:
-                    raise ctx.exception
-                else:
-                    msg = "Uploading <code>{0}</code> local dataflow to <code>{1}</code> dataflow to " \
-                          "<code>{2}</code> connection has finished." \
-                        .format(os.path.basename(filemodel.file.name), remote_df_name, env.name)
-                    notif_msg = msg
-                    messages.info(request, mark_safe(msg))
+                _data = {'env': env, 'remote_df_name': remote_df_name, 'user': request.user, 'filemodel': filemodel,
+                         'job-message': f"Upload <code><strong>{remote_df_name}</strong></code> dataflow to"
+                                        f" <code><strong>{env.name}</strong></code>"}
+                ctx = JobsInteractor.call(data=_data, function="_upload_dataflow", scheduler=sched)
             else:
                 messages.error(request, form.errors.as_data)
         except Exception as e:
             messages.error(request, mark_safe(e))
-            notif_msg = mark_safe(str(e))
-            notif_type = 'error'
 
-        # Push a notification.
-        try:
-            if notif_msg:
-                notif_data = {
-                    'user': request.user,
-                    'message': notif_msg,
-                    'status': Notifications.get_initial_status(),
-                    'link': "#",
-                    'type': notif_type
-                }
-                ctx = SetNotificationInteractor.call(data=notif_data)
-
-                if ctx.exception:
-                    raise ctx.exception
-        except Exception as e:
-            messages.error(request, str(e))
-
-        return redirect("main:upload-dataflow")
+        return redirect("main:job-list")
 
 
 class CompareDataflows(generic.FormView):

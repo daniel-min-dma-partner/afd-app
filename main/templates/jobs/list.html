@@ -50,6 +50,10 @@
                                 <td class="text-center align-middle">
                                     {% if job.status == 'success' %}
                                         <i class="fas fa-check text-success"></i>
+                                    {% elif job.status == 'failed' %}
+                                        <i class="fas fa-times text-danger"></i>
+                                    {% elif job.status == 'warning' %}
+                                        <i class="fas fa-exclamation text-warning"></i>
                                     {% else %}
                                         <div class="progress progress-sm">
                                             <div class="progress-bar bg-{{ job.status|get_status_badge }}"

@@ -6,23 +6,24 @@ from libs.interactor.interactor import Interactor
 from main.interactors.download_dataflow_interactor import DownloadDataflowInteractorNoAnt
 from main.interactors.file_interactor import FileCompressorInteractor
 from main.interactors.notification_interactor import SetNotificationInteractor
+from main.interactors.upload_dataflow_interactor import UploadDataflowInteractorNoAnt
 from main.models import Notifications, UploadNotifications, Job, JobStage
 
 logger = logging.getLogger("datafllow-download-job-logger")
 logger.setLevel(logging.INFO)
 
 
-def df_down_job(data: dict = None):
+def df_down_job(data: dict = None, function: str = ""):
     job = Job()
     job.message = data['job-message']
     job.user = data['user']
     job.save()
     job.generate_stages([])
 
-    _job(data, job)
+    globals()[function](data, job)
 
 
-def _job(data: dict = None, job: Job = None):
+def _download_dataflow(data: dict = None, job: Job = None):
     dataflows = data['dataflows']
     model = data['model']
     user = data['user']
@@ -89,11 +90,24 @@ def _job(data: dict = None, job: Job = None):
     ctx = SetNotificationInteractor.call(data=notif_data, klass=klass)
 
 
+def _upload_dataflow(data: dict = None, job: Job = None):
+    env = data['env']
+    remote_df_name = data['remote_df_name']
+    user = data['user']
+    filemodel = data['filemodel']
+    ctx = UploadDataflowInteractorNoAnt.call(env=env, remote_df_name=remote_df_name, user=user,
+                                             filemodel=filemodel, job=job)
+
+    if ctx.exception:
+        raise ctx.exception
+
+
 class JobsInteractor(Interactor):
     def run(self):
         data = self.context.data
+        callback_function = self.context.function
         sched: Scheduler = self.context.scheduler
-        sched.add_job(df_down_job, _id="df_down_job", data=data)
+        sched.add_job(df_down_job, _id="callback_function-job", data=data, function=callback_function)
 
 
 class BackgroundJobsInteractor(Interactor):
