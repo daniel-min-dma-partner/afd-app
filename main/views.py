@@ -1033,6 +1033,27 @@ class DataflowEditorView(generic.FormView):
             return render(request, self.template_name, {'form': form, 'filename': filename})
 
 
+class DigestNodeGeneratorView(generic.TemplateView):
+    template_name = 'dataflow-manager/edit/digest-generator-form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        context['default_value'] = {
+            "Digest-Node-Name": {
+                "action": "sfdcDigest",
+                "parameters": {
+                    "fields": [
+                        {
+                            "name": "Field-Name"
+                        }
+                    ],
+                    "object": "Account"
+                }
+            }
+        }
+        return context
+
+
 def download_removed_field_list(request, deprecation_detail_pk=None):
     deprecation = get_object_or_404(DeprecationDetails, pk=deprecation_detail_pk)
     md_json = deprecation.get_removed_fields()

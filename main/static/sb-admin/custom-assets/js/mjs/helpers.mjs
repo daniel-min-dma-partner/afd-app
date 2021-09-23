@@ -74,7 +74,7 @@ const show_error_and_popup = (response) => {
     }
 };
 
-const submit_with_screencover = (submit_button, modal=null, confirm_msg="Proceed?", progress_descriptor="Progressing...") => {
+const submit_with_screencover = (submit_button, modal = null, confirm_msg = "Proceed?", progress_descriptor = "Progressing...") => {
     if ([undefined, "", null].includes(confirm_msg) || confirm(confirm_msg)) {
         modal ? modal.modal('hide') : null;
         show_screenplay(100, progress_descriptor);
@@ -85,7 +85,7 @@ const submit_with_screencover = (submit_button, modal=null, confirm_msg="Proceed
     }
 };
 
-const show_screenplay = (perc=100, msg="") => {
+const show_screenplay = (perc = 100, msg = "") => {
     document.getElementById("myNav").style.width = `${perc}%`;
     $('.progress-description').html(msg);
 };
@@ -105,7 +105,7 @@ const alert_if_required_missing = () => {
     return required_fields_completed;
 };
 
-const jsonEditor = (container, json_field, mainMenuBar=true, modes=['code', 'tree']) => {
+const jsonEditor = (container, json_field, mainMenuBar = true, modes = ['code', 'tree']) => {
     if (container) {
         // UI options.
         let options = {
@@ -136,7 +136,11 @@ const jsonEditor = (container, json_field, mainMenuBar=true, modes=['code', 'tre
                 return false;
             }
         };
+
+        return editor;
     }
+
+    return false;
 };
 
 export {

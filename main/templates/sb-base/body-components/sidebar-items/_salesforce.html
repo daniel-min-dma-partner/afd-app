@@ -28,6 +28,7 @@
     {% url 'main:download-dataflow' as url_down_df %}
     {% url 'main:compare-dataflows' as url_comp_df %}
     {% url 'main:edit-dataflow' as url_edit_df %}
+    {% url 'main:digest-generator' as url_digen_df %}
     {% url 'main:deprecate-fields' as url_depr_df %}
     {% url 'main:view-deprecations' as url_view_dp %}
     {% url 'main:upload-dataflow' as url_up_df %}
@@ -53,6 +54,9 @@
                href="{{ url_comp_df }}">Compare</a>
             <a class="collapse-item{% if cur_url == url_mng_df %} active{% endif %}" href="{{ url_mng_df }}">Extract |
                 Update</a>
+            <a class="collapse-item{% if cur_url == url_digen_df %} active{% endif %}" href="{{ url_digen_df }}">
+                <code><strong>sfdcDigest</strong></code> Generator
+            </a>
             <h6 class="collapse-header">Remote Connection:</h6>
             <a class="collapse-item{% if cur_url == url_down_df %} active{% endif %}"
                href="{{ url_down_df }}">Download</a>

@@ -15,8 +15,7 @@ $("#submit-modal-trigger").on('click', (evt) => {
 });
 
 $('#confirmation-proceed').on('click', (evt) => {
-    let envname = $('#id_env_selector').select2('data')[0].text,
-        dfname = selected_df_name;
+    let envname = $('#id_env_selector').select2('data')[0].text;
     submit_with_screencover($('#submit-btn'), $('#id_modal'), "Upload now?",
-            `Uploading ${dfname} to ${envname}`);
+            `Uploading ${selected_df_name} to ${envname}`);
 });
