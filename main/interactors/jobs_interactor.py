@@ -1,15 +1,12 @@
-from main.interactors.download_dataflow_interactor import DownloadDataflowInteractorNoAnt
 import logging
 import os
-from typing import Union
 
-from core.apscheduler_config import Scheduler
+from core.components.apscheduler.config import Scheduler
 from libs.interactor.interactor import Interactor
 from main.interactors.download_dataflow_interactor import DownloadDataflowInteractorNoAnt
 from main.interactors.file_interactor import FileCompressorInteractor
 from main.interactors.notification_interactor import SetNotificationInteractor
 from main.models import Notifications, UploadNotifications, Job, JobStage
-from contextlib import contextmanager
 
 logger = logging.getLogger("datafllow-download-job-logger")
 logger.setLevel(logging.INFO)
