@@ -1,9 +1,10 @@
+import json
 import os.path
+from typing import List
+from typing import Union
 
 from django import template
-from typing import Union
 from django.template.defaultfilters import stringfilter
-from typing import List
 
 from main.models import Notifications, UploadNotifications, DeprecationDetails, Profile
 
@@ -101,3 +102,8 @@ def get_status_badge(status: str):
     }
 
     return status_badges[status]
+
+
+@register.filter
+def json_safe(js: dict):
+    return json.dumps(js, indent=2)

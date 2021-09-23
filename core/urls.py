@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from core.apscheduler_config import scheduler_configure
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,5 +26,3 @@ urlpatterns = [
 
 handler500 = 'main.views.handler500'
 handler403 = 'main.views.handler403'
-
-scheduler = scheduler_configure()

@@ -394,6 +394,10 @@ class Job(models.Model):
 
             seconds = round(ts)
 
+            hours = hours if hours > 9 else f"0{str(hours)}"
+            minutes = minutes if minutes > 9 else f"0{str(minutes)}"
+            seconds = seconds if seconds > 9 else f"0{str(seconds)}"
+
             duration = "{} days, {}:{}:{}".format(days, hours, minutes, seconds) if days else "{}:{}:{}".format(hours,
                                                                                                                 minutes,
                                                                                                                 seconds)
