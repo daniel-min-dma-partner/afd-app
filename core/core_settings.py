@@ -130,6 +130,7 @@ PUBLIC_PATHS = [
     r'^/login/',
     r'^/logout/',
     r'^/register/',
+    r'^/release/view',
     r'^/rest/.*',
     # r'^/sfdc/authenticate/',
 ]

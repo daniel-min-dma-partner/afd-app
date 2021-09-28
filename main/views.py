@@ -1029,10 +1029,16 @@ class DigestNodeGeneratorView(generic.TemplateView):
 
 def download_removed_field_list(request, deprecation_detail_pk=None):
     deprecation = get_object_or_404(DeprecationDetails, pk=deprecation_detail_pk)
-    md_json = deprecation.get_removed_fields()
-    return HttpResponse(md_json,
-                        content_type='application/json',
-                        headers={'Content-Disposition': f"attachment; filename=List of removed fields from '{os.path.basename(deprecation.file_name).replace('.json', '')}' dataflow.json"})
+
+    basepath = f"{os.getcwd()}/media/{datetime.datetime.now().strftime('%Y/%m/%d')}/{request.user.username}/"
+    media_dir = f"{basepath}download-selected-dfs/"
+    filename = f'Deprecation for {os.path.basename(deprecation.file_name).replace(".json", ".zip")}'
+    zipfilepath = interactor.download_dataflow_interactor.dump_deprecated(deprecation, media_dir)
+    zipfile = open(zipfilepath, 'rb')
+    response = HttpResponse(zipfile, content_type='application/zip')
+    response['Content-Disposition'] = f'attachment; filename={filename}'
+    shutil.rmtree(basepath)
+    return response
 
 
 def download_obj_fields_md(request, deprecation_pk=None):
