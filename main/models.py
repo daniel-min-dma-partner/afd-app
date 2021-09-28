@@ -8,12 +8,11 @@ import tzlocal
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
+from jsoneditor.fields.django_jsonfield import JSONField
 from tinymce.models import HTMLField
 
 from core.settings import MEDIA_ROOT
 from .modelfields import CompressedJSONField
-
-from jsoneditor.fields.django_jsonfield import JSONField
 
 
 # Create your models here.
@@ -313,6 +312,7 @@ class DeprecationDetails(models.Model):
     deprecated_dataflow = CompressedJSONField()
     meta = CompressedJSONField()
     removed_fields = CompressedJSONField(null=True, blank=True)
+    registers = CompressedJSONField(null=True, blank=True)
     status = models.IntegerField(default=NO_DEPRECATION, blank=False, null=False, choices=_STATUS_CHOICES)
     message = models.CharField(max_length=4096, help_text='', null=True, blank=True)
     deprecation = models.ForeignKey(DataflowDeprecation, on_delete=models.CASCADE)
@@ -328,6 +328,11 @@ class DeprecationDetails(models.Model):
                 removed_fields[key] = ordered_list
 
         return json.dumps({} if not removed_fields else removed_fields)
+
+    def get_registers(self):
+        registers = self.registers
+
+        return json.dumps({} if not registers else registers)
 
     def get_status_desc(self):
         if self.status in self._STATUS_MAP.keys():
@@ -388,6 +393,10 @@ class Job(models.Model):
             ts -= minutes * 60
 
             seconds = round(ts)
+
+            hours = hours if hours > 9 else f"0{str(hours)}"
+            minutes = minutes if minutes > 9 else f"0{str(minutes)}"
+            seconds = seconds if seconds > 9 else f"0{str(seconds)}"
 
             duration = "{} days, {}:{}:{}".format(days, hours, minutes, seconds) if days else "{}:{}:{}".format(hours,
                                                                                                                 minutes,

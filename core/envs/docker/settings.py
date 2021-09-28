@@ -1,10 +1,3 @@
-import os
-from pathlib import Path
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-
 DATABASES = {
     "default": {
         # Add the docker environment SQL_ENGINE variable or for local development use sqlite3 engine

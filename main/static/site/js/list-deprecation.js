@@ -1,15 +1,16 @@
-import {popup_notification, submit_with_screencover} from "../../sb-admin/custom-assets/js/mjs/helpers.mjs";
+import {popup_notification} from "../../sb-admin/custom-assets/js/mjs/helpers.mjs";
 
 $(document).ready(function (evt) {
     let dataTable = $("#dataTable").DataTable({
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
         "order": [[ 0, "desc" ]],
     });
-
     // #myInput is a <input type="text"> element
     $('input[type="search"]').on('keyup', function () {
         dataTable.search( this.value.trim() ).draw();
     });
+
+    // dataTable = $("#df-list-table").DataTable({searching: false, paging: false, info: false});
 
     let containers = document.getElementsByClassName("parameter-editor-div");
 
@@ -54,6 +55,28 @@ $(document).ready(function (evt) {
         editor.set(json);
         editor.expandAll();
     });
+
+    containers = document.getElementsByClassName("registers-div");
+
+    $.each(containers, (index, element) => {
+        let container = $(element),
+            pk = container.data('pk');
+
+        // UI options.
+        let options = {
+            mainMenuBar: true,
+            mode: 'form',
+            search: true,
+        };
+
+        // Converts strings to HTML tag.
+        let json = JSON.parse($.trim($(`textarea#registers-${pk}`).html()));
+
+        // Set data.
+        let editor = new JSONEditor(element, options);
+        editor.set(json);
+        editor.expandAll();
+    });
 });
 
 $('.btn-remove-deprec').on('click', function () {
@@ -80,7 +103,8 @@ $('button.download-selected-clicker').on('click', function (evt) {
         no_changes = $(`#deprecation-no-changes-${pk}`)[0].checked,
         filename = only_dep ? 'Only Deprecated' : (errors ? "With Errors" : "No Deprecated");
 
-    submit_with_screencover($(`button.download-selected-${pk}`), null, "Do you want to download it?", `Downloading ${filename}. It can take up to 30 seconds. Please wait.`);
+    // submit_with_screencover($(`button.download-selected-${pk}`), null, "Do you want to download it?", `Downloading ${filename}. It can take up to 30 seconds. Please wait.`);
+    $(`button.download-selected-${pk}`).click();
 });
 
 $('button.download-selected').on('click', function (evt) {
@@ -95,47 +119,49 @@ $('button.download-selected').on('click', function (evt) {
     } else if (only_dep+errors+no_changes > 1) {
         popup_notification("Warning", "Select only one option to download.", "warning", true, 5000);
     } else {
-        let request = new XMLHttpRequest(),
-            url = download_selected_dfs.replace('xxx', only_dep)
-                                        .replace('yyy', errors)
-                                        .replace('zzz', no_changes)
-                                        .replace('0', pk),
-            filename = only_dep ? 'Only Deprecated' : (errors ? "With Errors" : "No Deprecated");
+        if (confirm('Are you sure?')) {
+            let request = new XMLHttpRequest(),
+                url = download_selected_dfs.replace('xxx', only_dep)
+                    .replace('yyy', errors)
+                    .replace('zzz', no_changes)
+                    .replace('0', pk),
+                filename = only_dep ? 'Only Deprecated' : (errors ? "With Errors" : "No Deprecated");
 
-        filename = `${filename} of ${dep_name}`;
-        request.open('GET', url, true);
-        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-        request.responseType = 'blob';
+            filename = `${filename} of ${dep_name}`;
+            request.open('GET', url, true);
+            request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+            request.responseType = 'blob';
 
-        request.onload = function (e) {
-            if (this.status === 200) {
-                let blob = this.response;
-                let downloadLink = window.document.createElement('a');
-                let contentTypeHeader = request.getResponseHeader("Content-Type");
-                downloadLink.href = window.URL.createObjectURL(new Blob([blob], {type: contentTypeHeader}));
-                downloadLink.download = `${filename}.zip`;
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-            } else {
-                if (this.responseJSON !== null && this.responseJSON !== undefined) {
-                    if ('error' in this.responseJSON) {
-                        popup_notification("Warning", this.responseJSON['error'], 'warning');
-                    } else {
-                        popup_notification("Warning", JSON.stringify(this.responseJSON), 'warning');
-                    }
+            request.onload = function (e) {
+                if (this.status === 200) {
+                    let blob = this.response;
+                    let downloadLink = window.document.createElement('a');
+                    let contentTypeHeader = request.getResponseHeader("Content-Type");
+                    downloadLink.href = window.URL.createObjectURL(new Blob([blob], {type: contentTypeHeader}));
+                    downloadLink.download = `${filename}.zip`;
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
                 } else {
-                    if (!(this.statusText in [null, '', undefined]) && this.statusText === 'abort') {
-                        return false;
+                    if (this.responseJSON !== null && this.responseJSON !== undefined) {
+                        if ('error' in this.responseJSON) {
+                            popup_notification("Warning", this.responseJSON['error'], 'warning');
+                        } else {
+                            popup_notification("Warning", JSON.stringify(this.responseJSON), 'warning');
+                        }
+                    } else {
+                        if (!(this.statusText in [null, '', undefined]) && this.statusText === 'abort') {
+                            return false;
+                        }
+                        popup_notification("Warning", this.statusText, 'warning');
                     }
-                    popup_notification("Warning", this.statusText, 'warning');
                 }
-            }
-        };
-        request.onerror = function (response) {
-            location.reload();
-        };
-        request.send();
+            };
+            request.onerror = function (response) {
+                location.reload();
+            };
+            request.send();
+        }
     }
 });
 
@@ -181,4 +207,9 @@ $('tr[id^="collapseExample_"]').on('shown.bs.collapse', function () {
     } else {
         $('.title-' + pk).empty();
     }
+});
+
+$('a.h5').click(function (evt) {
+    let pk = $(this).data('pk');
+    $(`a.removed-fields-${pk}`)[0].click();
 });

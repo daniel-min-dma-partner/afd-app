@@ -206,6 +206,7 @@ def dump_deprecated(detail: DeprecationDetails, media_dir: str):
         shutil.rmtree(media_dir)
         os.makedirs(df_own_folder)
 
+    # Dumps original and deprecated dfs
     deprecated_path = df_own_folder + df_name + '--modified.json'
     original_path = df_own_folder + df_name + '.json'
     json.dump(detail.deprecated_dataflow, open(deprecated_path, 'w+'), indent=2)
@@ -213,6 +214,7 @@ def dump_deprecated(detail: DeprecationDetails, media_dir: str):
     while not os.path.isfile(original_path) or not os.path.isfile(deprecated_path):
         pass
 
+    # Dumps diff html file
     show_in_browser(original_path, deprecated_path)
     html_filepath = f'{BASE_DIR}/main/templates/json_diff_output.html'
     while not os.path.isfile(html_filepath):
@@ -220,8 +222,14 @@ def dump_deprecated(detail: DeprecationDetails, media_dir: str):
     shutil.copy(html_filepath, df_own_folder + 'diff_visualizer.html')
     os.remove(html_filepath)
 
+    # Dumps removed field/object json file.
     removed_fields = detail.removed_fields
     json.dump(removed_fields, open(f"{df_own_folder}Removed fields from {df_name}.json", 'w+'),
+              indent=2)
+
+    # Dumps affected registers/datasets json file
+    registers = detail.registers
+    json.dump(registers, open(f"{df_own_folder}Affected register nodes and datasets.json", 'w+'),
               indent=2)
 
     zipfile_path = media_dir + "../Only Deprecated.zip"

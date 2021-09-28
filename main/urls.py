@@ -65,6 +65,7 @@ urlpatterns = [
         re_path(r'^download-obj-fields/(?P<deprecation_pk>\d+)/$', main.download_obj_fields_md, name='download-obj-fields'),
         re_path(r'^download-selected-dfs/(?P<pk>\d+)/(?P<only_dep>\w*)/(?P<errors>\w*)/(?P<none>\w*)/$', main.download_selected_dfs, name='download-selected-dfs'),
         re_path(r'^download-removed-field-list/(?P<deprecation_detail_pk>\d+)/$', main.download_removed_field_list, name='download-removed-field-list'),
+        re_path(r'generate-digest-node', main.DigestNodeGeneratorView.as_view(), name='digest-generator'),
     ])),
 
     re_path(r'^profile/', include([
