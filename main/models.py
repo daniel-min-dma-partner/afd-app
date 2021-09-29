@@ -451,8 +451,7 @@ class Job(models.Model):
     def set_progress(self, save=False):
         self.status = 'progress'
 
-        if not self.started_at:
-            self.started_at = timezone.now() if not self.started_at else self.started_at
+        self.started_at = timezone.now() if not self.started_at else self.started_at
 
         if save:
             self.save()
@@ -487,7 +486,7 @@ class Job(models.Model):
     def get_progress(self):
         all_stages = self.jobstage_set.count()
         succeeded = self.jobstage_set.filter(status='success').count()
-        progress = 100 * (succeeded / all_stages)
+        progress = 100 * (succeeded / (all_stages if all_stages else 1))
 
         return progress
 
@@ -536,8 +535,7 @@ class JobStage(models.Model):
     def set_progress(self, save=False):
         self.status = 'progress'
 
-        if not self.started_at:
-            self.started_at = timezone.now() if not self.started_at else self.started_at
+        self.started_at = timezone.now() if not self.started_at else self.started_at
 
         if save:
             self.save()

@@ -4,12 +4,15 @@ import logging
 import os
 import random
 import string
+from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
 
 import pytz
 import tzlocal
 from django.core.cache import cache
+
+from main.models import Job
 
 logger = logging.getLogger('main')
 logger.level = logging.DEBUG
@@ -83,3 +86,14 @@ def get_time_localized(date_time=None, timezone=None):
     localized_dt_str = localized_dt.strftime("%Y-%m-%d - %H.%M.%S %z")
     print(f"From {inspect.stack()[0][3]}():\n - Original: {date_time}\n - Localized: {localized_dt_str}")
     return localized_dt_str
+
+
+@contextmanager
+def job_stage(job: Job, pk: int):
+    job.jobstage_set.filter(
+        pk=pk).first().set_progress(save=True)
+
+    yield
+
+    job.jobstage_set.filter(
+        pk=pk).first().set_successful(save=True)
