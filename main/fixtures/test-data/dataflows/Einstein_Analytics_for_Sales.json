@@ -1,0 +1,2350 @@
+{
+  "Extract_SalesCloudHierarchy_TRL_EAS": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "CloudSalesHierarchy_20190829"
+    }
+  },
+  "Extract_Contact": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Job_Function__c"
+        },
+        {
+          "name": "Job_Level__c"
+        }
+      ],
+      "object": "Contact"
+    }
+  },
+  "Augment_salescloudhierarchy_account_TRL_EAS": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Cloud_AE_ID"
+      ],
+      "left": "Augment_Coverage_Account_TRL_EAS",
+      "left_key": [
+        "sfbase__User__c"
+      ],
+      "right_select": [
+        "Cloud_AE",
+        "Mgmt_Level_3_Name",
+        "Mgmt_Level_4_Name",
+        "Mgmt_Level_5_Name",
+        "Mgmt_Level_6_Name",
+        "Mgmt_Level_7_Name",
+        "Mgmt_Level_8_Name"
+      ],
+      "right": "Extract_SalesCloudHierarchy_TRL_EAS",
+      "relationship": "SalesCloud",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Compute_ServiceCloudAE_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "ServiceCloudAE222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_TAE_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "ServiceCloudAE222",
+            "offset": "first()"
+          },
+          "name": "ServiceCloudAE",
+          "label": "Service Cloud AE"
+        }
+      ]
+    }
+  },
+  "augment_aov_account": {
+    "action": "augment",
+    "parameters": {
+      "left": "edgemart_aov_snap",
+      "right": "edgemart_aw_account",
+      "relationship": "aw_acco",
+      "operation": "LookupMultiValue",
+      "left_key": [
+        "ACCT_ID"
+      ],
+      "right_key": [
+        "ID_15"
+      ],
+      "right_select": [
+        "ACCT_OWN_ID",
+        "MGR_USR_ID_PATH",
+        "CSM_ID_PATH",
+        "USER_ID",
+        "MGR_USR_NM_PATH",
+        "PRXY_USR_ID_PATH",
+        "USR_PATH",
+        "SE_ROLE_ID_PATH",
+        "SFDC_TEAM_USR_ID",
+        "USR_ROLE_PATH",
+        "FORCST_USR_ID_PATH",
+        "USR_ROLE_ID_PATH",
+        "SEC_PRED_USER_ID_PATH_1",
+        "SEC_PRED_USER_ID_PATH_2",
+        "SEC_PRED_USER_ID_PATH_3"
+      ]
+    }
+  },
+  "Compute_B2CCommerceAE_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "B2CCommerceAE222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_B2BCommerceAE_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "B2CCommerceAE222",
+            "offset": "first()"
+          },
+          "name": "B2CCommerceAE",
+          "label": "B2C Commerce AE"
+        }
+      ]
+    }
+  },
+  "Extract_Case": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Requestor__c"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "CaseNumber"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Date_Time_Opened__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Subject"
+        },
+        {
+          "name": "Reason"
+        },
+        {
+          "name": "Description"
+        },
+        {
+          "name": "Status"
+        },
+        {
+          "name": "RecordTypeId"
+        }
+      ],
+      "object": "Case"
+    }
+  },
+  "Compute_CommerceCloudBDR_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "CommerceCloudBDR222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_B2BCommerceBDR_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "CommerceCloudBDR222",
+            "offset": "first()"
+          },
+          "name": "CommerceCloudBDR",
+          "label": "Commerce Cloud BDR"
+        }
+      ]
+    }
+  },
+  "edgemart_aov_snap": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "AOV_SNAP"
+    }
+  },
+  "Augment_sw_acv_snap_Opportunity": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Compute_pipe_council_deal_band",
+      "left_key": [
+        "OPPTY_ID"
+      ],
+      "right_select": [
+        "Compelling_Event__c",
+        "Challenges__c"
+      ],
+      "right": "sfdcDigest_Opportunity_acv_snap",
+      "relationship": "Opportunity",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_Account_Coverage_TRL_EAS": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "AccountCoverage"
+    }
+  },
+  "Register_aovsnapEAS": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "AOV_Snap_EAS",
+      "alias": "aov_snap_eas",
+      "source": "augment_aov_udh"
+    }
+  },
+  "Compute_PlatformAE_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "PlatformAE222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_mytrailheadAE_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "PlatformAE222",
+            "offset": "first()"
+          },
+          "name": "PlatformAE",
+          "label": "Platform AE"
+        }
+      ]
+    }
+  },
+  "Compute_B2BCommerceAE_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "B2BCommerceAE222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_CommerceCloudAE_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "B2BCommerceAE222",
+            "offset": "first()"
+          },
+          "name": "B2BCommerceAE",
+          "label": "B2B Commerce AE"
+        }
+      ]
+    }
+  },
+  "Augment_EAS_Case_Account_User3_Role": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_EAS_Case_Account_User2_Role",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId"
+    }
+  },
+  "Compute_TeamRoles_TRL_EAS": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Filter_EndDate_NotNULL_TeamRole_TRL_EAS",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "Salesperson222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"Salesperson\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "Salesperson222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "RegionalMCAE222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"Regional MC AE\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "RegionalMCAE222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "DTRBrandAE222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"DTR Brand AE\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "DTRBrandAE222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "QuipAE222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"Quip AE\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "QuipAE222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "HerokuAE222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"Heroku AE\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "HerokuAE222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "PardotAE222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"Pardot AE\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "PardotAE222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "TAE222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"TAE\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "TAE222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "ServiceCloudAE222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"Service Cloud AE\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "ServiceCloudAE222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "CPQAE222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"CPQ AE\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "CPQAE222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "mytrailheadAE222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"my trailhead AE\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "mytrailheadAE222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "PlatformAE222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"Platform AE\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "PlatformAE222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "AnalyticsAE222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"Analytics AE\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "AnalyticsAE222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "CommerceCloudAE222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"Commerce Cloud AE\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "CommerceCloudAE222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "B2BCommerceAE222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"B2B Commerce AE\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "B2BCommerceAE222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "B2CCommerceAE222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"B2C Commerce AE\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "B2CCommerceAE222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "BDR222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"BDR\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "BDR222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "B2BCommerceBDR222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"B2B Commerce BDR\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "B2BCommerceBDR222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "CommerceCloudBDR222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"Commerce Cloud BDR\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "CommerceCloudBDR222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "DTRBDR222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"DTR BDR\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "DTRBDR222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "MCBDR222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"MC BDR\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "MCBDR222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "PardotBDR222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"Pardot BDR\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "PardotBDR222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "QuipBDR222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"Quip BDR\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "QuipBDR222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "ECS222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"ECS\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "ECS222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "ECSMC222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"ECS MC\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "ECSMC222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "MulesoftAE222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"Mulesoft AE\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "MulesoftAE222",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "zzzzzzzzzzzzzzz",
+          "name": "MulesoftBDR222",
+          "saqlExpression": "case when sfbase__TeamRole__c == \"Mulesoft BDR\" then coalesce('sfbase_user.Name',\"zzzzzzzzzzzzzzz\") else \"zzzzzzzzzzzzzzz\" end",
+          "label": "MulesoftBDR222",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "augment_EAS_Task_Account_User11": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Task_UserRole_9",
+      "left_key": [
+        "AccountId.OwnerId.sf62user__manager__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId.sf62user__manager__c"
+    }
+  },
+  "augment_EAS_Task_Account_User10": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Task_UserRole_8",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_10__c"
+      ],
+      "right_select": [
+        "Name",
+        "UserRoleId"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_10__c"
+    }
+  },
+  "Compute_FieldWithoutDot": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Augment_sw_acv_snap_Opportunity",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "OPTY_OWN_NM",
+          "saqlExpression": "'UDH.USR_NM'",
+          "label": "OPTY_OWN_NM",
+          "type": "Text"
+        },
+        {
+          "name": "Flip_FISCAL_YR_NM",
+          "saqlExpression": "\"FY \" + FLIP_DT_Year_Fiscal",
+          "label": "Flip_FISCAL_YR_NM",
+          "type": "Text"
+        },
+        {
+          "name": "Flip_FISCAL_QTR_NM",
+          "saqlExpression": "\"Q\" + FLIP_DT_Quarter_Fiscal",
+          "label": "Flip_FISCAL_QTR_NM",
+          "type": "Text"
+        },
+        {
+          "name": "Flip_FISCAL_MO_NM",
+          "saqlExpression": "case \nwhen 'FLIP_DT_Month_Fiscal' == \"01\" then \"Feb\"\nwhen 'FLIP_DT_Month_Fiscal' == \"02\" then \"Mar\"\nwhen 'FLIP_DT_Month_Fiscal' == \"03\" then \"Apr\"\nwhen 'FLIP_DT_Month_Fiscal' == \"04\" then \"May\"\nwhen 'FLIP_DT_Month_Fiscal' == \"05\" then \"Jun\"\nwhen 'FLIP_DT_Month_Fiscal' == \"06\" then \"Jul\"\nwhen 'FLIP_DT_Month_Fiscal' == \"07\" then \"Aug\"\nwhen 'FLIP_DT_Month_Fiscal' == \"08\" then \"Sep\"\nwhen 'FLIP_DT_Month_Fiscal' == \"09\" then \"Oct\"\nwhen 'FLIP_DT_Month_Fiscal' == \"10\" then \"Nov\"\nwhen 'FLIP_DT_Month_Fiscal' == \"11\" then \"Dec\"\nwhen 'FLIP_DT_Month_Fiscal' == \"12\" then \"Jan\"\nend",
+          "label": "Flip_FISCAL_MO_NM",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Augment_sw_acv_grain_acv_snap": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "OPTY_ID"
+      ],
+      "left": "Augment_acvsnap_udh",
+      "left_key": [
+        "OPPTY_ID"
+      ],
+      "right_select": [
+        "DATASET_ACCS",
+        "SFTEAM_USR_ID_PATH",
+        "OVA_FORCST_USR_ID_PATH",
+        "ACCT_OWN_USR_ID",
+        "OVA_OWN_SE_ROLE_ID_PATH",
+        "OVA_OWN_USR_ID",
+        "CSM_ID_PATH",
+        "PRXY_USR_ID_PATH",
+        "SEC_PRED_USER_ID_PATH_3",
+        "SEC_PRED_USER_ID_PATH_2",
+        "SEC_PRED_USER_ID_PATH_1"
+      ],
+      "right": "Extract_sw_acv_grain_Edgemart",
+      "relationship": "acv_grain",
+      "operation": "LookupMultiValue"
+    }
+  },
+  "Register_TeamRole_new_TRL_EAS": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Final_TeamRole",
+      "alias": "Final_TeamRole",
+      "source": "Filter_UniqueAccount_TRL_EAS"
+    }
+  },
+  "augment_Task_UserRole": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_EAS_Task_Account_User1",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_01__c.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_UserRole",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_01__c.UserRoleId"
+    }
+  },
+  "Extract_Edgemart_acv_snap": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "F1_ACV_SNAP"
+    }
+  },
+  "Compute_Salesperson_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "Salesperson222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_TeamRoles_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "Salesperson222",
+            "offset": "first()"
+          },
+          "name": "Salesperson",
+          "label": "Salesperson"
+        }
+      ]
+    }
+  },
+  "edgemart_UDH": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "UserDirectHierarchy"
+    }
+  },
+  "Extract_sw_acv_grain_Edgemart": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "sw_acv_grain"
+    }
+  },
+  "augment_Task_UserRole_10": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_EAS_Task_Account_User11",
+      "left_key": [
+        "AccountId.OwnerId.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_UserRole",
+      "relationship": "AccountId.OwnerId.UserRoleId"
+    }
+  },
+  "Compute_MCBDR_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "MCBDR222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_DTRBDR_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "MCBDR222",
+            "offset": "first()"
+          },
+          "name": "MCBDR",
+          "label": "MC BDR"
+        }
+      ]
+    }
+  },
+  "Extract_Task": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "Subject"
+        },
+        {
+          "name": "Status"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "LastModifiedDate"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "WhoId"
+        },
+        {
+          "name": "RecordTypeId"
+        }
+      ],
+      "object": "Task"
+    }
+  },
+  "augment_EAS_Task_Account_User9": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Task_UserRole_7",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_09__c"
+      ],
+      "right_select": [
+        "Name",
+        "UserRoleId"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_09__c"
+    }
+  },
+  "augment_EAS_Task_Account_User8": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Task_UserRole_6",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_08__c"
+      ],
+      "right_select": [
+        "Name",
+        "UserRoleId"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_08__c"
+    }
+  },
+  "Augment_EAS_Case_Account_User1_Role": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_EAS_Case_Account_User_Role",
+      "left_key": [
+        "Requestor__c.Mgmt_Chain_Level_04__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Requestor__c.Mgmt_Chain_Level_04__c"
+    }
+  },
+  "augment_EAS_Task_Account_User7": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Task_UserRole_5",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_07__c"
+      ],
+      "right_select": [
+        "Name",
+        "UserRoleId"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_07__c"
+    }
+  },
+  "augment_EAS_Task_Account_User6": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Task_UserRole_4",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_06__c"
+      ],
+      "right_select": [
+        "Name",
+        "UserRoleId"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_06__c"
+    }
+  },
+  "Create_EAS_Case_Dataset": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "folder": "00l0M0000033i0oQAA",
+      "name": "EAS_Case",
+      "alias": "EAS_Case",
+      "source": "Augment_EAS_Case_Account_User3_Role_RT"
+    }
+  },
+  "augment_EAS_Task_Account_User5": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Task_UserRole_3",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_05__c"
+      ],
+      "right_select": [
+        "Name",
+        "UserRoleId"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_05__c"
+    }
+  },
+  "augment_EAS_Task_Account_User4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Task_UserRole_2",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_04__c"
+      ],
+      "right_select": [
+        "Name",
+        "UserRoleId"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_04__c"
+    }
+  },
+  "sfdcDigest_Opportunity_acv_snap": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Compelling_Event__c"
+        },
+        {
+          "name": "Challenges__c"
+        }
+      ],
+      "object": "Opportunity"
+    }
+  },
+  "augment_EAS_Task_Account_User3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Task_UserRole_1",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_03__c"
+      ],
+      "right_select": [
+        "Name",
+        "UserRoleId"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_03__c"
+    }
+  },
+  "augment_EAS_Task_Account_User2": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Task_UserRole",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_02__c"
+      ],
+      "right_select": [
+        "UserRoleId",
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_02__c"
+    }
+  },
+  "augment_EAS_Task_Account_User1": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_EAS_Task_Account_User0",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_01__c"
+      ],
+      "right_select": [
+        "UserRoleId",
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_01__c"
+    }
+  },
+  "augment_EAS_Task_Account_User0": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_EAS_Task_Account",
+      "left_key": [
+        "AccountId.OwnerId"
+      ],
+      "right_select": [
+        "Mgmt_Chain_Level_01__c",
+        "Mgmt_Chain_Level_02__c",
+        "Mgmt_Chain_Level_03__c",
+        "Mgmt_Chain_Level_04__c",
+        "Mgmt_Chain_Level_05__c",
+        "Mgmt_Chain_Level_06__c",
+        "Mgmt_Chain_Level_07__c",
+        "Mgmt_Chain_Level_08__c",
+        "Mgmt_Chain_Level_09__c",
+        "Mgmt_Chain_Level_10__c",
+        "sf62user__manager__c",
+        "UserRoleId",
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId"
+    }
+  },
+  "Filter_EndDate_NotNULL_TeamRole_TRL_EAS": {
+    "action": "filter",
+    "parameters": {
+      "source": "Augment_user_sfbase_account_TRL_EAS",
+      "saqlFilter": "'sfbase__EndDate__c_day_epoch' == 0"
+    }
+  },
+  "Augment_EAS_Case_Account_User_Role": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_EAS_Case_Account_User",
+      "left_key": [
+        "Requestor__c.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_UserRole",
+      "relationship": "Requestor__c.UserRoleId"
+    }
+  },
+  "Compute_QuipAE_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "QuipAE222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_DTRBrandAE_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "QuipAE222",
+            "offset": "first()"
+          },
+          "name": "QuipAE",
+          "label": "Quip AE"
+        }
+      ]
+    }
+  },
+  "Compute_mytrailheadAE_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "mytrailheadAE222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_CPQAE_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "mytrailheadAE222",
+            "offset": "first()"
+          },
+          "name": "mytrailheadAE",
+          "label": "my trailhead AE"
+        }
+      ]
+    }
+  },
+  "Compute_PardotAE_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "PardotAE222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_HerokuAE_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "PardotAE222",
+            "offset": "first()"
+          },
+          "name": "PardotAE",
+          "label": "Pardot AE"
+        }
+      ]
+    }
+  },
+  "Trim_Opty_Id": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "sfdcDigest_Opportunity_acv_snap",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "OpportunityID",
+          "saqlExpression": "substr('Id',1,15)",
+          "label": "OpportunityID",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Extract_Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Combo_Company__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "AccountSource"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "Industry"
+        },
+        {
+          "name": "BillingCountry"
+        },
+        {
+          "name": "BillingState"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Current_Account_AOV__c"
+        },
+        {
+          "name": "PersonContactId"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "LastModifiedDate"
+        },
+        {
+          "name": "Company__c"
+        },
+        {
+          "name": "Locked_Employees__c"
+        },
+        {
+          "name": "Rating"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "Augment_Coverage_Account_TRL_EAS": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Slice_222_TRL_EAS",
+      "left_key": [
+        "sfbase__Account__c.Account_ID"
+      ],
+      "right_select": [
+        "Customer_Status__c",
+        "Name"
+      ],
+      "right": "Extract_Account_TRL_EAS",
+      "relationship": "Account",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "augment_EAS_Task_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_EAS_Task_Contact",
+      "left_key": [
+        "AccountId"
+      ],
+      "right_select": [
+        "OwnerId",
+        "Name",
+        "Current_Account_AOV__c",
+        "Locked_Employees__c"
+      ],
+      "right": "Extract_Account",
+      "relationship": "AccountId"
+    }
+  },
+  "Extract_UserRole": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "UserRole"
+    }
+  },
+  "sfdcdigest_user_TRL_EAS": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "augment_sfbase__SalesforceTeam__c_Account_0_TRL_EAS": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Account_ID"
+      ],
+      "left": "sfdcDigest_sfbase__SalesforceTeam__c_0_TRL_EAS",
+      "left_key": [
+        "sfbase__Account__c"
+      ],
+      "right_select": [
+        "Mgmt_Level_4_Name",
+        "Enriched_City",
+        "Locked_Company_ID",
+        "Master_Carve",
+        "Locked_Company_Name",
+        "Locked_Industry",
+        "Mgmt_Level_9_ID",
+        "Locked_State",
+        "Enriched_Company_ID",
+        "Mgmt_Level_5_ID",
+        "Enriched_Sector",
+        "Has_Named_Master_Carve",
+        "Enriched_Company_Name",
+        "Locked_City",
+        "Account_Owner",
+        "Mgmt_Level_8_Name",
+        "Mgmt_Level_5_Name",
+        "Enriched_State",
+        "Mgmt_Level_3_ID",
+        "Enriched_Postal_Code",
+        "Mgmt_Level_6_ID",
+        "Org_Status",
+        "Account_Named_Master_Carve",
+        "Enriched_Sub_Sector",
+        "Enriched_DUNS_Number",
+        "Has_Named_Account_Master_Carve",
+        "Routing_Postal_Code",
+        "Mgmt_Level_7_Name",
+        "Is_Customer",
+        "Locked_DUNS_Number",
+        "Mgmt_Level_7_ID",
+        "GSS_Lead",
+        "Enriched_Region",
+        "Locked_Sic",
+        "Account_Name",
+        "Global_Company_Name",
+        "Territory_Name",
+        "Enriched_Industry",
+        "Account_ID",
+        "Locked_Country",
+        "Locked_Postal_Code",
+        "Enriched_Subregion",
+        "Mgmt_Level_3_Name",
+        "Locked_Region",
+        "Mgmt_Level_8_ID",
+        "Account_Rating",
+        "Locked_Sector",
+        "Enriched_Country",
+        "Mgmt_Level_4_ID",
+        "Locked_Sub_Sector",
+        "Mgmt_Level_6_Name",
+        "Has_Named_Company_Master_Carve",
+        "Account_Owner_Role",
+        "Enriched_Sic",
+        "Mgmt_Level_9_Name",
+        "Open_Opptys",
+        "Commerce_Cloud_AOV",
+        "Marketing_Cloud_Social_AOV",
+        "Locked_Employees",
+        "Open_Opty_IN_USD",
+        "MC_ET_Product_AOV",
+        "AOV",
+        "Enriched_Employees",
+        "Global_Company_ID"
+      ],
+      "right": "Extract_Account_Coverage_TRL_EAS",
+      "relationship": "sfbase__Account__c",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "register_EAS_Task": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "EAS_Task",
+      "alias": "EAS_Task",
+      "source": "augment_Task_UserRole_10"
+    }
+  },
+  "augment_Task_UserRole_1": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_EAS_Task_Account_User2",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_02__c.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_UserRole",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_02__c.UserRoleId"
+    }
+  },
+  "Register_TeamRole_TRL_EAS": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Team Role Dataset",
+      "alias": "Team_Role1235",
+      "source": "Augment_SelfJoin_TRL_EAS"
+    }
+  },
+  "Extract_User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Username"
+        },
+        {
+          "name": "EmployeeNumber"
+        },
+        {
+          "name": "ManagerId"
+        },
+        {
+          "name": "Mgmt_Chain_Level_01__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_02__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_03__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_04__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_05__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_06__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_07__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_08__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_09__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_10__c"
+        },
+        {
+          "name": "sf62user__manager__c"
+        },
+        {
+          "name": "FullPhotoUrl"
+        },
+        {
+          "name": "SmallPhotoUrl"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "sfbase__Region__c"
+        },
+        {
+          "name": "BU__c"
+        },
+        {
+          "name": "sfbase__Classification__c"
+        },
+        {
+          "name": "sfbase__Market_Segment__c"
+        },
+        {
+          "name": "Title"
+        },
+        {
+          "name": "UserRoleId"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "Compute_MulesoftBDR_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "MulesoftBDR222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_MulesoftAE_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "MulesoftBDR222",
+            "offset": "first()"
+          },
+          "name": "MulesoftBDR",
+          "label": "Mulesoft BDR"
+        }
+      ]
+    }
+  },
+  "Compute_CPQAE_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "CPQAE222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_ServiceCloudAE_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "CPQAE222",
+            "offset": "first()"
+          },
+          "name": "CPQAE",
+          "label": "CPQ AE"
+        }
+      ]
+    }
+  },
+  "Compute_PardotBDR_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "PardotBDR222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_MCBDR_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "PardotBDR222",
+            "offset": "first()"
+          },
+          "name": "PardotBDR",
+          "label": "Pardot BDR"
+        }
+      ]
+    }
+  },
+  "Extract_RecordType": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "RecordType"
+    }
+  },
+  "Compute_MulesoftAE_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "MulesoftAE222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_ECSMC_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "MulesoftAE222",
+            "offset": "first()"
+          },
+          "name": "MulesoftAE",
+          "label": "Mulesoft AE"
+        }
+      ]
+    }
+  },
+  "Compute_CommerceCloudAE_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "CommerceCloudAE222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_AnalyticsAE_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "CommerceCloudAE222",
+            "offset": "first()"
+          },
+          "name": "CommerceCloudAE",
+          "label": "Commerce Cloud AE"
+        }
+      ]
+    }
+  },
+  "edgemart_aw_account": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "aw_account"
+    }
+  },
+  "Augment_acvsnap_udh": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "EMP_ID"
+      ],
+      "left": "Extract_Edgemart_acv_snap",
+      "left_key": [
+        "OPTY_EMP_NUM"
+      ],
+      "right_select": [
+        "USR_NM"
+      ],
+      "right": "edgemart_UDH",
+      "relationship": "UDH",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "augment_EAS_Task_Contact": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Task",
+      "left_key": [
+        "WhoId"
+      ],
+      "right_select": [
+        "Job_Function__c",
+        "Job_Level__c"
+      ],
+      "right": "Extract_Contact",
+      "relationship": "WhoId"
+    }
+  },
+  "Augment_EAS_Case_Account_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_EAS_Case_Account",
+      "left_key": [
+        "Requestor__c"
+      ],
+      "right_select": [
+        "sfbase__Region__c",
+        "Name",
+        "BU__c",
+        "sfbase__Classification__c",
+        "sfbase__Market_Segment__c",
+        "Title",
+        "UserRoleId",
+        "Mgmt_Chain_Level_04__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "Requestor__c"
+    }
+  },
+  "Compute_RegionalMCAE_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "RegionalMCAE222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_Salesperson_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "RegionalMCAE222",
+            "offset": "first()"
+          },
+          "name": "RegionalMCAE",
+          "label": "Regional MC AE"
+        }
+      ]
+    }
+  },
+  "Augment_user_sfbase_account_TRL_EAS": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_sfbase__SalesforceTeam__c_Account_0_TRL_EAS",
+      "left_key": [
+        "sfbase__User__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcdigest_user_TRL_EAS",
+      "relationship": "sfbase_user",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Slice_222_TRL_EAS": {
+    "action": "sliceDataset",
+    "parameters": {
+      "mode": "drop",
+      "source": "Compute_MulesoftBDR_TRL_EAS",
+      "fields": [
+        {
+          "name": "AnalyticsAE222"
+        },
+        {
+          "name": "B2BCommerceAE222"
+        },
+        {
+          "name": "B2CCommerceAE222"
+        },
+        {
+          "name": "CommerceCloudAE222"
+        },
+        {
+          "name": "CPQAE222"
+        },
+        {
+          "name": "HerokuAE222"
+        },
+        {
+          "name": "mytrailheadAE222"
+        },
+        {
+          "name": "PardotAE222"
+        },
+        {
+          "name": "PlatformAE222"
+        },
+        {
+          "name": "QuipAE222"
+        },
+        {
+          "name": "RegionalMCAE222"
+        },
+        {
+          "name": "Salesperson222"
+        },
+        {
+          "name": "ServiceCloudAE222"
+        },
+        {
+          "name": "TAE222"
+        },
+        {
+          "name": "DTRBrandAE222"
+        },
+        {
+          "name": "BDR222"
+        },
+        {
+          "name": "B2BCommerceBDR222"
+        },
+        {
+          "name": "CommerceCloudBDR222"
+        },
+        {
+          "name": "DTRBDR222"
+        },
+        {
+          "name": "MCBDR222"
+        },
+        {
+          "name": "PardotBDR222"
+        },
+        {
+          "name": "QuipBDR222"
+        },
+        {
+          "name": "ECS222"
+        },
+        {
+          "name": "ECSMC222"
+        },
+        {
+          "name": "MulesoftAE222"
+        },
+        {
+          "name": "MulesoftBDR222"
+        }
+      ]
+    }
+  },
+  "Compute_QuipBDR_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "QuipBDR222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_PardotBDR_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "QuipBDR222",
+            "offset": "first()"
+          },
+          "name": "QuipBDR",
+          "label": "Quip BDR"
+        }
+      ]
+    }
+  },
+  "Augment_EAS_Case_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Case",
+      "left_key": [
+        "AccountId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Account",
+      "relationship": "AccountId"
+    }
+  },
+  "ComputeRelative_UniqueAccount_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "Team_Role_Name__c",
+          "direction": "asc"
+        }
+      ],
+      "source": "Augment_SelfJoin_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "Team_Role_Name__c",
+            "default": "0",
+            "offset": "previous()"
+          },
+          "name": "UniqueFlag",
+          "label": "UniqueFlag"
+        }
+      ]
+    }
+  },
+  "augment_Task_UserRole_4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_EAS_Task_Account_User5",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_05__c.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_UserRole",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_05__c.UserRoleId"
+    }
+  },
+  "augment_Task_UserRole_5": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_EAS_Task_Account_User6",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_06__c.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_UserRole",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_06__c.UserRoleId"
+    }
+  },
+  "augment_Task_UserRole_2": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_EAS_Task_Account_User3",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_03__c.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_UserRole",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_03__c.UserRoleId"
+    }
+  },
+  "augment_Task_UserRole_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_EAS_Task_Account_User4",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_04__c.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_UserRole",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_04__c.UserRoleId"
+    }
+  },
+  "Compute_AnalyticsAE_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "AnalyticsAE222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_PlatformAE_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "AnalyticsAE222",
+            "offset": "first()"
+          },
+          "name": "AnalyticsAE",
+          "label": "Analytics AE"
+        }
+      ]
+    }
+  },
+  "augment_Task_UserRole_8": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_EAS_Task_Account_User9",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_09__c.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_UserRole",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_09__c.UserRoleId"
+    }
+  },
+  "augment_Task_UserRole_9": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_EAS_Task_Account_User10",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_10__c.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_UserRole",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_10__c.UserRoleId"
+    }
+  },
+  "augment_Task_UserRole_6": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_EAS_Task_Account_User7",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_07__c.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_UserRole",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_07__c.UserRoleId"
+    }
+  },
+  "augment_Task_UserRole_7": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_EAS_Task_Account_User8",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_08__c.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_UserRole",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_08__c.UserRoleId"
+    }
+  },
+  "Compute_DTRBrandAE_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "DTRBrandAE222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_RegionalMCAE_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "DTRBrandAE222",
+            "offset": "first()"
+          },
+          "name": "DTRBrandAE",
+          "label": "DTR Brand AE"
+        }
+      ]
+    }
+  },
+  "Compute_DTRBDR_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "DTRBDR222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_CommerceCloudBDR_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "DTRBDR222",
+            "offset": "first()"
+          },
+          "name": "DTRBDR",
+          "label": "DTR BDR"
+        }
+      ]
+    }
+  },
+  "Compute_ECS_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "ECS222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_QuipBDR_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "ECS222",
+            "offset": "first()"
+          },
+          "name": "ECS",
+          "label": "ECS"
+        }
+      ]
+    }
+  },
+  "Compute_BDR_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "BDR222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_B2CCommerceAE_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "BDR222",
+            "offset": "first()"
+          },
+          "name": "BDR",
+          "label": "BDR"
+        }
+      ]
+    }
+  },
+  "Augment_SelfJoin_TRL_EAS": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "sfbase__Account__c"
+      ],
+      "left": "Augment_salescloudhierarchy_account_TRL_EAS",
+      "left_key": [
+        "sfbase__Account__c"
+      ],
+      "right_select": [
+        "SalesCloud.Mgmt_Level_4_Name",
+        "SalesCloud.Mgmt_Level_7_Name",
+        "SalesCloud.Mgmt_Level_8_Name",
+        "SalesCloud.Mgmt_Level_3_Name",
+        "SalesCloud.Mgmt_Level_5_Name",
+        "SalesCloud.Mgmt_Level_6_Name",
+        "Team_Role_Name__c",
+        "SalesCloud.Cloud_AE"
+      ],
+      "right": "Augment_salescloudhierarchy_account_TRL_EAS",
+      "relationship": "SelfJoin",
+      "operation": "LookupMultiValue"
+    }
+  },
+  "Compute_B2BCommerceBDR_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "B2BCommerceBDR222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_BDR_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "B2BCommerceBDR222",
+            "offset": "first()"
+          },
+          "name": "B2BCommerceBDR",
+          "label": "B2B Commerce BDR"
+        }
+      ]
+    }
+  },
+  "Compute_pipe_council_deal_band": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Augment_sw_acv_grain_acv_snap",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "pipe_council_deal_band",
+          "saqlExpression": "case\nwhen 'SNP_CLOUD_AMT_TTL_PLN_FX' <= 0 then \"7 - < $0\"\nwhen 'SNP_CLOUD_AMT_TTL_PLN_FX' <= 10000 then \"6 - $0 - $10K\"\nwhen 'SNP_CLOUD_AMT_TTL_PLN_FX' <= 50000 then \"5 - $10K - $50K\"\nwhen 'SNP_CLOUD_AMT_TTL_PLN_FX' <= 150000 then \"4 - $50K - $150K\"\nwhen 'SNP_CLOUD_AMT_TTL_PLN_FX' <= 500000 then \"3 - $150K - $500K\"\nwhen 'SNP_CLOUD_AMT_TTL_PLN_FX' <= 1000000 then \"2 - $500K - $1M\"\nwhen 'SNP_CLOUD_AMT_TTL_PLN_FX' > 1000000 then \"1 - $1M +\"\nend",
+          "label": "pipe_council_deal_band",
+          "type": "Text"
+        },
+        {
+          "name": "pipe_council_ecs_deal_band",
+          "saqlExpression": "case\nwhen 'SNP_CLOUD_AMT_TTL_PLN_FX' <= 0 then \"8 - < $0\"\nwhen 'SNP_CLOUD_AMT_TTL_PLN_FX' <= 10000 then \"7 - $0 - $10K\"\nwhen 'SNP_CLOUD_AMT_TTL_PLN_FX' <= 50000 then \"6 - $10K - $50K\"\nwhen 'SNP_CLOUD_AMT_TTL_PLN_FX' <= 150000 then \"5 - $50K - $150K\"\nwhen 'SNP_CLOUD_AMT_TTL_PLN_FX' <= 250000 then \"4 - $150K - $250K\"\nwhen 'SNP_CLOUD_AMT_TTL_PLN_FX' <= 500000 then \"3 - $250K - $500K\"\nwhen 'SNP_CLOUD_AMT_TTL_PLN_FX' <= 1000000 then \"2 - $500K - $1M\"\nwhen 'SNP_CLOUD_AMT_TTL_PLN_FX' > 1000000 then \"1 - $1M +\"\nend",
+          "label": "pipe_council_ecs_deal_band",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "augment_aov_udh": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "USR_ID"
+      ],
+      "left": "augment_aov_account",
+      "left_key": [
+        "aw_acco.USER_ID"
+      ],
+      "right_select": [
+        "DATASET_ACCS",
+        "FORCST_ENABLED_FLG"
+      ],
+      "right": "edgemart_UDH",
+      "relationship": "UserDir",
+      "operation": "LookupMultiValue"
+    }
+  },
+  "Register_sw_acv_snap_dataset": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "sw_acv_snap",
+      "alias": "sw_acv_snap",
+      "source": "Compute_FieldWithoutDot"
+    }
+  },
+  "sfdcDigest_sfbase__SalesforceTeam__c_0_TRL_EAS": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "sfbase__Source__c"
+        },
+        {
+          "name": "sfbase__TeamRole__c"
+        },
+        {
+          "name": "Team_Role_Name__c"
+        },
+        {
+          "name": "Team_Role_Name_Text__c"
+        },
+        {
+          "name": "sfbase__Account__c"
+        },
+        {
+          "name": "Team_Role__c"
+        },
+        {
+          "name": "Territory_Resources__c"
+        },
+        {
+          "name": "sfbase__User__c"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "sfbase__EndDate__c"
+        }
+      ],
+      "object": "sfbase__SalesforceTeam__c"
+    }
+  },
+  "Augment_EAS_Case_Account_User3_Role_RT": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_EAS_Case_Account_User3_Role",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "RecordTypeId"
+    }
+  },
+  "Extract_Account_TRL_EAS": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Customer_Status__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "Filter_UniqueAccount_TRL_EAS": {
+    "action": "filter",
+    "parameters": {
+      "source": "ComputeRelative_UniqueAccount_TRL_EAS",
+      "saqlFilter": "UniqueFlag == \"0\""
+    }
+  },
+  "Compute_HerokuAE_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "HerokuAE222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_QuipAE_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "HerokuAE222",
+            "offset": "first()"
+          },
+          "name": "HerokuAE",
+          "label": "Heroku AE"
+        }
+      ]
+    }
+  },
+  "Compute_ECSMC_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "ECSMC222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_ECS_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "ECSMC222",
+            "offset": "first()"
+          },
+          "name": "ECSMC",
+          "label": "ECS MC"
+        }
+      ]
+    }
+  },
+  "Augment_EAS_Case_Account_User2_Role": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_EAS_Case_Account_User1_Role",
+      "left_key": [
+        "CreatedById"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "CreatedById"
+    }
+  },
+  "Compute_TAE_TRL_EAS": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbase__Account__c"
+      ],
+      "orderBy": [
+        {
+          "name": "TAE222",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_PardotAE_TRL_EAS",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "TAE222",
+            "offset": "first()"
+          },
+          "name": "TAE",
+          "label": "TAE"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,2856 @@
+{
+  "Extract_Compass": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Account__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Company__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "Has_Success_Path__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Status__c"
+        },
+        {
+          "name": "Success_Segment__c"
+        },
+        {
+          "name": "Fiscal_Year_of_Plan__c"
+        }
+      ],
+      "object": "CCHI_Header__c"
+    }
+  },
+  "Compute_Relative_CountryCompany_HighestAccountAOV": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "Company__c"
+      ],
+      "orderBy": [
+        {
+          "name": "AOVTotal",
+          "direction": "desc"
+        }
+      ],
+      "source": "Compute_Account_AOV",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "Id",
+            "offset": "first()"
+          },
+          "name": "CountryHighestAOVAccountId",
+          "label": "CountryHighestAOVAccountId"
+        }
+      ]
+    }
+  },
+  "Extract_CSG_AI_Account_Summary_Current": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "CSG_AI_Account_Summary_Current"
+    }
+  },
+  "Filter_CSG_AI_BLAZE_ACCOUNT": {
+    "action": "filter",
+    "parameters": {
+      "source": "Edgemart_CSG_AI_BLAZE_ACCOUNT",
+      "saqlFilter": "CURR_SNAP==\"Y\""
+    }
+  },
+  "Extract_Opportunity": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Opportunity"
+    }
+  },
+  "Register_Account_BusinessValue": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Register_Account_BusinessValue",
+      "alias": "Register_Account_BusinessValue",
+      "source": "Aug_Account_Blazedata"
+    }
+  },
+  "Aug_User_MgmtChain03Nane": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Aug_User_ManagerName",
+      "left_key": [
+        "Mgmt_Chain_Level_03__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "MgmtChain03",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_User_MgmtChain04": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Aug_User_MgmtChain03Nane",
+      "left_key": [
+        "Mgmt_Chain_Level_04__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "MgmtChain04",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_Contact": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Business_Sponsor__c"
+        },
+        {
+          "name": "IT_Sponsor__c"
+        }
+      ],
+      "object": "Contact"
+    }
+  },
+  "Extract_Activity_PE": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Aug_Activity_ExecutiveSponsership",
+      "left_key": [
+        "CustomWhatId"
+      ],
+      "right_select": [
+        "Account__c"
+      ],
+      "right": "Extract_ProgramEngagement",
+      "relationship": "PE",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_Account_BVIncomplete": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Account__c"
+      ],
+      "left": "Aug_Account_BVCompleted",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "BVStatus",
+        "Account.Org_Status_DW__c",
+        "Account.AccountActive",
+        "Account.BVNotAttrit.AttrittedStatus"
+      ],
+      "right": "Filter_BV_Incomplete",
+      "relationship": "BVIncomplete",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_Case": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Case"
+    }
+  },
+  "Aug_Account_BV_SingleLookup": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Account__c"
+      ],
+      "left": "Aug_Account_RecordType",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Id",
+        "Account.Org_Status_DW__c",
+        "Account.AccountActive",
+        "Account.BVNotAttrit.AttrittedStatus"
+      ],
+      "right": "Compute_BV",
+      "relationship": "BVSingleLookup",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_ComboCompanyNoBVRecord": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Current_Combo_Company__c"
+      ],
+      "left": "Aug_ComboCompanyIncomplete",
+      "left_key": [
+        "Current_Combo_Company__c"
+      ],
+      "right_select": [
+        "AccountBVStatus",
+        "Org_Status_DW__c",
+        "BVSingleLookup.Account.Org_Status_DW__c",
+        "BV.Account.Org_Status_DW__c",
+        "ComboCompany.Org_Status_DW__c",
+        "ComboCompany.BVSingleLookup.Account.Org_Status_DW__c",
+        "ComboCompany.BV.Account.Org_Status_DW__c",
+        "BVCompleted.Account.Org_Status_DW__c",
+        "BVIncomplete.Account.Org_Status_DW__c",
+        "AccountActive",
+        "BVSingleLookup.Account.AccountActive",
+        "BV.Account.AccountActive",
+        "ComboCompany.AccountActive",
+        "ComboCompany.BVSingleLookup.Account.AccountActive",
+        "ComboCompany.BV.Account.AccountActive",
+        "BVCompleted.Account.AccountActive",
+        "BVIncomplete.Account.AccountActive",
+        "BVNotAttrit.AttrittedStatus",
+        "BVSingleLookup.Account.BVNotAttrit.AttrittedStatus",
+        "BV.Account.BVNotAttrit.AttrittedStatus",
+        "ComboCompany.BVNotAttrit.AttrittedStatus",
+        "ComboCompany.BVSingleLookup.Account.BVNotAttrit.AttrittedStatus",
+        "ComboCompany.BV.Account.BVNotAttrit.AttrittedStatus",
+        "BVCompleted.Account.BVNotAttrit.AttrittedStatus",
+        "BVIncomplete.Account.BVNotAttrit.AttrittedStatus"
+      ],
+      "right": "Filter_AccountBVNoBVRecord",
+      "relationship": "ComboNoBVRecord",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Compute_AccountActive": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Aug_BVNotAttritAccount_Account",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "AccountActive",
+          "saqlExpression": "case when ('Customer_Status__c' == \"Customer\" || 'BVNotAttrit.AttrittedStatus' ==\"No\") then \"Active\" else \"Not Active\" end",
+          "label": "AccountActive",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Dataset_Compute": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Aug_Activity_Blaze",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "SuccessSegment",
+          "saqlExpression": "case\nwhen 'Account.Success_Segment__c' is not null then 'Account.Success_Segment__c'\nelse \"BLANK\"\nend",
+          "label": "SuccessSegment",
+          "type": "Text"
+        },
+        {
+          "name": "AOVBand",
+          "saqlExpression": "case\nwhen 'Account.AOV_Band__c' is not null then 'Account.AOV_Band__c'\nelse \"BLANK\"\nend",
+          "label": "AOVBand",
+          "type": "Text"
+        },
+        {
+          "name": "AccountNameFinal",
+          "saqlExpression": "case\nwhen 'Account.Name' is not null then 'Account.Name'\nelse \"BLANK\"\nend",
+          "label": "AccountNameFinal",
+          "type": "Text"
+        },
+        {
+          "name": "CompanyNameFinal",
+          "saqlExpression": "case\nwhen 'Company.Name' is not null then 'Company.Name'\nelse \"BLANK\"\nend",
+          "label": "CompanyNameFinal",
+          "type": "Text"
+        },
+        {
+          "name": "SMJobCodeFinal",
+          "saqlExpression": "case\nwhen 'SM.SM_Job_Code' is not null then 'SM.SM_Job_Code'\nelse \"BLANK\"\nend",
+          "label": "SMJobCodeFinal",
+          "type": "Text"
+        },
+        {
+          "name": "CSGCoverage",
+          "saqlExpression": "case\nwhen 'Account.CSG_Coverage__c' is not null then 'Account.CSG_Coverage__c'\nelse \"BLANK\"\nend\n",
+          "label": "CSGCoverage",
+          "type": "Text"
+        },
+        {
+          "name": "CoreSupportLevel",
+          "saqlExpression": "case\nwhen 'Account.SupportLevel__c' is not null then 'Account.SupportLevel__c'\nelse \"BLANK\"\nend",
+          "label": "CoreSupportLevel",
+          "type": "Text"
+        },
+        {
+          "name": "IsSela",
+          "saqlExpression": "case\nwhen 'Blaze.IS_SELA' is not null then 'Blaze.IS_SELA'\nelse \"BLANK\"\nend",
+          "label": "IsSela",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Aug_Account_Blazedata": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ACCT_ID_18"
+      ],
+      "left": "Aug_Account_BV_SP Details",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "MARKET_SEGMENT",
+        "SALES_DIRECTOR",
+        "AVP",
+        "SVP"
+      ],
+      "right": "Extract_CSG_AI_Account_Summary_Current",
+      "relationship": "Blaze",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Filter_AccountBVIncomplete": {
+    "action": "filter",
+    "parameters": {
+      "source": "Compute_AccountBVStatus",
+      "saqlFilter": "'AccountBVStatus'==\"Incomplete\""
+    }
+  },
+  "Aug_Account_SPCompleted": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "CompassAccount.Id"
+      ],
+      "left": "Aug_Account_RecordType",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "SPStatus",
+        "CompassAccount.BVNotAttrit.AttrittedStatus"
+      ],
+      "right": "Filter_SPStatusCompleted",
+      "relationship": "SPCompleted",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Reg_Tasks_SuccessPath": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Reg_Tasks_SuccessPath",
+      "alias": "Reg_Tasks_SuccessPath",
+      "source": "Compute_SuccessPath_TaskType"
+    }
+  },
+  "Aug_Account_BV_SP Details": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "CompassAccount.Id"
+      ],
+      "left": "Aug_Account_SP",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Account__c",
+        "Id",
+        "Name",
+        "Compass__c",
+        "Compass_Maturity_Assessment_Score__c",
+        "CreatedById",
+        "CreatedDate",
+        "Domain_Assessment_Score__c",
+        "Capability_Assessment_Date__c",
+        "Has_Business_Objective__c",
+        "Market_Segment__c",
+        "Success_Segment__c",
+        "Sentiment__c",
+        "Status__c",
+        "Architecture_Model_Maturity_Level__c",
+        "Business_Process_Value_Maturity_Level__c",
+        "Change_Management_Maturity_Level__c",
+        "Compass_Maturity_Assessment_Presentation__c",
+        "Governance_Maturity_Level__c",
+        "Operating_Model_Maturity_Level__c",
+        "Team_Members_Maturity_Level__c",
+        "Vision_and_Strategy_Maturity_Level__c",
+        "New_Ways_of_Working_Maturity_Level__c",
+        "Lifecycle__c",
+        "Compass.Name",
+        "Compass.CreatedById",
+        "Compass.CreatedDate",
+        "Compass.Has_Success_Path__c",
+        "Compass.OwnerId",
+        "Compass.HasCompanyOnly",
+        "Compass.HighestAOV.CountryHighestAOV.CountryHighestAOVAccountId",
+        "Compass.CompassAccountId",
+        "CompassAccount.BVNotAttrit.AttrittedStatus",
+        "SPStatus",
+        "SPDaysSinceLastModified"
+      ],
+      "right": "Compute_SuccessPathStatus",
+      "relationship": "SP",
+      "operation": "LookupMultiValue"
+    }
+  },
+  "Aug_LeadSM_Name": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Account",
+      "left_key": [
+        "CSM_lookup__c"
+      ],
+      "right_select": [
+        "Name",
+        "CSG_Portfolio__c",
+        "CSG_Region__c",
+        "CSG_Subregion__c",
+        "IsActive",
+        "JobCode__c",
+        "Manager.Name",
+        "Manager",
+        "Manager.JobCode__c",
+        "ManagerPath"
+      ],
+      "right": "Aug_BV_Manager",
+      "relationship": "LeadSM",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_UserBV": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "OwnerId"
+      ],
+      "left": "Aug_UserBV_SingleLookup",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name",
+        "Id",
+        "Customer_s_Business_Objective__c",
+        "Account.Success_Segment__c",
+        "Account.Name",
+        "Account.CSG_Coverage__c",
+        "Account.Combo_Company__c",
+        "Account.Current_Combo_Company__c",
+        "Account.CSG_Portfolio__c",
+        "Account.CSG_Region__c",
+        "Account.CSG_Subregion__c",
+        "Account.Region__c",
+        "Account.CSM_lookup__c",
+        "Account.LeadSM.Name",
+        "RecordType.Name",
+        "Contact1.Name",
+        "Contact1.Business_Sponsor__c",
+        "Contact1.IT_Sponsor__c",
+        "Contact2.Name",
+        "Contact2.Business_Sponsor__c",
+        "Contact2.IT_Sponsor__c",
+        "Contact3.Name",
+        "Contact3.Business_Sponsor__c",
+        "Contact3.IT_Sponsor__c",
+        "BvHasCustomerContact",
+        "BvSentiment",
+        "BVHasValidCustomerContact",
+        "Account.RecordType.Name",
+        "Business_Objective_1_Description__c",
+        "Business_Objective_2_Description__c",
+        "Business_Objective_3_Description__c",
+        "Salesforce_Metric_Success_Path__c",
+        "Success_Measure__c",
+        "Sentiment_2__c",
+        "Sentiment_3__c",
+        "Sentiment__c",
+        "Success_Metric_1_1_Description__c",
+        "Success_Metric_1_2_Description__c",
+        "Success_Metric_1_2__c",
+        "Success_Metric_1_3_Description__c",
+        "Success_Metric_1_3__c",
+        "Success_Metric_2_1_Description__c",
+        "Success_Metric_2_1__c",
+        "Success_Metric_2_2_Description__c",
+        "Success_Metric_2_2__c",
+        "Success_Metric_2_3_Description__c",
+        "Success_Metric_2_3__c",
+        "Success_Metric_3_1_Description__c",
+        "Success_Metric_3_1__c",
+        "Success_Metric_3_2_Description__c",
+        "Success_Metric_3_2__c",
+        "Success_Metric_3_3_Description__c",
+        "Success_Metric_3_3__c",
+        "Success_Path__c",
+        "Target_Value_Success_Path__c",
+        "Target_Value__c",
+        "X18_Character_ID__c",
+        "BVStatus",
+        "Account.Org_Status_DW__c",
+        "Account.AccountActive",
+        "Account.BVNotAttrit.AttrittedStatus"
+      ],
+      "right": "Compute_BV",
+      "relationship": "BV",
+      "operation": "LookupMultiValue"
+    }
+  },
+  "Filter_HighestAOVAccount": {
+    "action": "filter",
+    "parameters": {
+      "source": "Compute_IdentifyHighestAOV Account",
+      "saqlFilter": "HasHighestAOV==\"True\""
+    }
+  },
+  "Activity_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Filter_Task_Event_Record",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "Manager.Name",
+        "Manager",
+        "ManagerPath",
+        "sf62user__manager__c",
+        "JobCode__c",
+        "Manager.JobCode__c"
+      ],
+      "right": "ManagerAug",
+      "relationship": "User",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_Account_BVCompleted": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Account__c"
+      ],
+      "left": "Compute_ComboCompanyHasBV",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "BVStatus",
+        "Account.Org_Status_DW__c",
+        "Account.AccountActive",
+        "Account.BVNotAttrit.AttrittedStatus"
+      ],
+      "right": "Filter_BVCompleted",
+      "relationship": "BVCompleted",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_ActionPlan": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Account__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Compass__c"
+        },
+        {
+          "name": "Compass_Maturity_Assessment_Review_Date__c"
+        },
+        {
+          "name": "Compass_Maturity_Assessment_Score__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Completed_Date__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Domain_Assessment_Score__c"
+        },
+        {
+          "name": "Capability_Assessment_Date__c"
+        },
+        {
+          "name": "Has_Business_Objective__c"
+        },
+        {
+          "name": "Market_Segment__c"
+        },
+        {
+          "name": "Success_Segment__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Sentiment__c"
+        },
+        {
+          "name": "Status__c"
+        },
+        {
+          "name": "Architecture_Model_Maturity_Level__c"
+        },
+        {
+          "name": "Business_Process_Value_Maturity_Level__c"
+        },
+        {
+          "name": "Change_Management_Maturity_Level__c"
+        },
+        {
+          "name": "Compass_Maturity_Assessment_Presentation__c"
+        },
+        {
+          "name": "Governance_Maturity_Level__c"
+        },
+        {
+          "name": "Operating_Model_Maturity_Level__c"
+        },
+        {
+          "name": "Team_Members_Maturity_Level__c"
+        },
+        {
+          "name": "Vision_and_Strategy_Maturity_Level__c"
+        },
+        {
+          "name": "New_Ways_of_Working_Maturity_Level__c"
+        },
+        {
+          "name": "Lifecycle__c"
+        },
+        {
+          "name": "LastModifiedDate"
+        }
+      ],
+      "object": "Action_Plan__c"
+    }
+  },
+  "Aug_BV_RecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Aug_BV_Account",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "RecordType",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_RedAccount": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Red_Account__c"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Red_Account__c"
+    }
+  },
+  "Extract_Task": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "AccountId"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "defaultValue": null,
+          "name": "ActivityDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Adoption_Playbooks__c"
+        },
+        {
+          "name": "Category__c"
+        },
+        {
+          "name": "WhatId"
+        },
+        {
+          "name": "WhoId"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "defaultValue": null,
+          "name": "CreatedDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Subject"
+        },
+        {
+          "defaultValue": "BLANK",
+          "name": "Purpose__c"
+        },
+        {
+          "name": "CompletedDateTime"
+        },
+        {
+          "defaultValue": "BLANK",
+          "name": "Status"
+        },
+        {
+          "name": "IsClosed"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Associated_Object__c"
+        },
+        {
+          "defaultValue": "BLANK",
+          "name": "Type"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Duration__c"
+        },
+        {
+          "name": "Activity_type_for_Services__c"
+        },
+        {
+          "name": "Internal_Comments__c"
+        },
+        {
+          "name": "Meeting_Comments__c"
+        },
+        {
+          "name": "LastModifiedDate"
+        }
+      ],
+      "object": "Task"
+    }
+  },
+  "Filter_Tasks_SuccessPath": {
+    "action": "filter",
+    "parameters": {
+      "source": "Aug_Tasks_SP",
+      "saqlFilter": "'SP.Id' is not null"
+    }
+  },
+  "Aug_Activity_ActionPlan": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Aug_Activity_Compass",
+      "left_key": [
+        "CustomWhatId"
+      ],
+      "right_select": [
+        "Compass.CompassAccountId",
+        "Compass.HighestAOV.CountryHighestAOV.CountryHighestAOVAccountId"
+      ],
+      "right": "Aug_ActionPlanCompass",
+      "relationship": "ActionPlan",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Compute_ComboCompanyHasBV": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Aug_ComboCompanyHasBV",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "ComboCompanyHasBV",
+          "saqlExpression": "case when 'ComboCompany.AccountHasBV' ==\"Yes\" then \"Yes\" else \"No\" end",
+          "label": "ComboCompanyHasBV",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Compute_Account_15digitId": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Aug_Activity_Company",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "Account_Id_15",
+          "saqlExpression": "substr('AccountId_Final',1,15)",
+          "label": "Account_Id_15",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Extract_ExecutiveSponsorship": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Account_LookUp__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Global_Company__c"
+        }
+      ],
+      "object": "Executive_Outreach__c"
+    }
+  },
+  "Compute_UserBV": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Aug_UserBV",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "UserHasBV",
+          "saqlExpression": "case when 'BVSingleLookup.Id' is not null then \"Yes\" else \"No\" end",
+          "label": "HasBV",
+          "type": "Text"
+        },
+        {
+          "name": "TotalSM",
+          "saqlExpression": "case when (('JobCode__c' matches \"463C\" or 'JobCode__c' matches \"430C\") and 'LastLoginDate'>= \"2020-02-00T00:00:00.000Z\" and ('MgmtChain03.Name' in [\"Simon Short\"] or 'MgmtChain04.Name' in [\"Kaname Miyata\"] ) and 'IsActive'==\"true\") or\n (('JobCode__c' matches \"199C\" ) and 'LastLoginDate'>= \"2020-02-00T00:00:00.000Z\" and ('MgmtChain03.Name' in [\"Simon Short\"] or 'MgmtChain04.Name' in [\"Kaname Miyata\"] ) and 'IsActive'==\"true\") then \"Yes\" else \"No\" end",
+          "label": "TotalSM",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Aug_ActionPlanCompass": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Aug_ActionPlanRecordType",
+      "left_key": [
+        "Compass__c"
+      ],
+      "right_select": [
+        "Account__c",
+        "Company__c",
+        "CompassAccountId",
+        "CreatedById",
+        "CreatedDate",
+        "HasCompanyOnly",
+        "Has_Success_Path__c",
+        "Name",
+        "OwnerId",
+        "HighestAOV.CountryHighestAOV.CountryHighestAOVAccountId"
+      ],
+      "right": "Compute_CompassAccount",
+      "relationship": "Compass",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Filter_SPStatusCompleted": {
+    "action": "filter",
+    "parameters": {
+      "source": "Compute_SuccessPathStatus",
+      "saqlFilter": "SPStatus==\"Completed\""
+    }
+  },
+  "Aug_BVNotAttritAccount_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "sfid"
+      ],
+      "left": "Aug_LeadSM_Name",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "AttrittedStatus"
+      ],
+      "right": "Extract_BVNotAttritAccount",
+      "relationship": "BVNotAttrit",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Compute_SuccessPathStatus": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Filter_SuccessPath",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "SPStatus",
+          "saqlExpression": "case when 'Lifecycle__c' == \"Steady State\" then \"Completed\" else \"InProgress\" end",
+          "label": "SPStatus",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 18,
+          "name": "SPDaysSinceLastModified",
+          "saqlExpression": "daysBetween(toDate(CreatedDate_sec_epoch), now() )\n\n",
+          "scale": 2,
+          "label": "SPDaysSinceLastModified",
+          "type": "Numeric"
+        }
+      ]
+    }
+  },
+  "Filter_Task_Event_Record": {
+    "action": "filter",
+    "parameters": {
+      "source": "Aug_Task_RecordType",
+      "saqlFilter": "'RecordType.Name'==\"SM Task\" || 'RecordType.Name'==\"SM Event\""
+    }
+  },
+  "Register_User_BusinessValue": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Reg_User_BusinessValue",
+      "alias": "Reg_User_BusinessValue",
+      "source": "Filter_User_BV"
+    }
+  },
+  "Aug_BV_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_BusinessObjective",
+      "left_key": [
+        "Account__c"
+      ],
+      "right_select": [
+        "Success_Segment__c",
+        "AOV_Band__c",
+        "Name",
+        "CSG_Coverage__c",
+        "Combo_Company__c",
+        "Current_Combo_Company__c",
+        "CSG_Portfolio__c",
+        "CSG_Region__c",
+        "CSG_Subregion__c",
+        "Region__c",
+        "SupportLevel__c",
+        "CSM_lookup__c",
+        "Org_Status_DW__c",
+        "LeadSM.Name",
+        "LeadSM.JobCode__c",
+        "LeadSM.CSG_Portfolio__c",
+        "LeadSM.CSG_Region__c",
+        "LeadSM.CSG_Subregion__c",
+        "LeadSM.IsActive",
+        "LeadSM.Manager",
+        "LeadSM.ManagerPath",
+        "LeadSM.Manager.Name",
+        "AccountActive",
+        "RecordType.Name",
+        "NameLocal",
+        "Industry",
+        "Country__pc",
+        "BVNotAttrit.AttrittedStatus"
+      ],
+      "right": "Aug_Account_RecordType",
+      "relationship": "Account",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_ActionPlanAccount": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Aug_ActionPlanCompass",
+      "left_key": [
+        "Compass.CompassAccountId"
+      ],
+      "right_select": [
+        "Success_Segment__c",
+        "AOV_Band__c",
+        "Name",
+        "CSG_Coverage__c",
+        "Combo_Company__c",
+        "Current_Combo_Company__c",
+        "CSG_Portfolio__c",
+        "CSG_Region__c",
+        "CSG_Subregion__c",
+        "Region__c",
+        "SupportLevel__c",
+        "CSM_lookup__c",
+        "Org_Status_DW__c",
+        "LeadSM.Name",
+        "LeadSM.JobCode__c",
+        "LeadSM.CSG_Portfolio__c",
+        "LeadSM.CSG_Region__c",
+        "LeadSM.CSG_Subregion__c",
+        "LeadSM.IsActive",
+        "LeadSM.Manager",
+        "LeadSM.ManagerPath",
+        "LeadSM.Manager.Name",
+        "LeadSM.Manager.JobCode__c",
+        "AccountActive",
+        "RecordType.Name",
+        "Id",
+        "BVNotAttrit.AttrittedStatus"
+      ],
+      "right": "Aug_Account_RecordType",
+      "relationship": "CompassAccount",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_ConsumptionPlan": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Account__c"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Consumption_Plan__c"
+    }
+  },
+  "Reg_SuccessPath": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Reg_SuccessPath",
+      "alias": "Reg_SuccessPath",
+      "source": "Compute_SuccessPathStatus"
+    }
+  },
+  "Compute_AccountBV": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Filter_AccountBV",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "AccountHasBV",
+          "saqlExpression": "case when 'BVSingleLookup.Id' is not null then \"Yes\" else \"No\" end",
+          "label": "AccountHasBV",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Extract_Company": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "Company__c"
+    }
+  },
+  "ManagerAug": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Flatten_Mgr",
+      "left_key": [
+        "Manager"
+      ],
+      "right_select": [
+        "Name",
+        "JobCode__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "Manager",
+      "operation": "LookupMultiValue"
+    }
+  },
+  "Extract_Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "defaultValue": "BLANK",
+          "name": "Success_Segment__c"
+        },
+        {
+          "name": "Global_Company__c"
+        },
+        {
+          "defaultValue": "BLANK",
+          "name": "AOV_Band__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "CSG_Coverage__c"
+        },
+        {
+          "name": "Combo_Company__c"
+        },
+        {
+          "name": "CSG_Portfolio__c"
+        },
+        {
+          "name": "CSG_Region__c"
+        },
+        {
+          "name": "CSG_Subregion__c"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "SupportLevel__c"
+        },
+        {
+          "name": "CSM_lookup__c"
+        },
+        {
+          "name": "Commerce_Cloud_AOV__c"
+        },
+        {
+          "name": "Current_Account_AOV__c"
+        },
+        {
+          "name": "DMP_AOV__c"
+        },
+        {
+          "name": "ET_Marketing_Cloud_AOV__c"
+        },
+        {
+          "name": "Pardot_AOV__c"
+        },
+        {
+          "name": "Org_Status_DW__c"
+        },
+        {
+          "name": "Total_AOV__c"
+        },
+        {
+          "name": "Company__c"
+        },
+        {
+          "name": "NameLocal"
+        },
+        {
+          "name": "Country__pc"
+        },
+        {
+          "name": "Industry"
+        },
+        {
+          "name": "Customer_Status__c"
+        },
+        {
+          "name": "Current_Combo_Company__c"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "Filter_SPStatusInProgress": {
+    "action": "filter",
+    "parameters": {
+      "source": "Compute_SuccessPathStatus",
+      "saqlFilter": "SPStatus==\"InProgress\""
+    }
+  },
+  "Aug_Task_RecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Compute_WhatId",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "RecordType",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_Activity_CountryCompany": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Company__c"
+      ],
+      "left": "Aug_Activity_GlobalCompany",
+      "left_key": [
+        "CustomWhatId"
+      ],
+      "right_select": [
+        "Id"
+      ],
+      "right": "Filter_HasHighestAOVCountry",
+      "relationship": "CountryCompany",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Filter_ComboCompanyHasBV": {
+    "action": "filter",
+    "parameters": {
+      "source": "Compute_AccountBV",
+      "saqlFilter": "'AccountHasBV'==\"Yes\""
+    }
+  },
+  "Aug_Activity_Blaze": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ACCOUNT_ID"
+      ],
+      "left": "Compute_Account_15digitId",
+      "left_key": [
+        "Account_Id_15"
+      ],
+      "right_select": [
+        "IS_SELA"
+      ],
+      "right": "Filter_CSG_AI_BLAZE_ACCOUNT",
+      "relationship": "Blaze",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Compute_IdentifyHighestAOV Account": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Compute_Relative_AccountAOV",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "HasHighestAOV",
+          "saqlExpression": "case when 'HighestAOVAccountId' == 'Id' then \"True\" else \"False\" end",
+          "label": "HasHighestAOV",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Reg_HighestAOVCompassCheck": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Reg_HighestAOVCompassCheck",
+      "alias": "Reg_HighestAOVCompassCheck",
+      "source": "Compute_CompassAccount"
+    }
+  },
+  "Extract_Event": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "AccountId"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "defaultValue": null,
+          "name": "ActivityDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Adoption_Playbooks__c"
+        },
+        {
+          "name": "Category__c"
+        },
+        {
+          "name": "WhatId"
+        },
+        {
+          "name": "WhoId"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Subject"
+        },
+        {
+          "defaultValue": "BLANK",
+          "name": "Purpose__c"
+        },
+        {
+          "defaultValue": "BLANK",
+          "name": "Meeting_Status__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Associated_Object__c"
+        },
+        {
+          "defaultValue": "BLANK",
+          "name": "Type"
+        },
+        {
+          "name": "Duration__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "LastModifiedDate"
+        },
+        {
+          "name": "Description"
+        }
+      ],
+      "object": "Event"
+    }
+  },
+  "Flatten_Mgr": {
+    "schema": {
+      "objects": [
+        {
+          "label": "Flatten_UserRole",
+          "fields": [
+            {
+              "name": "Manager",
+              "label": "Manager",
+              "isSystemField": false
+            },
+            {
+              "name": "ManagerPath",
+              "label": "ManagerPath",
+              "isSystemField": false
+            }
+          ]
+        }
+      ]
+    },
+    "action": "flatten",
+    "parameters": {
+      "include_self_id": true,
+      "self_field": "Id",
+      "multi_field": "Manager",
+      "parent_field": "sf62user__manager__c",
+      "path_field": "ManagerPath",
+      "source": "Extract_User"
+    }
+  },
+  "Compute_IdentifyHighestCountryAOV": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Compute_Relative_CountryCompany_HighestAccountAOV",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "HasHighestAOVCountry",
+          "saqlExpression": "case when 'CountryHighestAOVAccountId' == 'Id' then \"True\" else \"False\" end",
+          "label": "HasHighestAOVCountry",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Aug_UserBV_SingleLookup": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "OwnerId"
+      ],
+      "left": "Aug_User_MgmtChain04",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Id",
+        "Account.Org_Status_DW__c",
+        "Account.AccountActive",
+        "Account.BVNotAttrit.AttrittedStatus"
+      ],
+      "right": "Compute_BV",
+      "relationship": "BVSingleLookup",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_Account_SP": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Compute_ComboCompanyBVStatus",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "AccountSPStatus",
+        "BVNotAttrit.AttrittedStatus",
+        "SPCompleted.CompassAccount.BVNotAttrit.AttrittedStatus",
+        "SPInprogress.CompassAccount.BVNotAttrit.AttrittedStatus"
+      ],
+      "right": "Compute_AccountSPStatus",
+      "relationship": "SPStatus",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Compute_WhatId": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Task_Event",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "CustomWhatId",
+          "saqlExpression": "case when('WhatId' in [\"-BLANK-\"] or 'WhatId' is null) then \"BLANKWhatId\" else 'WhatId' end",
+          "label": "CustomWhatId",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Aug_Activity_ConsumptionPlan": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Aug_Activity_ActionPlan",
+      "left_key": [
+        "CustomWhatId"
+      ],
+      "right_select": [
+        "Account__c"
+      ],
+      "right": "Extract_ConsumptionPlan",
+      "relationship": "ConsumptionPlan",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_Activity_Redaccount": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Aug_Activity_Opp",
+      "left_key": [
+        "CustomWhatId"
+      ],
+      "right_select": [
+        "Red_Account__c"
+      ],
+      "right": "Extract_RedAccount",
+      "relationship": "RedAccount",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_Account_BV": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Account__c"
+      ],
+      "left": "Aug_Account_BV_SingleLookup",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Initial_Value__c",
+        "Name",
+        "Id",
+        "Sentiment_2__c",
+        "Sentiment_3__c",
+        "Sentiment__c",
+        "Customer_Target_Metrics__c",
+        "Success_Path__c",
+        "Target_Value__c",
+        "Target_Value_Success_Path__c",
+        "Current_Value__c",
+        "X18_Character_ID__c",
+        "Customer_s_Business_Objective__c",
+        "Salesforce_Metric_Success_Path__c",
+        "Success_Measure__c",
+        "Business_Objective_1_Description__c",
+        "Business_Objective_2_Description__c",
+        "Business_Objective_3_Description__c",
+        "Success_Metric_1_2__c",
+        "Success_Metric_1_3__c",
+        "Success_Metric_2_1__c",
+        "Success_Metric_2_2__c",
+        "Success_Metric_2_3__c",
+        "Success_Metric_3_1__c",
+        "Success_Metric_3_2__c",
+        "Success_Metric_3_3__c",
+        "Success_Metric_1_1_Description__c",
+        "Success_Metric_1_2_Description__c",
+        "Success_Metric_1_3_Description__c",
+        "Success_Metric_2_1_Description__c",
+        "Success_Metric_2_2_Description__c",
+        "Success_Metric_2_3_Description__c",
+        "Success_Metric_3_1_Description__c",
+        "Success_Metric_3_2_Description__c",
+        "Success_Metric_3_3_Description__c",
+        "Account.Org_Status_DW__c",
+        "Account.LeadSM.Name",
+        "Account.AccountActive",
+        "RecordType.Name",
+        "BvOwner.Name",
+        "BvOwner.JobCode__c",
+        "BvOwner.CSG_Portfolio__c",
+        "BvOwner.CSG_Region__c",
+        "BvOwner.CSG_Subregion__c",
+        "BvOwner.Manager.Name",
+        "BvOwner.Manager.JobCode__c",
+        "Contact1.Name",
+        "Contact1.Business_Sponsor__c",
+        "Contact1.IT_Sponsor__c",
+        "Contact2.Name",
+        "Contact2.Business_Sponsor__c",
+        "Contact2.IT_Sponsor__c",
+        "Contact3.Name",
+        "Contact3.Business_Sponsor__c",
+        "Contact3.IT_Sponsor__c",
+        "BvHasCustomerContact",
+        "BvSentiment",
+        "BVHasValidCustomerContact",
+        "BVStatus",
+        "BvOwner.Support_Subgroup__c",
+        "Account.BVNotAttrit.AttrittedStatus"
+      ],
+      "right": "Compute_BV",
+      "relationship": "BV",
+      "operation": "LookupMultiValue"
+    }
+  },
+  "CompanyIdinTask": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Activity_Redaccount",
+      "left_key": [
+        "CustomWhatId"
+      ],
+      "right_select": [
+        "Id"
+      ],
+      "right": "Extract_Company",
+      "relationship": "CompanyEvent",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Email"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "UserRoleId"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "sf62user__manager__c"
+        },
+        {
+          "name": "ManagerId"
+        },
+        {
+          "name": "JobCode__c"
+        },
+        {
+          "name": "CSG_Portfolio__c"
+        },
+        {
+          "name": "CSG_Region__c"
+        },
+        {
+          "name": "CSG_Subregion__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_03__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_04__c"
+        },
+        {
+          "name": "LastLoginDate"
+        },
+        {
+          "name": "IsActive"
+        },
+        {
+          "name": "Support_Subgroup__c"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "Extract_SMxRef": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "ActivitySMGeo"
+    }
+  },
+  "Aug_Activity_Case": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Activity_User",
+      "left_key": [
+        "CustomWhatId"
+      ],
+      "right_select": [
+        "AccountId"
+      ],
+      "right": "Extract_Case",
+      "relationship": "Case",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_Activity_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Aug_Activity_SMxMapping",
+      "left_key": [
+        "AccountId_Final"
+      ],
+      "right_select": [
+        "Success_Segment__c",
+        "Global_Company__c",
+        "AOV_Band__c",
+        "Name",
+        "CSG_Coverage__c",
+        "Combo_Company__c",
+        "Current_Combo_Company__c",
+        "Org_Status_DW__c",
+        "Company__c",
+        "SupportLevel__c"
+      ],
+      "right": "Extract_Account",
+      "relationship": "Account",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_RecordType": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "DeveloperName"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "RecordType"
+    }
+  },
+  "Aug_Account_SPInProgress": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "CompassAccount.Id"
+      ],
+      "left": "Aug_Account_SPCompleted",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "SPStatus",
+        "CompassAccount.BVNotAttrit.AttrittedStatus"
+      ],
+      "right": "Filter_SPStatusInProgress",
+      "relationship": "SPInprogress",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Filter_SuccessPath": {
+    "action": "filter",
+    "parameters": {
+      "source": "Aug_ActionPlanAccount",
+      "saqlFilter": "'RecordType.Name'==\"Success Path\" and 'CompassAccount.RecordType.Name' ==\"Sales\""
+    }
+  },
+  "Filter_CompasswithCompanyOnly": {
+    "action": "filter",
+    "parameters": {
+      "source": "Compute_CompasswithCompanyonly",
+      "saqlFilter": "HasCompanyOnly==\"True\""
+    }
+  },
+  "Aug_Activity_Compass": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Aug_Activity_Case",
+      "left_key": [
+        "CustomWhatId"
+      ],
+      "right_select": [
+        "CompassAccountId",
+        "HighestAOV.CountryHighestAOV.CountryHighestAOVAccountId"
+      ],
+      "right": "Compute_CompassAccount",
+      "relationship": "Compass",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Edgemart_CSG_AI_BLAZE_ACCOUNT": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "CSG_AI_BLAZE_ACCOUNT"
+    }
+  },
+  "Aug_CompasswithHighestAOVAccount": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Compute_CompasswithCompanyonly",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "HighestAOV.HighestAOVAccountId",
+        "CountryHighestAOV.CountryHighestAOVAccountId"
+      ],
+      "right": "Aug_CompassCompany_CountryCompany",
+      "relationship": "HighestAOV",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_User_ManagerName": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_User",
+      "left_key": [
+        "ManagerId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "UserManager",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Compute_ComboCompanyBVStatus": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Aug_ComboCompanyNoBVRecord",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "ComboCompanyBVStatus",
+          "saqlExpression": "case when 'ComboCompleted.AccountBVStatus' is not null then \"Completed\" when 'ComboCompleted.AccountBVStatus' is null and 'ComboIncomplete.AccountBVStatus' is not null then \"Incomplete\" when 'ComboCompleted.AccountBVStatus' is null and 'ComboIncomplete.AccountBVStatus' is null then \"No BV Record\" else \"others\" end\n\n\n",
+          "label": "ComboCompanyBVStatus",
+          "type": "Text"
+        },
+        {
+          "name": "LeadSMNameFinal",
+          "saqlExpression": "case when 'LeadSM.Name' is null then \"No Lead SM Assigned\" else 'LeadSM.Name' end",
+          "label": "LeadSMNameFinal",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Aug_Activity_GlobalCompany": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Global_Company__c"
+      ],
+      "left": "CompanyIdinTask",
+      "left_key": [
+        "CustomWhatId"
+      ],
+      "right_select": [
+        "Id"
+      ],
+      "right": "Filter_HighestAOVAccount",
+      "relationship": "GlobalCompany",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Filter_HasHighestAOVCountry": {
+    "action": "filter",
+    "parameters": {
+      "source": "Compute_IdentifyHighestCountryAOV",
+      "saqlFilter": "HasHighestAOVCountry==\"True\""
+    }
+  },
+  "Reg_SMActivity": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Reg_SMActivity",
+      "alias": "Reg_SMActivity",
+      "source": "Dataset_Compute"
+    }
+  },
+  "Compute_AccountBVStatus": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Aug_Account_BVIncomplete",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "AccountBVStatus",
+          "saqlExpression": "case when 'BVCompleted.BVStatus' ==\"Completed\" and \n'BVIncomplete.BVStatus'==\"Incomplete\" then \"Completed\" when  'BVCompleted.BVStatus' ==\"Completed\" and \n'BVIncomplete.BVStatus' is null then \"Completed\" when  'BVCompleted.BVStatus' is null and \n'BVIncomplete.BVStatus'==\"Incomplete\" then \"Incomplete\" else \"No BV Record\" end",
+          "label": "AccountBVStatus",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Compute_SuccessPath_TaskType": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "ComputeRelative_SPTasks",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "SuccessPathTaskType",
+          "saqlExpression": "case when 'Subject' matches \"#AG\" then \"Auto Generated\" else \"Custom\" end",
+          "label": "SuccessPathTaskType",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 18,
+          "name": "SPTaskDaysSinceModified",
+          "saqlExpression": "daysBetween(toDate(SPTaskLastmodifiedDate_sec_epoch), now() )\n\n",
+          "scale": 2,
+          "label": "SPTaskDaysSinceModified",
+          "type": "Numeric"
+        }
+      ]
+    }
+  },
+  "Aug_BV_Owner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Filter_BV",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "JobCode__c",
+        "CSG_Portfolio__c",
+        "CSG_Region__c",
+        "CSG_Subregion__c",
+        "Manager.Name",
+        "Manager.JobCode__c",
+        "Support_Subgroup__c"
+      ],
+      "right": "Aug_BV_Manager",
+      "relationship": "BvOwner",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Filter_AccountBV": {
+    "action": "filter",
+    "parameters": {
+      "source": "Aug_Account_BV",
+      "saqlFilter": " 'RecordType.Name' ==\"Sales\""
+    }
+  },
+  "Filter_BV": {
+    "action": "filter",
+    "parameters": {
+      "source": "Aug_BV_RecordType",
+      "saqlFilter": "'RecordType.Name'==\"Success Path - Business Objectives\"  and 'Account.RecordType.Name' ==\"Sales\""
+    }
+  },
+  "Compute_CompassAccount": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Aug_CompasswithHighestAOVAccount",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "CompassAccountId",
+          "saqlExpression": "case when 'HighestAOV.HighestAOV.HighestAOVAccountId' is not null then 'HighestAOV.HighestAOV.HighestAOVAccountId' \n when 'HighestAOV.CountryHighestAOV.CountryHighestAOVAccountId' is not null then 'HighestAOV.CountryHighestAOV.CountryHighestAOVAccountId' \nelse 'Account__c' end",
+          "label": "CompassAccountId",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Extract_BusinessObjective": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Account__c"
+        },
+        {
+          "name": "Compass__c"
+        },
+        {
+          "name": "Contact_1__c"
+        },
+        {
+          "name": "Contact_2__c"
+        },
+        {
+          "name": "Contact_3__c"
+        },
+        {
+          "name": "Contact__c"
+        },
+        {
+          "name": "Date_Completed__c"
+        },
+        {
+          "name": "Company__c"
+        },
+        {
+          "name": "Initial_Value__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Sentiment_2__c"
+        },
+        {
+          "name": "Sentiment_3__c"
+        },
+        {
+          "name": "Sentiment__c"
+        },
+        {
+          "name": "Customer_Target_Metrics__c"
+        },
+        {
+          "name": "Success_Path__c"
+        },
+        {
+          "name": "Target_Value__c"
+        },
+        {
+          "name": "Target_Value_Success_Path__c"
+        },
+        {
+          "name": "Current_Value__c"
+        },
+        {
+          "name": "Updated_Date__c"
+        },
+        {
+          "name": "X18_Character_ID__c"
+        },
+        {
+          "name": "Customer_s_Business_Objective__c"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "Salesforce_Metric_Success_Path__c"
+        },
+        {
+          "name": "Success_Measure__c"
+        },
+        {
+          "name": "Business_Objective_1_Description__c"
+        },
+        {
+          "name": "Business_Objective_2_Description__c"
+        },
+        {
+          "name": "Business_Objective_3_Description__c"
+        },
+        {
+          "name": "Success_Metric_1_2__c"
+        },
+        {
+          "name": "Success_Metric_1_3__c"
+        },
+        {
+          "name": "Success_Metric_2_1__c"
+        },
+        {
+          "name": "Success_Metric_2_2__c"
+        },
+        {
+          "name": "Success_Metric_2_3__c"
+        },
+        {
+          "name": "Success_Metric_3_1__c"
+        },
+        {
+          "name": "Success_Metric_3_2__c"
+        },
+        {
+          "name": "Success_Metric_3_3__c"
+        },
+        {
+          "name": "Success_Metric_1_1_Description__c"
+        },
+        {
+          "name": "Success_Metric_1_2_Description__c"
+        },
+        {
+          "name": "Success_Metric_1_3_Description__c"
+        },
+        {
+          "name": "Success_Metric_2_1_Description__c"
+        },
+        {
+          "name": "Success_Metric_2_2_Description__c"
+        },
+        {
+          "name": "Success_Metric_2_3_Description__c"
+        },
+        {
+          "name": "Success_Metric_3_1_Description__c"
+        },
+        {
+          "name": "Success_Metric_3_2_Description__c"
+        },
+        {
+          "name": "Success_Metric_3_3_Description__c"
+        }
+      ],
+      "object": "Business_Priority__c"
+    }
+  },
+  "Aug_Activity_Opp": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Activity_PE",
+      "left_key": [
+        "CustomWhatId"
+      ],
+      "right_select": [
+        "AccountId"
+      ],
+      "right": "Extract_Opportunity",
+      "relationship": "Opp",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_Activity_ExecutiveSponsership": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Aug_Activity_ConsumptionPlan",
+      "left_key": [
+        "CustomWhatId"
+      ],
+      "right_select": [
+        "Account_LookUp__c",
+        "Global_Company__c"
+      ],
+      "right": "Extract_ExecutiveSponsorship",
+      "relationship": "ExecSpon",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_ComboCompanyIncomplete": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Current_Combo_Company__c"
+      ],
+      "left": "Aug_ComboCompanyCompleted",
+      "left_key": [
+        "Current_Combo_Company__c"
+      ],
+      "right_select": [
+        "AccountBVStatus",
+        "Org_Status_DW__c",
+        "BVSingleLookup.Account.Org_Status_DW__c",
+        "BV.Account.Org_Status_DW__c",
+        "ComboCompany.Org_Status_DW__c",
+        "ComboCompany.BVSingleLookup.Account.Org_Status_DW__c",
+        "ComboCompany.BV.Account.Org_Status_DW__c",
+        "BVCompleted.Account.Org_Status_DW__c",
+        "BVIncomplete.Account.Org_Status_DW__c",
+        "AccountActive",
+        "BVSingleLookup.Account.AccountActive",
+        "BV.Account.AccountActive",
+        "ComboCompany.AccountActive",
+        "ComboCompany.BVSingleLookup.Account.AccountActive",
+        "ComboCompany.BV.Account.AccountActive",
+        "BVCompleted.Account.AccountActive",
+        "BVIncomplete.Account.AccountActive",
+        "BVNotAttrit.AttrittedStatus",
+        "BVSingleLookup.Account.BVNotAttrit.AttrittedStatus",
+        "BV.Account.BVNotAttrit.AttrittedStatus",
+        "ComboCompany.BVNotAttrit.AttrittedStatus",
+        "ComboCompany.BVSingleLookup.Account.BVNotAttrit.AttrittedStatus",
+        "ComboCompany.BV.Account.BVNotAttrit.AttrittedStatus",
+        "BVCompleted.Account.BVNotAttrit.AttrittedStatus",
+        "BVIncomplete.Account.BVNotAttrit.AttrittedStatus"
+      ],
+      "right": "Filter_AccountBVIncomplete",
+      "relationship": "ComboIncomplete",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_ComboCompanyHasBV": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Current_Combo_Company__c"
+      ],
+      "left": "Compute_AccountBV",
+      "left_key": [
+        "Current_Combo_Company__c"
+      ],
+      "right_select": [
+        "AccountHasBV",
+        "Org_Status_DW__c",
+        "BVSingleLookup.Account.Org_Status_DW__c",
+        "BV.Account.Org_Status_DW__c",
+        "AccountActive",
+        "BVSingleLookup.Account.AccountActive",
+        "BV.Account.AccountActive",
+        "BVNotAttrit.AttrittedStatus",
+        "BVSingleLookup.Account.BVNotAttrit.AttrittedStatus",
+        "BV.Account.BVNotAttrit.AttrittedStatus"
+      ],
+      "right": "Filter_ComboCompanyHasBV",
+      "relationship": "ComboCompany",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_BV_Manager": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Flatten_Mgr",
+      "left_key": [
+        "Manager"
+      ],
+      "right_select": [
+        "JobCode__c",
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Manager",
+      "operation": "LookupMultiValue"
+    }
+  },
+  "Filter_BV_Incomplete": {
+    "action": "filter",
+    "parameters": {
+      "source": "Compute_BV",
+      "saqlFilter": "'BVStatus'==\"Incomplete\""
+    }
+  },
+  "Compute_BV": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Aug_BV_Contact3",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "BvHasCustomerContact",
+          "saqlExpression": "case when ('Contact_1__c' is null and 'Contact_2__c' is null and 'Contact_3__c' is null) then \"No\" else \"Yes\" end",
+          "label": "BvHasCustomerContact",
+          "type": "Text"
+        },
+        {
+          "name": "BvSentiment",
+          "saqlExpression": "case when 'Sentiment__c' is null then \"NA\" else 'Sentiment__c' end",
+          "label": "BvSentiment",
+          "type": "Text"
+        },
+        {
+          "saqlExpression": "case when 'Contact1.Business_Sponsor__c' ==\"true\" or 'Contact1.IT_Sponsor__c' ==\"true\" or 'Contact2.Business_Sponsor__c' ==\"true\" or 'Contact2.IT_Sponsor__c' ==\"true\" or 'Contact3.Business_Sponsor__c' ==\"true\" or 'Contact3.IT_Sponsor__c' ==\"true\" then \"Yes\" else \"No\" end",
+          "name": "BVHasValidCustomerContact",
+          "label": "BVHasValidCustomerContact",
+          "type": "Text"
+        },
+        {
+          "name": "BVStatus",
+          "saqlExpression": "case when ('RecordType.Name' in [\"Success Path - Business Objectives\"]  and 'Customer_s_Business_Objective__c' is not null and 'Contact_1__c' is not null and 'Sentiment__c' is not null and 'Customer_s_Business_Objective__c' not in [\"test\"] and ('Salesforce_Metric_Success_Path__c' is not null or 'Success_Measure__c' is not null ) and 'BVHasValidCustomerContact'==\"Yes\") then \"Completed\" else \"Incomplete\" end",
+          "label": "BVStatus",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Aug_Account_RecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Compute_AccountActive",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "RecordType",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_BV_Blaze": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ACCT_ID_18"
+      ],
+      "left": "Compute_BV",
+      "left_key": [
+        "Account__c"
+      ],
+      "right_select": [
+        "MARKET_SEGMENT",
+        "AVP",
+        "SALES_DIRECTOR",
+        "SVP"
+      ],
+      "right": "Extract_CSG_AI_Account_Summary_Current",
+      "relationship": "Blaze",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_CompassCompany_CountryCompany": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Company__c"
+      ],
+      "left": "Aug_CompassCompanywithHighestAOVAccount",
+      "left_key": [
+        "Company__c"
+      ],
+      "right_select": [
+        "CountryHighestAOVAccountId"
+      ],
+      "right": "Filter_HasHighestAOVCountry",
+      "relationship": "CountryHighestAOV",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_ProgramEngagement": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Account__c"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Program_Engagement__c"
+    }
+  },
+  "Aug_ComboCompanyCompleted": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Current_Combo_Company__c"
+      ],
+      "left": "Compute_AccountBVStatus",
+      "left_key": [
+        "Current_Combo_Company__c"
+      ],
+      "right_select": [
+        "AccountBVStatus",
+        "Org_Status_DW__c",
+        "BVSingleLookup.Account.Org_Status_DW__c",
+        "BV.Account.Org_Status_DW__c",
+        "ComboCompany.Org_Status_DW__c",
+        "ComboCompany.BVSingleLookup.Account.Org_Status_DW__c",
+        "ComboCompany.BV.Account.Org_Status_DW__c",
+        "BVCompleted.Account.Org_Status_DW__c",
+        "BVIncomplete.Account.Org_Status_DW__c",
+        "AccountActive",
+        "BVSingleLookup.Account.AccountActive",
+        "BV.Account.AccountActive",
+        "ComboCompany.AccountActive",
+        "ComboCompany.BVSingleLookup.Account.AccountActive",
+        "ComboCompany.BV.Account.AccountActive",
+        "BVCompleted.Account.AccountActive",
+        "BVIncomplete.Account.AccountActive",
+        "BVNotAttrit.AttrittedStatus",
+        "BVSingleLookup.Account.BVNotAttrit.AttrittedStatus",
+        "BV.Account.BVNotAttrit.AttrittedStatus",
+        "ComboCompany.BVNotAttrit.AttrittedStatus",
+        "ComboCompany.BVSingleLookup.Account.BVNotAttrit.AttrittedStatus",
+        "ComboCompany.BV.Account.BVNotAttrit.AttrittedStatus",
+        "BVCompleted.Account.BVNotAttrit.AttrittedStatus",
+        "BVIncomplete.Account.BVNotAttrit.AttrittedStatus"
+      ],
+      "right": "Filter_AccountBVCompleted",
+      "relationship": "ComboCompleted",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "ComputeFinalAccount": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Aug_Activity_CountryCompany",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "defaultValue": "BLANK",
+          "name": "AccountId_Final",
+          "saqlExpression": "case\nwhen ('Case.AccountId' is not null) then 'Case.AccountId'\nwhen ('Compass.CompassAccountId' is not null) then 'Compass.CompassAccountId'\nwhen ('ActionPlan.Compass.CompassAccountId' is not null) then 'ActionPlan.Compass.CompassAccountId'\nwhen ('ConsumptionPlan.Account__c' is not null) then 'ConsumptionPlan.Account__c'\nwhen ('ExecSpon.Account_LookUp__c' is not null) then 'ExecSpon.Account_LookUp__c'\nwhen ( 'PE.Account__c' is not null) then 'PE.Account__c'\nwhen ('Opp.AccountId' is not null) then 'Opp.AccountId'\nwhen ( 'RedAccount.Red_Account__c' is not null) then 'RedAccount.Red_Account__c'\nwhen ( 'GlobalCompany.Id' is not null) then 'GlobalCompany.Id'\nwhen ( 'CountryCompany.Id' is not null) then 'CountryCompany.Id'\nelse 'AccountId'\nend\n\n",
+          "label": "AccountId_Final",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Aug_BV_Contact3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Aug_BV_Contact2",
+      "left_key": [
+        "Contact_3__c"
+      ],
+      "right_select": [
+        "Business_Sponsor__c",
+        "IT_Sponsor__c",
+        "Name"
+      ],
+      "right": "Extract_Contact",
+      "relationship": "Contact3",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_BVNotAttritAccount": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "BVNotAttritAccount"
+    }
+  },
+  "Aug_BV_Contact1": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Aug_BV_Owner",
+      "left_key": [
+        "Contact_1__c"
+      ],
+      "right_select": [
+        "Business_Sponsor__c",
+        "IT_Sponsor__c",
+        "Name"
+      ],
+      "right": "Extract_Contact",
+      "relationship": "Contact1",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Filter_AccountBVCompleted": {
+    "action": "filter",
+    "parameters": {
+      "source": "Compute_AccountBVStatus",
+      "saqlFilter": "'AccountBVStatus'==\"Completed\""
+    }
+  },
+  "Reg_BusinessValue": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Reg_BusinessValue",
+      "alias": "Reg_BusinessValue",
+      "source": "Aug_BV_Blaze"
+    }
+  },
+  "Aug_BV_Contact2": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Aug_BV_Contact1",
+      "left_key": [
+        "Contact_2__c"
+      ],
+      "right_select": [
+        "Business_Sponsor__c",
+        "IT_Sponsor__c",
+        "Name"
+      ],
+      "right": "Extract_Contact",
+      "relationship": "Contact2",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_Activity_SMxMapping": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "UserID_18_digit"
+      ],
+      "left": "ComputeFinalAccount",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "GEO",
+        "Area",
+        "PrMo_Area",
+        "Selling_Role_Name",
+        "SM_Job_Code",
+        "Terr",
+        "JC",
+        "UserID_18_digit"
+      ],
+      "right": "Extract_SMxRef",
+      "relationship": "SM",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Compute_Relative_AccountAOV": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "Global_Company__c"
+      ],
+      "orderBy": [
+        {
+          "name": "AOVTotal",
+          "direction": "desc"
+        }
+      ],
+      "source": "Compute_Account_AOV",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "Id",
+            "offset": "first()"
+          },
+          "name": "HighestAOVAccountId",
+          "label": "HighestAOVAccountId"
+        }
+      ]
+    }
+  },
+  "Aug_ActionPlanRecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_ActionPlan",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "RecordType",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Task_Event": {
+    "action": "append",
+    "parameters": {
+      "enableDisjointedSchemaMerge": true,
+      "sources": [
+        "Extract_Event",
+        "Extract_Task"
+      ]
+    }
+  },
+  "Compute_CompasswithCompanyonly": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Extract_Compass",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "HasCompanyOnly",
+          "saqlExpression": "case when 'Account__c' is null and 'Company__c' is not null then \"True\" else \"False\" end",
+          "label": "HasCompanyOnly",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Aug_Activity_Company": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ComputeFinalCompanyId",
+      "left_key": [
+        "CompanyId_Final"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Company",
+      "relationship": "Company",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Filter_User_BV": {
+    "action": "filter",
+    "parameters": {
+      "source": "Compute_UserBV",
+      "saqlFilter": "'TotalSM' ==\"Yes\" or 'UserHasBV' ==\"Yes\""
+    }
+  },
+  "Aug_CompassCompanywithHighestAOVAccount": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Global_Company__c"
+      ],
+      "left": "Filter_CompasswithCompanyOnly",
+      "left_key": [
+        "Company__c"
+      ],
+      "right_select": [
+        "HighestAOVAccountId"
+      ],
+      "right": "Filter_HighestAOVAccount",
+      "relationship": "HighestAOV",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "ComputeFinalCompanyId": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Aug_Activity_Account",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "CompanyId_Final",
+          "saqlExpression": " 'Account.Global_Company__c'\n",
+          "label": "CompanyId_Final",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Filter_BVCompleted": {
+    "action": "filter",
+    "parameters": {
+      "source": "Compute_BV",
+      "saqlFilter": "'BVStatus'==\"Completed\""
+    }
+  },
+  "Aug_Tasks_SP": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Aug_Task_RecordType",
+      "left_key": [
+        "CustomWhatId"
+      ],
+      "right_select": [
+        "Account__c",
+        "Architecture_Model_Maturity_Level__c",
+        "Business_Process_Value_Maturity_Level__c",
+        "Capability_Assessment_Date__c",
+        "Change_Management_Maturity_Level__c",
+        "Compass.Account__c",
+        "Compass.Company__c",
+        "Compass.CompassAccountId",
+        "Compass.CreatedById",
+        "Compass.CreatedDate",
+        "Compass.HasCompanyOnly",
+        "Compass.Has_Success_Path__c",
+        "Compass.Name",
+        "Compass.OwnerId",
+        "CompassAccount.AOV_Band__c",
+        "CompassAccount.Combo_Company__c",
+        "CompassAccount.Current_Combo_Company__c",
+        "CompassAccount.CSG_Coverage__c",
+        "CompassAccount.CSG_Portfolio__c",
+        "CompassAccount.CSG_Region__c",
+        "CompassAccount.CSG_Subregion__c",
+        "CompassAccount.CSM_lookup__c",
+        "CompassAccount.LeadSM.CSG_Portfolio__c",
+        "CompassAccount.LeadSM.CSG_Region__c",
+        "CompassAccount.LeadSM.CSG_Subregion__c",
+        "CompassAccount.LeadSM.IsActive",
+        "CompassAccount.LeadSM.JobCode__c",
+        "CompassAccount.LeadSM.Manager",
+        "CompassAccount.LeadSM.Manager.JobCode__c",
+        "CompassAccount.LeadSM.Manager.Name",
+        "CompassAccount.LeadSM.ManagerPath",
+        "CompassAccount.LeadSM.Name",
+        "CompassAccount.Name",
+        "CompassAccount.RecordType.Name",
+        "CompassAccount.Region__c",
+        "CompassAccount.Success_Segment__c",
+        "CompassAccount.SupportLevel__c",
+        "Compass_Maturity_Assessment_Presentation__c",
+        "Compass_Maturity_Assessment_Review_Date__c",
+        "Compass_Maturity_Assessment_Score__c",
+        "Compass__c",
+        "Completed_Date__c",
+        "CreatedById",
+        "CreatedDate",
+        "Domain_Assessment_Score__c",
+        "Governance_Maturity_Level__c",
+        "Has_Business_Objective__c",
+        "Id",
+        "Lifecycle__c",
+        "Market_Segment__c",
+        "Name",
+        "New_Ways_of_Working_Maturity_Level__c",
+        "Operating_Model_Maturity_Level__c",
+        "RecordType.Name",
+        "RecordTypeId",
+        "Sentiment__c",
+        "SPStatus",
+        "Team_Members_Maturity_Level__c",
+        "Vision_and_Strategy_Maturity_Level__c",
+        "CompassAccount.Org_Status_DW__c",
+        "SPDaysSinceLastModified",
+        "CompassAccount.AccountActive",
+        "Compass.HighestAOV.CountryHighestAOV.CountryHighestAOVAccountId",
+        "CompassAccount.Id",
+        "CompassAccount.BVNotAttrit.AttrittedStatus"
+      ],
+      "right": "Compute_SuccessPathStatus",
+      "relationship": "SP",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "ComputeRelative_SPTasks": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "CustomWhatId"
+      ],
+      "orderBy": [
+        {
+          "name": "LastModifiedDate",
+          "direction": "desc"
+        }
+      ],
+      "source": "Filter_Tasks_SuccessPath",
+      "computedFields": [
+        {
+          "expression": {
+            "sourceField": "LastModifiedDate",
+            "offset": "first()"
+          },
+          "name": "SPTaskLastmodifiedDate",
+          "label": "SPTaskLastmodifiedDate"
+        }
+      ]
+    }
+  },
+  "Compute_AccountSPStatus": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Aug_Account_SPInProgress",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "AccountSPStatus",
+          "saqlExpression": "case when 'SPCompleted.SPStatus' ==\"Completed\" and \n'SPInprogress.SPStatus'==\"InProgress\" then \"Completed\" when  'SPCompleted.SPStatus' ==\"Completed\" and \n'SPInprogress.SPStatus' is null then \"Completed\" when  'SPCompleted.SPStatus' is null and \n'SPInprogress.SPStatus'==\"InProgress\" then \"InProgress\" else \"No SP Record\" end\n\n",
+          "label": "AccountSPStatus",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Filter_AccountBVNoBVRecord": {
+    "action": "filter",
+    "parameters": {
+      "source": "Compute_AccountBVStatus",
+      "saqlFilter": "'AccountBVStatus'==\"No BV Record\""
+    }
+  },
+  "Compute_Account_AOV": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Extract_Account",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "defaultValue": "0",
+          "precision": 18,
+          "name": "AOVTotal",
+          "saqlExpression": "coalesce('Total_AOV__c',0) ",
+          "scale": 5,
+          "label": "AOVTotal",
+          "type": "Numeric"
+        }
+      ]
+    }
+  }
+}
