@@ -58,9 +58,6 @@ INSTALLED_APPS = [
     # Created apps
     # 'chat',
     'libs',
-    'libs.diff2htmlcompare',
-    'libs.interactor.interactor',
-    'libs.tcrm_automation',
     'main',
 ]
 
