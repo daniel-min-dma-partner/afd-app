@@ -1,0 +1,4212 @@
+{
+  "Join Program Engagements Success Programs": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Program Engagements Owners",
+      "left_key": [
+        "Success_Program__c"
+      ],
+      "right_select": [
+        "Name",
+        "Business_Line__c",
+        "APM_Level_2__c",
+        "APM_Level_1__c",
+        "Business_Outcomes__c",
+        "Category__c",
+        "Engagement_Category__c",
+        "Domain_Cloud__c",
+        "Product_Line__c",
+        "Status__c",
+        "Sub_Status__c",
+        "Sub_Sub_Status__c",
+        "Type__c"
+      ],
+      "right": "Extract Success Program",
+      "relationship": "SuccessProgram",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Add Success Outcome Rollup": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Extract Success Outcomes",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "precision": 18,
+          "name": "Count",
+          "saqlExpression": "1",
+          "scale": 2,
+          "label": "Count",
+          "type": "Numeric"
+        }
+      ]
+    }
+  },
+  "Join Account Owner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Global Account",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "FullPhotoUrl",
+        "Id",
+        "Name",
+        "Department_Number__c",
+        "Department",
+        "Cost_Center__c",
+        "TeamLead.Cost_Center__c",
+        "Director.Cost_Center__c",
+        "Executive.FullPhotoUrl",
+        "Executive.Name",
+        "Executive.Cost_Center__c",
+        "Director.Name",
+        "TeamLead.Name",
+        "Managers",
+        "ManagerPath",
+        "TeamLead.Id",
+        "TeamLead.Department_Number__c",
+        "TeamLead.Department",
+        "TeamLead.Managers",
+        "TeamLead.ManagerPath",
+        "Director.Department_Number__c",
+        "Director.Department",
+        "Director.Managers",
+        "Director.ManagerPath",
+        "Executive.ManagerId",
+        "Executive.Department_Number__c",
+        "Executive.Department",
+        "Executive.Managers",
+        "Executive.ManagerPath"
+      ],
+      "right": "Join User Executive",
+      "relationship": "AccountOwner",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Account Lead AE": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Account Lead SM",
+      "left_key": [
+        "GlobalCompany.AE__c"
+      ],
+      "right_select": [
+        "FullPhotoUrl",
+        "Name",
+        "Department_Number__c",
+        "Department",
+        "Cost_Center__c",
+        "Managers",
+        "ManagerPath",
+        "TeamLead.Id",
+        "TeamLead.Department_Number__c",
+        "TeamLead.Department",
+        "TeamLead.Cost_Center__c",
+        "TeamLead.Managers",
+        "TeamLead.ManagerPath",
+        "Director.Department_Number__c",
+        "Director.Department",
+        "Director.Cost_Center__c",
+        "Director.Managers",
+        "Director.ManagerPath",
+        "Executive.FullPhotoUrl",
+        "Executive.Name",
+        "Executive.ManagerId",
+        "Executive.Department_Number__c",
+        "Executive.Department",
+        "Executive.Cost_Center__c",
+        "Executive.Managers",
+        "Executive.ManagerPath",
+        "TeamLead.Name",
+        "Director.Name"
+      ],
+      "right": "Join User Executive",
+      "relationship": "AE",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Timecard Project": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Timecard Assignment",
+      "left_key": [
+        "pse__Project__c"
+      ],
+      "right_select": [
+        "Account_Number__c",
+        "Name",
+        "RecordTypeId",
+        "OwnerId",
+        "pse__Project_ID__c",
+        "pse__Stage__c",
+        "ProjectStage_c__c",
+        "OpportunityStage__c",
+        "CreatedDate",
+        "OpportunityCloseDate__c",
+        "pse__End_Date__c",
+        "pse__Start_Date__c",
+        "pse__Account__c",
+        "Red_Account__c",
+        "Red_Account_Reason__c",
+        "Opportunity_Amount__c",
+        "Opportunity_Type__c",
+        "pse__Opportunity__c",
+        "pse__Practice__c",
+        "Case__c"
+      ],
+      "right": "Extract Project",
+      "relationship": "Project",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Filter Case": {
+    "action": "filter",
+    "parameters": {
+      "source": "Extract Case",
+      "saqlFilter": "date('CreatedDate_Year', 'CreatedDate_Month', 'CreatedDate_Day') in [\"2 year ago\"..\"current day\"]"
+    }
+  },
+  "Join Case Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Case Owner",
+      "left_key": [
+        "AccountId"
+      ],
+      "right_select": [
+        "AccountOwner.Department",
+        "AccountOwner.Department_Number__c",
+        "AccountOwner.FullPhotoUrl",
+        "AccountOwner.Id",
+        "AccountOwner.Name",
+        "AccountStatus__c",
+        "Account_Owner_Role__c",
+        "AE.Department",
+        "AE.Department_Number__c",
+        "AE.FullPhotoUrl",
+        "AE.Name",
+        "AOV_Band__c",
+        "CFL_Region__c",
+        "Combo_Company__c",
+        "Company.Account_Family_Name__c",
+        "Company.AE__c",
+        "Company.CSG_Portfolio__c",
+        "Company.CSG_Region__c",
+        "Company.CSG_Subregion__c",
+        "Company.CSM__c",
+        "Company.FY17_HT_Secondary_Region__c",
+        "Company.Name",
+        "Company.Sector__c",
+        "Company.Segment__c",
+        "Company.Sub_Sector__c",
+        "Company.Success_lead__c",
+        "Company.Success_Segment__c",
+        "Company.User__c",
+        "Company__c",
+        "CSG_Portfolio__c",
+        "CSG_Region__c",
+        "CSG_Subregion__c",
+        "CSM_lookup__c",
+        "edw_num_licenses__c",
+        "ELA_Type__c",
+        "ExecSponsor.Department",
+        "ExecSponsor.Department_Number__c",
+        "ExecSponsor.FullPhotoUrl",
+        "ExecSponsor.Name",
+        "GlobalCompany.Account_Family_Name__c",
+        "GlobalCompany.AE__c",
+        "GlobalCompany.CSG_Portfolio__c",
+        "GlobalCompany.CSG_Region__c",
+        "GlobalCompany.CSG_Subregion__c",
+        "GlobalCompany.CSM__c",
+        "GlobalCompany.FY17_HT_Secondary_Region__c",
+        "GlobalCompany.Name",
+        "GlobalCompany.Sector__c",
+        "GlobalCompany.Segment__c",
+        "GlobalCompany.Sub_Sector__c",
+        "GlobalCompany.Success_lead__c",
+        "GlobalCompany.Success_Segment__c",
+        "GlobalCompany.User__c",
+        "Global_Company__c",
+        "Id",
+        "Industry",
+        "LeadSM.Department",
+        "LeadSM.Department_Number__c",
+        "LeadSM.FullPhotoUrl",
+        "LeadSM.Name",
+        "Locked_Region__c",
+        "Marketing_Cloud_AOV_Band__c",
+        "MasterRecordId",
+        "Master_Carve__c",
+        "Name",
+        "NameLocal",
+        "Open_Red_Account_Issues__c",
+        "Organization_ID_DW_Case_Sensitive__c",
+        "Organization_ID_DW__c",
+        "Org_Status_DW__c",
+        "OwnerId",
+        "ParentId",
+        "Region_AOV_Band__c",
+        "Region__c",
+        "Segment__c",
+        "SoldDate__c",
+        "Subregion__c",
+        "Success_Segment__c",
+        "SupportLevel__c",
+        "Support_LoB__c",
+        "Support_SBR_Category__c",
+        "Team_Territory__c",
+        "Usage_Segment_Reporting__c",
+        "AccountOwner.Executive.FullPhotoUrl",
+        "AccountOwner.Executive.Name",
+        "LeadSM.Executive.FullPhotoUrl",
+        "LeadSM.Executive.Name",
+        "AE.Executive.FullPhotoUrl",
+        "AE.Executive.Name",
+        "ExecSponsor.Executive.FullPhotoUrl",
+        "ExecSponsor.Executive.Name",
+        "AccountOwner.Cost_Center__c",
+        "AccountOwner.TeamLead.Cost_Center__c",
+        "AccountOwner.Director.Cost_Center__c",
+        "AccountOwner.Executive.Cost_Center__c",
+        "LeadSM.Cost_Center__c",
+        "LeadSM.TeamLead.Cost_Center__c",
+        "LeadSM.Director.Cost_Center__c",
+        "LeadSM.Executive.Cost_Center__c",
+        "AE.Cost_Center__c",
+        "AE.TeamLead.Cost_Center__c",
+        "AE.Director.Cost_Center__c",
+        "AE.Executive.Cost_Center__c",
+        "ExecSponsor.Cost_Center__c",
+        "ExecSponsor.TeamLead.Cost_Center__c",
+        "ExecSponsor.Director.Cost_Center__c",
+        "ExecSponsor.Executive.Cost_Center__c",
+        "AccountOwner.TeamLead.Name",
+        "AccountOwner.Director.Name",
+        "CSG_Coverage__c",
+        "AccountOwner.Managers",
+        "AccountOwner.ManagerPath",
+        "AccountOwner.TeamLead.Id",
+        "AccountOwner.TeamLead.Department_Number__c",
+        "AccountOwner.TeamLead.Department",
+        "AccountOwner.TeamLead.Managers",
+        "AccountOwner.TeamLead.ManagerPath",
+        "LeadSM.Managers",
+        "LeadSM.ManagerPath",
+        "LeadSM.TeamLead.Id",
+        "LeadSM.TeamLead.Department_Number__c",
+        "LeadSM.TeamLead.Department",
+        "LeadSM.TeamLead.Managers",
+        "LeadSM.TeamLead.ManagerPath",
+        "AE.Managers",
+        "AE.ManagerPath",
+        "AE.TeamLead.Id",
+        "AE.TeamLead.Department_Number__c",
+        "AE.TeamLead.Department",
+        "AE.TeamLead.Managers",
+        "AE.TeamLead.ManagerPath",
+        "ExecSponsor.Managers",
+        "ExecSponsor.ManagerPath",
+        "ExecSponsor.TeamLead.Id",
+        "ExecSponsor.TeamLead.Department_Number__c",
+        "ExecSponsor.TeamLead.Department",
+        "ExecSponsor.TeamLead.Managers",
+        "ExecSponsor.TeamLead.ManagerPath",
+        "AccountOwner.Director.Department_Number__c",
+        "AccountOwner.Director.Department",
+        "AccountOwner.Director.Managers",
+        "AccountOwner.Director.ManagerPath",
+        "LeadSM.Director.Department_Number__c",
+        "LeadSM.Director.Department",
+        "LeadSM.Director.Managers",
+        "LeadSM.Director.ManagerPath",
+        "AE.Director.Department_Number__c",
+        "AE.Director.Department",
+        "AE.Director.Managers",
+        "AE.Director.ManagerPath",
+        "ExecSponsor.Director.Department_Number__c",
+        "ExecSponsor.Director.Department",
+        "ExecSponsor.Director.Managers",
+        "ExecSponsor.Director.ManagerPath",
+        "AccountOwner.Executive.ManagerId",
+        "AccountOwner.Executive.Department_Number__c",
+        "AccountOwner.Executive.Department",
+        "AccountOwner.Executive.Managers",
+        "AccountOwner.Executive.ManagerPath",
+        "LeadSM.Executive.ManagerId",
+        "LeadSM.Executive.Department_Number__c",
+        "LeadSM.Executive.Department",
+        "LeadSM.Executive.Managers",
+        "LeadSM.Executive.ManagerPath",
+        "AE.Executive.ManagerId",
+        "AE.Executive.Department_Number__c",
+        "AE.Executive.Department",
+        "AE.Executive.Managers",
+        "AE.Executive.ManagerPath",
+        "ExecSponsor.Executive.ManagerId",
+        "ExecSponsor.Executive.Department_Number__c",
+        "ExecSponsor.Executive.Department",
+        "ExecSponsor.Executive.Managers",
+        "ExecSponsor.Executive.ManagerPath",
+        "LeadSM.TeamLead.Name",
+        "LeadSM.Director.Name",
+        "AE.TeamLead.Name",
+        "AE.Director.Name",
+        "ExecSponsor.TeamLead.Name",
+        "ExecSponsor.Director.Name"
+      ],
+      "right": "Join Account Exec Sponsor",
+      "relationship": "Account",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Contact Executive": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Contact Director",
+      "left_key": [
+        "Director.ReportsToId"
+      ],
+      "right_select": [
+        "Name",
+        "pse__Default_Cost_Rate__c",
+        "pse__Salesforce_User__c",
+        "ReportsToId",
+        "Id"
+      ],
+      "right": "Extract Contact",
+      "relationship": "Executive",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract Assignment": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Project_Name__c"
+        },
+        {
+          "name": "Resource_Name__c"
+        },
+        {
+          "name": "pse__Role__c"
+        },
+        {
+          "name": "ClassType__c"
+        }
+      ],
+      "object": "pse__Assignment__c"
+    }
+  },
+  "Join Timecard Assignment": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract Timecard",
+      "left_key": [
+        "pse__Assignment__c"
+      ],
+      "right_select": [
+        "ClassType__c",
+        "Name",
+        "Project_Name__c",
+        "pse__Role__c",
+        "Resource_Name__c"
+      ],
+      "right": "Extract Assignment",
+      "relationship": "Assignment",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Case RecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Case Account",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract RecordType",
+      "relationship": "RecordType",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Success Outcomes Success Program": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Success Outcomes Owner",
+      "left_key": [
+        "Success_Program__c"
+      ],
+      "right_select": [
+        "Business_Line__c",
+        "APM_Level_1__c",
+        "APM_Level_2__c",
+        "Business_Outcomes__c",
+        "Category__c",
+        "Name",
+        "Engagement_Category__c",
+        "Product_Line__c",
+        "Status__c",
+        "Sub_Status__c",
+        "Sub_Sub_Status__c",
+        "Type__c"
+      ],
+      "right": "Extract Success Program",
+      "relationship": "SuccessProgram",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Case Red Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Case Opportunity",
+      "left_key": [
+        "CEM__c"
+      ],
+      "right_select": [
+        "ACV_at_Risk__c",
+        "Additional_Risk_Detail__c",
+        "Current_Licenses__c",
+        "High_Risk_Architecture__c",
+        "Key_Risk_Category__c",
+        "Name",
+        "Risk_Detail__c",
+        "Status__c",
+        "AOV_Saved__c",
+        "AOV_Lost__c",
+        "Stage__c"
+      ],
+      "right": "Extract Red Account",
+      "relationship": "RedAccount",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Add Fields to Program Engagements": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Join Program Engagements Red Accounts",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "saqlExpression": "case when 'SuccessProgram.Name' == \"Business Capabilities Consulting\" then \"Business Excellence Expertise\" when 'SuccessProgram.Name' matches \"Lightning Beacon\" then \"Strategic Product Initiatives\" when 'SuccessProgram.Name' matches \"Design Thinking for Lightning\" then \"Strategic Product Initiatives\" when 'SuccessProgram.Name' matches \"Evergreen\" then \"Strategic Customer Engagement Management\" when 'SuccessProgram.Name' == \"Product Expertise\" then \"Technical & Architecture Expertise\" when 'SuccessProgram.Name' matches \"VDE\" then \"Technical & Architecture Expertise\" when 'SuccessProgram.Name' == \"eHRA: \" then \"HRA & Peak Readiness Programs\" when 'SuccessProgram.Name' ==  \"Peak Readiness\" then \"HRA & Peak Readiness Programs\" when 'SuccessProgram.Name' matches \"HRA: \" then \"HRA & Peak Readiness Programs\" when 'SuccessProgram.Name' matches \"PEM - \" then \"Partner Engagement Expertise\" when 'SuccessProgram.Name' ==  \"Cross Cloud\" then \"Cloud-Specific Expertise\" when 'SuccessProgram.Name' matches \"COVID\" then \"COVID-19\" when 'SuccessProgram.Name' matches \"Lightning\" then \"Lightning Adoption\" else \"Other\" end",
+          "name": "Team_of_Expertise",
+          "label": "Team of Expertise",
+          "type": "Text"
+        },
+        {
+          "saqlExpression": "case when 'SuccessProgram.Name' is null then \"true\" else \"false\" end",
+          "name": "Missing_Success_Program",
+          "label": "Missing Success Program",
+          "type": "Text"
+        },
+        {
+          "precision": 18,
+          "saqlExpression": "case when 'Account.Region_AOV_Band__c' == \"$0\" then 01 when 'Account.Region_AOV_Band__c' == \"$1-10k\" then 02 when 'Account.Region_AOV_Band__c' == \"$10k-50k\" then 03 when 'Account.Region_AOV_Band__c' == \"$50k-100k\" then 04 when 'Account.Region_AOV_Band__c' == \"$100k-200k\" then 05 when 'Account.Region_AOV_Band__c' == \"$200k-600k\" then 06 when 'Account.Region_AOV_Band__c' == \"$600k-1M\" then 07 when 'Account.Region_AOV_Band__c' == \"$1M-5M\" then 08 when 'Account.Region_AOV_Band__c' == \"$5M-10M\" then 09 when 'Account.Region_AOV_Band__c' == \"$10M-25M\" then 10 when 'Account.Region_AOV_Band__c' == \"$25M+\" then 11 else 0 end",
+          "name": "AOV_Sort",
+          "scale": 2,
+          "label": "AOV Band Sort",
+          "type": "Numeric"
+        }
+      ]
+    }
+  },
+  "Join Case Opportunity": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Case Created By",
+      "left_key": [
+        "Related_Opportunity__c"
+      ],
+      "right_select": [
+        "Name",
+        "StageName",
+        "IsClosed",
+        "CloseDate",
+        "IsWon",
+        "RecordTypeId",
+        "Cloud_Type__c",
+        "Application_Type__c",
+        "ContractType__c",
+        "Type",
+        "Sub_Type__c",
+        "Targeted_Clouds__c",
+        "Amount",
+        "Amount_Won__c",
+        "ExpectedRevenue",
+        "CreatedDate",
+        "Opportunity_Age",
+        "Id"
+      ],
+      "right": "Add Fields to Opportunity",
+      "relationship": "Opportunity",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract Practice": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "pse__Practice_Name_Chain__c"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "pse__Practice__c"
+    }
+  },
+  "Join Contact Team Lead": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract Contact",
+      "left_key": [
+        "ReportsToId"
+      ],
+      "right_select": [
+        "Name",
+        "pse__Default_Cost_Rate__c",
+        "Id",
+        "ReportsToId",
+        "pse__Salesforce_User__c"
+      ],
+      "right": "Extract Contact",
+      "relationship": "TeamLead",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "MasterRecordId"
+        },
+        {
+          "name": "Organization_ID_DW__c"
+        },
+        {
+          "name": "Organization_ID_DW_Case_Sensitive__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "ParentId"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "NameLocal"
+        },
+        {
+          "name": "CFL_Region__c"
+        },
+        {
+          "name": "CSG_Region__c"
+        },
+        {
+          "name": "CSG_Portfolio__c"
+        },
+        {
+          "name": "CSG_Subregion__c"
+        },
+        {
+          "name": "Region_AOV_Band__c"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Subregion__c"
+        },
+        {
+          "name": "Locked_Region__c"
+        },
+        {
+          "name": "Team_Territory__c"
+        },
+        {
+          "name": "Success_Segment__c"
+        },
+        {
+          "name": "Segment__c"
+        },
+        {
+          "name": "Usage_Segment_Reporting__c"
+        },
+        {
+          "name": "Account_Owner_Role__c"
+        },
+        {
+          "name": "Industry"
+        },
+        {
+          "name": "AccountStatus__c"
+        },
+        {
+          "name": "SoldDate__c"
+        },
+        {
+          "name": "Org_Status_DW__c"
+        },
+        {
+          "name": "Master_Carve__c"
+        },
+        {
+          "name": "CSM_lookup__c"
+        },
+        {
+          "name": "ELA_Type__c"
+        },
+        {
+          "name": "SupportLevel__c"
+        },
+        {
+          "name": "Support_LoB__c"
+        },
+        {
+          "name": "Support_SBR_Category__c"
+        },
+        {
+          "name": "Open_Red_Account_Issues__c"
+        },
+        {
+          "name": "Combo_Company__c"
+        },
+        {
+          "name": "Company__c"
+        },
+        {
+          "name": "Global_Company__c"
+        },
+        {
+          "name": "Marketing_Cloud_AOV_Band__c"
+        },
+        {
+          "name": "AOV_Band__c"
+        },
+        {
+          "name": "edw_num_licenses__c"
+        },
+        {
+          "name": "CSG_Coverage__c"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "Join User Director": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join User Team Lead",
+      "left_key": [
+        "TeamLead.ManagerId"
+      ],
+      "right_select": [
+        "Name",
+        "Managers",
+        "ManagerPath",
+        "ManagerId",
+        "FullPhotoUrl",
+        "Department_Number__c",
+        "Department",
+        "Cost_Center__c",
+        "Id"
+      ],
+      "right": "Flatten UserManager",
+      "relationship": "Director",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Program Engagements Owners": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Program Engagements Accounts",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "FullPhotoUrl",
+        "Name",
+        "Department_Number__c",
+        "Department",
+        "Cost_Center__c",
+        "Managers",
+        "ManagerPath",
+        "TeamLead.FullPhotoUrl",
+        "TeamLead.Id",
+        "TeamLead.Name",
+        "TeamLead.Department",
+        "TeamLead.Managers",
+        "TeamLead.ManagerPath",
+        "Director.FullPhotoUrl",
+        "Director.Name",
+        "Director.Department",
+        "Director.Managers",
+        "Director.ManagerPath",
+        "Executive.FullPhotoUrl",
+        "Executive.Name",
+        "Executive.ManagerId",
+        "Executive.Department",
+        "Executive.Managers",
+        "Executive.ManagerPath",
+        "ManagerId",
+        "TeamLead.ManagerId",
+        "Director.ManagerId"
+      ],
+      "right": "Join User Executive",
+      "relationship": "Owner",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Filter Missing Timecards": {
+    "action": "filter",
+    "parameters": {
+      "source": "Extract Missing Timecards",
+      "saqlFilter": "date('CreatedDate_Year', 'CreatedDate_Month', 'CreatedDate_Day') in [\"1 year ago\"..\"current day\"]"
+    }
+  },
+  "Join Success Outcomes Case Success Program": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Success Outcomes Cases",
+      "left_key": [
+        "Case.Success_Program__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract Success Program",
+      "relationship": "CaseSuccessProgram",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Missing Timecards Assignments": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Missing Timecards Contacts",
+      "left_key": [
+        "Assignment__c"
+      ],
+      "right_select": [
+        "Name",
+        "Project_Name__c",
+        "Resource_Name__c",
+        "pse__Role__c",
+        "ClassType__c"
+      ],
+      "right": "Extract Assignment",
+      "relationship": "Assignment",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Register Timecards": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SCPPE Timecards",
+      "alias": "SCPPE_Timecards",
+      "source": "Drop Bucket Fields"
+    }
+  },
+  "Extract Program Engagements": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Account__c"
+        },
+        {
+          "name": "Account_Detail__c"
+        },
+        {
+          "name": "Advisory_Architect_Resource__c"
+        },
+        {
+          "name": "Appexchange_Partners_Blockers__c"
+        },
+        {
+          "name": "As_of_Date__c"
+        },
+        {
+          "name": "Attended__c"
+        },
+        {
+          "name": "Bounces__c"
+        },
+        {
+          "name": "Case__c"
+        },
+        {
+          "name": "CFL_Champion__c"
+        },
+        {
+          "name": "CFL_Resource__c"
+        },
+        {
+          "name": "Classic_MAU_formula__c"
+        },
+        {
+          "name": "Clicks__c"
+        },
+        {
+          "name": "Completed_Webinar_Survey__c"
+        },
+        {
+          "name": "Contact__c"
+        },
+        {
+          "name": "Contact_Match__c"
+        },
+        {
+          "name": "CSAT__c"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "CSG_Regional_Lead__c"
+        },
+        {
+          "name": "CSG_Segment_Lead__c"
+        },
+        {
+          "name": "Data_Loaded__c"
+        },
+        {
+          "name": "Day_Of_Week__c"
+        },
+        {
+          "name": "Delivered__c"
+        },
+        {
+          "name": "Delivery_Description__c"
+        },
+        {
+          "name": "Delivery_Hours__c"
+        },
+        {
+          "name": "Delivery_Job_Function__c"
+        },
+        {
+          "name": "Delivery_Language__c"
+        },
+        {
+          "name": "Delivery_Method__c"
+        },
+        {
+          "name": "Delivery_Region__c"
+        },
+        {
+          "name": "End_Date__c"
+        },
+        {
+          "name": "Engagement_Type__c"
+        },
+        {
+          "name": "Estimated_Delivery_hours__c"
+        },
+        {
+          "name": "Estimated_GMV_Lift__c"
+        },
+        {
+          "name": "Event_Agenda__c"
+        },
+        {
+          "name": "Event_Campaign__c"
+        },
+        {
+          "name": "value_1_5__c"
+        },
+        {
+          "name": "UtilScore4__c"
+        },
+        {
+          "name": "UtilScore3__c"
+        },
+        {
+          "name": "UtilScore2__c"
+        },
+        {
+          "name": "UtilScore1__c"
+        },
+        {
+          "name": "Unsubscribes__c"
+        },
+        {
+          "name": "Type__c"
+        },
+        {
+          "name": "Total_Registered__c"
+        },
+        {
+          "name": "Total_Attended__c"
+        },
+        {
+          "name": "Topic__c"
+        },
+        {
+          "name": "Time_Zone__c"
+        },
+        {
+          "name": "Team_Owner__c"
+        },
+        {
+          "name": "SystemModstamp"
+        },
+        {
+          "name": "Survey_Opt_Out__c"
+        },
+        {
+          "defaultValue": "blank",
+          "name": "Success_Program__c"
+        },
+        {
+          "name": "Sub_Reason__c"
+        },
+        {
+          "name": "Status__c"
+        },
+        {
+          "name": "Status_Reason__c"
+        },
+        {
+          "name": "Success_Program_Owner__c"
+        },
+        {
+          "name": "Start_Minutes__c"
+        },
+        {
+          "name": "Start_Date__c"
+        },
+        {
+          "name": "Source__c"
+        },
+        {
+          "name": "Session_Status__c"
+        },
+        {
+          "name": "Session_Outcome__c"
+        },
+        {
+          "name": "Session_ID__c"
+        },
+        {
+          "name": "Session_ID_new__c"
+        },
+        {
+          "name": "Sales_Leader__c"
+        },
+        {
+          "name": "Salesforce_Host_Knowledge__c"
+        },
+        {
+          "name": "RYG_Status__c"
+        },
+        {
+          "name": "Request_Reason__c"
+        },
+        {
+          "name": "RelatedOpportunity__c"
+        },
+        {
+          "name": "Registration_Cut_off__c"
+        },
+        {
+          "name": "Registered__c"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Regional_Lightning_Champion__c"
+        },
+        {
+          "name": "Red_Account__c"
+        },
+        {
+          "name": "Record_Name__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Program_Source__c"
+        },
+        {
+          "name": "Program_Name__c"
+        },
+        {
+          "name": "Product_Feedback__c"
+        },
+        {
+          "name": "Products__c"
+        },
+        {
+          "name": "Priority__c"
+        },
+        {
+          "name": "Pilot_Target_MAU__c"
+        },
+        {
+          "name": "Phase__c"
+        },
+        {
+          "name": "Private_Event__c"
+        },
+        {
+          "name": "Phase_formula__c"
+        },
+        {
+          "name": "Partner_Host_Knowledge__c"
+        },
+        {
+          "name": "Partner_Account__c"
+        },
+        {
+          "name": "Participant_Email__c"
+        },
+        {
+          "name": "Participant_Full_name__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Opens__c"
+        },
+        {
+          "name": "Next_Steps__c"
+        },
+        {
+          "name": "No_Follow_up_Email__c"
+        },
+        {
+          "name": "Nominate_Customer_for_Lightning_Success__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Marketing_Request__c"
+        },
+        {
+          "name": "Likely_to_Adopt__c"
+        },
+        {
+          "name": "Lightning_Target__c"
+        },
+        {
+          "name": "Lightning_MAU__c"
+        },
+        {
+          "name": "Lightning_MAU_formula__c"
+        },
+        {
+          "name": "LE_Readiness_Check__c"
+        },
+        {
+          "name": "Learn_more__c"
+        },
+        {
+          "name": "Latest_Milestone__c"
+        },
+        {
+          "name": "LDC_Project_Size__c"
+        },
+        {
+          "name": "Job_Title__c"
+        },
+        {
+          "name": "Is_Demand_Gen__c"
+        },
+        {
+          "name": "Internal_Hours__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "GTW_Description_Code__c"
+        },
+        {
+          "name": "Global_Company__c"
+        },
+        {
+          "name": "Fututre_Topic_Sugggestions__c"
+        },
+        {
+          "name": "FY19_Lightning_MAU__c"
+        },
+        {
+          "name": "Facilitator__c"
+        },
+        {
+          "name": "Expected_FY18_MAU__c"
+        },
+        {
+          "name": "Expected_Outcomes__c"
+        },
+        {
+          "name": "External_Registration_Page__c"
+        },
+        {
+          "name": "Executive_Sponsor_Customer__c"
+        },
+        {
+          "name": "Event_Venue_Address__c"
+        },
+        {
+          "name": "Event_Type__c"
+        },
+        {
+          "name": "Event_Topics__c"
+        },
+        {
+          "name": "Event_Start_Time__c"
+        },
+        {
+          "name": "Event_Sponsor__c"
+        },
+        {
+          "name": "Event_Sponsor_Other__c"
+        },
+        {
+          "name": "Event_Category__c"
+        },
+        {
+          "name": "Survey_Sent_Date__c"
+        },
+        {
+          "name": "CreatedById"
+        }
+      ],
+      "object": "Program_Engagement__c"
+    }
+  },
+  "Register Program Engagements": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SCPPE Program Engagements",
+      "alias": "SCPPE_Program_Engagements",
+      "source": "Add Fields to Program Engagements"
+    }
+  },
+  "Join Success Outcomes Renewal Opportunity": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Success Outcomes Services Opportunity",
+      "left_key": [
+        "Renewal_Opportunity__c"
+      ],
+      "right_select": [
+        "Amount",
+        "Amount_Won__c",
+        "Application_Type__c",
+        "CloseDate",
+        "Cloud_Type__c",
+        "ContractType__c",
+        "CreatedDate",
+        "ExpectedRevenue",
+        "IsClosed",
+        "IsWon",
+        "Name",
+        "StageName",
+        "Sub_Type__c",
+        "Targeted_Clouds__c",
+        "Type"
+      ],
+      "right": "Extract Opportunity",
+      "relationship": "RenewalOpportunity",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Contact Director": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Contact Team Lead",
+      "left_key": [
+        "TeamLead.ReportsToId"
+      ],
+      "right_select": [
+        "ReportsToId",
+        "pse__Salesforce_User__c",
+        "pse__Default_Cost_Rate__c",
+        "Name",
+        "Id"
+      ],
+      "right": "Extract Contact",
+      "relationship": "Director",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Built Utilization Bucket": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Add Fields to Timecards",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "saqlExpression": "case when 'Project_Category' == \"Internal\" then \"true\"\n     when 'Project_Category' == \"PTO\" then \"true\"\n     when 'Project_Category' == \"VTO\" then \"true\"\n     when 'Project_Category' == \"Admin\" then \"true\"\n     when 'Project_Category' == \"Training\" then \"true\"\n     else \"External\" end",
+          "name": "Category",
+          "label": "Category",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Join User Executive": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join User Director",
+      "left_key": [
+        "Director.ManagerId"
+      ],
+      "right_select": [
+        "Cost_Center__c",
+        "Department",
+        "Department_Number__c",
+        "FullPhotoUrl",
+        "ManagerId",
+        "ManagerPath",
+        "Managers",
+        "Name"
+      ],
+      "right": "Flatten UserManager",
+      "relationship": "Executive",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Timecard Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Timecard Header",
+      "left_key": [
+        "Project.pse__Account__c"
+      ],
+      "right_select": [
+        "Id",
+        "MasterRecordId",
+        "Organization_ID_DW__c",
+        "Organization_ID_DW_Case_Sensitive__c",
+        "OwnerId",
+        "ParentId",
+        "NameLocal",
+        "CFL_Region__c",
+        "CSG_Region__c",
+        "CSG_Portfolio__c",
+        "CSG_Subregion__c",
+        "Region_AOV_Band__c",
+        "Region__c",
+        "Subregion__c",
+        "Locked_Region__c",
+        "Team_Territory__c",
+        "Success_Segment__c",
+        "Segment__c",
+        "Usage_Segment_Reporting__c",
+        "Account_Owner_Role__c",
+        "Industry",
+        "AccountStatus__c",
+        "SoldDate__c",
+        "Org_Status_DW__c",
+        "Master_Carve__c",
+        "CSM_lookup__c",
+        "ELA_Type__c",
+        "SupportLevel__c",
+        "Support_LoB__c",
+        "Support_SBR_Category__c",
+        "Open_Red_Account_Issues__c",
+        "Combo_Company__c",
+        "Global_Company__c",
+        "Marketing_Cloud_AOV_Band__c",
+        "AOV_Band__c",
+        "edw_num_licenses__c",
+        "Company.Account_Family_Name__c",
+        "Company.CSG_Portfolio__c",
+        "Company.CSG_Region__c",
+        "Company.CSG_Subregion__c",
+        "Company.Segment__c",
+        "Company.Sector__c",
+        "Company.Success_Segment__c",
+        "Company.Name",
+        "Company.Sub_Sector__c",
+        "Company.AE__c",
+        "Company.CSM__c",
+        "Company.Success_lead__c",
+        "Company.User__c",
+        "GlobalCompany.Account_Family_Name__c",
+        "GlobalCompany.CSG_Portfolio__c",
+        "GlobalCompany.CSG_Region__c",
+        "GlobalCompany.CSG_Subregion__c",
+        "GlobalCompany.Segment__c",
+        "GlobalCompany.Sector__c",
+        "GlobalCompany.Success_Segment__c",
+        "GlobalCompany.Name",
+        "GlobalCompany.Sub_Sector__c",
+        "GlobalCompany.FY17_HT_Secondary_Region__c",
+        "GlobalCompany.AE__c",
+        "GlobalCompany.CSM__c",
+        "GlobalCompany.Success_lead__c",
+        "GlobalCompany.User__c",
+        "AccountOwner.FullPhotoUrl",
+        "AccountOwner.Name",
+        "AccountOwner.Department_Number__c",
+        "AccountOwner.Department",
+        "AccountOwner.Cost_Center__c",
+        "AccountOwner.TeamLead.Cost_Center__c",
+        "AccountOwner.Director.Cost_Center__c",
+        "AccountOwner.Executive.FullPhotoUrl",
+        "AccountOwner.Executive.Name",
+        "AccountOwner.Executive.Cost_Center__c",
+        "LeadSM.FullPhotoUrl",
+        "LeadSM.Name",
+        "LeadSM.Department_Number__c",
+        "LeadSM.Department",
+        "LeadSM.Cost_Center__c",
+        "LeadSM.TeamLead.Cost_Center__c",
+        "LeadSM.Director.Cost_Center__c",
+        "LeadSM.Executive.FullPhotoUrl",
+        "LeadSM.Executive.Name",
+        "LeadSM.Executive.Cost_Center__c",
+        "AE.FullPhotoUrl",
+        "AE.Name",
+        "AE.Department_Number__c",
+        "AE.Department",
+        "AE.Cost_Center__c",
+        "AE.TeamLead.Cost_Center__c",
+        "AE.Director.Cost_Center__c",
+        "AE.Executive.FullPhotoUrl",
+        "AE.Executive.Name",
+        "AE.Executive.Cost_Center__c",
+        "ExecSponsor.FullPhotoUrl",
+        "ExecSponsor.Name",
+        "ExecSponsor.Department_Number__c",
+        "ExecSponsor.Department",
+        "ExecSponsor.Cost_Center__c",
+        "ExecSponsor.TeamLead.Cost_Center__c",
+        "ExecSponsor.Director.Cost_Center__c",
+        "ExecSponsor.Executive.FullPhotoUrl",
+        "ExecSponsor.Executive.Name",
+        "ExecSponsor.Executive.Cost_Center__c",
+        "Name",
+        "AccountOwner.TeamLead.Name",
+        "AccountOwner.Director.Name",
+        "CSG_Coverage__c",
+        "AccountOwner.Managers",
+        "AccountOwner.ManagerPath",
+        "AccountOwner.TeamLead.Id",
+        "AccountOwner.TeamLead.Department_Number__c",
+        "AccountOwner.TeamLead.Department",
+        "AccountOwner.TeamLead.Managers",
+        "AccountOwner.TeamLead.ManagerPath",
+        "LeadSM.Managers",
+        "LeadSM.ManagerPath",
+        "LeadSM.TeamLead.Id",
+        "LeadSM.TeamLead.Department_Number__c",
+        "LeadSM.TeamLead.Department",
+        "LeadSM.TeamLead.Managers",
+        "LeadSM.TeamLead.ManagerPath",
+        "AE.Managers",
+        "AE.ManagerPath",
+        "AE.TeamLead.Id",
+        "AE.TeamLead.Department_Number__c",
+        "AE.TeamLead.Department",
+        "AE.TeamLead.Managers",
+        "AE.TeamLead.ManagerPath",
+        "ExecSponsor.Managers",
+        "ExecSponsor.ManagerPath",
+        "ExecSponsor.TeamLead.Id",
+        "ExecSponsor.TeamLead.Department_Number__c",
+        "ExecSponsor.TeamLead.Department",
+        "ExecSponsor.TeamLead.Managers",
+        "ExecSponsor.TeamLead.ManagerPath",
+        "AccountOwner.Director.Department_Number__c",
+        "AccountOwner.Director.Department",
+        "AccountOwner.Director.Managers",
+        "AccountOwner.Director.ManagerPath",
+        "LeadSM.Director.Department_Number__c",
+        "LeadSM.Director.Department",
+        "LeadSM.Director.Managers",
+        "LeadSM.Director.ManagerPath",
+        "AE.Director.Department_Number__c",
+        "AE.Director.Department",
+        "AE.Director.Managers",
+        "AE.Director.ManagerPath",
+        "ExecSponsor.Director.Department_Number__c",
+        "ExecSponsor.Director.Department",
+        "ExecSponsor.Director.Managers",
+        "ExecSponsor.Director.ManagerPath",
+        "AccountOwner.Executive.ManagerId",
+        "AccountOwner.Executive.Department_Number__c",
+        "AccountOwner.Executive.Department",
+        "AccountOwner.Executive.Managers",
+        "AccountOwner.Executive.ManagerPath",
+        "LeadSM.Executive.ManagerId",
+        "LeadSM.Executive.Department_Number__c",
+        "LeadSM.Executive.Department",
+        "LeadSM.Executive.Managers",
+        "LeadSM.Executive.ManagerPath",
+        "AE.Executive.ManagerId",
+        "AE.Executive.Department_Number__c",
+        "AE.Executive.Department",
+        "AE.Executive.Managers",
+        "AE.Executive.ManagerPath",
+        "ExecSponsor.Executive.ManagerId",
+        "ExecSponsor.Executive.Department_Number__c",
+        "ExecSponsor.Executive.Department",
+        "ExecSponsor.Executive.Managers",
+        "ExecSponsor.Executive.ManagerPath",
+        "LeadSM.TeamLead.Name",
+        "LeadSM.Director.Name",
+        "AE.TeamLead.Name",
+        "AE.Director.Name",
+        "ExecSponsor.TeamLead.Name",
+        "ExecSponsor.Director.Name"
+      ],
+      "right": "Join Account Exec Sponsor",
+      "relationship": "Account",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Timecard Practice": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Timecard Account",
+      "left_key": [
+        "Project.pse__Practice__c"
+      ],
+      "right_select": [
+        "Name",
+        "pse__Practice_Name_Chain__c"
+      ],
+      "right": "Extract Practice",
+      "relationship": "Practice",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract Case": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "ContactId"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Reason"
+        },
+        {
+          "name": "Description"
+        },
+        {
+          "name": "Stage__c"
+        },
+        {
+          "name": "Status"
+        },
+        {
+          "name": "Sub_Status__c"
+        },
+        {
+          "name": "IsClosed"
+        },
+        {
+          "name": "Date_Time_Opened__c"
+        },
+        {
+          "name": "CaseNumber"
+        },
+        {
+          "name": "AdministrationMinutes__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Origin"
+        },
+        {
+          "name": "Related_Case__c"
+        },
+        {
+          "name": "Resolution__c"
+        },
+        {
+          "name": "Total_Case_Admin_Minutes__c"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "Support_Case_Owner__c"
+        },
+        {
+          "name": "CEM__c"
+        },
+        {
+          "name": "Opportunity_Close_Date__c"
+        },
+        {
+          "name": "Related_Opportunity__c"
+        },
+        {
+          "name": "Amount__c"
+        },
+        {
+          "name": "Success_Program__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Engagement_Type__c"
+        },
+        {
+          "name": "Engagement_Start_Date__c"
+        },
+        {
+          "name": "Duration_of_Engagement__c"
+        },
+        {
+          "name": "End_Date__c"
+        },
+        {
+          "name": "Recommendation_Next_Step__c"
+        },
+        {
+          "name": "Actual_delivery_date__c"
+        },
+        {
+          "name": "General_Application_Area__c"
+        },
+        {
+          "name": "FunctionalArea__c"
+        },
+        {
+          "name": "Sub_Functional_Area__c"
+        },
+        {
+          "name": "cloud_product__c"
+        },
+        {
+          "name": "Cloud__c"
+        },
+        {
+          "name": "Problem_Cloud__c"
+        },
+        {
+          "name": "Sub_Cloud__c"
+        },
+        {
+          "name": "Related_Product__c"
+        },
+        {
+          "name": "Product_Feature_s__c"
+        },
+        {
+          "name": "NonProfitAccount__c"
+        },
+        {
+          "name": "HT_Success_Program__c"
+        },
+        {
+          "name": "IsEscalated"
+        },
+        {
+          "name": "Age_days__c"
+        },
+        {
+          "name": "Age_hours__c"
+        },
+        {
+          "name": "Customer_Age__c"
+        },
+        {
+          "name": "Triage__c"
+        },
+        {
+          "name": "Triage_Start_Date__c"
+        },
+        {
+          "name": "Usage_Score_120_Days__c"
+        },
+        {
+          "name": "Usage_Score_30_Days__c"
+        },
+        {
+          "name": "Usage_Score_60_Days__c"
+        },
+        {
+          "name": "Usage_Score_90_Days__c"
+        },
+        {
+          "name": "Utilization_Score_EWS__c"
+        },
+        {
+          "name": "CSR_Score__c"
+        },
+        {
+          "name": "CSR_Score_2_0_BETA__c"
+        },
+        {
+          "name": "Implementation_Strategy__c"
+        },
+        {
+          "name": "AE_Role__c"
+        },
+        {
+          "name": "AE_Region__c"
+        },
+        {
+          "name": "AE_Classification__c"
+        },
+        {
+          "name": "AssetId"
+        },
+        {
+          "name": "MasterRecordId"
+        },
+        {
+          "name": "Organization_Id__c"
+        },
+        {
+          "name": "HTCustomerOrgId_S2S__c"
+        },
+        {
+          "name": "ParentId"
+        },
+        {
+          "name": "TLP_CRM__c"
+        },
+        {
+          "name": "Subject"
+        },
+        {
+          "name": "CROverall_Notes__c"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "defaultValue": null,
+          "firstDayOfWeek": 1,
+          "name": "CreatedDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "firstDayOfWeek": 1,
+          "name": "ClosedDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Committed_Completion_Date__c"
+        },
+        {
+          "name": "Requested_Delivery_Date__c"
+        },
+        {
+          "name": "CFL_Portfolio__c"
+        },
+        {
+          "name": "CSG_Subregion__c"
+        }
+      ],
+      "object": "Case"
+    }
+  },
+  "Join Program Engagements Red Accounts": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Program Engagements Opportunity",
+      "left_key": [
+        "Red_Account__c"
+      ],
+      "right_select": [
+        "ACV_at_Risk__c",
+        "Additional_Risk_Detail__c",
+        "Current_Licenses__c",
+        "High_Risk_Architecture__c",
+        "Key_Risk_Category__c",
+        "Name",
+        "Risk_Detail__c",
+        "Status__c",
+        "AOV_Saved__c",
+        "AOV_Lost__c",
+        "Stage__c"
+      ],
+      "right": "Extract Red Account",
+      "relationship": "RedAccount",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Case Opportunity RecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Case Red Account",
+      "left_key": [
+        "Opportunity.RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract RecordType",
+      "relationship": "OpportunityRecordType",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract Project": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Case__c"
+        },
+        {
+          "name": "Account_Number__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "pse__Project_ID__c"
+        },
+        {
+          "name": "pse__Stage__c"
+        },
+        {
+          "name": "ProjectStage_c__c"
+        },
+        {
+          "name": "OpportunityStage__c"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "OpportunityCloseDate__c"
+        },
+        {
+          "name": "pse__End_Date__c"
+        },
+        {
+          "name": "pse__Start_Date__c"
+        },
+        {
+          "name": "pse__Account__c"
+        },
+        {
+          "name": "Red_Account__c"
+        },
+        {
+          "name": "Red_Account_Reason__c"
+        },
+        {
+          "name": "Opportunity_Amount__c"
+        },
+        {
+          "name": "Opportunity_Type__c"
+        },
+        {
+          "name": "pse__Opportunity__c"
+        },
+        {
+          "name": "pse__Practice__c"
+        }
+      ],
+      "object": "pse__Proj__c"
+    }
+  },
+  "Filter Timecards": {
+    "action": "filter",
+    "parameters": {
+      "source": "Join Timecard Success Programs",
+      "saqlFilter": "date('CreatedDate_Year', 'CreatedDate_Month', 'CreatedDate_Day') in [\"1 year ago\"..\"current day\"]"
+    }
+  },
+  "Register Missing Timecards": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SCPPE Missing Timecards",
+      "alias": "SCPPE_Missing_Timecards",
+      "source": "Join Missing Timecards Assignments"
+    }
+  },
+  "Join User Team Lead": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Flatten UserManager",
+      "left_key": [
+        "ManagerId"
+      ],
+      "right_select": [
+        "FullPhotoUrl",
+        "Id",
+        "Name",
+        "ManagerId",
+        "Department_Number__c",
+        "Department",
+        "Cost_Center__c",
+        "Managers",
+        "ManagerPath"
+      ],
+      "right": "Flatten UserManager",
+      "relationship": "TeamLead",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Success Outcomes Owner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Success Outcomes Account",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "TeamLead.Name",
+        "TeamLead.FullPhotoUrl",
+        "Executive.FullPhotoUrl",
+        "Executive.Name",
+        "FullPhotoUrl",
+        "Director.Name",
+        "Director.FullPhotoUrl",
+        "Cost_Center__c",
+        "Department",
+        "Managers",
+        "ManagerPath",
+        "TeamLead.Id",
+        "TeamLead.Department_Number__c",
+        "TeamLead.Department",
+        "TeamLead.Managers",
+        "TeamLead.ManagerPath",
+        "Director.Department_Number__c",
+        "Director.Department",
+        "Director.Managers",
+        "Director.ManagerPath",
+        "Executive.ManagerId",
+        "Executive.Department_Number__c",
+        "Executive.Department",
+        "Executive.Managers",
+        "Executive.ManagerPath"
+      ],
+      "right": "Join User Executive",
+      "relationship": "Owner",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Case PSA": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Case__c"
+      ],
+      "left": "Join Case Success Outcome MultiVal",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Case__c",
+        "Name"
+      ],
+      "right": "Extract Project",
+      "relationship": "Project",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract Company": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Account_Family_Name__c"
+        },
+        {
+          "name": "CSG_Portfolio__c"
+        },
+        {
+          "name": "CSG_Region__c"
+        },
+        {
+          "name": "CSG_Subregion__c"
+        },
+        {
+          "name": "Segment__c"
+        },
+        {
+          "name": "Sector__c"
+        },
+        {
+          "name": "Success_Segment__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Sub_Sector__c"
+        },
+        {
+          "name": "FY17_HT_Secondary_Region__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "AE__c"
+        },
+        {
+          "name": "CSM__c"
+        },
+        {
+          "name": "Success_lead__c"
+        },
+        {
+          "name": "User__c"
+        }
+      ],
+      "object": "Company__c"
+    }
+  },
+  "Join Case History Case": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract Case History",
+      "left_key": [
+        "CaseId"
+      ],
+      "right_select": [
+        "IsClosed",
+        "CaseNumber",
+        "Origin",
+        "Type",
+        "Related_Product__c",
+        "CreatedDate",
+        "ClosedDate",
+        "Owner.Name",
+        "Owner.TeamLead.FullPhotoUrl",
+        "Owner.TeamLead.Name",
+        "Owner.Director.FullPhotoUrl",
+        "Owner.Director.Name",
+        "Owner.Executive.FullPhotoUrl",
+        "Owner.Executive.Name",
+        "Account.Name",
+        "Account.AccountOwner.Director.Cost_Center__c",
+        "Account.AccountOwner.Executive.FullPhotoUrl",
+        "Account.AccountOwner.Executive.Name",
+        "Account.LeadSM.Executive.FullPhotoUrl",
+        "Account.LeadSM.Executive.Name",
+        "Account.AE.Executive.Name",
+        "Account.ExecSponsor.Executive.FullPhotoUrl",
+        "Account.ExecSponsor.Executive.Name",
+        "AOV_Sort",
+        "Missing_Success_Program",
+        "Account.AccountOwner.FullPhotoUrl",
+        "Account.AccountOwner.Name",
+        "Account.AE.Name",
+        "Account.AOV_Band__c",
+        "Account.CFL_Region__c",
+        "Account.Company.CSG_Portfolio__c",
+        "Account.Company.CSG_Region__c",
+        "Account.Company.CSG_Subregion__c",
+        "Account.Company.Name",
+        "Account.Company.Segment__c",
+        "Account.Company.Sector__c",
+        "Account.Company.Sub_Sector__c",
+        "Account.Company.Success_Segment__c",
+        "Account.CSG_Portfolio__c",
+        "Account.CSG_Region__c",
+        "Account.CSG_Subregion__c",
+        "Account.Industry",
+        "Account.GlobalCompany.Name",
+        "Account.LeadSM.Name",
+        "Account.Organization_ID_DW_Case_Sensitive__c",
+        "Account.Organization_ID_DW__c",
+        "Account.Region__c",
+        "Account.Segment__c",
+        "Account.Region_AOV_Band__c",
+        "Account.Subregion__c",
+        "Account.Success_Segment__c",
+        "Account.SupportLevel__c",
+        "CreatedBy.Name",
+        "Opportunity.Name",
+        "Opportunity.Amount",
+        "Opportunity.CloseDate",
+        "Opportunity.ExpectedRevenue",
+        "Opportunity.IsWon",
+        "Opportunity.Amount_Won__c",
+        "Opportunity.StageName",
+        "Opportunity.Type",
+        "Opportunity_Close_Date__c",
+        "RecordType.Name",
+        "RedAccount.Name",
+        "RedAccount.Status__c",
+        "Stage__c",
+        "Status",
+        "Sub_Status__c",
+        "SuccessProgram.Name",
+        "Team_of_Expertise",
+        "RedAccount.AOV_Saved__c",
+        "RedAccount.AOV_Lost__c",
+        "Account.AccountOwner.TeamLead.Name",
+        "Account.AccountOwner.Director.Name",
+        "Opportunity.Id",
+        "Account.CSG_Coverage__c",
+        "Committed_Completion_Date__c",
+        "Requested_Delivery_Date__c",
+        "Missing_Success_Outcome",
+        "SuccessOutcome.Count",
+        "CFL_Portfolio__c",
+        "CSG_Subregion__c",
+        "SuccessOutcome.Case.Success_Program__c",
+        "SuccessOutcome.CaseSuccessProgram.Name",
+        "Missing_PSA",
+        "Owner.Managers",
+        "Owner.ManagerPath",
+        "Owner.TeamLead.Id",
+        "Owner.TeamLead.Department_Number__c",
+        "Owner.TeamLead.Department",
+        "Owner.TeamLead.Managers",
+        "Owner.TeamLead.ManagerPath",
+        "Account.AccountOwner.Managers",
+        "Account.AccountOwner.ManagerPath",
+        "Account.AccountOwner.TeamLead.Id",
+        "Account.AccountOwner.TeamLead.Department_Number__c",
+        "Account.AccountOwner.TeamLead.Department",
+        "Account.AccountOwner.TeamLead.Managers",
+        "Account.AccountOwner.TeamLead.ManagerPath",
+        "Account.LeadSM.Managers",
+        "Account.LeadSM.ManagerPath",
+        "Account.LeadSM.TeamLead.Id",
+        "Account.LeadSM.TeamLead.Department_Number__c",
+        "Account.LeadSM.TeamLead.Department",
+        "Account.LeadSM.TeamLead.Managers",
+        "Account.LeadSM.TeamLead.ManagerPath",
+        "Account.AE.Managers",
+        "Account.AE.ManagerPath",
+        "Account.AE.TeamLead.Id",
+        "Account.AE.TeamLead.Department_Number__c",
+        "Account.AE.TeamLead.Department",
+        "Account.AE.TeamLead.Managers",
+        "Account.AE.TeamLead.ManagerPath",
+        "Account.ExecSponsor.Managers",
+        "Account.ExecSponsor.ManagerPath",
+        "Account.ExecSponsor.TeamLead.Id",
+        "Account.ExecSponsor.TeamLead.Department_Number__c",
+        "Account.ExecSponsor.TeamLead.Department",
+        "Account.ExecSponsor.TeamLead.Managers",
+        "Account.ExecSponsor.TeamLead.ManagerPath",
+        "CreatedBy.Managers",
+        "CreatedBy.ManagerPath",
+        "CreatedBy.TeamLead.Id",
+        "CreatedBy.TeamLead.Department_Number__c",
+        "CreatedBy.TeamLead.Department",
+        "CreatedBy.TeamLead.Managers",
+        "CreatedBy.TeamLead.ManagerPath",
+        "SuccessOutcome.CaseOwner.Managers",
+        "SuccessOutcome.CaseOwner.ManagerPath",
+        "SuccessOutcome.CaseOwner.TeamLead.Id",
+        "SuccessOutcome.CaseOwner.TeamLead.Department",
+        "SuccessOutcome.CaseOwner.TeamLead.Managers",
+        "SuccessOutcome.CaseOwner.TeamLead.ManagerPath",
+        "SuccessOutcome.Account.AccountOwner.Managers",
+        "SuccessOutcome.Account.AccountOwner.ManagerPath",
+        "SuccessOutcome.Account.AccountOwner.TeamLead.Id",
+        "SuccessOutcome.Account.AccountOwner.TeamLead.Department_Number__c",
+        "SuccessOutcome.Account.AccountOwner.TeamLead.Department",
+        "SuccessOutcome.Account.AccountOwner.TeamLead.Managers",
+        "SuccessOutcome.Account.AccountOwner.TeamLead.ManagerPath",
+        "SuccessOutcome.Account.LeadSM.Managers",
+        "SuccessOutcome.Account.LeadSM.ManagerPath",
+        "SuccessOutcome.Account.LeadSM.TeamLead.Id",
+        "SuccessOutcome.Account.LeadSM.TeamLead.Department_Number__c",
+        "SuccessOutcome.Account.LeadSM.TeamLead.Department",
+        "SuccessOutcome.Account.LeadSM.TeamLead.Managers",
+        "SuccessOutcome.Account.LeadSM.TeamLead.ManagerPath",
+        "SuccessOutcome.Account.AE.Managers",
+        "SuccessOutcome.Account.AE.ManagerPath",
+        "SuccessOutcome.Account.AE.TeamLead.Id",
+        "SuccessOutcome.Account.AE.TeamLead.Department_Number__c",
+        "SuccessOutcome.Account.AE.TeamLead.Department",
+        "SuccessOutcome.Account.AE.TeamLead.Managers",
+        "SuccessOutcome.Account.AE.TeamLead.ManagerPath",
+        "SuccessOutcome.Owner.Managers",
+        "SuccessOutcome.Owner.ManagerPath",
+        "SuccessOutcome.Owner.TeamLead.Id",
+        "SuccessOutcome.Owner.TeamLead.Department_Number__c",
+        "SuccessOutcome.Owner.TeamLead.Department",
+        "SuccessOutcome.Owner.TeamLead.Managers",
+        "SuccessOutcome.Owner.TeamLead.ManagerPath",
+        "Owner.Director.Department_Number__c",
+        "Owner.Director.Department",
+        "Owner.Director.Managers",
+        "Owner.Director.ManagerPath",
+        "Account.AccountOwner.Director.Department_Number__c",
+        "Account.AccountOwner.Director.Department",
+        "Account.AccountOwner.Director.Managers",
+        "Account.AccountOwner.Director.ManagerPath",
+        "Account.LeadSM.Director.Department_Number__c",
+        "Account.LeadSM.Director.Department",
+        "Account.LeadSM.Director.Managers",
+        "Account.LeadSM.Director.ManagerPath",
+        "Account.AE.Director.Department_Number__c",
+        "Account.AE.Director.Department",
+        "Account.AE.Director.Managers",
+        "Account.AE.Director.ManagerPath",
+        "Account.ExecSponsor.Director.Department_Number__c",
+        "Account.ExecSponsor.Director.Department",
+        "Account.ExecSponsor.Director.Managers",
+        "Account.ExecSponsor.Director.ManagerPath",
+        "CreatedBy.Director.Department_Number__c",
+        "CreatedBy.Director.Department",
+        "CreatedBy.Director.Managers",
+        "CreatedBy.Director.ManagerPath",
+        "SuccessOutcome.CaseOwner.Director.Department",
+        "SuccessOutcome.CaseOwner.Director.Managers",
+        "SuccessOutcome.CaseOwner.Director.ManagerPath",
+        "SuccessOutcome.Account.AccountOwner.Director.Department_Number__c",
+        "SuccessOutcome.Account.AccountOwner.Director.Department",
+        "SuccessOutcome.Account.AccountOwner.Director.Managers",
+        "SuccessOutcome.Account.AccountOwner.Director.ManagerPath",
+        "SuccessOutcome.Account.LeadSM.Director.Department_Number__c",
+        "SuccessOutcome.Account.LeadSM.Director.Department",
+        "SuccessOutcome.Account.LeadSM.Director.Managers",
+        "SuccessOutcome.Account.LeadSM.Director.ManagerPath",
+        "SuccessOutcome.Account.AE.Director.Department_Number__c",
+        "SuccessOutcome.Account.AE.Director.Department",
+        "SuccessOutcome.Account.AE.Director.Managers",
+        "SuccessOutcome.Account.AE.Director.ManagerPath",
+        "SuccessOutcome.Owner.Director.Department_Number__c",
+        "SuccessOutcome.Owner.Director.Department",
+        "SuccessOutcome.Owner.Director.Managers",
+        "SuccessOutcome.Owner.Director.ManagerPath",
+        "Owner.Executive.ManagerId",
+        "Owner.Executive.Department_Number__c",
+        "Owner.Executive.Department",
+        "Owner.Executive.Managers",
+        "Owner.Executive.ManagerPath",
+        "Account.AccountOwner.Executive.ManagerId",
+        "Account.AccountOwner.Executive.Department_Number__c",
+        "Account.AccountOwner.Executive.Department",
+        "Account.AccountOwner.Executive.Managers",
+        "Account.AccountOwner.Executive.ManagerPath",
+        "Account.LeadSM.Executive.ManagerId",
+        "Account.LeadSM.Executive.Department_Number__c",
+        "Account.LeadSM.Executive.Department",
+        "Account.LeadSM.Executive.Managers",
+        "Account.LeadSM.Executive.ManagerPath",
+        "Account.AE.Executive.ManagerId",
+        "Account.AE.Executive.Department_Number__c",
+        "Account.AE.Executive.Department",
+        "Account.AE.Executive.Managers",
+        "Account.AE.Executive.ManagerPath",
+        "Account.ExecSponsor.Executive.ManagerId",
+        "Account.ExecSponsor.Executive.Department_Number__c",
+        "Account.ExecSponsor.Executive.Department",
+        "Account.ExecSponsor.Executive.Managers",
+        "Account.ExecSponsor.Executive.ManagerPath",
+        "CreatedBy.Executive.ManagerId",
+        "CreatedBy.Executive.Department_Number__c",
+        "CreatedBy.Executive.Department",
+        "CreatedBy.Executive.Managers",
+        "CreatedBy.Executive.ManagerPath",
+        "SuccessOutcome.CaseOwner.Executive.ManagerId",
+        "SuccessOutcome.CaseOwner.Executive.Department",
+        "SuccessOutcome.CaseOwner.Executive.Managers",
+        "SuccessOutcome.CaseOwner.Executive.ManagerPath",
+        "SuccessOutcome.Account.AccountOwner.Executive.ManagerId",
+        "SuccessOutcome.Account.AccountOwner.Executive.Department_Number__c",
+        "SuccessOutcome.Account.AccountOwner.Executive.Department",
+        "SuccessOutcome.Account.AccountOwner.Executive.Managers",
+        "SuccessOutcome.Account.AccountOwner.Executive.ManagerPath",
+        "SuccessOutcome.Account.LeadSM.Executive.ManagerId",
+        "SuccessOutcome.Account.LeadSM.Executive.Department_Number__c",
+        "SuccessOutcome.Account.LeadSM.Executive.Department",
+        "SuccessOutcome.Account.LeadSM.Executive.Managers",
+        "SuccessOutcome.Account.LeadSM.Executive.ManagerPath",
+        "SuccessOutcome.Account.AE.Executive.ManagerId",
+        "SuccessOutcome.Account.AE.Executive.Department_Number__c",
+        "SuccessOutcome.Account.AE.Executive.Department",
+        "SuccessOutcome.Account.AE.Executive.Managers",
+        "SuccessOutcome.Account.AE.Executive.ManagerPath",
+        "SuccessOutcome.Owner.Executive.ManagerId",
+        "SuccessOutcome.Owner.Executive.Department_Number__c",
+        "SuccessOutcome.Owner.Executive.Department",
+        "SuccessOutcome.Owner.Executive.Managers",
+        "SuccessOutcome.Owner.Executive.ManagerPath",
+        "Account.LeadSM.TeamLead.Name",
+        "Account.LeadSM.Director.Name",
+        "SuccessOutcome.Account.LeadSM.TeamLead.Name",
+        "SuccessOutcome.Account.LeadSM.Director.Name",
+        "Account.AE.TeamLead.Name",
+        "Account.AE.Director.Name",
+        "SuccessOutcome.Account.AE.TeamLead.Name",
+        "SuccessOutcome.Account.AE.Director.Name",
+        "Account.ExecSponsor.TeamLead.Name",
+        "Account.ExecSponsor.Director.Name",
+        "SuccessOutcome.CaseOwner.FullPhotoUrl",
+        "SuccessOutcome.CaseOwner.Department_Number__c",
+        "SuccessOutcome.CaseOwner.Department",
+        "SuccessOutcome.CaseOwner.Cost_Center__c",
+        "SuccessOutcome.CaseOwner.TeamLead.FullPhotoUrl",
+        "SuccessOutcome.CaseOwner.Director.FullPhotoUrl",
+        "SuccessOutcome.CaseOwner.Executive.FullPhotoUrl",
+        "RedAccount.Stage__c",
+        "SuccessOutcome.RedAccount.Stage__c",
+        "Project.Case__c",
+        "Project.Name"
+      ],
+      "right": "Add Fields to Case",
+      "relationship": "Case",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract Success Program": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Status__c"
+        },
+        {
+          "name": "Sub_Status__c"
+        },
+        {
+          "name": "Sub_Sub_Status__c"
+        },
+        {
+          "name": "Development_Stage__c"
+        },
+        {
+          "name": "Domain_Cloud__c"
+        },
+        {
+          "name": "APM_Level_1__c"
+        },
+        {
+          "name": "APM_Level_2__c"
+        },
+        {
+          "name": "Product_Line__c"
+        },
+        {
+          "name": "Engagement_Category__c"
+        },
+        {
+          "name": "Type__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Delivery_Specialist_Type__c"
+        },
+        {
+          "name": "Category__c"
+        },
+        {
+          "name": "Days_Before_Outcome_Verification__c"
+        },
+        {
+          "name": "Business_Line__c"
+        },
+        {
+          "name": "Business_Outcomes__c"
+        }
+      ],
+      "object": "Success_Program__c"
+    }
+  },
+  "Join Program Engagements Cases": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract Program Engagements",
+      "left_key": [
+        "Case__c"
+      ],
+      "right_select": [
+        "Actual_delivery_date__c",
+        "AdministrationMinutes__c",
+        "AE_Classification__c",
+        "AE_Region__c",
+        "Age_days__c",
+        "Age_hours__c",
+        "Amount__c",
+        "CaseNumber",
+        "ClosedDate",
+        "Cloud__c",
+        "CreatedDate",
+        "Customer_Age__c",
+        "Duration_of_Engagement__c",
+        "End_Date__c",
+        "Engagement_Type__c",
+        "Engagement_Start_Date__c",
+        "IsClosed",
+        "RecordType.Name",
+        "Stage__c",
+        "Status",
+        "Sub_Cloud__c",
+        "Sub_Status__c",
+        "Account.AccountOwner.TeamLead.Name",
+        "Account.AccountOwner.Director.Name",
+        "Account.CSG_Coverage__c",
+        "Committed_Completion_Date__c",
+        "Requested_Delivery_Date__c",
+        "CFL_Portfolio__c",
+        "CSG_Subregion__c",
+        "Owner.Managers",
+        "Owner.ManagerPath",
+        "Owner.TeamLead.Id",
+        "Owner.TeamLead.Department_Number__c",
+        "Owner.TeamLead.Department",
+        "Owner.TeamLead.Managers",
+        "Owner.TeamLead.ManagerPath",
+        "Account.AccountOwner.Managers",
+        "Account.AccountOwner.ManagerPath",
+        "Account.AccountOwner.TeamLead.Id",
+        "Account.AccountOwner.TeamLead.Department_Number__c",
+        "Account.AccountOwner.TeamLead.Department",
+        "Account.AccountOwner.TeamLead.Managers",
+        "Account.AccountOwner.TeamLead.ManagerPath",
+        "Account.LeadSM.Managers",
+        "Account.LeadSM.ManagerPath",
+        "Account.LeadSM.TeamLead.Id",
+        "Account.LeadSM.TeamLead.Department_Number__c",
+        "Account.LeadSM.TeamLead.Department",
+        "Account.LeadSM.TeamLead.Managers",
+        "Account.LeadSM.TeamLead.ManagerPath",
+        "Account.AE.Managers",
+        "Account.AE.ManagerPath",
+        "Account.AE.TeamLead.Id",
+        "Account.AE.TeamLead.Department_Number__c",
+        "Account.AE.TeamLead.Department",
+        "Account.AE.TeamLead.Managers",
+        "Account.AE.TeamLead.ManagerPath",
+        "Account.ExecSponsor.Managers",
+        "Account.ExecSponsor.ManagerPath",
+        "Account.ExecSponsor.TeamLead.Id",
+        "Account.ExecSponsor.TeamLead.Department_Number__c",
+        "Account.ExecSponsor.TeamLead.Department",
+        "Account.ExecSponsor.TeamLead.Managers",
+        "Account.ExecSponsor.TeamLead.ManagerPath",
+        "Owner.Director.Department_Number__c",
+        "Owner.Director.Department",
+        "Owner.Director.Managers",
+        "Owner.Director.ManagerPath",
+        "Account.AccountOwner.Director.Department_Number__c",
+        "Account.AccountOwner.Director.Department",
+        "Account.AccountOwner.Director.Managers",
+        "Account.AccountOwner.Director.ManagerPath",
+        "Account.LeadSM.Director.Department_Number__c",
+        "Account.LeadSM.Director.Department",
+        "Account.LeadSM.Director.Managers",
+        "Account.LeadSM.Director.ManagerPath",
+        "Account.AE.Director.Department_Number__c",
+        "Account.AE.Director.Department",
+        "Account.AE.Director.Managers",
+        "Account.AE.Director.ManagerPath",
+        "Account.ExecSponsor.Director.Department_Number__c",
+        "Account.ExecSponsor.Director.Department",
+        "Account.ExecSponsor.Director.Managers",
+        "Account.ExecSponsor.Director.ManagerPath",
+        "Owner.Executive.ManagerId",
+        "Owner.Executive.Department_Number__c",
+        "Owner.Executive.Department",
+        "Owner.Executive.Managers",
+        "Owner.Executive.ManagerPath",
+        "Account.AccountOwner.Executive.ManagerId",
+        "Account.AccountOwner.Executive.Department_Number__c",
+        "Account.AccountOwner.Executive.Department",
+        "Account.AccountOwner.Executive.Managers",
+        "Account.AccountOwner.Executive.ManagerPath",
+        "Account.LeadSM.Executive.ManagerId",
+        "Account.LeadSM.Executive.Department_Number__c",
+        "Account.LeadSM.Executive.Department",
+        "Account.LeadSM.Executive.Managers",
+        "Account.LeadSM.Executive.ManagerPath",
+        "Account.AE.Executive.ManagerId",
+        "Account.AE.Executive.Department_Number__c",
+        "Account.AE.Executive.Department",
+        "Account.AE.Executive.Managers",
+        "Account.AE.Executive.ManagerPath",
+        "Account.ExecSponsor.Executive.ManagerId",
+        "Account.ExecSponsor.Executive.Department_Number__c",
+        "Account.ExecSponsor.Executive.Department",
+        "Account.ExecSponsor.Executive.Managers",
+        "Account.ExecSponsor.Executive.ManagerPath",
+        "Account.LeadSM.TeamLead.Name",
+        "Account.LeadSM.Director.Name",
+        "Account.AE.TeamLead.Name",
+        "Account.AE.Director.Name",
+        "Account.ExecSponsor.TeamLead.Name",
+        "Account.ExecSponsor.Director.Name"
+      ],
+      "right": "Filter Case RecordType",
+      "relationship": "Case",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Flatten UserManager": {
+    "schema": {
+      "objects": [
+        {
+          "label": "UserWithRoles",
+          "fields": [
+            {
+              "name": "Managers",
+              "label": "Managers",
+              "isSystemField": false
+            },
+            {
+              "name": "ManagerPath",
+              "label": "ManagerPath",
+              "isSystemField": false
+            }
+          ]
+        }
+      ]
+    },
+    "action": "flatten",
+    "parameters": {
+      "include_self_id": true,
+      "self_field": "Id",
+      "multi_field": "Managers",
+      "parent_field": "ManagerId",
+      "path_field": "ManagerPath",
+      "source": "Extract User"
+    }
+  },
+  "Extract Red Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Status__c"
+        },
+        {
+          "name": "ACV_at_Risk__c"
+        },
+        {
+          "name": "Risk_Detail__c"
+        },
+        {
+          "name": "Key_Risk_Category__c"
+        },
+        {
+          "name": "High_Risk_Architecture__c"
+        },
+        {
+          "name": "Additional_Risk_Detail__c"
+        },
+        {
+          "name": "Current_Licenses__c"
+        },
+        {
+          "name": "AOV_Saved__c"
+        },
+        {
+          "name": "AOV_Lost__c"
+        },
+        {
+          "name": "Stage__c"
+        }
+      ],
+      "object": "Red_Account__c"
+    }
+  },
+  "Extract RecordType": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "RecordType"
+    }
+  },
+  "Extract User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "FullPhotoUrl"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "ManagerId"
+        },
+        {
+          "name": "Department_Number__c"
+        },
+        {
+          "name": "Department"
+        },
+        {
+          "name": "Cost_Center__c"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "Filter Case RecordType": {
+    "action": "filter",
+    "parameters": {
+      "source": "Join Case RecordType",
+      "saqlFilter": "'RecordType.Name' in [\"Success Request\", \"Accelerator Delivery Request\"]"
+    }
+  },
+  "Join Missing Timecards Contacts": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Filter Missing Timecards",
+      "left_key": [
+        "pse__Resource__c"
+      ],
+      "right_select": [
+        "Director.Name",
+        "Executive.Name",
+        "Name",
+        "Id",
+        "TeamLead.Name",
+        "TeamLead.Id",
+        "Executive.Id",
+        "Director.Id",
+        "TeamLead.ReportsToId",
+        "Executive.ReportsToId",
+        "Director.ReportsToId"
+      ],
+      "right": "Join Contact Executive",
+      "relationship": "Resource",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Register SCPPE Engagements History": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SCPPE Engagements History",
+      "alias": "SCPPE_Engagements_History",
+      "source": "Join Case History Case"
+    }
+  },
+  "Extract Missing Timecards": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "pse__Resource__c"
+        },
+        {
+          "name": "Timecard__c"
+        },
+        {
+          "name": "pse__Date_Timecard_Entered__c"
+        },
+        {
+          "name": "pse__End_Date__c"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "Assignment__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "TimecardCreated__c"
+        }
+      ],
+      "object": "pse__Missing_Timecard__c"
+    }
+  },
+  "Join Account Lead SM": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Account Owner",
+      "left_key": [
+        "GlobalCompany.CSM__c"
+      ],
+      "right_select": [
+        "FullPhotoUrl",
+        "Name",
+        "Department_Number__c",
+        "Department",
+        "Cost_Center__c",
+        "Managers",
+        "ManagerPath",
+        "TeamLead.Id",
+        "TeamLead.Department_Number__c",
+        "TeamLead.Department",
+        "TeamLead.Cost_Center__c",
+        "TeamLead.Managers",
+        "TeamLead.ManagerPath",
+        "Director.Department_Number__c",
+        "Director.Department",
+        "Director.Cost_Center__c",
+        "Director.Managers",
+        "Director.ManagerPath",
+        "Executive.FullPhotoUrl",
+        "Executive.Name",
+        "Executive.ManagerId",
+        "Executive.Department_Number__c",
+        "Executive.Department",
+        "Executive.Cost_Center__c",
+        "Executive.Managers",
+        "Executive.ManagerPath",
+        "Director.Name",
+        "TeamLead.Name"
+      ],
+      "right": "Join User Executive",
+      "relationship": "LeadSM",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Global Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Account Company",
+      "left_key": [
+        "Global_Company__c"
+      ],
+      "right_select": [
+        "Account_Family_Name__c",
+        "AE__c",
+        "CSG_Portfolio__c",
+        "CSG_Region__c",
+        "CSG_Subregion__c",
+        "CSM__c",
+        "FY17_HT_Secondary_Region__c",
+        "Name",
+        "Sector__c",
+        "Segment__c",
+        "Sub_Sector__c",
+        "Success_lead__c",
+        "Success_Segment__c",
+        "User__c"
+      ],
+      "right": "Extract Company",
+      "relationship": "GlobalCompany",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Register Success Outcomes": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SCPPE Success Outcomes",
+      "alias": "SCPPE_Success_Outcomes",
+      "source": "Add Fields to Success Outcomes"
+    }
+  },
+  "Join Success Outcome Case Owner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Success Outcomes Case Success Program",
+      "left_key": [
+        "Case.OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "ManagerId",
+        "Managers",
+        "ManagerPath",
+        "TeamLead.Id",
+        "TeamLead.Name",
+        "TeamLead.ManagerId",
+        "TeamLead.Department",
+        "TeamLead.Managers",
+        "TeamLead.ManagerPath",
+        "Director.Name",
+        "Director.ManagerId",
+        "Director.Department",
+        "Director.Managers",
+        "Director.ManagerPath",
+        "Executive.Name",
+        "Executive.ManagerId",
+        "Executive.Department",
+        "Executive.Managers",
+        "Executive.ManagerPath",
+        "TeamLead.FullPhotoUrl",
+        "Cost_Center__c",
+        "Department",
+        "Department_Number__c",
+        "Director.FullPhotoUrl",
+        "Executive.FullPhotoUrl",
+        "FullPhotoUrl"
+      ],
+      "right": "Join User Executive",
+      "relationship": "CaseOwner",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Timecard Success Programs": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Timecard Cases",
+      "left_key": [
+        "Case.Success_Program__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract Success Program",
+      "relationship": "SuccessProgram",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Add Fields to Timecards": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Filter Timecards",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "saqlExpression": "case when 'Project.Case__c' is null then \"true\" else \"false\" end",
+          "name": "Missing_PSA",
+          "label": "Missing PSA",
+          "type": "Text"
+        },
+        {
+          "name": "Project_Category",
+          "saqlExpression": "case when 'Project.Name' matches \"[INT]\" then \"Internal\"\n     when 'Project.Name' matches \"[EXT]\" then \"External\"\n     when 'Project.Name' matches \"time off\" then \"PTO\"\n     when 'Project.Name' matches \"VTO\" then \"VTO\"\n     when 'Project.Name' matches \"administrative\" then \"Admin\"\n     when 'Project.Name' matches \"training\" then \"Training\"\n     else 'Project.Name' end",
+          "label": "Project_Category",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Join Program Engagements Accounts": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Program Engagements Cases",
+      "left_key": [
+        "Account__c"
+      ],
+      "right_select": [
+        "AccountStatus__c",
+        "Account_Owner_Role__c",
+        "AOV_Band__c",
+        "CFL_Region__c",
+        "Combo_Company__c",
+        "Company.Account_Family_Name__c",
+        "Company.AE__c",
+        "Company.CSG_Portfolio__c",
+        "Company.CSG_Region__c",
+        "Company.CSG_Subregion__c",
+        "Company.CSM__c",
+        "Company.FY17_HT_Secondary_Region__c",
+        "Company.Name",
+        "Company.Sector__c",
+        "Company.Segment__c",
+        "Company.Sub_Sector__c",
+        "Company.Success_Segment__c",
+        "CSG_Portfolio__c",
+        "CSG_Region__c",
+        "CSG_Subregion__c",
+        "CSM_lookup__c",
+        "GlobalCompany.Account_Family_Name__c",
+        "GlobalCompany.AE__c",
+        "GlobalCompany.CSG_Portfolio__c",
+        "GlobalCompany.CSG_Region__c",
+        "GlobalCompany.CSG_Subregion__c",
+        "GlobalCompany.CSM__c",
+        "GlobalCompany.FY17_HT_Secondary_Region__c",
+        "GlobalCompany.Name",
+        "GlobalCompany.Sector__c",
+        "GlobalCompany.Segment__c",
+        "GlobalCompany.Sub_Sector__c",
+        "GlobalCompany.Success_Segment__c",
+        "GlobalCompany.Success_lead__c",
+        "Industry",
+        "Locked_Region__c",
+        "Marketing_Cloud_AOV_Band__c",
+        "Name",
+        "NameLocal",
+        "Open_Red_Account_Issues__c",
+        "Org_Status_DW__c",
+        "Organization_ID_DW__c",
+        "Organization_ID_DW_Case_Sensitive__c",
+        "Region__c",
+        "Segment__c",
+        "Region_AOV_Band__c",
+        "Success_Segment__c",
+        "SupportLevel__c",
+        "Subregion__c",
+        "Team_Territory__c",
+        "CSG_Coverage__c"
+      ],
+      "right": "Join Global Account",
+      "relationship": "Account",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Case Owner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Filter Case",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Department",
+        "Department_Number__c",
+        "Director.FullPhotoUrl",
+        "Director.Id",
+        "Director.ManagerId",
+        "Director.Name",
+        "FullPhotoUrl",
+        "Id",
+        "ManagerId",
+        "Name",
+        "TeamLead.FullPhotoUrl",
+        "TeamLead.ManagerId",
+        "TeamLead.Name",
+        "Executive.FullPhotoUrl",
+        "Executive.Name",
+        "Cost_Center__c",
+        "TeamLead.Cost_Center__c",
+        "Director.Cost_Center__c",
+        "Executive.Cost_Center__c",
+        "Managers",
+        "ManagerPath",
+        "TeamLead.Id",
+        "TeamLead.Department_Number__c",
+        "TeamLead.Department",
+        "TeamLead.Managers",
+        "TeamLead.ManagerPath",
+        "Director.Department_Number__c",
+        "Director.Department",
+        "Director.Managers",
+        "Director.ManagerPath",
+        "Executive.ManagerId",
+        "Executive.Department_Number__c",
+        "Executive.Department",
+        "Executive.Managers",
+        "Executive.ManagerPath"
+      ],
+      "right": "Join User Executive",
+      "relationship": "Owner",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Success Outcomes Cases": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Success Outcomes Record Type",
+      "left_key": [
+        "Case__c"
+      ],
+      "right_select": [
+        "OwnerId",
+        "Stage__c",
+        "Status",
+        "IsClosed",
+        "CaseNumber",
+        "Type",
+        "Engagement_Type__c",
+        "Engagement_Start_Date__c",
+        "End_Date__c",
+        "Cloud__c",
+        "Age_days__c",
+        "Organization_Id__c",
+        "CreatedDate",
+        "ClosedDate",
+        "Committed_Completion_Date__c",
+        "Requested_Delivery_Date__c",
+        "CFL_Portfolio__c",
+        "CSG_Subregion__c",
+        "Success_Program__c"
+      ],
+      "right": "Extract Case",
+      "relationship": "Case",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Timecard Red Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Timecard Practice",
+      "left_key": [
+        "Project.Red_Account__c"
+      ],
+      "right_select": [
+        "ACV_at_Risk__c",
+        "Additional_Risk_Detail__c",
+        "Current_Licenses__c",
+        "High_Risk_Architecture__c",
+        "Key_Risk_Category__c",
+        "Name",
+        "Risk_Detail__c",
+        "Status__c",
+        "AOV_Saved__c",
+        "AOV_Lost__c",
+        "Stage__c"
+      ],
+      "right": "Extract Red Account",
+      "relationship": "RedAccount",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Case Success Outcome MultiVal": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Case__c"
+      ],
+      "left": "Join Case Opportunity RecordType",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Count",
+        "Case.Success_Program__c",
+        "CaseSuccessProgram.Name",
+        "CaseOwner.Managers",
+        "CaseOwner.ManagerPath",
+        "CaseOwner.TeamLead.Id",
+        "CaseOwner.TeamLead.Department",
+        "CaseOwner.TeamLead.Managers",
+        "CaseOwner.TeamLead.ManagerPath",
+        "Account.AccountOwner.Managers",
+        "Account.AccountOwner.ManagerPath",
+        "Account.AccountOwner.TeamLead.Id",
+        "Account.AccountOwner.TeamLead.Department_Number__c",
+        "Account.AccountOwner.TeamLead.Department",
+        "Account.AccountOwner.TeamLead.Managers",
+        "Account.AccountOwner.TeamLead.ManagerPath",
+        "Account.LeadSM.Managers",
+        "Account.LeadSM.ManagerPath",
+        "Account.LeadSM.TeamLead.Id",
+        "Account.LeadSM.TeamLead.Department_Number__c",
+        "Account.LeadSM.TeamLead.Department",
+        "Account.LeadSM.TeamLead.Managers",
+        "Account.LeadSM.TeamLead.ManagerPath",
+        "Account.AE.Managers",
+        "Account.AE.ManagerPath",
+        "Account.AE.TeamLead.Id",
+        "Account.AE.TeamLead.Department_Number__c",
+        "Account.AE.TeamLead.Department",
+        "Account.AE.TeamLead.Managers",
+        "Account.AE.TeamLead.ManagerPath",
+        "Owner.Managers",
+        "Owner.ManagerPath",
+        "Owner.TeamLead.Id",
+        "Owner.TeamLead.Department_Number__c",
+        "Owner.TeamLead.Department",
+        "Owner.TeamLead.Managers",
+        "Owner.TeamLead.ManagerPath",
+        "CaseOwner.Director.Department",
+        "CaseOwner.Director.Managers",
+        "CaseOwner.Director.ManagerPath",
+        "Account.AccountOwner.Director.Department_Number__c",
+        "Account.AccountOwner.Director.Department",
+        "Account.AccountOwner.Director.Managers",
+        "Account.AccountOwner.Director.ManagerPath",
+        "Account.LeadSM.Director.Department_Number__c",
+        "Account.LeadSM.Director.Department",
+        "Account.LeadSM.Director.Managers",
+        "Account.LeadSM.Director.ManagerPath",
+        "Account.AE.Director.Department_Number__c",
+        "Account.AE.Director.Department",
+        "Account.AE.Director.Managers",
+        "Account.AE.Director.ManagerPath",
+        "Owner.Director.Department_Number__c",
+        "Owner.Director.Department",
+        "Owner.Director.Managers",
+        "Owner.Director.ManagerPath",
+        "CaseOwner.Executive.ManagerId",
+        "CaseOwner.Executive.Department",
+        "CaseOwner.Executive.Managers",
+        "CaseOwner.Executive.ManagerPath",
+        "Account.AccountOwner.Executive.ManagerId",
+        "Account.AccountOwner.Executive.Department_Number__c",
+        "Account.AccountOwner.Executive.Department",
+        "Account.AccountOwner.Executive.Managers",
+        "Account.AccountOwner.Executive.ManagerPath",
+        "Account.LeadSM.Executive.ManagerId",
+        "Account.LeadSM.Executive.Department_Number__c",
+        "Account.LeadSM.Executive.Department",
+        "Account.LeadSM.Executive.Managers",
+        "Account.LeadSM.Executive.ManagerPath",
+        "Account.AE.Executive.ManagerId",
+        "Account.AE.Executive.Department_Number__c",
+        "Account.AE.Executive.Department",
+        "Account.AE.Executive.Managers",
+        "Account.AE.Executive.ManagerPath",
+        "Owner.Executive.ManagerId",
+        "Owner.Executive.Department_Number__c",
+        "Owner.Executive.Department",
+        "Owner.Executive.Managers",
+        "Owner.Executive.ManagerPath",
+        "Account.LeadSM.TeamLead.Name",
+        "Account.LeadSM.Director.Name",
+        "Account.AE.TeamLead.Name",
+        "Account.AE.Director.Name",
+        "CaseOwner.FullPhotoUrl",
+        "CaseOwner.Department_Number__c",
+        "CaseOwner.Department",
+        "CaseOwner.Cost_Center__c",
+        "CaseOwner.TeamLead.FullPhotoUrl",
+        "CaseOwner.Director.FullPhotoUrl",
+        "CaseOwner.Executive.FullPhotoUrl",
+        "RedAccount.Stage__c"
+      ],
+      "right": "Add Fields to Success Outcomes",
+      "relationship": "SuccessOutcome",
+      "operation": "LookupMultiValue"
+    }
+  },
+  "Extract Success Outcomes": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Account_Detail__c"
+        },
+        {
+          "name": "Account__c"
+        },
+        {
+          "name": "AOV_at_Risk__c"
+        },
+        {
+          "name": "AOV_Saved__c"
+        },
+        {
+          "name": "Case__c"
+        },
+        {
+          "name": "Centralized_Salesforce_COE__c"
+        },
+        {
+          "name": "Compass__c"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "Customer_Priority__c"
+        },
+        {
+          "name": "Date_Time_Closed__c"
+        },
+        {
+          "name": "Date_Time_Opened__c"
+        },
+        {
+          "name": "Duration_of_Engagement__c"
+        },
+        {
+          "name": "Engagement_Start_Date__c"
+        },
+        {
+          "name": "Forecasted_Attrition__c"
+        },
+        {
+          "name": "Global_Company__c"
+        },
+        {
+          "name": "Key_Customer__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "New_Business_Add_On_Amount__c"
+        },
+        {
+          "name": "New_Business_Add_On_Close_Date__c"
+        },
+        {
+          "name": "New_Business_Add_On_Opportunity__c"
+        },
+        {
+          "name": "New_Business_Add_On_Stage__c"
+        },
+        {
+          "name": "Next_Steps__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Red_Account__c"
+        },
+        {
+          "name": "Renewal_Amount__c"
+        },
+        {
+          "name": "Renewal_Close_Date__c"
+        },
+        {
+          "name": "Renewal_Opportunity__c"
+        },
+        {
+          "name": "Renewal_Stage__c"
+        },
+        {
+          "name": "Review_Status__c"
+        },
+        {
+          "name": "Services_Amount__c"
+        },
+        {
+          "name": "Services_Close_Date__c"
+        },
+        {
+          "name": "Services_Opportunity__c"
+        },
+        {
+          "name": "Services_Stage__c"
+        },
+        {
+          "name": "SSO_In_Use__c"
+        },
+        {
+          "name": "Status__c"
+        },
+        {
+          "name": "Success_Program__c"
+        },
+        {
+          "name": "Type__c"
+        }
+      ],
+      "object": "Success_Outcomes__c"
+    }
+  },
+  "Join Case Created By": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Case Success Program",
+      "left_key": [
+        "CreatedById"
+      ],
+      "right_select": [
+        "Department",
+        "Department_Number__c",
+        "Director.FullPhotoUrl",
+        "Director.Id",
+        "Director.ManagerId",
+        "Director.Name",
+        "FullPhotoUrl",
+        "Id",
+        "ManagerId",
+        "Name",
+        "TeamLead.FullPhotoUrl",
+        "TeamLead.ManagerId",
+        "TeamLead.Name",
+        "Executive.FullPhotoUrl",
+        "Executive.Name",
+        "Cost_Center__c",
+        "TeamLead.Cost_Center__c",
+        "Director.Cost_Center__c",
+        "Executive.Cost_Center__c",
+        "Managers",
+        "ManagerPath",
+        "TeamLead.Id",
+        "TeamLead.Department_Number__c",
+        "TeamLead.Department",
+        "TeamLead.Managers",
+        "TeamLead.ManagerPath",
+        "Director.Department_Number__c",
+        "Director.Department",
+        "Director.Managers",
+        "Director.ManagerPath",
+        "Executive.ManagerId",
+        "Executive.Department_Number__c",
+        "Executive.Department",
+        "Executive.Managers",
+        "Executive.ManagerPath"
+      ],
+      "right": "Join User Executive",
+      "relationship": "CreatedBy",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Add Utilization Category": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Built Utilization Bucket",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "saqlExpression": "case when 'Category' == \"External\" then \"External\" else 'Project_Category' end",
+          "name": "Utilization_Category",
+          "label": "Utilization Category",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Extract Opportunity": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "StageName"
+        },
+        {
+          "name": "IsClosed"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "firstDayOfWeek": 1,
+          "name": "CloseDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "IsWon"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Cloud_Type__c"
+        },
+        {
+          "name": "Application_Type__c"
+        },
+        {
+          "name": "ContractType__c"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "Sub_Type__c"
+        },
+        {
+          "name": "Targeted_Clouds__c"
+        },
+        {
+          "name": "Amount"
+        },
+        {
+          "name": "Amount_Won__c"
+        },
+        {
+          "name": "ExpectedRevenue"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "firstDayOfWeek": 1,
+          "name": "CreatedDate",
+          "isYearEndFiscalYear": true
+        }
+      ],
+      "object": "Opportunity"
+    }
+  },
+  "Join Case Success Program": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Filter Case RecordType",
+      "left_key": [
+        "Success_Program__c"
+      ],
+      "right_select": [
+        "APM_Level_1__c",
+        "APM_Level_2__c",
+        "Business_Line__c",
+        "Business_Outcomes__c",
+        "Category__c",
+        "Days_Before_Outcome_Verification__c",
+        "Delivery_Specialist_Type__c",
+        "Development_Stage__c",
+        "Domain_Cloud__c",
+        "Engagement_Category__c",
+        "Name",
+        "Product_Line__c",
+        "RecordTypeId",
+        "Status__c",
+        "Sub_Status__c",
+        "Sub_Sub_Status__c",
+        "Type__c"
+      ],
+      "right": "Extract Success Program",
+      "relationship": "SuccessProgram",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Success Outcomes Record Type": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Add Success Outcome Rollup",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract RecordType",
+      "relationship": "RecordType",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Success Outcomes Red Accounts": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Success Outcomes Success Program",
+      "left_key": [
+        "Red_Account__c"
+      ],
+      "right_select": [
+        "ACV_at_Risk__c",
+        "Additional_Risk_Detail__c",
+        "Current_Licenses__c",
+        "High_Risk_Architecture__c",
+        "Key_Risk_Category__c",
+        "Name",
+        "Risk_Detail__c",
+        "Status__c",
+        "AOV_Saved__c",
+        "AOV_Lost__c",
+        "Stage__c"
+      ],
+      "right": "Extract Red Account",
+      "relationship": "RedAccount",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Drop Bucket Fields": {
+    "action": "sliceDataset",
+    "parameters": {
+      "mode": "drop",
+      "source": "Add Utilization Category",
+      "fields": [
+        {
+          "name": "Project_Category"
+        },
+        {
+          "name": "Category"
+        }
+      ]
+    }
+  },
+  "Add Fields to Success Outcomes": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Join Success Outcomes Renewal Opportunity",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "saqlExpression": "case when 'New_Business_Add_On_Opportunity__c' is null then \"false\" else \"true\" end",
+          "name": "Has_Add_On_Opportunity",
+          "label": "Has Add On Opportunity",
+          "type": "Text"
+        },
+        {
+          "saqlExpression": "case when 'Red_Account__c' is null then \"false\" else \"true\" end",
+          "name": "Has_Red_Account",
+          "label": "Has Red Account",
+          "type": "Text"
+        },
+        {
+          "saqlExpression": "case when 'Services_Opportunity__c'is null then \"false\" else \"true\" end",
+          "name": "Has_Service_Opportunity",
+          "label": "Has Service Opportunity",
+          "type": "Text"
+        },
+        {
+          "saqlExpression": "case when 'Renewal_Opportunity__c' is null then \"false\" else \"true\" end",
+          "name": "Has_Renewal_Opportunity",
+          "label": "Has Renewal Opportunity",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Add Fields to Opportunity": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Extract Opportunity",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "precision": 18,
+          "saqlExpression": "case when IsClosed == \"false\"  then daysBetween(toDate(CreatedDate_sec_epoch), now()) else daysBetween(toDate(CreatedDate_sec_epoch),toDate(CloseDate_sec_epoch)) end",
+          "name": "Opportunity_Age",
+          "scale": 2,
+          "label": "Opportunity Age",
+          "type": "Numeric"
+        }
+      ]
+    }
+  },
+  "Join Account Company": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract Account",
+      "left_key": [
+        "Company__c"
+      ],
+      "right_select": [
+        "AE__c",
+        "CSG_Portfolio__c",
+        "Account_Family_Name__c",
+        "CSG_Region__c",
+        "CSG_Subregion__c",
+        "CSM__c",
+        "FY17_HT_Secondary_Region__c",
+        "Name",
+        "Sector__c",
+        "Segment__c",
+        "Sub_Sector__c",
+        "Success_lead__c",
+        "Success_Segment__c",
+        "User__c"
+      ],
+      "right": "Extract Company",
+      "relationship": "Company",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Register SCPPE Engagements": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SCPPE Engagements",
+      "alias": "SCPPE_Engagements_v2",
+      "source": "Add Fields to Case"
+    }
+  },
+  "Join Program Engagements Opportunity": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Program Engagements Success Programs",
+      "left_key": [
+        "RelatedOpportunity__c"
+      ],
+      "right_select": [
+        "Amount",
+        "Amount_Won__c",
+        "Application_Type__c",
+        "CloseDate",
+        "Cloud_Type__c",
+        "ContractType__c",
+        "CreatedDate",
+        "IsClosed",
+        "IsWon",
+        "Name",
+        "Opportunity_Age",
+        "StageName",
+        "Sub_Type__c",
+        "Targeted_Clouds__c",
+        "Type"
+      ],
+      "right": "Add Fields to Opportunity",
+      "relationship": "Opportunity",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Timecard Header": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Timecard Resource",
+      "left_key": [
+        "pse__Timecard_Header__c"
+      ],
+      "right_select": [
+        "Actual_End_Date__c",
+        "Actual_Start_Date__c",
+        "OwnerId",
+        "Project_Name__c",
+        "Project_Region__c",
+        "pse__Approved__c",
+        "pse__Billable__c",
+        "pse__End_Date__c",
+        "pse__Project_Methodology__c",
+        "pse__Project_Phase__c",
+        "pse__Project__c",
+        "pse__Start_Date__c",
+        "pse__Status__c",
+        "pse__Submitted__c",
+        "pse__Total_Billable_Amount__c",
+        "pse__Total_Cost__c",
+        "pse__Total_Days_Worked__c",
+        "pse__Total_Hours__c",
+        "RecordTypeId",
+        "Total_Planned_Billable_Amount__c"
+      ],
+      "right": "Extract Timecard Header",
+      "relationship": "TimecardHeader",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract Timecard Header": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Actual_End_Date__c"
+        },
+        {
+          "name": "Actual_Start_Date__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "pse__End_Date__c"
+        },
+        {
+          "name": "pse__Start_Date__c"
+        },
+        {
+          "name": "pse__Status__c"
+        },
+        {
+          "name": "Total_Planned_Billable_Amount__c"
+        },
+        {
+          "name": "pse__Total_Hours__c"
+        },
+        {
+          "name": "pse__Total_Cost__c"
+        },
+        {
+          "name": "pse__Total_Billable_Amount__c"
+        },
+        {
+          "name": "pse__Total_Days_Worked__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "pse__Billable__c"
+        },
+        {
+          "name": "Project_Name__c"
+        },
+        {
+          "name": "pse__Project__c"
+        },
+        {
+          "name": "pse__Project_Phase__c"
+        },
+        {
+          "name": "pse__Project_Methodology__c"
+        },
+        {
+          "name": "Project_Region__c"
+        },
+        {
+          "name": "pse__Submitted__c"
+        },
+        {
+          "name": "pse__Approved__c"
+        }
+      ],
+      "object": "pse__Timecard_Header__c"
+    }
+  },
+  "Join Timecard Resource": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Timecard Project",
+      "left_key": [
+        "pse__Resource__c"
+      ],
+      "right_select": [
+        "Director.Name",
+        "Director.Id",
+        "Executive.Name",
+        "Name",
+        "TeamLead.Name",
+        "Director.pse__Default_Cost_Rate__c",
+        "Director.pse__Salesforce_User__c",
+        "Executive.pse__Default_Cost_Rate__c",
+        "Executive.pse__Salesforce_User__c",
+        "pse__Default_Cost_Rate__c",
+        "pse__Salesforce_User__c",
+        "TeamLead.pse__Default_Cost_Rate__c",
+        "TeamLead.pse__Salesforce_User__c"
+      ],
+      "right": "Join Contact Executive",
+      "relationship": "Resource",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Add Fields to Case": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Join Case PSA",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "Team_of_Expertise",
+          "saqlExpression": "case when 'SuccessProgram.Name' == \"Business Capabilities Consulting\" then \"Business Excellence Expertise\" when 'SuccessProgram.Name' matches \"Lightning Beacon\" then \"Strategic Product Initiatives\" when 'SuccessProgram.Name' matches \"Design Thinking for Lightning\" then \"Strategic Product Initiatives\" when 'SuccessProgram.Name' matches \"Evergreen\" then \"Strategic Customer Engagement Management\" when 'SuccessProgram.Name' == \"Product Expertise\" then \"Technical & Architecture Expertise\" when 'SuccessProgram.Name' matches \"VDE\" then \"Technical & Architecture Expertise\" when 'SuccessProgram.Name' == \"eHRA: \" then \"HRA & Peak Readiness Programs\" when 'SuccessProgram.Name' ==  \"Peak Readiness\" then \"HRA & Peak Readiness Programs\" when 'SuccessProgram.Name' matches \"HRA: \" then \"HRA & Peak Readiness Programs\" when 'SuccessProgram.Name' matches \"PEM - \" then \"Partner Engagement Expertise\" when 'SuccessProgram.Name' ==  \"Cross Cloud\" then \"Cloud-Specific Expertise\" when 'SuccessProgram.Name' matches \"COVID\" then \"COVID-19\" when 'SuccessProgram.Name' matches \"Lightning\" then \"Lightning Adoption\" else \"Other\" end",
+          "label": "Team of Expertise",
+          "type": "Text"
+        },
+        {
+          "precision": 18,
+          "saqlExpression": "case when 'Account.Region_AOV_Band__c' == \"$0\" then 01 when 'Account.Region_AOV_Band__c' == \"$1-10k\" then 02 when 'Account.Region_AOV_Band__c' == \"$10k-50k\" then 03 when 'Account.Region_AOV_Band__c' == \"$50k-100k\" then 04 when 'Account.Region_AOV_Band__c' == \"$100k-200k\" then 05 when 'Account.Region_AOV_Band__c' == \"$200k-600k\" then 06 when 'Account.Region_AOV_Band__c' == \"$600k-1M\" then 07 when 'Account.Region_AOV_Band__c' == \"$1M-5M\" then 08 when 'Account.Region_AOV_Band__c' == \"$5M-10M\" then 09 when 'Account.Region_AOV_Band__c' == \"$10M-25M\" then 10 when 'Account.Region_AOV_Band__c' == \"$25M+\" then 11 else 0 end",
+          "name": "AOV_Sort",
+          "scale": 2,
+          "label": "AOV Sort",
+          "type": "Numeric"
+        },
+        {
+          "name": "Missing_Success_Program",
+          "saqlExpression": "case when 'SuccessProgram.Name' is null then \"true\" else \"false\" end",
+          "label": "Missing Success Program",
+          "type": "Text"
+        },
+        {
+          "name": "Missing_Success_Outcome",
+          "saqlExpression": "case when 'SuccessOutcome.Count' is null then \"true\" else \"false\" end",
+          "label": "Missing Success Outcome",
+          "type": "Text"
+        },
+        {
+          "name": "Missing_PSA",
+          "saqlExpression": "case when 'Project.Case__c' is null then \"true\" else \"false\" end",
+          "label": "Missing_PSA",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Join Account Exec Sponsor": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Account Lead AE",
+      "left_key": [
+        "Company.User__c"
+      ],
+      "right_select": [
+        "FullPhotoUrl",
+        "Name",
+        "Department_Number__c",
+        "Department",
+        "Cost_Center__c",
+        "Managers",
+        "ManagerPath",
+        "TeamLead.Id",
+        "TeamLead.Department_Number__c",
+        "TeamLead.Department",
+        "TeamLead.Cost_Center__c",
+        "TeamLead.Managers",
+        "TeamLead.ManagerPath",
+        "Director.Department_Number__c",
+        "Director.Department",
+        "Director.Cost_Center__c",
+        "Director.Managers",
+        "Director.ManagerPath",
+        "Executive.FullPhotoUrl",
+        "Executive.Name",
+        "Executive.ManagerId",
+        "Executive.Department_Number__c",
+        "Executive.Department",
+        "Executive.Cost_Center__c",
+        "Executive.Managers",
+        "Executive.ManagerPath",
+        "TeamLead.Name",
+        "Director.Name"
+      ],
+      "right": "Join User Executive",
+      "relationship": "ExecSponsor",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Timecard Cases": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Timecard Red Account",
+      "left_key": [
+        "Project.Case__c"
+      ],
+      "right_select": [
+        "CaseNumber",
+        "Id",
+        "Success_Program__c",
+        "CreatedDate",
+        "Committed_Completion_Date__c",
+        "Date_Time_Opened__c",
+        "Engagement_Start_Date__c",
+        "Problem_Cloud__c",
+        "Requested_Delivery_Date__c",
+        "Status",
+        "Type",
+        "CFL_Portfolio__c",
+        "CSG_Subregion__c"
+      ],
+      "right": "Extract Case",
+      "relationship": "Case",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract Contact": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "pse__Salesforce_User__c"
+        },
+        {
+          "name": "pse__Default_Cost_Rate__c"
+        },
+        {
+          "name": "ReportsToId"
+        }
+      ],
+      "object": "Contact"
+    }
+  },
+  "Extract Timecard": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Actual_End_Date__c"
+        },
+        {
+          "name": "Actual_Start_Date__c"
+        },
+        {
+          "name": "pse__End_Date__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "firstDayOfWeek": 0,
+          "name": "CreatedDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "pse__Total_Hours__c"
+        },
+        {
+          "name": "pse__Total_Days_Worked__c"
+        },
+        {
+          "name": "pse__Total_Cost__c"
+        },
+        {
+          "name": "pse__Total_Billable_Amount__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "pse__Status__c"
+        },
+        {
+          "name": "pse__Start_Date__c"
+        },
+        {
+          "name": "pse__Assignment__c"
+        },
+        {
+          "name": "pse__Project__c"
+        },
+        {
+          "name": "pse__Resource__c"
+        },
+        {
+          "name": "pse__Timecard_Header__c"
+        }
+      ],
+      "object": "pse__Timecard__c"
+    }
+  },
+  "Join Success Outcomes Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Success Outcome Case Owner",
+      "left_key": [
+        "Account__c"
+      ],
+      "right_select": [
+        "AccountOwner.Director.Name",
+        "AccountOwner.Executive.Name",
+        "AccountOwner.Name",
+        "AccountOwner.TeamLead.Name",
+        "AccountStatus__c",
+        "AE.Executive.Name",
+        "AE.Name",
+        "AOV_Band__c",
+        "CFL_Region__c",
+        "Company.CSG_Portfolio__c",
+        "Company.CSG_Region__c",
+        "Company.CSG_Subregion__c",
+        "Company.Name",
+        "Company.Success_lead__c",
+        "Company.Sub_Sector__c",
+        "Company.Segment__c",
+        "Company.Sector__c",
+        "Company.Success_Segment__c",
+        "CSG_Coverage__c",
+        "CSG_Portfolio__c",
+        "CSG_Region__c",
+        "CSG_Subregion__c",
+        "GlobalCompany.CSG_Portfolio__c",
+        "GlobalCompany.CSG_Region__c",
+        "GlobalCompany.CSG_Subregion__c",
+        "GlobalCompany.Name",
+        "GlobalCompany.Sector__c",
+        "GlobalCompany.Segment__c",
+        "GlobalCompany.Sub_Sector__c",
+        "GlobalCompany.Success_Segment__c",
+        "Industry",
+        "LeadSM.Executive.Name",
+        "LeadSM.Name",
+        "Marketing_Cloud_AOV_Band__c",
+        "Name",
+        "NameLocal",
+        "Organization_ID_DW__c",
+        "Organization_ID_DW_Case_Sensitive__c",
+        "Org_Status_DW__c",
+        "Region_AOV_Band__c",
+        "Region__c",
+        "Segment__c",
+        "Subregion__c",
+        "SupportLevel__c",
+        "Support_LoB__c",
+        "Success_Segment__c",
+        "Support_SBR_Category__c",
+        "Team_Territory__c",
+        "AccountOwner.Managers",
+        "AccountOwner.ManagerPath",
+        "AccountOwner.TeamLead.Id",
+        "AccountOwner.TeamLead.Department_Number__c",
+        "AccountOwner.TeamLead.Department",
+        "AccountOwner.TeamLead.Managers",
+        "AccountOwner.TeamLead.ManagerPath",
+        "LeadSM.Managers",
+        "LeadSM.ManagerPath",
+        "LeadSM.TeamLead.Id",
+        "LeadSM.TeamLead.Department_Number__c",
+        "LeadSM.TeamLead.Department",
+        "LeadSM.TeamLead.Managers",
+        "LeadSM.TeamLead.ManagerPath",
+        "AE.Managers",
+        "AE.ManagerPath",
+        "AE.TeamLead.Id",
+        "AE.TeamLead.Department_Number__c",
+        "AE.TeamLead.Department",
+        "AE.TeamLead.Managers",
+        "AE.TeamLead.ManagerPath",
+        "AccountOwner.Director.Department_Number__c",
+        "AccountOwner.Director.Department",
+        "AccountOwner.Director.Managers",
+        "AccountOwner.Director.ManagerPath",
+        "LeadSM.Director.Department_Number__c",
+        "LeadSM.Director.Department",
+        "LeadSM.Director.Managers",
+        "LeadSM.Director.ManagerPath",
+        "AE.Director.Department_Number__c",
+        "AE.Director.Department",
+        "AE.Director.Managers",
+        "AE.Director.ManagerPath",
+        "AccountOwner.Executive.ManagerId",
+        "AccountOwner.Executive.Department_Number__c",
+        "AccountOwner.Executive.Department",
+        "AccountOwner.Executive.Managers",
+        "AccountOwner.Executive.ManagerPath",
+        "LeadSM.Executive.ManagerId",
+        "LeadSM.Executive.Department_Number__c",
+        "LeadSM.Executive.Department",
+        "LeadSM.Executive.Managers",
+        "LeadSM.Executive.ManagerPath",
+        "AE.Executive.ManagerId",
+        "AE.Executive.Department_Number__c",
+        "AE.Executive.Department",
+        "AE.Executive.Managers",
+        "AE.Executive.ManagerPath",
+        "LeadSM.TeamLead.Name",
+        "LeadSM.Director.Name",
+        "AE.TeamLead.Name",
+        "AE.Director.Name"
+      ],
+      "right": "Join Account Lead AE",
+      "relationship": "Account",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join Success Outcomes Services Opportunity": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join Success Outcomes Red Accounts",
+      "left_key": [
+        "Services_Opportunity__c"
+      ],
+      "right_select": [
+        "Amount",
+        "Amount_Won__c",
+        "CloseDate",
+        "Cloud_Type__c",
+        "ContractType__c",
+        "ExpectedRevenue",
+        "IsClosed",
+        "IsWon",
+        "Name",
+        "StageName",
+        "Type",
+        "Sub_Type__c",
+        "Targeted_Clouds__c"
+      ],
+      "right": "Extract Opportunity",
+      "relationship": "ServiceOpportunity",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract Case History": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "CaseId"
+        },
+        {
+          "name": "Field"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "NewValue"
+        },
+        {
+          "name": "OldValue"
+        }
+      ],
+      "object": "CaseHistory"
+    }
+  }
+}

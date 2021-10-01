@@ -1,0 +1,1059 @@
+{
+  "augment_Success_Program__c_0_SPLST": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_4_0_SPLST",
+      "left_key": [
+        "Success_Program__c"
+      ],
+      "right_select": [
+        "Name",
+        "Domain_Cloud__c"
+      ],
+      "right": "sfdcDigest_Success_Program__c_0_SPLST",
+      "relationship": "Success_Program__c"
+    }
+  },
+  "augment_User_3_0_SPLST": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_2_0_SPLST",
+      "left_key": [
+        "LastModifiedById"
+      ],
+      "right_select": [
+        "Name",
+        "UserRoleId",
+        "ManagerId"
+      ],
+      "right": "sfdcDigest_User_0_SPLST",
+      "relationship": "LastModifiedById"
+    }
+  },
+  "sfdcDigest_Group_case_account_spl": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "DeveloperName"
+        }
+      ],
+      "object": "Group"
+    }
+  },
+  "augment_RecordType_0_SPLST": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Master_Carve__c_0_SPLST",
+      "left_key": [
+        "AccountId.RecordTypeId"
+      ],
+      "right_select": [
+        "Id"
+      ],
+      "right": "sfdcDigest_RecordType_0_SPLST",
+      "relationship": "AccountId.RecordTypeId"
+    }
+  },
+  "Augment_Owner_Manager_Case_act_spl": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Group_Owner_Case_act_spl",
+      "left_key": [
+        "OwnerId.ManagerId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_0_SPLST",
+      "relationship": "OwnerID_ManagerID",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "sfdcDigest_RecordType_0_SPLST": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "DeveloperName"
+        }
+      ],
+      "object": "RecordType"
+    }
+  },
+  "augment_Master_Carve__c_0_SPLST": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_0_SPLST",
+      "left_key": [
+        "AccountId.Master_Carve__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Master_Carve__c_0_SPLST",
+      "relationship": "AccountId.Master_Carve__c"
+    }
+  },
+  "sfdcDigest_User_0_SPLST": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "UserRoleId"
+        },
+        {
+          "name": "ManagerId"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "augment_User_2_0_SPLST": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Contact_0_SPLST",
+      "left_key": [
+        "CreatedById"
+      ],
+      "right_select": [
+        "Name",
+        "UserRoleId",
+        "ManagerId"
+      ],
+      "right": "sfdcDigest_User_0_SPLST",
+      "relationship": "CreatedById"
+    }
+  },
+  "augment_Case_0_SPLST": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_3_0_SPLST",
+      "left_key": [
+        "ParentId"
+      ],
+      "right_select": [
+        "Id",
+        "SuppliedName",
+        "Reason",
+        "Engagement_Type__c"
+      ],
+      "right": "sfdcDigest_Case_0_SPLST",
+      "relationship": "ParentId"
+    }
+  },
+  "sfdcDigest_Contact_0_SPLST": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Email"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Contact"
+    }
+  },
+  "augment_Opportunity_0_SPLST": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Case_0_SPLST",
+      "left_key": [
+        "Related_Opportunity__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Opportunity_0_SPLST",
+      "relationship": "Related_Opportunity__c"
+    }
+  },
+  "sfdcDigest_Success_Program__c_0_SPLST": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Domain_Cloud__c"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Success_Program__c"
+    }
+  },
+  "Augment_UserRole_Case_Account_Spl": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Success_Program__c_0_SPLST",
+      "left_key": [
+        "OwnerId.UserRoleId"
+      ],
+      "right_select": [
+        "DeveloperName",
+        "Name"
+      ],
+      "right": "sfdcDigest_UserRole_Case_Account_spl",
+      "relationship": "OwnerID_role",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "sfdcDigest_Account_0_SPLST": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Account_Owner_Role__c"
+        },
+        {
+          "name": "Account_Owner_Role__pc"
+        },
+        {
+          "name": "Account_Customer_Status__pc"
+        },
+        {
+          "name": "Customer_Status__c"
+        },
+        {
+          "name": "AnnualRevenue"
+        },
+        {
+          "name": "AOV_Band__c"
+        },
+        {
+          "name": "Average_Customer_Sat__c"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "CloudCraze_Support_Level__c"
+        },
+        {
+          "name": "Combo_Sector__c"
+        },
+        {
+          "name": "Combo_Company__c"
+        },
+        {
+          "name": "Commerce_Cloud_CSM__c"
+        },
+        {
+          "name": "Company__pc"
+        },
+        {
+          "name": "Core_Edition__c"
+        },
+        {
+          "name": "CSG_Coverage__c"
+        },
+        {
+          "name": "CSG_Portfolio__c"
+        },
+        {
+          "name": "Subregion__c"
+        },
+        {
+          "name": "CSM_Manager__c"
+        },
+        {
+          "name": "CurrencyIsoCode"
+        },
+        {
+          "name": "Data_Storage_Allowance_Mb__c"
+        },
+        {
+          "name": "Data_Storage_Used_Mb__c"
+        },
+        {
+          "name": "Decision_Date__c"
+        },
+        {
+          "name": "Demandware_Customer__c"
+        },
+        {
+          "name": "Description"
+        },
+        {
+          "name": "EBU_Sales_Programs__c"
+        },
+        {
+          "name": "edw_num_licenses__c"
+        },
+        {
+          "name": "ELA_Type__c"
+        },
+        {
+          "name": "File_Storage_Allowance_Mb__c"
+        },
+        {
+          "name": "File_Storage_Used_Mb__c"
+        },
+        {
+          "name": "Fiscal_Year_Vertical__c"
+        },
+        {
+          "name": "ShippingCountry"
+        },
+        {
+          "name": "ShippingCity"
+        },
+        {
+          "name": "Industry"
+        },
+        {
+          "name": "Instance__c"
+        },
+        {
+          "name": "IsCustomerPortal"
+        },
+        {
+          "name": "IsPartner"
+        },
+        {
+          "name": "ISV_Program_Tier__c"
+        },
+        {
+          "name": "M_A__c"
+        },
+        {
+          "name": "Krux_Customer__c"
+        },
+        {
+          "name": "LastModifiedById"
+        },
+        {
+          "name": "Leads__c"
+        },
+        {
+          "name": "Locked_Industry__c"
+        },
+        {
+          "name": "Locked_Region__c"
+        },
+        {
+          "name": "Locked_Sector__c"
+        },
+        {
+          "name": "Locked_SubSector__c"
+        },
+        {
+          "name": "Master_Carve__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "NameLocal"
+        },
+        {
+          "name": "Non_Profit_Account__c"
+        },
+        {
+          "name": "Open_Red_Account_Issues__c"
+        },
+        {
+          "name": "Org_Status_DW__c"
+        },
+        {
+          "name": "Organization_ID_DW_Case_Sensitive__c"
+        },
+        {
+          "name": "Organization_ID_DW__c"
+        },
+        {
+          "name": "Ownership"
+        },
+        {
+          "name": "Pardot_First_Active_Date__c"
+        },
+        {
+          "name": "Pardot_Support_Level__c"
+        },
+        {
+          "name": "Paydex_Score__c"
+        },
+        {
+          "name": "Acct_Rating__pc"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Reseller__c"
+        },
+        {
+          "name": "Scale_Journey_Getting_Started__c"
+        },
+        {
+          "name": "Segment__c"
+        },
+        {
+          "name": "SFDC_Sector__c"
+        },
+        {
+          "name": "Storage_Last_Calculated__c"
+        },
+        {
+          "name": "Storage_Status__c"
+        },
+        {
+          "name": "Success_Segment__c"
+        },
+        {
+          "name": "Support_LoB__c"
+        },
+        {
+          "name": "SupportLevel__c"
+        },
+        {
+          "name": "Team_Territory__c"
+        },
+        {
+          "name": "TickerSymbol"
+        },
+        {
+          "name": "Acct_Type__pc"
+        },
+        {
+          "name": "Usage_Segment_Reporting__c"
+        },
+        {
+          "name": "Website"
+        },
+        {
+          "name": "BillingCity"
+        },
+        {
+          "name": "LastModifiedDate"
+        },
+        {
+          "name": "BillingState"
+        },
+        {
+          "name": "LastActivityDate"
+        },
+        {
+          "name": "BillingCountry"
+        },
+        {
+          "name": "OwnerId"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "sfdcDigest_Case_0_SPLST": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Actual_Delivery_Method__c"
+        },
+        {
+          "name": "CSR_Score__c"
+        },
+        {
+          "name": "Age_days__c"
+        },
+        {
+          "name": "Age_hours__c"
+        },
+        {
+          "name": "AOV_Band__c"
+        },
+        {
+          "name": "Business_Issues__c"
+        },
+        {
+          "name": "CaseNumber"
+        },
+        {
+          "name": "Origin"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Fops_Category__c"
+        },
+        {
+          "name": "CEM__c"
+        },
+        {
+          "name": "Collection_Status__c"
+        },
+        {
+          "name": "Committed_Completion_Date__c"
+        },
+        {
+          "name": "Completion_Deadline__c"
+        },
+        {
+          "name": "Premier_Points__c"
+        },
+        {
+          "name": "ContactEmail"
+        },
+        {
+          "name": "ContactId"
+        },
+        {
+          "name": "Language"
+        },
+        {
+          "name": "support_available_timezone__c"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "CFL_Portfolio__c"
+        },
+        {
+          "name": "CSR_Skill_Group__c"
+        },
+        {
+          "name": "CSR_Score_2_0_BETA__c"
+        },
+        {
+          "name": "Customer_Age__c"
+        },
+        {
+          "name": "Date_Time_Opened__c"
+        },
+        {
+          "name": "ClosedDate"
+        },
+        {
+          "name": "Delivery_Language__c"
+        },
+        {
+          "name": "Delivery_Method__c"
+        },
+        {
+          "name": "Description"
+        },
+        {
+          "name": "End_Date__c"
+        },
+        {
+          "name": "Engagement_Start_Date__c"
+        },
+        {
+          "name": "Entitlement_Expiration_Date__c"
+        },
+        {
+          "name": "Goals__c"
+        },
+        {
+          "name": "Last_Case_Comment__c"
+        },
+        {
+          "name": "Last_Activity_Time__c"
+        },
+        {
+          "name": "LastModifiedById"
+        },
+        {
+          "name": "Last_Owner_Activity_Date_Time__c"
+        },
+        {
+          "name": "Location__c"
+        },
+        {
+          "name": "Organization_Id__c"
+        },
+        {
+          "name": "CROverall_Notes__c"
+        },
+        {
+          "name": "ParentId"
+        },
+        {
+          "name": "Priority"
+        },
+        {
+          "name": "Related_Opportunity__c"
+        },
+        {
+          "name": "Requested_Delivery_Date__c"
+        },
+        {
+          "name": "Requestor__c"
+        },
+        {
+          "name": "Status"
+        },
+        {
+          "name": "Sub_Status__c"
+        },
+        {
+          "name": "Fops_Subcategory__c"
+        },
+        {
+          "name": "Subject"
+        },
+        {
+          "name": "Success_Program__c"
+        },
+        {
+          "name": "Support_Case_Owner_Count__c"
+        },
+        {
+          "name": "Support_Case_Owner_Delivery_Segmentation__c"
+        },
+        {
+          "name": "Support_Case_Owner_Group__c"
+        },
+        {
+          "name": "Support_Case_Owner_Skill_Group__c"
+        },
+        {
+          "name": "Support_Case_Owner_Subgroup__c"
+        },
+        {
+          "name": "Survey_Received__c"
+        },
+        {
+          "name": "Transactional_Survey_Sent_Date__c"
+        },
+        {
+          "name": "Triage_Start_Date__c"
+        },
+        {
+          "name": "SuppliedName"
+        },
+        {
+          "name": "Reason"
+        },
+        {
+          "name": "Engagement_Type__c"
+        }
+      ],
+      "object": "Case"
+    }
+  },
+  "augment_Case_Account_0_SPLST": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "sfdcDigest_Case_0_SPLST",
+      "left_key": [
+        "AccountId"
+      ],
+      "right_select": [
+        "Id",
+        "Account_Owner_Role__c",
+        "Account_Owner_Role__pc",
+        "Account_Customer_Status__pc",
+        "Customer_Status__c",
+        "AnnualRevenue",
+        "AOV_Band__c",
+        "Average_Customer_Sat__c",
+        "Region__c",
+        "CloudCraze_Support_Level__c",
+        "Combo_Sector__c",
+        "Combo_Company__c",
+        "Commerce_Cloud_CSM__c",
+        "Company__pc",
+        "Core_Edition__c",
+        "CSG_Coverage__c",
+        "CSG_Portfolio__c",
+        "Subregion__c",
+        "CSM_Manager__c",
+        "CurrencyIsoCode",
+        "Data_Storage_Allowance_Mb__c",
+        "Data_Storage_Used_Mb__c",
+        "Decision_Date__c",
+        "Demandware_Customer__c",
+        "Description",
+        "EBU_Sales_Programs__c",
+        "edw_num_licenses__c",
+        "ELA_Type__c",
+        "File_Storage_Allowance_Mb__c",
+        "File_Storage_Used_Mb__c",
+        "Fiscal_Year_Vertical__c",
+        "ShippingCountry",
+        "ShippingCity",
+        "Industry",
+        "Instance__c",
+        "IsCustomerPortal",
+        "IsPartner",
+        "ISV_Program_Tier__c",
+        "M_A__c",
+        "Krux_Customer__c",
+        "LastModifiedById",
+        "Leads__c",
+        "Locked_Industry__c",
+        "Locked_Region__c",
+        "Locked_Sector__c",
+        "Locked_SubSector__c",
+        "Master_Carve__c",
+        "Name",
+        "NameLocal",
+        "Non_Profit_Account__c",
+        "Open_Red_Account_Issues__c",
+        "Org_Status_DW__c",
+        "Organization_ID_DW_Case_Sensitive__c",
+        "Organization_ID_DW__c",
+        "Ownership",
+        "Pardot_First_Active_Date__c",
+        "Pardot_Support_Level__c",
+        "Paydex_Score__c",
+        "Acct_Rating__pc",
+        "RecordTypeId",
+        "Reseller__c",
+        "Scale_Journey_Getting_Started__c",
+        "Segment__c",
+        "SFDC_Sector__c",
+        "Storage_Last_Calculated__c",
+        "Storage_Status__c",
+        "Success_Segment__c",
+        "Support_LoB__c",
+        "SupportLevel__c",
+        "Team_Territory__c",
+        "TickerSymbol",
+        "Acct_Type__pc",
+        "Usage_Segment_Reporting__c",
+        "Website",
+        "BillingCity",
+        "LastModifiedDate",
+        "BillingState",
+        "LastActivityDate",
+        "BillingCountry"
+      ],
+      "right": "sfdcDigest_Account_0_SPLST",
+      "relationship": "AccountId"
+    }
+  },
+  "augment_User_4_0_SPLST": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Opportunity_0_SPLST",
+      "left_key": [
+        "Requestor__c"
+      ],
+      "right_select": [
+        "Name",
+        "UserRoleId",
+        "ManagerId"
+      ],
+      "right": "sfdcDigest_User_0_SPLST",
+      "relationship": "Requestor__c"
+    }
+  },
+  "augment_Territory__c_0_SPLST": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Account_0_SPLST",
+      "left_key": [
+        "AccountId.Team_Territory__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Territory__c_0_SPLST",
+      "relationship": "AccountId.Team_Territory__c"
+    }
+  },
+  "sfdcDigest_Territory__c_0_SPLST": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Territory__c"
+    }
+  },
+  "register_Cases_Account_spl_0_SPLST": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Cases_Account_spl",
+      "alias": "Cases_Account_spl",
+      "source": "AccountOwner"
+    }
+  },
+  "augment_Contact_0_SPLST": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Red_Account__c_0_SPLST",
+      "left_key": [
+        "ContactId"
+      ],
+      "right_select": [
+        "Email",
+        "Name"
+      ],
+      "right": "sfdcDigest_Contact_0_SPLST",
+      "relationship": "ContactId"
+    }
+  },
+  "augment_User_0_SPLST": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Case_Account_0_SPLST",
+      "left_key": [
+        "AccountId.LastModifiedById"
+      ],
+      "right_select": [
+        "Name",
+        "UserRoleId",
+        "ManagerId"
+      ],
+      "right": "sfdcDigest_User_0_SPLST",
+      "relationship": "AccountId.LastModifiedById"
+    }
+  },
+  "augment_Red_Account__c_0_SPLST": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_1_0_SPLST",
+      "left_key": [
+        "CEM__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Red_Account__c_0_SPLST",
+      "relationship": "CEM__c"
+    }
+  },
+  "sfdcDigest_UserRole_Case_Account_spl": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "DeveloperName"
+        }
+      ],
+      "object": "UserRole"
+    }
+  },
+  "sfdcDigest_Opportunity_0_SPLST": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Opportunity"
+    }
+  },
+  "augment_RecordType_1_0_SPLST": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Territory__c_0_SPLST",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Id",
+        "DeveloperName"
+      ],
+      "right": "sfdcDigest_RecordType_0_SPLST",
+      "relationship": "RecordTypeId"
+    }
+  },
+  "augment_Account_0_SPLST": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_RecordType_0_SPLST",
+      "left_key": [
+        "AccountId.Reseller__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Account_0_SPLST",
+      "relationship": "AccountId.Reseller__c"
+    }
+  },
+  "sfdcDigest_Master_Carve__c_0_SPLST": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Master_Carve__c"
+    }
+  },
+  "sfdcDigest_Red_Account__c_0_SPLST": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Red_Account__c"
+    }
+  },
+  "augment_User_1_0_SPLST": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_RecordType_1_0_SPLST",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "UserRoleId",
+        "ManagerId"
+      ],
+      "right": "sfdcDigest_User_0_SPLST",
+      "relationship": "OwnerId"
+    }
+  },
+  "Augment_Group_Owner_Case_act_spl": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_UserRole_Case_Account_Spl",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "DeveloperName"
+      ],
+      "right": "sfdcDigest_Group_case_account_spl",
+      "relationship": "OwnerID_Group",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "AccountOwner": {
+    "action": "augment",
+    "parameters": {
+      "operation": "LookupSingleValue",
+      "left": "Augment_Owner_Manager_Case_act_spl",
+      "left_key": [
+        "OwnerId"
+      ],
+      "relationship": "AccountOwner",
+      "right": "sfdcDigest_User_0_SPLST",
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ]
+    }
+  }
+}

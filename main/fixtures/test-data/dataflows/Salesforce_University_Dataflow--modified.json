@@ -1,0 +1,3369 @@
+{
+  "Register_PublicPrivateEvents": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "PublicPrivateEvents_SalesforceU",
+      "alias": "PublicPrivateEvents_SalesforceU",
+      "source": "Join_OrderCreatedBy"
+    }
+  },
+  "Join_ResellerCampaignEdCredit": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_ResellerCampaignRecType",
+      "left_key": [
+        "Training_Credit_Code__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Ed_Credits",
+      "relationship": "Training_Credit_Code__c"
+    }
+  },
+  "000_Manager_Level_1": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Flatten_UserManager",
+      "left_key": [
+        "Mgmt_Chain_Level_01__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_01__c"
+    }
+  },
+  "1501_Register_ConsumptionPlan": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Consumption Plan",
+      "alias": "Consumption_Plan",
+      "source": "1500_Aug_ConsumptionPlan_Acc"
+    }
+  },
+  "Join_ECommerceOppUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_ECommerceOppEdCredit",
+      "left_key": [
+        "OpportunityId__c.CreatedById"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "OpportunityId__c.CreatedById",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_Contact": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Contact"
+    }
+  },
+  "Register_Services": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Services_SalesforceU",
+      "alias": "Services_SalesforceU",
+      "source": "Join_Services"
+    }
+  },
+  "003_Manager_Level_4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "002_Manager_Level_3",
+      "left_key": [
+        "Mgmt_Chain_Level_04__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_04__c"
+    }
+  },
+  "Join_AccountUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_RegionAccount",
+      "left_key": [
+        "pse__Project__c.ProjectManagerUser__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "pse__Project__c.ProjectManagerUser__c"
+    }
+  },
+  "Join_ECommerceOppCampaign": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_ECommerceOppAcount",
+      "left_key": [
+        "OpportunityId__c.Education_Event__c"
+      ],
+      "right_select": [
+        "Name",
+        "Type",
+        "Attendee_Total__c",
+        "CreatedById",
+        "Company__c",
+        "RecordTypeId",
+        "Item_ID__c",
+        "Id",
+        "Course_Days__c",
+        "StartDate",
+        "EndDate",
+        "Instructor__c",
+        "Training_Expense_Amount_05__c",
+        "Training_Cost__c",
+        "Vendor__c",
+        "CreatedDate",
+        "Training_Expense_Amount_03__c",
+        "Training_Expense_Amount_04__c",
+        "Open_Seats__c",
+        "Delivery_Type__c",
+        "Hub__c",
+        "Total_Revenue__c",
+        "FoodTraining_Expense_Amount_02__c",
+        "Training_Expense_Amount_01__c",
+        "Plan_Enrollment__c"
+      ],
+      "right": "Extract_Campaign",
+      "relationship": "OpportunityId__c.Education_Event__c"
+    }
+  },
+  "Join_CampaignRecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Campaign",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "RecordTypeId"
+    }
+  },
+  "Join_OrderUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_OppOwnerUser",
+      "left_key": [
+        "OrderId__c"
+      ],
+      "right_select": [
+        "EffectiveDate",
+        "Status",
+        "sfbase__OrderLifeTimeValue__c",
+        "OrderNumber",
+        "CreatedById"
+      ],
+      "right": "Extract_Order",
+      "relationship": "OrderId__c"
+    }
+  },
+  "Join_BillingEventRecType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_BillingEventProject",
+      "left_key": [
+        "pse__Project__c.RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "pse__Project__c.RecordTypeId"
+    }
+  },
+  "Extract_User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "defaultValue": "Blank",
+          "name": "sf62user__manager__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Support_Subgroup__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "sfbase__Market_Segment__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate"
+        },
+        {
+          "name": "Mgmt_Chain_Level_01__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_02__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_03__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_09__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_08__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_07__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_06__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_05__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_04__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Username"
+        },
+        {
+          "name": "ManagerId"
+        },
+        {
+          "name": "IsActive"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Macro_Segment__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Hire_Date__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "JobGrade__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "TimeinGTMJobFunctionMonths__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "GTMJobFunction__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "GTMJobFunctionDetail__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "UserRoleId"
+        },
+        {
+          "name": "sf62user__Employee_Number__c"
+        },
+        {
+          "name": "FullPhotoUrl"
+        },
+        {
+          "name": "SmallPhotoUrl"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "011_Aug_Account_PSM": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "010_Aug_Account_Owner",
+      "left_key": [
+        "CSG_Portfolio_Success_Manager__c"
+      ],
+      "right_select": [
+        "GTMJobFunction__c",
+        "GTMJobFunctionDetail__c",
+        "Hire_Date__c",
+        "Id",
+        "IsActive",
+        "JobGrade__c",
+        "Macro_Segment__c",
+        "ManagerId",
+        "Managers",
+        "ManagerPath",
+        "Mgmt_Chain_Level_01__c",
+        "Mgmt_Chain_Level_02__c",
+        "Mgmt_Chain_Level_03__c",
+        "Mgmt_Chain_Level_04__c",
+        "Mgmt_Chain_Level_05__c",
+        "Mgmt_Chain_Level_06__c",
+        "Mgmt_Chain_Level_07__c",
+        "Mgmt_Chain_Level_08__c",
+        "Mgmt_Chain_Level_09__c",
+        "Mgmt_Chain_Level_01__c.Name",
+        "Mgmt_Chain_Level_02__c.Name",
+        "Mgmt_Chain_Level_03__c.Name",
+        "Mgmt_Chain_Level_04__c.Name",
+        "Mgmt_Chain_Level_05__c.Name",
+        "Mgmt_Chain_Level_06__c.Name",
+        "Mgmt_Chain_Level_07__c.Name",
+        "Mgmt_Chain_Level_08__c.Name",
+        "Mgmt_Chain_Level_09__c.Name",
+        "Name",
+        "Role.Name",
+        "Role.DeveloperName",
+        "Role.Roles",
+        "Role.RolePath",
+        "Role.ParentRoleId",
+        "sf62user__manager__c",
+        "sfbase__Market_Segment__c",
+        "TimeinGTMJobFunctionMonths__c",
+        "Username",
+        "UserRoleId",
+        "Support_Subgroup__c"
+      ],
+      "right": "009_User_UserRole",
+      "relationship": "PSM"
+    }
+  },
+  "Flatten_UserManager": {
+    "schema": {
+      "objects": [
+        {
+          "label": "Flatten_UserRole",
+          "fields": [
+            {
+              "name": "Managers",
+              "label": "Managers",
+              "isSystemField": false
+            },
+            {
+              "name": "ManagerPath",
+              "label": "ManagerPath",
+              "isSystemField": false
+            }
+          ]
+        }
+      ]
+    },
+    "action": "flatten",
+    "parameters": {
+      "self_field": "Id",
+      "multi_field": "Managers",
+      "parent_field": "ManagerId",
+      "path_field": "ManagerPath",
+      "source": "Extract_User"
+    }
+  },
+  "Extract_RecordType": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "DeveloperName"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "RecordType"
+    }
+  },
+  "Join_RecTypeRegion": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_ProjRecType",
+      "left_key": [
+        "pse__Project__c.pse__Region__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Region",
+      "relationship": "pse__Project__c.pse__Region__c"
+    }
+  },
+  "007_Manager_Level_8": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "006_Manager_Level_7",
+      "left_key": [
+        "Mgmt_Chain_Level_08__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_08__c"
+    }
+  },
+  "Join_UserAssignment": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_User1User2",
+      "left_key": [
+        "pse__Assignment__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Assignment",
+      "relationship": "pse__Assignment__c"
+    }
+  },
+  "004_Manager_Level_5": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "003_Manager_Level_4",
+      "left_key": [
+        "Mgmt_Chain_Level_05__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_05__c"
+    }
+  },
+  "010_Aug_Account_Owner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Account",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "GTMJobFunction__c",
+        "GTMJobFunctionDetail__c",
+        "Hire_Date__c",
+        "Id",
+        "IsActive",
+        "JobGrade__c",
+        "Macro_Segment__c",
+        "ManagerId",
+        "Managers",
+        "ManagerPath",
+        "Mgmt_Chain_Level_01__c",
+        "Mgmt_Chain_Level_02__c",
+        "Mgmt_Chain_Level_03__c",
+        "Mgmt_Chain_Level_04__c",
+        "Mgmt_Chain_Level_05__c",
+        "Mgmt_Chain_Level_06__c",
+        "Mgmt_Chain_Level_07__c",
+        "Mgmt_Chain_Level_08__c",
+        "Mgmt_Chain_Level_09__c",
+        "Mgmt_Chain_Level_01__c.Name",
+        "Mgmt_Chain_Level_02__c.Name",
+        "Mgmt_Chain_Level_03__c.Name",
+        "Mgmt_Chain_Level_04__c.Name",
+        "Mgmt_Chain_Level_05__c.Name",
+        "Mgmt_Chain_Level_06__c.Name",
+        "Mgmt_Chain_Level_07__c.Name",
+        "Mgmt_Chain_Level_08__c.Name",
+        "Mgmt_Chain_Level_09__c.Name",
+        "Name",
+        "Role.Name",
+        "Role.DeveloperName",
+        "Role.Roles",
+        "Role.RolePath",
+        "Role.ParentRoleId",
+        "sf62user__manager__c",
+        "sfbase__Market_Segment__c",
+        "TimeinGTMJobFunctionMonths__c",
+        "Username",
+        "UserRoleId",
+        "Support_Subgroup__c"
+      ],
+      "right": "009_User_UserRole",
+      "relationship": "OwnerId"
+    }
+  },
+  "Join_RegionAccount": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_RecTypeRegion",
+      "left_key": [
+        "pse__Project__c.pse__Account__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Account",
+      "relationship": "pse__Project__c.pse__Account__c"
+    }
+  },
+  "Extract_Opp": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "CampaignId"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "PartnerAccountId"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "StageName"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "Training_Credit_Code__c"
+        },
+        {
+          "name": "Item_ID__c"
+        },
+        {
+          "name": "AmountConverted__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "firstDayOfWeek": 0,
+          "name": "CloseDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "firstDayOfWeek": 0,
+          "name": "Contract_End_Date__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Discount__c"
+        },
+        {
+          "name": "LeadSource"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Apttus_Config2__OrderNumber__c"
+        },
+        {
+          "name": "Payment_Type__c"
+        },
+        {
+          "name": "PromotionCode__c"
+        },
+        {
+          "name": "Push_Counter__c"
+        },
+        {
+          "name": "Stage_2_Flag__c"
+        },
+        {
+          "name": "Subscription_Type__c"
+        },
+        {
+          "name": "pse__Region__c"
+        },
+        {
+          "name": "Reseller_Partner__c"
+        },
+        {
+          "name": "Self_Registered__c"
+        },
+        {
+          "name": "PO__c"
+        },
+        {
+          "name": "Age_Custom__c"
+        },
+        {
+          "name": "Segment__c"
+        },
+        {
+          "name": "Education_Event__c"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "ForecastCategoryName"
+        },
+        {
+          "name": "Order__c"
+        },
+        {
+          "name": "Premier_Status__c"
+        },
+        {
+          "name": "Amount"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "firstDayOfWeek": 0,
+          "name": "LastModifiedDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "LastModifiedById"
+        },
+        {
+          "name": "ContractId"
+        },
+        {
+          "name": "ExpectedRevenue"
+        },
+        {
+          "name": "Probability"
+        },
+        {
+          "name": "TotalOpportunityQuantity"
+        }
+      ],
+      "object": "Opportunity"
+    }
+  },
+  "Join_ECommerceOppContractUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractOppContract",
+      "left_key": [
+        "CreatedById"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "CreatedById"
+    }
+  },
+  "Join_BillingEventProject": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_BillingEvent",
+      "left_key": [
+        "pse__Project__c"
+      ],
+      "right_select": [
+        "RecordTypeId",
+        "pse__Billing_Type__c",
+        "pse__Region__c",
+        "Name",
+        "pse__Stage__c",
+        "pse__Account__c",
+        "Contract__c",
+        "Contract_Number__c",
+        "T_M_Amount_Remaining__c",
+        "Actual_Hours_Remaining__c",
+        "Actual_Hours__c",
+        "pse__Total_Assigned_Hours__c",
+        "Opportunity_Amount__c",
+        "pse__Billed__c",
+        "pse__Invoiced__c",
+        "pse__Bookings__c",
+        "pse__Planned_Hours__c",
+        "pse__Scheduled_Time__c",
+        "ProjectManagerUser__c",
+        "ProjectManager2User__c"
+      ],
+      "right": "Extract_Project",
+      "relationship": "pse__Project__c"
+    }
+  },
+  "001_Manager_Level_2": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "000_Manager_Level_1",
+      "left_key": [
+        "Mgmt_Chain_Level_02__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_02__c"
+    }
+  },
+  "Join_ECommerceCampaignUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_ECommerceOppCampaign",
+      "left_key": [
+        "OpportunityId__c.Education_Event__c.CreatedById"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "OpportunityId__c.Education_Event__c.CreatedById"
+    }
+  },
+  "Join_ContactUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_TimecardContact",
+      "left_key": [
+        "pse__Approver__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "pse__Approver__c"
+    }
+  },
+  "006_Manager_Level_7": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "005_Manager_Level_6",
+      "left_key": [
+        "Mgmt_Chain_Level_07__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_07__c"
+    }
+  },
+  "Join_ResellerCampaignRecType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_ResellerOppCampaign",
+      "left_key": [
+        "Education_Event__c.RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "Education_Event__c.RecordTypeId"
+    }
+  },
+  "Join_ECommerceUserUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_ECommerceOppUser",
+      "left_key": [
+        "OpportunityId__c.OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "FullPhotoUrl",
+        "SmallPhotoUrl"
+      ],
+      "right": "Extract_User",
+      "relationship": "OpportunityId__c.OwnerId",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "1500_Aug_ConsumptionPlan_Acc": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_ConsumptionPlan",
+      "left_key": [
+        "Account__c"
+      ],
+      "right_select": [
+        "Name",
+        "Region__c",
+        "AOV_Band__c",
+        "CFL_Region__c",
+        "CSG_Subregion__c",
+        "Industry",
+        "Global_Company__c",
+        "RecordTypeId",
+        "ShippingCountry",
+        "Company__c.Name",
+        "Company__c.Region__c",
+        "Company__c.AOV_Band__c",
+        "Company__c.CSG_Region__c",
+        "Company__c.Country__c",
+        "Company__c.Sector__c",
+        "Company__c.Status__c",
+        "Company__c.Filter_Cloud_Services",
+        "Company__c.Company_Notes__c",
+        "SoldDate__c"
+      ],
+      "right": "017_Aug_Account_Company",
+      "relationship": "Account"
+    }
+  },
+  "Join_OppOrderOpp": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_OppOrderUser",
+      "left_key": [
+        "OpportunityId__c"
+      ],
+      "right_select": [
+        "Name",
+        "Subscription_Type__c",
+        "Type",
+        "Payment_Type__c",
+        "Region__c",
+        "StageName",
+        "Amount",
+        "PromotionCode__c",
+        "PO__c",
+        "Item_ID__c",
+        "RecordTypeId",
+        "Self_Registered__c",
+        "Discount__c",
+        "LeadSource",
+        "CloseDate",
+        "Age_Custom__c",
+        "ForecastCategoryName",
+        "Premier_Status__c",
+        "Push_Counter__c",
+        "Segment__c",
+        "Stage_2_Flag__c",
+        "AmountConverted__c",
+        "Training_Credit_Code__c",
+        "Education_Event__c",
+        "OwnerId",
+        "AccountId",
+        "CreatedById",
+        "TotalOpportunityQuantity"
+      ],
+      "right": "Extract_Opp",
+      "relationship": "OpportunityId__c"
+    }
+  },
+  "015_Aug_Company_Lead_AE": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "014_Aug_Company_Lead_CSM",
+      "left_key": [
+        "AE__c"
+      ],
+      "right_select": [
+        "GTMJobFunction__c",
+        "GTMJobFunctionDetail__c",
+        "Hire_Date__c",
+        "Id",
+        "IsActive",
+        "JobGrade__c",
+        "Macro_Segment__c",
+        "ManagerId",
+        "Managers",
+        "ManagerPath",
+        "Mgmt_Chain_Level_01__c",
+        "Mgmt_Chain_Level_02__c",
+        "Mgmt_Chain_Level_03__c",
+        "Mgmt_Chain_Level_04__c",
+        "Mgmt_Chain_Level_05__c",
+        "Mgmt_Chain_Level_06__c",
+        "Mgmt_Chain_Level_07__c",
+        "Mgmt_Chain_Level_08__c",
+        "Mgmt_Chain_Level_09__c",
+        "Mgmt_Chain_Level_01__c.Name",
+        "Mgmt_Chain_Level_02__c.Name",
+        "Mgmt_Chain_Level_03__c.Name",
+        "Mgmt_Chain_Level_04__c.Name",
+        "Mgmt_Chain_Level_05__c.Name",
+        "Mgmt_Chain_Level_06__c.Name",
+        "Mgmt_Chain_Level_07__c.Name",
+        "Mgmt_Chain_Level_08__c.Name",
+        "Mgmt_Chain_Level_09__c.Name",
+        "Name",
+        "Role.Name",
+        "Role.DeveloperName",
+        "Role.Roles",
+        "Role.RolePath",
+        "Role.ParentRoleId",
+        "sf62user__manager__c",
+        "sfbase__Market_Segment__c",
+        "TimeinGTMJobFunctionMonths__c",
+        "Username",
+        "UserRoleId",
+        "Support_Subgroup__c"
+      ],
+      "right": "009_User_UserRole",
+      "relationship": "Lead_AE"
+    }
+  },
+  "009_User_UserRole": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "008_Manager_Level_9",
+      "left_key": [
+        "UserRoleId"
+      ],
+      "right_select": [
+        "Name",
+        "DeveloperName",
+        "Roles",
+        "RolePath",
+        "ParentRoleId",
+        "Id"
+      ],
+      "right": "Flatten_UserRole",
+      "relationship": "Role"
+    }
+  },
+  "Extract_Order": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "fiscalMonthOffset": 1,
+          "firstDayOfWeek": -1,
+          "name": "EffectiveDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Status"
+        },
+        {
+          "name": "OrderNumber"
+        },
+        {
+          "name": "sfbase__OrderLifeTimeValue__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Order"
+    }
+  },
+  "Extract_Campaign": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "Attendee_Total__c"
+        },
+        {
+          "name": "Company__c"
+        },
+        {
+          "name": "Item_ID__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Course_Days__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "firstDayOfWeek": 0,
+          "name": "StartDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "firstDayOfWeek": 0,
+          "name": "EndDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Instructor__c"
+        },
+        {
+          "name": "Training_Expense_Amount_05__c"
+        },
+        {
+          "name": "Training_Cost__c"
+        },
+        {
+          "name": "Vendor__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate"
+        },
+        {
+          "name": "Training_Expense_Amount_03__c"
+        },
+        {
+          "name": "Training_Expense_Amount_04__c"
+        },
+        {
+          "name": "Open_Seats__c"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Status"
+        },
+        {
+          "name": "Lead_Source__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Delivery_Type__c"
+        },
+        {
+          "name": "Site__c"
+        },
+        {
+          "name": "Hub__c"
+        },
+        {
+          "name": "Address__c"
+        },
+        {
+          "name": "Total_Revenue__c"
+        },
+        {
+          "name": "FoodTraining_Expense_Amount_02__c"
+        },
+        {
+          "name": "Training_Expense_Amount_01__c"
+        },
+        {
+          "name": "Maximum_Revenue__c"
+        },
+        {
+          "name": "Discount_Total__c"
+        },
+        {
+          "name": "Plan_Enrollment__c"
+        }
+      ],
+      "object": "Campaign"
+    }
+  },
+  "Join_UserProject": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_ContactUser",
+      "left_key": [
+        "pse__Project__c"
+      ],
+      "right_select": [
+        "RecordTypeId",
+        "pse__Billing_Type__c",
+        "pse__Region__c",
+        "Name",
+        "pse__Stage__c",
+        "Contract__c",
+        "pse__Account__c",
+        "Contract_Number__c",
+        "Actual_Hours__c",
+        "T_M_Amount_Remaining__c",
+        "Actual_Hours_Remaining__c",
+        "pse__Total_Assigned_Hours__c",
+        "Opportunity_Amount__c",
+        "pse__Scheduled_Time__c",
+        "pse__Billed__c",
+        "pse__Invoiced__c",
+        "pse__Bookings__c",
+        "pse__Planned_Hours__c",
+        "ProjectManagerUser__c",
+        "ProjectManager2User__c"
+      ],
+      "right": "Extract_Project",
+      "relationship": "pse__Project__c"
+    }
+  },
+  "Extract_Assignment": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "pse__Assignment__c"
+    }
+  },
+  "Register_ECommerce": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "ECommerce_SalesforceU",
+      "alias": "ECommerce_SalesforceU",
+      "source": "Join_ECommerceCampaignRecType"
+    }
+  },
+  "Join_OppOrderOwner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_OppOrderCampaign",
+      "left_key": [
+        "OpportunityId__c.OwnerId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "OpportunityId__c.OwnerId"
+    }
+  },
+  "008_Manager_Level_9": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "007_Manager_Level_8",
+      "left_key": [
+        "Mgmt_Chain_Level_09__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_09__c"
+    }
+  },
+  "Join_ECommerceOppAcount": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_ECommerceUserUser",
+      "left_key": [
+        "OpportunityId__c.AccountId"
+      ],
+      "right_select": [
+        "SupportLevel__c",
+        "Name"
+      ],
+      "right": "Extract_Account",
+      "relationship": "OpportunityId__c.AccountId"
+    }
+  },
+  "Join_ECommerceOppContractOpp": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_ECommerceOppContractUser",
+      "left_key": [
+        "OpportunityId__c"
+      ],
+      "right_select": [
+        "Id",
+        "StageName",
+        "RecordTypeId",
+        "Type",
+        "Training_Credit_Code__c",
+        "CreatedById",
+        "Item_ID__c",
+        "Name",
+        "Amount",
+        "AmountConverted__c",
+        "CloseDate",
+        "Contract_End_Date__c",
+        "Discount__c",
+        "LeadSource",
+        "OwnerId",
+        "Apttus_Config2__OrderNumber__c",
+        "Payment_Type__c",
+        "Push_Counter__c",
+        "Stage_2_Flag__c",
+        "AccountId",
+        "Education_Event__c",
+        "TotalOpportunityQuantity"
+      ],
+      "right": "Extract_Opp",
+      "relationship": "OpportunityId__c"
+    }
+  },
+  "Extract_OppOrder": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "OpportunityId__c"
+        },
+        {
+          "name": "OrderId__c"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "OpportunityOrder__c"
+    }
+  },
+  "Extract_Region": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "pse__Region__c"
+    }
+  },
+  "Register_ClicktoolsCampaign": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "ClicktoolsCampaign",
+      "alias": "ClicktoolsCampaign",
+      "source": "Join_ClicktoolsCampaign"
+    }
+  },
+  "013_ComputeExpression_Company": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Extract_Company",
+      "computedFields": [
+        {
+          "name": "Filter_PA",
+          "saqlExpression": "case when 'Program_Architects__c' > 0 then \"Program Architect\" else \"False\" end",
+          "type": "Text"
+        },
+        {
+          "name": "Filter_BA",
+          "saqlExpression": "case when 'CSE__c' > 0 then \"BTA\" else \"False\" end",
+          "type": "Text"
+        },
+        {
+          "name": "Filter_ITC",
+          "saqlExpression": "case when 'ITC__c' > 0  then \"ITC\" else \"False\" end",
+          "type": "Text"
+        },
+        {
+          "name": "Filter_Cloud_Services",
+          "saqlExpression": "'Filter_PA' + \";\" + 'Filter_BA'+ \";\" +'Filter_ITC' ",
+          "type": "Text",
+          "isMultiValue": true
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Join_OppAccountUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_OppOrderAccount",
+      "left_key": [
+        "OpportunityId__c.AccountId.OwnerId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "OpportunityId__c.AccountId.OwnerId"
+    }
+  },
+  "Join_BillingEventUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_BillingEventAccount",
+      "left_key": [
+        "pse__Project__c.ProjectManagerUser__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "pse__Project__c.ProjectManagerUser__c"
+    }
+  },
+  "Join_User1User2": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_AccountUser",
+      "left_key": [
+        "pse__Project__c.ProjectManager2User__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "pse__Project__c.ProjectManager2User__c"
+    }
+  },
+  "Join_ResellerOppCampaign": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Opp",
+      "left_key": [
+        "Education_Event__c"
+      ],
+      "right_select": [
+        "Item_ID__c",
+        "Status",
+        "Instructor__c",
+        "Attendee_Total__c",
+        "Company__c",
+        "Training_Expense_Amount_04__c",
+        "Open_Seats__c",
+        "Region__c",
+        "Lead_Source__c",
+        "Training_Expense_Amount_03__c",
+        "Training_Expense_Amount_05__c",
+        "Training_Cost__c",
+        "Vendor__c",
+        "Name",
+        "StartDate",
+        "RecordTypeId",
+        "Delivery_Type__c",
+        "Site__c",
+        "Hub__c",
+        "Address__c",
+        "Total_Revenue__c",
+        "Course_Days__c",
+        "Type",
+        "FoodTraining_Expense_Amount_02__c",
+        "Training_Expense_Amount_01__c",
+        "Plan_Enrollment__c"
+      ],
+      "right": "Extract_Campaign",
+      "relationship": "Education_Event__c"
+    }
+  },
+  "Register_Reseller": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Reseller",
+      "alias": "Reseller",
+      "source": "Join_ResellerCampaignUser"
+    }
+  },
+  "Join_ResellerCampaignUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_ResellerCampaignAcc",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId"
+    }
+  },
+  "Join_OppOrderCampaign": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_OppOrderEdCredits",
+      "left_key": [
+        "OpportunityId__c.Education_Event__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Campaign",
+      "relationship": "OpportunityId__c.Education_Event__c"
+    }
+  },
+  "Join_BillingEventRegion": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_BillingEventRecType",
+      "left_key": [
+        "pse__Project__c.pse__Region__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Region",
+      "relationship": "pse__Project__c.pse__Region__c"
+    }
+  },
+  "Join_OppOrderUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_OppOrder",
+      "left_key": [
+        "CreatedById"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "CreatedById"
+    }
+  },
+  "Join_ECommerceOppRecType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_ECommerceOppContractOpp",
+      "left_key": [
+        "OpportunityId__c.RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "OpportunityId__c.RecordTypeId"
+    }
+  },
+  "Register_User": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "UserswithPhotoURLs",
+      "alias": "UserswithPhotoURLs",
+      "source": "Extract_User"
+    }
+  },
+  "014_Aug_Company_Lead_CSM": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "013_ComputeExpression_Company",
+      "left_key": [
+        "CSM__c"
+      ],
+      "right_select": [
+        "GTMJobFunction__c",
+        "GTMJobFunctionDetail__c",
+        "Hire_Date__c",
+        "Id",
+        "IsActive",
+        "JobGrade__c",
+        "Macro_Segment__c",
+        "ManagerId",
+        "Managers",
+        "ManagerPath",
+        "Mgmt_Chain_Level_01__c",
+        "Mgmt_Chain_Level_02__c",
+        "Mgmt_Chain_Level_03__c",
+        "Mgmt_Chain_Level_04__c",
+        "Mgmt_Chain_Level_05__c",
+        "Mgmt_Chain_Level_06__c",
+        "Mgmt_Chain_Level_07__c",
+        "Mgmt_Chain_Level_08__c",
+        "Mgmt_Chain_Level_09__c",
+        "Mgmt_Chain_Level_01__c.Name",
+        "Mgmt_Chain_Level_02__c.Name",
+        "Mgmt_Chain_Level_03__c.Name",
+        "Mgmt_Chain_Level_04__c.Name",
+        "Mgmt_Chain_Level_05__c.Name",
+        "Mgmt_Chain_Level_06__c.Name",
+        "Mgmt_Chain_Level_07__c.Name",
+        "Mgmt_Chain_Level_08__c.Name",
+        "Mgmt_Chain_Level_09__c.Name",
+        "Name",
+        "Role.Name",
+        "Role.DeveloperName",
+        "Role.Roles",
+        "Role.RolePath",
+        "Role.ParentRoleId",
+        "sf62user__manager__c",
+        "sfbase__Market_Segment__c",
+        "TimeinGTMJobFunctionMonths__c",
+        "Username",
+        "UserRoleId",
+        "Support_Subgroup__c"
+      ],
+      "right": "009_User_UserRole",
+      "relationship": "Lead_CSM"
+    }
+  },
+  "Join_OppOrderAccount": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_OppOrderOwner",
+      "left_key": [
+        "OpportunityId__c.AccountId"
+      ],
+      "right_select": [
+        "Name",
+        "Industry",
+        "Id",
+        "edw_num_licenses__c",
+        "AOV_Band__c",
+        "Usage_Score__c",
+        "Region__c",
+        "OwnerId"
+      ],
+      "right": "Extract_Account",
+      "relationship": "OpportunityId__c.AccountId"
+    }
+  },
+  "Extract_BillingEvent": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "pse__Invoiced__c"
+        },
+        {
+          "name": "pse__Is_Released__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "pse__Project__c"
+        }
+      ],
+      "object": "pse__Billing_Event__c"
+    }
+  },
+  "Join_ClicktoolsCampaign": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Clicktools",
+      "left_key": [
+        "Campaign__c"
+      ],
+      "right_select": [
+        "Name",
+        "Id",
+        "StartDate",
+        "Company__c",
+        "Vendor__c",
+        "Type",
+        "Instructor__c",
+        "Hub__c",
+        "Attendee_Total__c"
+      ],
+      "right": "Extract_Campaign",
+      "relationship": "Campaign__c"
+    }
+  },
+  "Register_CampaignRecordType": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Campaign_SalesforceU",
+      "alias": "Campaign_SalesforceU",
+      "source": "Join_CampaignRecordType"
+    }
+  },
+  "Join_OppOwnerUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_OppAccountUser",
+      "left_key": [
+        "OpportunityId__c.CreatedById"
+      ],
+      "right_select": [
+        "Name",
+        "FullPhotoUrl",
+        "SmallPhotoUrl"
+      ],
+      "right": "Extract_User",
+      "relationship": "OpportunityId__c.CreatedById",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "012_Aug_Account_CSM": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "011_Aug_Account_PSM",
+      "left_key": [
+        "CSM_lookup__c"
+      ],
+      "right_select": [
+        "GTMJobFunction__c",
+        "GTMJobFunctionDetail__c",
+        "Hire_Date__c",
+        "Id",
+        "IsActive",
+        "JobGrade__c",
+        "Macro_Segment__c",
+        "ManagerId",
+        "Managers",
+        "ManagerPath",
+        "Mgmt_Chain_Level_01__c",
+        "Mgmt_Chain_Level_02__c",
+        "Mgmt_Chain_Level_03__c",
+        "Mgmt_Chain_Level_04__c",
+        "Mgmt_Chain_Level_05__c",
+        "Mgmt_Chain_Level_06__c",
+        "Mgmt_Chain_Level_07__c",
+        "Mgmt_Chain_Level_08__c",
+        "Mgmt_Chain_Level_09__c",
+        "Mgmt_Chain_Level_01__c.Name",
+        "Mgmt_Chain_Level_02__c.Name",
+        "Mgmt_Chain_Level_03__c.Name",
+        "Mgmt_Chain_Level_04__c.Name",
+        "Mgmt_Chain_Level_05__c.Name",
+        "Mgmt_Chain_Level_06__c.Name",
+        "Mgmt_Chain_Level_07__c.Name",
+        "Mgmt_Chain_Level_08__c.Name",
+        "Mgmt_Chain_Level_09__c.Name",
+        "Name",
+        "Role.Name",
+        "Role.DeveloperName",
+        "Role.Roles",
+        "Role.RolePath",
+        "Role.ParentRoleId",
+        "sf62user__manager__c",
+        "sfbase__Market_Segment__c",
+        "TimeinGTMJobFunctionMonths__c",
+        "Username",
+        "UserRoleId",
+        "Support_Subgroup__c"
+      ],
+      "right": "009_User_UserRole",
+      "relationship": "CSM"
+    }
+  },
+  "Extract_Timecard": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "pse__Status__c"
+        },
+        {
+          "name": "pse__Billable__c"
+        },
+        {
+          "name": "Project_Name__c"
+        },
+        {
+          "name": "pse__Exclude_from_Billing__c"
+        },
+        {
+          "name": "pse__Total_Billable_Amount__c"
+        },
+        {
+          "name": "pse__Total_Hours__c"
+        },
+        {
+          "name": "Role__c"
+        },
+        {
+          "name": "Resource_Name__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "pse__Resource__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "firstDayOfWeek": -1,
+          "name": "pse__Start_Date__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "firstDayOfWeek": -1,
+          "name": "pse__End_Date__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "pse__Approver__c"
+        },
+        {
+          "name": "pse__Cost_Rate__c"
+        },
+        {
+          "name": "pse__Cost_Rate_Amount__c"
+        },
+        {
+          "name": "pse__Bill_Rate__c"
+        },
+        {
+          "name": "pse__Total_Cost__c"
+        },
+        {
+          "name": "Project_Region__c"
+        },
+        {
+          "name": "pse__Project__c"
+        },
+        {
+          "name": "pse__Assignment__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "firstDayOfWeek": -1,
+          "name": "CreatedDate",
+          "isYearEndFiscalYear": true
+        }
+      ],
+      "object": "pse__Timecard_Header__c"
+    }
+  },
+  "Join_Services": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "pse__Project__c"
+      ],
+      "left": "Join_UserAssignment",
+      "left_key": [
+        "pse__Project__c"
+      ],
+      "right_select": [
+        "Name",
+        "pse__Invoiced__c",
+        "pse__Is_Released__c"
+      ],
+      "right": "Join_BillingEventUserUser",
+      "relationship": "BillingEventTimecardProject"
+    }
+  },
+  "Extract_Project": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "pse__Billing_Type__c"
+        },
+        {
+          "name": "pse__Region__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "pse__Stage__c"
+        },
+        {
+          "name": "Contract__c"
+        },
+        {
+          "name": "pse__Account__c"
+        },
+        {
+          "name": "Contract_Number__c"
+        },
+        {
+          "name": "Actual_Hours__c"
+        },
+        {
+          "name": "T_M_Amount_Remaining__c"
+        },
+        {
+          "name": "Actual_Hours_Remaining__c"
+        },
+        {
+          "name": "pse__Total_Assigned_Hours__c"
+        },
+        {
+          "name": "Opportunity_Amount__c"
+        },
+        {
+          "name": "pse__Scheduled_Time__c"
+        },
+        {
+          "name": "pse__Billed__c"
+        },
+        {
+          "name": "pse__Invoiced__c"
+        },
+        {
+          "name": "pse__Bookings__c"
+        },
+        {
+          "name": "pse__Planned_Hours__c"
+        },
+        {
+          "name": "ProjectManagerUser__c"
+        },
+        {
+          "name": "ProjectManager2User__c"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "pse__Proj__c"
+    }
+  },
+  "Extract_ConsumptionPlan": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "SELA__c"
+        },
+        {
+          "name": "Account__c"
+        },
+        {
+          "name": "CRM_Utilized__c"
+        },
+        {
+          "name": "CRM_Unused__c"
+        },
+        {
+          "name": "Custom_Consumption__c"
+        },
+        {
+          "name": "Custom_Licenses__c"
+        },
+        {
+          "name": "Custom_Utilized__c"
+        },
+        {
+          "name": "Custom_Unused__c"
+        },
+        {
+          "name": "Mktg_Cloud_Consumption__c"
+        },
+        {
+          "name": "Mktg_Comments__c"
+        },
+        {
+          "name": "Analytics_Consumption__c"
+        },
+        {
+          "name": "Analytics_Implemented__c"
+        },
+        {
+          "name": "Analytics_Comments__c"
+        },
+        {
+          "name": "Partner_Comm_Consumption__c"
+        },
+        {
+          "name": "Partner_Comm_Portal_Licenses__c"
+        },
+        {
+          "name": "Partner_Comm_Portal_Utilized__c"
+        },
+        {
+          "name": "Partner_Comm_Portal_Unplanned__c"
+        },
+        {
+          "name": "Partner_Comm_Comments__c"
+        },
+        {
+          "name": "Mobile_Next_12_mnths_Plan__c"
+        },
+        {
+          "name": "Mobile_Unplanned__c"
+        },
+        {
+          "name": "Heroku_Consumption__c"
+        },
+        {
+          "name": "Heroku_Comments__c"
+        },
+        {
+          "name": "Employee_Comm_Q4_Cur_Yr_Plan__c"
+        },
+        {
+          "name": "Overall_Consumption__c"
+        },
+        {
+          "name": "Account_Name_Local__c"
+        },
+        {
+          "name": "Sales_Svc_Lightning_Enabled__c"
+        },
+        {
+          "name": "Company__c"
+        },
+        {
+          "name": "Calendar_Year_Plan__c"
+        },
+        {
+          "name": "CRM_Next_12_mnths_Plan__c"
+        },
+        {
+          "name": "Custom_Next_12_mnths_Plan__c"
+        },
+        {
+          "name": "Custom_Unplanned__c"
+        },
+        {
+          "name": "CRM_Unplanned__c"
+        },
+        {
+          "name": "CRM_License__c"
+        },
+        {
+          "defaultValue": "blank",
+          "name": "Marketing_Implemented__c"
+        },
+        {
+          "defaultValue": "blank",
+          "name": "Heroku_Implemented__c"
+        }
+      ],
+      "object": "Consumption_Plan__c"
+    }
+  },
+  "Join_OrderCreatedBy": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_OrderUser",
+      "left_key": [
+        "OrderId__c.CreatedById"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "OrderId__c.CreatedById"
+    }
+  },
+  "Join_BillingEventAccount": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_BillingEventRegion",
+      "left_key": [
+        "pse__Project__c.pse__Account__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Account",
+      "relationship": "pse__Project__c.pse__Account__c"
+    }
+  },
+  "Extract_Ed_Credits": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Education_Credits__c"
+    }
+  },
+  "ExtractOppContract": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "OpportunityId__c"
+        }
+      ],
+      "object": "OpportunityContract__c"
+    }
+  },
+  "Extract_Clicktools": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Click_Tools_Survey_Result__c"
+        },
+        {
+          "name": "GES_Customer_Name__c"
+        },
+        {
+          "name": "CS_1st_Instructor_Demonstration_Skills__c"
+        },
+        {
+          "name": "CS_2nd_Instructor_Knowledge_Level__c"
+        },
+        {
+          "name": "CS_2nd_Instructor_Presentation_Skills__c"
+        },
+        {
+          "name": "EMP_201_INSTAVG__c"
+        },
+        {
+          "name": "CS_1st_Instructor_Discussion_Skills__c"
+        },
+        {
+          "name": "Likelihood_to_Recommend_to_Others__c"
+        },
+        {
+          "name": "GES_your_overall_experience__c"
+        },
+        {
+          "name": "GES_Take_Another_SFDC_Course__c"
+        },
+        {
+          "name": "GES_Recommend_Course__c"
+        },
+        {
+          "name": "Survey_Sent_Date__c"
+        },
+        {
+          "name": "GES_feedback_on_instructor__c"
+        },
+        {
+          "name": "Campaign__c"
+        }
+      ],
+      "object": "Clicktools_Survey_Results__c"
+    }
+  },
+  "016_Aug_Company_RecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "015_Aug_Company_Lead_AE",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name",
+        "DeveloperName"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "RecordTypeId"
+    }
+  },
+  "Extract_Company": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Unpaid_CSG_Resources__c"
+        },
+        {
+          "name": "Industry__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Ultimate_Parent_DUNS__c"
+        },
+        {
+          "name": "Transitioned_SM_Allocation__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Transition_Status__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Transition_Date__c"
+        },
+        {
+          "name": "Total_Employees__c"
+        },
+        {
+          "name": "numLicenses__c"
+        },
+        {
+          "name": "Top25__c"
+        },
+        {
+          "name": "test_licenses__c"
+        },
+        {
+          "name": "SystemModstamp"
+        },
+        {
+          "name": "Sub_Sector__c"
+        },
+        {
+          "name": "Status__c"
+        },
+        {
+          "name": "Services_TTM__c"
+        },
+        {
+          "name": "Services_Revenue__c"
+        },
+        {
+          "name": "Segment__c"
+        },
+        {
+          "name": "Sector__c"
+        },
+        {
+          "name": "Secondary_Region_SM_Allocation__c"
+        },
+        {
+          "name": "Sales_Manager_Presenting__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "manager__c"
+        },
+        {
+          "name": "S1_Adoption__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Routing_Postal_Code__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Renewals_link__c"
+        },
+        {
+          "name": "Renewals_Next_180__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Relationship_Status__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Region_formula__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Region__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Red_Account__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Reboot_Stage__c"
+        },
+        {
+          "name": "Rank__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Program_Tier__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Program_Architect_drill__c"
+        },
+        {
+          "name": "Global_SM_allocation__c"
+        },
+        {
+          "name": "Allocated_CST__c"
+        },
+        {
+          "name": "Allocated_CSM__c"
+        },
+        {
+          "name": "Pipeline_CFY__c"
+        },
+        {
+          "name": "Pipe_CFY__c"
+        },
+        {
+          "name": "Paid_CSG_resources__c"
+        },
+        {
+          "name": "PA_CSE_Pipeline__c"
+        },
+        {
+          "name": "num_Open_Cases__c"
+        },
+        {
+          "name": "Mobile_Adoption__c"
+        },
+        {
+          "name": "MayEdit"
+        },
+        {
+          "name": "Locked_Total_Employees__c"
+        },
+        {
+          "name": "Locked_Sub_Sector__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Locked_SIC__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Locked_Sector__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Locked_Postal_Code__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Locked_Industry__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Locked_HQ_State__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Locked_Country__c"
+        },
+        {
+          "name": "License_Util__c"
+        },
+        {
+          "name": "Lic_Employee__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Legal_Name__c"
+        },
+        {
+          "name": "LastViewedDate"
+        },
+        {
+          "name": "LastReferencedDate"
+        },
+        {
+          "name": "LastModifiedDate"
+        },
+        {
+          "name": "LastActivityDate"
+        },
+        {
+          "name": "LACA_AOV_USD__c"
+        },
+        {
+          "name": "Key__c"
+        },
+        {
+          "name": "JP_AOV_USD__c"
+        },
+        {
+          "name": "IsLocked"
+        },
+        {
+          "name": "HQ_State__c"
+        },
+        {
+          "name": "HQ_Country__c"
+        },
+        {
+          "name": "Fortune500_Rank__c"
+        },
+        {
+          "name": "Global_500_Rank_link__c"
+        },
+        {
+          "name": "FY17_Review_Category__c"
+        },
+        {
+          "name": "FY17_Geo__c"
+        },
+        {
+          "name": "FT_Global_500_rank__c"
+        },
+        {
+          "name": "FT_Global_500_rank_link__c"
+        },
+        {
+          "name": "Foundation__c"
+        },
+        {
+          "name": "Fortune_1000_rank__c"
+        },
+        {
+          "name": "Fortune_1000_rank_Link__c"
+        },
+        {
+          "name": "Exec_Sponsorship_Program__c"
+        },
+        {
+          "name": "Exec_Sponsor_Name__c"
+        },
+        {
+          "name": "Review_Comments__c"
+        },
+        {
+          "name": "Exception_Requested__c"
+        },
+        {
+          "name": "ET_Pipeline_next_12_months__c"
+        },
+        {
+          "name": "ETMC_ACV_TTM__c"
+        },
+        {
+          "name": "ET_2012_Spend__c"
+        },
+        {
+          "name": "EOS_Company_ID__c"
+        },
+        {
+          "name": "EMEA_AOV_USD__c"
+        },
+        {
+          "name": "IsDeleted"
+        },
+        {
+          "name": "CurrencyIsoCode"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "CSG_Subregion__c"
+        },
+        {
+          "name": "FY17_HT_Region__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "CSG_Region__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate"
+        },
+        {
+          "name": "Transition_Notes__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Country__c"
+        },
+        {
+          "name": "Premier_Coverage__c"
+        },
+        {
+          "name": "Core_or_MC__c"
+        },
+        {
+          "name": "Company_Type__c"
+        },
+        {
+          "name": "Company_Notes__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Company_Count__c"
+        },
+        {
+          "name": "Communities_Segment__c"
+        },
+        {
+          "name": "Chatter_Adoption__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "CFL_Manager__c"
+        },
+        {
+          "name": "Classification__c"
+        },
+        {
+          "name": "Business_Unit__c"
+        },
+        {
+          "name": "BU__c"
+        },
+        {
+          "name": "CSE_s__c"
+        },
+        {
+          "name": "Average_Support_CSAT__c"
+        },
+        {
+          "name": "Attrition_TTM__c"
+        },
+        {
+          "name": "APAC_AOV_USD__c"
+        },
+        {
+          "name": "AOV_Rev__c"
+        },
+        {
+          "name": "AOV_Band__c"
+        },
+        {
+          "name": "AMER_AOV_USD__c"
+        },
+        {
+          "name": "Is_Custom_Company__c"
+        },
+        {
+          "name": "ACV_TTM__c"
+        },
+        {
+          "name": "ACV_Drill__c"
+        },
+        {
+          "name": "Actual_CST__c"
+        },
+        {
+          "name": "Actual_CSM__c"
+        },
+        {
+          "name": "Account_Family_Name__c"
+        },
+        {
+          "name": "ServicesTTM__c"
+        },
+        {
+          "name": "usd_Renewals_next_12_months__c"
+        },
+        {
+          "name": "USDPipe_CFY__c"
+        },
+        {
+          "name": "Annual_rev__c"
+        },
+        {
+          "name": "ACV__c"
+        },
+        {
+          "name": "Red_Accounts__c"
+        },
+        {
+          "name": "Program_Architects__c"
+        },
+        {
+          "name": "ITC__c"
+        },
+        {
+          "name": "Open_Cases__c"
+        },
+        {
+          "name": "MCS_Accounts__c"
+        },
+        {
+          "name": "CSE__c"
+        },
+        {
+          "name": "Licenses__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "AE__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "CST__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "GAM__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Deal_Champion__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Lead_Data_Co_Prime__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Lead_ETMS_AE__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Lead_ET_Services__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Lead_ET_CSM__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Lead_Platform_Co_Prime__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "SE__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Lead_Service_Co_Prime__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "CSM__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Reboot_Sponsor__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Reboot_Account__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Success_Champion__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "User__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Services_BDM__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Success_lead__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Tech_Champion__c"
+        }
+      ],
+      "object": "Company__c"
+    }
+  },
+  "Extract_Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "Extract_Account",
+      "fields": [
+        {
+          "name": "NameLocal"
+        },
+        {
+          "name": "CSG_Region__c"
+        },
+        {
+          "name": "CSG_Portfolio_Success_Manager__c"
+        },
+        {
+          "name": "CSG_Subregion__c"
+        },
+        {
+          "name": "CSG_Portfolio__c"
+        },
+        {
+          "name": "Cases__c"
+        },
+        {
+          "name": "TrueLogin__c"
+        },
+        {
+          "name": "Open_Red_Account_Issues__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "AccountSource"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "CSM_lookup__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Org_Status_DW__c"
+        },
+        {
+          "name": "Non_Profit_Account__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "LastModifiedDate"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Region__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Region_AOV_Band__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "ShippingState"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Subregion__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "ShippingCountry"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "ShippingPostalCode"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "ShippingCity"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "BillingCity"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "BillingState"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "BillingCountry"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "BillingPostalCode"
+        },
+        {
+          "name": "NumberOfEmployees"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "RecordTypeId"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Industry"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Type"
+        },
+        {
+          "name": "ParentId"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "SoldDate__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "CFL_Region__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "AOV_Band__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Instance__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "SFDC_Sector__c"
+        },
+        {
+          "defaultValue": "Blank",
+          "name": "Global_Company__c"
+        },
+        {
+          "name": "ET_Marketing_Cloud_AOV__c"
+        },
+        {
+          "name": "Current_Account_AOV__c"
+        },
+        {
+          "name": "SupportLevel__c"
+        },
+        {
+          "name": "edw_num_licenses__c"
+        },
+        {
+          "name": "Usage_Score__c"
+        }
+      ],
+      "object": "account"
+    }
+  },
+  "002_Manager_Level_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "001_Manager_Level_2",
+      "left_key": [
+        "Mgmt_Chain_Level_03__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_03__c"
+    }
+  },
+  "Join_ECommerceCampaignRecType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_ECommerceCampaignUser",
+      "left_key": [
+        "OpportunityId__c.Education_Event__c.RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "OpportunityId__c.Education_Event__c.RecordTypeId"
+    }
+  },
+  "Join_ResellerCampaignAcc": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_ResellerCampaignEdCredit",
+      "left_key": [
+        "Reseller_Partner__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Account",
+      "relationship": "Reseller_Partner__c"
+    }
+  },
+  "Join_OppOrderRecType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_OppOrderOpp",
+      "left_key": [
+        "OpportunityId__c.RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "OpportunityId__c.RecordTypeId"
+    }
+  },
+  "Extract_UserRole": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "DeveloperName"
+        },
+        {
+          "name": "ParentRoleId"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "LastModifiedDate"
+        },
+        {
+          "name": "LastModifiedById"
+        },
+        {
+          "name": "SystemModstamp"
+        }
+      ],
+      "object": "UserRole"
+    }
+  },
+  "Join_BillingEventUserUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_BillingEventUser",
+      "left_key": [
+        "pse__Project__c.ProjectManager2User__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Account",
+      "relationship": "pse__Project__c.ProjectManager2User__c"
+    }
+  },
+  "Join_TimecardContact": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Timecard",
+      "left_key": [
+        "pse__Resource__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Contact",
+      "relationship": "pse__Resource__c"
+    }
+  },
+  "005_Manager_Level_6": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "004_Manager_Level_5",
+      "left_key": [
+        "Mgmt_Chain_Level_06__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_06__c"
+    }
+  },
+  "017_Aug_Account_Company": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "012B_Aug_Account_RecordType",
+      "left_key": [
+        "Global_Company__c"
+      ],
+      "right_select": [
+        "Lead_CSM.GTMJobFunction__c",
+        "Lead_CSM.GTMJobFunctionDetail__c",
+        "Lead_CSM.Hire_Date__c",
+        "Lead_CSM.Id",
+        "Lead_CSM.IsActive",
+        "Lead_CSM.JobGrade__c",
+        "Lead_CSM.Macro_Segment__c",
+        "Lead_CSM.ManagerId",
+        "Lead_CSM.Managers",
+        "Lead_CSM.ManagerPath",
+        "Lead_CSM.Mgmt_Chain_Level_01__c",
+        "Lead_CSM.Mgmt_Chain_Level_02__c",
+        "Lead_CSM.Mgmt_Chain_Level_03__c",
+        "Lead_CSM.Mgmt_Chain_Level_04__c",
+        "Lead_CSM.Mgmt_Chain_Level_05__c",
+        "Lead_CSM.Mgmt_Chain_Level_06__c",
+        "Lead_CSM.Mgmt_Chain_Level_07__c",
+        "Lead_CSM.Mgmt_Chain_Level_08__c",
+        "Lead_CSM.Mgmt_Chain_Level_09__c",
+        "Lead_CSM.Mgmt_Chain_Level_01__c.Name",
+        "Lead_CSM.Mgmt_Chain_Level_02__c.Name",
+        "Lead_CSM.Mgmt_Chain_Level_03__c.Name",
+        "Lead_CSM.Mgmt_Chain_Level_04__c.Name",
+        "Lead_CSM.Mgmt_Chain_Level_05__c.Name",
+        "Lead_CSM.Mgmt_Chain_Level_06__c.Name",
+        "Lead_CSM.Mgmt_Chain_Level_07__c.Name",
+        "Lead_CSM.Mgmt_Chain_Level_08__c.Name",
+        "Lead_CSM.Mgmt_Chain_Level_09__c.Name",
+        "Lead_CSM.Name",
+        "Lead_CSM.Role.Name",
+        "Lead_CSM.Role.DeveloperName",
+        "Lead_CSM.Role.Roles",
+        "Lead_CSM.Role.RolePath",
+        "Lead_CSM.Role.ParentRoleId",
+        "Lead_CSM.sf62user__manager__c",
+        "Lead_CSM.sfbase__Market_Segment__c",
+        "Lead_CSM.TimeinGTMJobFunctionMonths__c",
+        "Lead_CSM.Username",
+        "Lead_CSM.UserRoleId",
+        "Lead_CSM.Support_Subgroup__c",
+        "Lead_AE.GTMJobFunction__c",
+        "Lead_AE.GTMJobFunctionDetail__c",
+        "Lead_AE.Hire_Date__c",
+        "Lead_AE.Id",
+        "Lead_AE.IsActive",
+        "Lead_AE.JobGrade__c",
+        "Lead_AE.Macro_Segment__c",
+        "Lead_AE.ManagerId",
+        "Lead_AE.Managers",
+        "Lead_AE.ManagerPath",
+        "Lead_AE.Mgmt_Chain_Level_01__c",
+        "Lead_AE.Mgmt_Chain_Level_02__c",
+        "Lead_AE.Mgmt_Chain_Level_03__c",
+        "Lead_AE.Mgmt_Chain_Level_04__c",
+        "Lead_AE.Mgmt_Chain_Level_05__c",
+        "Lead_AE.Mgmt_Chain_Level_06__c",
+        "Lead_AE.Mgmt_Chain_Level_07__c",
+        "Lead_AE.Mgmt_Chain_Level_08__c",
+        "Lead_AE.Mgmt_Chain_Level_09__c",
+        "Lead_AE.Mgmt_Chain_Level_01__c.Name",
+        "Lead_AE.Mgmt_Chain_Level_02__c.Name",
+        "Lead_AE.Mgmt_Chain_Level_03__c.Name",
+        "Lead_AE.Mgmt_Chain_Level_04__c.Name",
+        "Lead_AE.Mgmt_Chain_Level_05__c.Name",
+        "Lead_AE.Mgmt_Chain_Level_06__c.Name",
+        "Lead_AE.Mgmt_Chain_Level_07__c.Name",
+        "Lead_AE.Mgmt_Chain_Level_08__c.Name",
+        "Lead_AE.Mgmt_Chain_Level_09__c.Name",
+        "Lead_AE.Name",
+        "Lead_AE.Role.Name",
+        "Lead_AE.Role.DeveloperName",
+        "Lead_AE.Role.Roles",
+        "Lead_AE.Role.RolePath",
+        "Lead_AE.Role.ParentRoleId",
+        "Lead_AE.sf62user__manager__c",
+        "Lead_AE.sfbase__Market_Segment__c",
+        "Lead_AE.TimeinGTMJobFunctionMonths__c",
+        "Lead_AE.Username",
+        "Lead_AE.UserRoleId",
+        "Lead_AE.Support_Subgroup__c",
+        "Unpaid_CSG_Resources__c",
+        "Industry__c",
+        "Ultimate_Parent_DUNS__c",
+        "Transitioned_SM_Allocation__c",
+        "Transition_Status__c",
+        "Transition_Date__c",
+        "Total_Employees__c",
+        "numLicenses__c",
+        "Top25__c",
+        "test_licenses__c",
+        "SystemModstamp",
+        "Sub_Sector__c",
+        "Status__c",
+        "Filter_Cloud_Services",
+        "Services_TTM__c",
+        "Services_Revenue__c",
+        "Segment__c",
+        "Sector__c",
+        "Secondary_Region_SM_Allocation__c",
+        "Sales_Manager_Presenting__c",
+        "manager__c",
+        "S1_Adoption__c",
+        "Routing_Postal_Code__c",
+        "Renewals_link__c",
+        "Renewals_Next_180__c",
+        "Relationship_Status__c",
+        "Region_formula__c",
+        "Region__c",
+        "Red_Account__c",
+        "Id",
+        "Reboot_Stage__c",
+        "Rank__c",
+        "Program_Tier__c",
+        "Program_Architect_drill__c",
+        "Global_SM_allocation__c",
+        "Allocated_CST__c",
+        "Allocated_CSM__c",
+        "Pipeline_CFY__c",
+        "Pipe_CFY__c",
+        "Paid_CSG_resources__c",
+        "PA_CSE_Pipeline__c",
+        "num_Open_Cases__c",
+        "Mobile_Adoption__c",
+        "MayEdit",
+        "Locked_Total_Employees__c",
+        "Locked_Sub_Sector__c",
+        "Locked_SIC__c",
+        "Locked_Sector__c",
+        "Locked_Postal_Code__c",
+        "Locked_Industry__c",
+        "Locked_HQ_State__c",
+        "Locked_Country__c",
+        "License_Util__c",
+        "Lic_Employee__c",
+        "Legal_Name__c",
+        "LastViewedDate",
+        "LastReferencedDate",
+        "LastModifiedDate",
+        "LastActivityDate",
+        "LACA_AOV_USD__c",
+        "Key__c",
+        "JP_AOV_USD__c",
+        "IsLocked",
+        "HQ_State__c",
+        "HQ_Country__c",
+        "Fortune500_Rank__c",
+        "Global_500_Rank_link__c",
+        "FY17_Review_Category__c",
+        "FY17_Geo__c",
+        "FT_Global_500_rank__c",
+        "FT_Global_500_rank_link__c",
+        "Foundation__c",
+        "Fortune_1000_rank__c",
+        "Fortune_1000_rank_Link__c",
+        "Exec_Sponsorship_Program__c",
+        "Exec_Sponsor_Name__c",
+        "Review_Comments__c",
+        "Exception_Requested__c",
+        "ET_Pipeline_next_12_months__c",
+        "ETMC_ACV_TTM__c",
+        "ET_2012_Spend__c",
+        "EOS_Company_ID__c",
+        "EMEA_AOV_USD__c",
+        "IsDeleted",
+        "CurrencyIsoCode",
+        "CSG_Subregion__c",
+        "FY17_HT_Region__c",
+        "CSG_Region__c",
+        "CreatedDate",
+        "Transition_Notes__c",
+        "Country__c",
+        "Premier_Coverage__c",
+        "Core_or_MC__c",
+        "Company_Type__c",
+        "Company_Notes__c",
+        "Name",
+        "Company_Count__c",
+        "Communities_Segment__c",
+        "Chatter_Adoption__c",
+        "CFL_Manager__c",
+        "Classification__c",
+        "Business_Unit__c",
+        "BU__c",
+        "CSE_s__c",
+        "Average_Support_CSAT__c",
+        "EWS_Score__c",
+        "Attrition_TTM__c",
+        "APAC_AOV_USD__c",
+        "AOV_Rev__c",
+        "AOV_Band__c",
+        "AMER_AOV_USD__c",
+        "Is_Custom_Company__c",
+        "ACV_TTM__c",
+        "ACV_Drill__c",
+        "Actual_CST__c",
+        "Actual_CSM__c",
+        "Account_Family_Name__c",
+        "ServicesTTM__c",
+        "usd_Renewals_next_12_months__c",
+        "USDPipe_CFY__c",
+        "Annual_rev__c",
+        "ACV__c",
+        "Red_Accounts__c",
+        "Program_Architects__c",
+        "ITC__c",
+        "Open_Cases__c",
+        "MCS_Accounts__c",
+        "CSE__c",
+        "Licenses__c",
+        "AE__c",
+        "CST__c",
+        "GAM__c",
+        "Deal_Champion__c",
+        "Lead_Data_Co_Prime__c",
+        "Lead_ETMS_AE__c",
+        "Lead_ET_Services__c",
+        "Lead_ET_CSM__c",
+        "Lead_Platform_Co_Prime__c",
+        "SE__c",
+        "Lead_Service_Co_Prime__c",
+        "CSM__c",
+        "Reboot_Sponsor__c",
+        "Reboot_Account__c",
+        "RecordTypeId",
+        "Success_Champion__c",
+        "User__c",
+        "Services_BDM__c",
+        "Success_lead__c",
+        "Tech_Champion__c",
+        "RecordTypeId.Name",
+        "RecordTypeId.DeveloperName"
+      ],
+      "right": "016_Aug_Company_RecordType",
+      "relationship": "Company__c"
+    }
+  },
+  "Join_OppOrderEdCredits": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_OppOrderRecType",
+      "left_key": [
+        "OpportunityId__c.Training_Credit_Code__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Ed_Credits",
+      "relationship": "OpportunityId__c.Training_Credit_Code__c"
+    }
+  },
+  "Flatten_UserRole": {
+    "schema": {
+      "objects": [
+        {
+          "label": "Flatten_UserRole",
+          "fields": [
+            {
+              "name": "Roles",
+              "label": "Roles",
+              "isSystemField": false
+            },
+            {
+              "name": "RolePath",
+              "label": "RolePath",
+              "isSystemField": false
+            }
+          ]
+        }
+      ]
+    },
+    "action": "flatten",
+    "parameters": {
+      "self_field": "Id",
+      "multi_field": "Roles",
+      "parent_field": "ParentRoleId",
+      "path_field": "RolePath",
+      "source": "Extract_UserRole"
+    }
+  },
+  "012B_Aug_Account_RecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "012_Aug_Account_CSM",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name",
+        "DeveloperName"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "RecordTypeId"
+    }
+  },
+  "Join_ECommerceOppEdCredit": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_ECommerceOppRecType",
+      "left_key": [
+        "OpportunityId__c.Training_Credit_Code__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Ed_Credits",
+      "relationship": "OpportunityId__c.Training_Credit_Code__c"
+    }
+  },
+  "Join_ProjRecType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_UserProject",
+      "left_key": [
+        "pse__Project__c.RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "pse__Project__c.RecordTypeId"
+    }
+  }
+}

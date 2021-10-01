@@ -1,0 +1,519 @@
+{
+  "501_Digest_Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Team_Territory__c"
+        },
+        {
+          "name": "AOV_Band__c"
+        },
+        {
+          "name": "Region_AOV_Band__c"
+        },
+        {
+          "name": "Company__c"
+        },
+        {
+          "name": "Global_Company__c"
+        },
+        {
+          "name": "Industry"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "BillingCity"
+        },
+        {
+          "name": "BillingCountry"
+        },
+        {
+          "name": "BillingPostalCode"
+        },
+        {
+          "name": "BillingStreet"
+        },
+        {
+          "name": "BillingState"
+        },
+        {
+          "name": "ShippingCity"
+        },
+        {
+          "name": "ShippingCountry"
+        },
+        {
+          "name": "ShippingState"
+        },
+        {
+          "name": "ShippingPostalCode"
+        },
+        {
+          "name": "FY_Shipping_City__c"
+        },
+        {
+          "name": "Locked_Region__c"
+        },
+        {
+          "name": "FY_Shipping_Street__c"
+        },
+        {
+          "name": "FY_Postal_Code__c"
+        },
+        {
+          "name": "FY_Shipping_State__c"
+        },
+        {
+          "name": "FY_Shipping_Country__c"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "320_Wave_Augment_PTB_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "300_Wave_Extract_PTB",
+      "left_key": [
+        "Account_ID"
+      ],
+      "right_select": [
+        "AOV_Band__c",
+        "Region_AOV_Band__c",
+        "Id",
+        "Industry",
+        "Name",
+        "Region__c",
+        "Type",
+        "BillingCity",
+        "BillingCountry",
+        "BillingPostalCode",
+        "BillingState",
+        "ShippingCity",
+        "ShippingCountry",
+        "ShippingState",
+        "ShippingPostalCode",
+        "AccountOwner.Name",
+        "AccountOwner.Manager.Name",
+        "Territory.Name",
+        "Global_Company.Name",
+        "Company.Name"
+      ],
+      "right": "525_Augment_PTB_Company",
+      "relationship": "Account"
+    }
+  },
+  "525_Augment_PTB_Company": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "524_Augment_PTB_Company",
+      "left_key": [
+        "Company__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "504_Digest_Company",
+      "relationship": "Company"
+    }
+  },
+  "221_CiQ_Augment_AcctOwner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "USR_ID_15"
+      ],
+      "left_key": [
+        "ACCT_OWN_ID"
+      ],
+      "left": "220_CiQ_Augment_OpptyWwner",
+      "right_select": [
+        "USR_ID"
+      ],
+      "right": "202_CiQ_Extract_hrchy",
+      "relationship": "AcctOwner"
+    }
+  },
+  "521_Augment_PTB_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "501_Digest_Account",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "sf62user__manager__c"
+      ],
+      "right": "502_Digest_User",
+      "relationship": "AccountOwner"
+    }
+  },
+  "222_CiQ_Augment_oppty_hrchy": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "USR_ID_15"
+      ],
+      "left_key": [
+        "CLSD_OVA_OWNER_ID"
+      ],
+      "left": "221_CiQ_Augment_AcctOwner",
+      "right_select": [
+        "FORCST_USR_ID_PATH",
+        "FORCST_USR_NM_PATH",
+        "MGT_USR_NM_PATH"
+      ],
+      "right": "202_CiQ_Extract_hrchy",
+      "relationship": "HRCHY"
+    }
+  },
+  "220_CiQ_Augment_OpptyWwner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "USR_ID_15"
+      ],
+      "left_key": [
+        "OPTY_OWNER_USR_ID"
+      ],
+      "left": "200_CiQ_Extract_oppty",
+      "right_select": [
+        "USR_ID"
+      ],
+      "right": "202_CiQ_Extract_hrchy",
+      "relationship": "OpptyOwner"
+    }
+  },
+  "502_Digest_User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "sf62user__manager__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "240_CiQ_Register_oppty_hrchy": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "rowLevelSecurityFilter": "'HRCHY.FORCST_USR_ID_PATH' == \"$User.Id\" || 'OpptyOwner.USR_ID' == \"$User.Id\" || 'AcctOwner.USR_ID' == \"$User.Id\" || 'WHITELIST_ID' == \"$User.Id\" || 'METRIC_TYPE' == \"TARGET\"",
+      "name": "PDS_CloseIQ",
+      "alias": "PDS_CloseIQ",
+      "source": "222_CiQ_Augment_oppty_hrchy"
+    }
+  },
+  "340_Wave_Register": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "wave_ptb_account",
+      "alias": "wave_ptb_account",
+      "source": "526_Country_Wave_Augment_PTB_Account"
+    }
+  },
+  "523_Augment_PTB_Territory": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "522_Augment_PTB_User",
+      "left_key": [
+        "Team_Territory__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "503_Digest_Territory",
+      "relationship": "Territory"
+    }
+  },
+  "101_SFX_Extract_orgDim": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "PDS_SFX_dim_org_curr"
+    }
+  },
+  "200_CiQ_Extract_oppty": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "CiQ_S17"
+    }
+  },
+  "526_Country_Wave_Augment_PTB_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ISO_ALPHA_2_Code"
+      ],
+      "left": "320_Wave_Augment_PTB_Account",
+      "left_key": [
+        "Account.ShippingCountry"
+      ],
+      "right_select": [
+        "ISO_ALPHA_3_Code"
+      ],
+      "right": "505_Country_Wave_Extract_PTB",
+      "relationship": "Account"
+    }
+  },
+  "104_SFX_Extract_empDim": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "PDS_SFX_dim_emp"
+    }
+  },
+  "123_SFX_Augment_usage_orgSumm_usr_emp_orgDim": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "org_id"
+      ],
+      "left_key": [
+        "org_id"
+      ],
+      "left": "122_SFX_Augment_usage_empDim",
+      "right_select": [
+        "chatter_enabled",
+        "country",
+        "customer_production_org",
+        "pod",
+        "Customer",
+        "org_status",
+        "org_type",
+        "edition",
+        "industry",
+        "account_owner_id",
+        "org_created_date",
+        "account_name",
+        "state",
+        "dunns_id",
+        "deleted_org",
+        "foundation_account_flag",
+        "business_unit",
+        "account_id",
+        "market_segment",
+        "customer_name",
+        "postal_code",
+        "region",
+        "parent_org_id"
+      ],
+      "right": "101_SFX_Extract_orgDim",
+      "relationship": "ORG"
+    }
+  },
+  "504_Digest_Company": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Company__c"
+    }
+  },
+  "140_SFX_Register_Dataset": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "rowLevelSecurityFilter": "",
+      "name": "PDS_SFX_Daily",
+      "alias": "PDS_SFX_Daily",
+      "source": "123_SFX_Augment_usage_orgSumm_usr_emp_orgDim"
+    }
+  },
+  "300_Wave_Extract_PTB": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "wave_ver2"
+    }
+  },
+  "524_Augment_PTB_Company": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "523_Augment_PTB_Territory",
+      "left_key": [
+        "Global_Company__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "504_Digest_Company",
+      "relationship": "Global_Company"
+    }
+  },
+  "100_SFX_Extract_usage": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "fact_product_usage"
+    }
+  },
+  "505_Country_Wave_Extract_PTB": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "pds_country_code"
+    }
+  },
+  "503_Digest_Territory": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Territory__c"
+    }
+  },
+  "122_SFX_Augment_usage_empDim": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "organization_id",
+        "user_id"
+      ],
+      "left_key": [
+        "org_id",
+        "usr_id"
+      ],
+      "left": "100_SFX_Extract_usage",
+      "right_select": [
+        "employee_manager_name",
+        "employee_cont_svc_date",
+        "organization_cost_center_description",
+        "employee_management_chain_level_01",
+        "employee_management_chain_level_02",
+        "employee_ae_type",
+        "employee_business_unit_id",
+        "employee_management_chain_level_03",
+        "temaid",
+        "employee_management_chain_level_08",
+        "employee_management_chain_level_09",
+        "employee_manager_people_ind",
+        "employee_ecomm_name",
+        "employee_full_name",
+        "employee_management_chain_level_04",
+        "employee_management_chain_level_05",
+        "employee_management_chain_level_06",
+        "employee_management_chain_level_07",
+        "teamowner",
+        "employee_account_ind",
+        "employee_email_address",
+        "organization_business_unit_id",
+        "employee_fte_desc",
+        "employee_id",
+        "employee_management_chain_level_10",
+        "employee_comp_grade_group",
+        "employee_ae_ind",
+        "job_profile_name",
+        "employee_exmpt_ind",
+        "employee_counntry_prim_covr_id",
+        "employee_co_description",
+        "employee_counntry_prim_covr_description",
+        "employee_primary_job_work_space",
+        "employee_business_title",
+        "employee_fte_percentage",
+        "hierarchy_path",
+        "employee_location",
+        "organization_cost_center_id",
+        "employee_acqision_flag",
+        "employee_hire_date",
+        "employee_manager_id",
+        "delete_flag",
+        "employee_market_segment",
+        "employee_comp_grade",
+        "employee_tenure_group_num",
+        "employee_acqision_company_name",
+        "employee_last_name",
+        "ceo_evp_svp_name",
+        "job_family_group_name",
+        "employee_type_description",
+        "organization_annual_budget_view_level_3",
+        "organization_annual_budget_view_level_4",
+        "organization_annual_budget_view_level_5",
+        "organization_annual_budget_view_level_6",
+        "organization_annual_budget_view_level_0",
+        "organization_annual_budget_view_level_1",
+        "organization_annual_budget_view_level_2",
+        "organization_business_center_description",
+        "employee_division",
+        "employee_len_of_svc_num",
+        "employee_co_id",
+        "employee_ky",
+        "employee_middle_name",
+        "job_family_code",
+        "employee_hire_approval_date",
+        "hierarchy_depth",
+        "job_profile_id",
+        "teamname"
+      ],
+      "right": "104_SFX_Extract_empDim",
+      "relationship": "EMP",
+      "operation": "LookupMultiValue"
+    }
+  },
+  "202_CiQ_Extract_hrchy": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "UserDirectHierarchy"
+    }
+  },
+  "522_Augment_PTB_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "521_Augment_PTB_User",
+      "left_key": [
+        "AccountOwner.sf62user__manager__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "502_Digest_User",
+      "relationship": "AccountOwner.Manager"
+    }
+  }
+}

@@ -1,0 +1,1352 @@
+{
+  "augment_Partner_Order_Detail__c_Partner_Order__c": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Partner_Order_Detail",
+      "left_key": [
+        "Partner_Order__c"
+      ],
+      "right_select": [
+        "Auto_Renew__c",
+        "Contract_Auto_Renewal__c",
+        "Contract_Reseller__c",
+        "CreatedDate",
+        "Customer_Name__c",
+        "Date_Customer_Accepted_SFDC_Svc_Agrmnt__c",
+        "Opportunity_StageName__c",
+        "Opportunity_Type__c",
+        "Name",
+        "Partner_Order_Type__c",
+        "Partner_Org_Partner_Order_ID__c",
+        "Start_Date__c",
+        "Status__c",
+        "Partner_Channel_Contract_Term__c"
+      ],
+      "right": "Extract_Partner_Order",
+      "relationship": "Partner_Order__c"
+    }
+  },
+  "augment_Partner_Channel_Contract_Terms__c": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Partner_Order_Detail__c_Partner_Order__c",
+      "left_key": [
+        "Partner_Order__c.Partner_Channel_Contract_Term__c"
+      ],
+      "right_select": [
+        "Partner_Program_Type__c",
+        "Reseller_Contract_Reference__c"
+      ],
+      "right": "Extract_Partner_Channel_Contract_Terms",
+      "relationship": "Partner_Order__c.Partner_Channel_Contract_Term__c"
+    }
+  },
+  "Register_TestDataset": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Test_Opportunity",
+      "alias": "Test_Opportunity",
+      "source": "Extract_Opportunity_Test"
+    }
+  },
+  "Extract_Opportunity": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "FiscalYear"
+        },
+        {
+          "name": "FiscalQuarter"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CloseDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "StageName"
+        },
+        {
+          "name": "IsWon"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Partner_Region_new__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Lead_Sales_Partner_Role__c"
+        },
+        {
+          "name": "Lead_Sales_Partner_new__c"
+        },
+        {
+          "name": "Reseller_Partner__c"
+        },
+        {
+          "name": "Pricebook2Id"
+        },
+        {
+          "name": "TotalOpportunityQuantity"
+        },
+        {
+          "name": "Partner_Type__c"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "Billing_Country__c"
+        },
+        {
+          "name": "Reseller_Partner_Type__c"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Amount"
+        },
+        {
+          "name": "Amount_Won__c"
+        },
+        {
+          "name": "AmountConverted__c"
+        },
+        {
+          "name": "Apttus_Config2__OrderNumber__c"
+        },
+        {
+          "name": "ContractType__c"
+        },
+        {
+          "name": "IsClosed"
+        },
+        {
+          "name": "Lead_Type__c"
+        },
+        {
+          "name": "Order__c"
+        },
+        {
+          "name": "Segment__c"
+        },
+        {
+          "name": "sfbase__ACV__c"
+        },
+        {
+          "name": "sfbase__AutoRenewal__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbase__Contract_EndDate__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "sfbase__IsAutoRenewed__c"
+        },
+        {
+          "name": "sfquote__Partner_Total_Amount__c"
+        }
+      ],
+      "object": "Opportunity"
+    }
+  },
+  "Extract_Partner_Channel_Contract_Terms": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Partner_Program_Type__c"
+        },
+        {
+          "name": "Reseller_Contract_Reference__c"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Partner_Channel_Contract_Terms__c"
+    }
+  },
+  "op_record": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Oppty_User",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name",
+        "Id",
+        "DeveloperName"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "Recordtype",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_Opportunity_Test": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "fullRefreshToken": "8-9-2016",
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "StageName"
+        },
+        {
+          "name": "LeadSource"
+        },
+        {
+          "name": "IsWon"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "IsClosed"
+        },
+        {
+          "name": "ForecastCategory"
+        },
+        {
+          "name": "ForecastCategoryName"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CloseDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "LastModifiedDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "AmountConverted__c"
+        },
+        {
+          "name": "Amount"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "Segment__c"
+        },
+        {
+          "name": "Salesforce_Exec_Sponsor__c"
+        },
+        {
+          "name": "Dead_Reason__c"
+        },
+        {
+          "name": "PrimaryCompetitor__c"
+        },
+        {
+          "name": "X30_Day_Extension__c"
+        },
+        {
+          "name": "Next_Steps__c"
+        },
+        {
+          "name": "Manager_Notes__c"
+        },
+        {
+          "name": "sfbase__PriorAnnualContractValue__c"
+        },
+        {
+          "name": "Manager_Forecast_Judgement__c"
+        },
+        {
+          "name": "LastActivityDate"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Stage_2_Flag__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Contract_End_Date__c"
+        },
+        {
+          "name": "sfbase__Contract_EndDate__c"
+        }
+      ],
+      "complexFilterConditions": "CloseDate > 2016-01-01",
+      "object": "Opportunity"
+    }
+  },
+  "register_Partner_Ops_Oppty_Account_Contracts": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "folder": "00lQ0000000EWtpIAG",
+      "name": "Oppty_Account_Contracts",
+      "alias": "Oppty_Account_Contracts",
+      "source": "PatOps_Augment_Opportunity_Account"
+    }
+  },
+  "Extract_sfbill__Transaction": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "sfbill__Contract__c"
+        },
+        {
+          "name": "sfbill__BalanceDue__c"
+        },
+        {
+          "name": "Invoice_Age__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__DueDate__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "sfbill__InvoiceAge__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__TransactionDate__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Total_Account_TCV__c"
+        }
+      ],
+      "object": "sfbill__Transaction__c"
+    }
+  },
+  "augment_Opportunity_Account_1": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "op_record",
+      "left_key": [
+        "AccountId"
+      ],
+      "right_select": [
+        "Name",
+        "Type",
+        "AccountStatus__c",
+        "PersonContactId",
+        "Region__c",
+        "pse__Region__pc",
+        "Industry"
+      ],
+      "right": "Extract_Account",
+      "relationship": "AccountId",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "UserRoleId"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Macro_Segment__c"
+        },
+        {
+          "name": "Username"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "PatOps_Augment_Opportunity_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "op_record",
+      "left_key": [
+        "Reseller_Partner__c"
+      ],
+      "right_select": [
+        "Name",
+        "OfferType__pc",
+        "Id",
+        "Industry",
+        "pse__Region__pc",
+        "Region__c",
+        "AccountNumber"
+      ],
+      "right": "Extract_Account",
+      "relationship": "Acc_Opty",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "PatOps_Augment_OrderItem_Order_Contract_Acct": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "PatOps_Augment_OrderItem_Order_Contract",
+      "left_key": [
+        "OrderId.ContractId.AccountId"
+      ],
+      "right_select": [
+        "Name",
+        "Id",
+        "Master_Partner_Account__c",
+        "Region__c",
+        "CreatedDate",
+        "Type",
+        "Segment__c"
+      ],
+      "right": "Extract_Account",
+      "relationship": "OrderId.ContractId.AccountId",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_Case": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Account_Owner__c"
+        },
+        {
+          "name": "Age_days__c"
+        },
+        {
+          "name": "Age_hours__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "CaseNumber"
+        },
+        {
+          "name": "Origin"
+        },
+        {
+          "name": "Reason"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "ClosedDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Date_Time_Opened__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Effective_Date__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "End_Date__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Escalated_Date__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Escalation_Status__c"
+        },
+        {
+          "name": "Escalation_Reason__c"
+        },
+        {
+          "name": "Initial_Response_Time__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Invoice_Date__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "SuppliedName"
+        },
+        {
+          "name": "Priority"
+        },
+        {
+          "name": "Tracking__c"
+        },
+        {
+          "name": "Status"
+        },
+        {
+          "name": "FunctionalArea__c"
+        },
+        {
+          "name": "General_Application_Area__c"
+        },
+        {
+          "name": "Severity_Level__c"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "OwnerId"
+        }
+      ],
+      "object": "Case"
+    }
+  },
+  "PatOps_Augment_OrderItem_Order_Contract_Acct_RT": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "PatOps_Augment_OrderItem_Order_Contract_Acct",
+      "left_key": [
+        "OrderId.ContractId.RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "OrderId.ContractId.RecordTypeId",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_RecordType": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "DeveloperName"
+        }
+      ],
+      "object": "RecordType"
+    }
+  },
+  "register_Partner_Ops_Oppty_Accounts_RP": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "folder": "00lQ0000000EWtpIAG",
+      "name": "Oppty_Account",
+      "alias": "Oppty_Account",
+      "source": "PatOps_Augment_Opportunity_Account_2"
+    }
+  },
+  "augment_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Partner_Product_Catalog__c",
+      "left_key": [
+        "Partner_Product_Name__c.Partner_Account__c"
+      ],
+      "right_select": [
+        "Name",
+        "OfferType__pc",
+        "Id",
+        "Industry",
+        "pse__Region__pc",
+        "Region__c",
+        "AccountNumber"
+      ],
+      "right": "Extract_Account",
+      "relationship": "Partner_Product_Name__c.Partner_Account__c"
+    }
+  },
+  "augment_Account_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_sfbill__Transaction__c_Contract_3",
+      "left_key": [
+        "sfbill__Contract__c.AccountId"
+      ],
+      "right_select": [
+        "Name",
+        "Type",
+        "AccountStatus__c",
+        "Account_Customer_Status__pc",
+        "pse__Start_Date__pc",
+        "Industry",
+        "pse__Region__pc",
+        "Region__c"
+      ],
+      "right": "Extract_Account",
+      "relationship": "AccountId",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "augment_Account_1_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Account_3",
+      "left_key": [
+        "sfbill__Contract__c.Channel_Sales_Partner__c"
+      ],
+      "right_select": [
+        "Name",
+        "Type",
+        "AccountStatus__c",
+        "Account_Customer_Status__pc",
+        "pse__Start_Date__pc",
+        "Industry",
+        "pse__Region__pc",
+        "Region__c",
+        "Id"
+      ],
+      "right": "Extract_Account",
+      "relationship": "sfbill__Contract__c.Channel_Sales_Partner__c",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "augment_Account_1": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Opportunity_Account_1",
+      "left_key": [
+        "Reseller_Partner__c"
+      ],
+      "right_select": [
+        "Name",
+        "Type",
+        "AccountStatus__c",
+        "PersonContactId",
+        "Region__c",
+        "pse__Region__pc",
+        "Industry"
+      ],
+      "right": "Extract_Account",
+      "relationship": "Reseller_Partner__c",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "augment_User_0": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Case_Account_0",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "Username"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId"
+    }
+  },
+  "register_Partner_Order_3": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Partner_Order",
+      "alias": "Partner_Order_3",
+      "source": "augment_Account"
+    }
+  },
+  "Extract_Partner_Order": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Auto_Renew__c"
+        },
+        {
+          "name": "Contract_Auto_Renewal__c"
+        },
+        {
+          "name": "Contract_Reseller__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Customer_Name__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Date_Customer_Accepted_SFDC_Svc_Agrmnt__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Opportunity_StageName__c"
+        },
+        {
+          "name": "Opportunity_Type__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Partner_Order_Type__c"
+        },
+        {
+          "name": "Partner_Org_Partner_Order_ID__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Start_Date__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Status__c"
+        },
+        {
+          "name": "Partner_Channel_Contract_Term__c"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Partner_Order__c"
+    }
+  },
+  "Extract_OrderItem": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "OrderId"
+        },
+        {
+          "name": "OrderItemNumber"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Product2Id"
+        },
+        {
+          "name": "Quantity"
+        },
+        {
+          "name": "TotalPrice"
+        },
+        {
+          "name": "UnitPrice"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "ServiceDate",
+          "isYearEndFiscalYear": true
+        }
+      ],
+      "object": "OrderItem"
+    }
+  },
+  "Extract_Partner_Product_Catalog": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Partner_Order_Type__c"
+        },
+        {
+          "name": "Partner_Product_ID__c"
+        },
+        {
+          "name": "Partner_Product_Name__c"
+        },
+        {
+          "name": "PNR__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Product_Type__c"
+        },
+        {
+          "name": "Status__c"
+        },
+        {
+          "name": "Partner_Account__c"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Partner_Product_Catalog__c"
+    }
+  },
+  "register_PatOps_Order_Product_Contract": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "folder": "00lQ0000000EWtpIAG",
+      "name": "Order_Product_Contract",
+      "alias": "Order_Product_Contract_3",
+      "source": "PatOps_Augment_OrderItem_Order_Contract_Acct1_RT_Pricebook2"
+    }
+  },
+  "Extract_Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "ISV_Senior_AE__c"
+        },
+        {
+          "name": "CSM_lookup__c"
+        },
+        {
+          "name": "ISV_Case_Pack__c"
+        },
+        {
+          "name": "ISV_Program_Tier__c"
+        },
+        {
+          "name": "Master_Partner_Account__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "NumberOfEmployees"
+        },
+        {
+          "name": "Segment__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "AccountStatus__c"
+        },
+        {
+          "name": "Account_Customer_Status__pc"
+        },
+        {
+          "name": "pse__Start_Date__pc"
+        },
+        {
+          "name": "Industry"
+        },
+        {
+          "name": "PersonContactId"
+        },
+        {
+          "name": "pse__Region__pc"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "OfferType__pc"
+        },
+        {
+          "name": "AccountNumber"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "augment_Case_Account_0": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Case",
+      "left_key": [
+        "AccountId"
+      ],
+      "right_select": [
+        "Id",
+        "Name"
+      ],
+      "right": "Extract_Account",
+      "relationship": "AccountId"
+    }
+  },
+  "Extract_Contract": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "BillingCity"
+        },
+        {
+          "name": "BillingCountry"
+        },
+        {
+          "name": "BillingState"
+        },
+        {
+          "name": "BillingPostalCode"
+        },
+        {
+          "name": "ContractNumber"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Pricebook2Id"
+        },
+        {
+          "name": "AutoRenewCode"
+        },
+        {
+          "name": "sfbase__Billing_Frequency__c"
+        },
+        {
+          "name": "InvoiceDispatchMethod"
+        },
+        {
+          "name": "RenewalTerm"
+        },
+        {
+          "name": "sfbase__PaymentType__c"
+        },
+        {
+          "name": "OrderPrebillDays"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "StartDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "EndDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Channel_Sales_Partner__c"
+        },
+        {
+          "name": "Reseller_Partner_Type__c"
+        },
+        {
+          "name": "sfbase__ContractType__c"
+        },
+        {
+          "name": "Status"
+        }
+      ],
+      "object": "Contract"
+    }
+  },
+  "PatOps_Augment_OrderItem_Order_Contract_Acct1_RT_Pricebook2": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "PatOps_Augment_OrderItem_Order_Contract_Acct_RT",
+      "left_key": [
+        "OrderId.ContractId.Channel_Sales_Partner__c"
+      ],
+      "right_select": [
+        "Name",
+        "Id",
+        "Master_Partner_Account__c",
+        "Region__c",
+        "CreatedDate",
+        "Type",
+        "Segment__c",
+        "NumberOfEmployees"
+      ],
+      "right": "Extract_Account",
+      "relationship": "OrderId.ContractId.Channel_Sales_Partner__c",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "PatOps_Augment_Opportunity_Account_2": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "op_record",
+      "left_key": [
+        "AccountId"
+      ],
+      "right_select": [
+        "Name",
+        "OfferType__pc",
+        "Id",
+        "Industry",
+        "pse__Region__pc",
+        "Region__c",
+        "AccountNumber"
+      ],
+      "right": "Extract_Account",
+      "relationship": "Acc_Opty",
+      "operation": "LookupMultiValue"
+    }
+  },
+  "register_opty_account_dualjoin_1": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "opty_account_dualjoin",
+      "alias": "opty_account_dualjoin",
+      "source": "augment_Account_1"
+    }
+  },
+  "Extract_Partner_Order_Detail": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Annual_SFDC_Price__c"
+        },
+        {
+          "name": "SFDC_ACV__c"
+        },
+        {
+          "name": "Contract_Auto_Renew__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Customer_Price__c"
+        },
+        {
+          "name": "Customer_Price_per_unit_month__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Partner_Org_Partner_Order_Detail_ID__c"
+        },
+        {
+          "name": "Product_ID__c"
+        },
+        {
+          "name": "Quantity__c"
+        },
+        {
+          "name": "SFDC_Price__c"
+        },
+        {
+          "name": "SFDC_Price_2__c"
+        },
+        {
+          "name": "SFDC_Quantity__c"
+        },
+        {
+          "name": "SFDC_Quantity_2__c"
+        },
+        {
+          "name": "Partner_Order__c"
+        },
+        {
+          "name": "Partner_Product_Name__c"
+        }
+      ],
+      "object": "Partner_Order_Detail__c"
+    }
+  },
+  "PatOps_Augment_OrderItem_Order_Contract": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "PatOps_Augment_OrderItem_Order",
+      "left_key": [
+        "OrderId.ContractId"
+      ],
+      "right_select": [
+        "AccountId",
+        "BillingCity",
+        "BillingCountry",
+        "BillingState",
+        "BillingPostalCode",
+        "ContractNumber",
+        "RecordTypeId",
+        "Pricebook2Id",
+        "sfbase__ContractType__c",
+        "Reseller_Partner_Type__c",
+        "Channel_Sales_Partner__c",
+        "AutoRenewCode",
+        "sfbase__Billing_Frequency__c",
+        "InvoiceDispatchMethod",
+        "RenewalTerm",
+        "sfbase__PaymentType__c",
+        "OrderPrebillDays",
+        "Id",
+        "StartDate",
+        "EndDate",
+        "Status"
+      ],
+      "right": "Extract_Contract",
+      "relationship": "OrderId.ContractId",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "augment_sfbill__Transaction__c_Contract_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_sfbill__Transaction",
+      "left_key": [
+        "sfbill__Contract__c"
+      ],
+      "right_select": [
+        "AccountId",
+        "Channel_Sales_Partner__c",
+        "Reseller_Partner_Type__c",
+        "sfbase__ContractType__c",
+        "Status"
+      ],
+      "right": "Extract_Contract",
+      "relationship": "sfbill__Contract__c",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Oppty_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Opportunity",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "Id",
+        "Macro_Segment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "Opty_user",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "register_Transaction_account_contract_3": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Transaction_accounts_PO",
+      "alias": "Transaction_accounts_PO",
+      "source": "augment_Account_1_3"
+    }
+  },
+  "Extract_Order": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "ContractId"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "EffectiveDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbase__OrderEndDate__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "EndDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "OrderNumber"
+        },
+        {
+          "name": "sfbase__OrderTermAps__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Primary_Order_Start_Date__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Status"
+        }
+      ],
+      "object": "Order"
+    }
+  },
+  "register_Cases_Account_0": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Cases_Account",
+      "alias": "Cases_Account",
+      "source": "augment_User_0"
+    }
+  },
+  "PatOps_Augment_OrderItem_Order": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_OrderItem",
+      "left_key": [
+        "OrderId"
+      ],
+      "right_select": [
+        "ContractId",
+        "EffectiveDate",
+        "sfbase__OrderEndDate__c",
+        "EndDate",
+        "OrderNumber",
+        "sfbase__OrderTermAps__c",
+        "Id",
+        "Name",
+        "Primary_Order_Start_Date__c",
+        "Status",
+        "Type"
+      ],
+      "right": "Extract_Order",
+      "relationship": "OrderId",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "augment_Partner_Product_Catalog__c": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Partner_Channel_Contract_Terms__c",
+      "left_key": [
+        "Partner_Product_Name__c"
+      ],
+      "right_select": [
+        "Partner_Order_Type__c",
+        "Partner_Product_ID__c",
+        "Partner_Product_Name__c",
+        "PNR__c",
+        "Name",
+        "Product_Type__c",
+        "Status__c",
+        "Partner_Account__c"
+      ],
+      "right": "Extract_Partner_Product_Catalog",
+      "relationship": "Partner_Product_Name__c"
+    }
+  }
+}

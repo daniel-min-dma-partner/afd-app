@@ -1,0 +1,2867 @@
+{
+  "201": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_DailyActivity",
+      "left_key": [
+        "EnterpriseID"
+      ],
+      "right_select": [
+        "Id",
+        "Name",
+        "CloudServiceProviderId",
+        "SystemModstamp",
+        "ServiceProviderKey",
+        "HasEntitlements",
+        "sfbase__AccountId__c",
+        "AccountId",
+        "AccountIdKey"
+      ],
+      "right": "Filter_Digest_Tenant_Exacttarget",
+      "relationship": "Tenant"
+    }
+  },
+  "202": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "201",
+      "left_key": [
+        "Tenant.AccountIdKey"
+      ],
+      "right_select": [
+        "Name",
+        "Type",
+        "Industry",
+        "Combo_Sector__c",
+        "Segment__c",
+        "SFDC_Sector__c",
+        "Sub_Sector__c",
+        "Support_LoB__c",
+        "Region__c",
+        "Subregion__c",
+        "BillingCountry",
+        "BillingState",
+        "MarketSegment__c",
+        "MC_Social_AOV_Band",
+        "MC_EMW_AOV_Band",
+        "MC_Services_AOV_Band",
+        "Company.Id",
+        "Company.AOV_Band__c",
+        "Company.Name"
+      ],
+      "right": "Augment_Company_Account",
+      "relationship": "Account"
+    }
+  },
+  "301": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_ActiveAudience",
+      "left_key": [
+        "EnterpriseID"
+      ],
+      "right_select": [
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name",
+        "Account.Type",
+        "Account.Industry",
+        "Account.Combo_Sector__c",
+        "Account.Segment__c",
+        "Account.SFDC_Sector__c",
+        "Account.Sub_Sector__c",
+        "Account.Support_LoB__c",
+        "Account.Region__c",
+        "Account.Subregion__c",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.MarketSegment__c",
+        "Account.MC_Social_AOV_Band",
+        "Account.MC_EMW_AOV_Band",
+        "Account.MC_Services_AOV_Band",
+        "Account.Company.Id",
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Audience"
+    }
+  },
+  "501": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Digest_RedAccounts",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name",
+        "SobjectType",
+        "DeveloperName"
+      ],
+      "right": "Digest_RecordType",
+      "relationship": "RecordType"
+    }
+  },
+  "502": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "501",
+      "left_key": [
+        "At_Level_3_escalated_to__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Digest_User",
+      "relationship": "At_Level_3_escalated_to__c"
+    }
+  },
+  "503": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "502",
+      "left_key": [
+        "Executive_Sponsor_2__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Digest_User",
+      "relationship": "Executive_Sponsor_2__c"
+    }
+  },
+  "504": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "503",
+      "left_key": [
+        "Issue_Owner__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Digest_User",
+      "relationship": "Issue_Owner__c"
+    }
+  },
+  "505": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "504",
+      "left_key": [
+        "EPM_Owner__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Digest_User",
+      "relationship": "EPM_Owner__c"
+    }
+  },
+  "506": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "505",
+      "left_key": [
+        "Red_Account__c"
+      ],
+      "right_select": [
+        "Id",
+        "Name",
+        "Type",
+        "Industry",
+        "Combo_Sector__c",
+        "Segment__c",
+        "SFDC_Sector__c",
+        "Sub_Sector__c",
+        "Support_LoB__c",
+        "Region__c",
+        "Subregion__c",
+        "BillingCountry",
+        "BillingState",
+        "MarketSegment__c",
+        "MC_Social_AOV_Band",
+        "MC_EMW_AOV_Band",
+        "MC_Services_AOV_Band",
+        "Company.Id",
+        "Company.AOV_Band__c",
+        "Company.Name"
+      ],
+      "right": "Augment_Company_Account",
+      "relationship": "Account"
+    }
+  },
+  "601": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_MonthlyActiveUsers",
+      "left_key": [
+        "EnterpriseID"
+      ],
+      "right_select": [
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "Id",
+        "Name",
+        "SystemModstamp",
+        "ServiceProviderKey",
+        "HasEntitlements",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name",
+        "Account.Type",
+        "Account.Industry",
+        "Account.Combo_Sector__c",
+        "Account.Segment__c",
+        "Account.SFDC_Sector__c",
+        "Account.Sub_Sector__c",
+        "Account.Support_LoB__c",
+        "Account.Region__c",
+        "Account.Subregion__c",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.MarketSegment__c",
+        "Account.MC_Social_AOV_Band",
+        "Account.MC_EMW_AOV_Band",
+        "Account.MC_Services_AOV_Band",
+        "Account.Company.Id",
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Ten"
+    }
+  },
+  "701": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_SocialStudio",
+      "left_key": [
+        "client_id"
+      ],
+      "right_select": [
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "Id",
+        "Name",
+        "SystemModstamp",
+        "ServiceProviderKey",
+        "HasEntitlements",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name",
+        "Account.Type",
+        "Account.Industry",
+        "Account.Combo_Sector__c",
+        "Account.Segment__c",
+        "Account.SFDC_Sector__c",
+        "Account.Sub_Sector__c",
+        "Account.Support_LoB__c",
+        "Account.Region__c",
+        "Account.Subregion__c",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.MarketSegment__c",
+        "Account.MC_Social_AOV_Band",
+        "Account.MC_EMW_AOV_Band",
+        "Account.MC_Services_AOV_Band",
+        "Account.Company.Id",
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_Radian6",
+      "relationship": "Ten"
+    }
+  },
+  "801": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_Automation",
+      "left_key": [
+        "EnterpriseID"
+      ],
+      "right_select": [
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "Id",
+        "Name",
+        "SystemModstamp",
+        "ServiceProviderKey",
+        "HasEntitlements",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name",
+        "Account.Type",
+        "Account.Industry",
+        "Account.Combo_Sector__c",
+        "Account.Segment__c",
+        "Account.SFDC_Sector__c",
+        "Account.Sub_Sector__c",
+        "Account.Support_LoB__c",
+        "Account.Region__c",
+        "Account.Subregion__c",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.MarketSegment__c",
+        "Account.MC_Social_AOV_Band",
+        "Account.MC_EMW_AOV_Band",
+        "Account.MC_Services_AOV_Band",
+        "Account.Company.Id",
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Ten"
+    }
+  },
+  "Augment_MC_PushFull": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Append_PushAsset_Push",
+      "left_key": [
+        "EnterpriseID"
+      ],
+      "right_select": [
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name",
+        "Account.Type",
+        "Account.Industry",
+        "Account.Combo_Sector__c",
+        "Account.Segment__c",
+        "Account.SFDC_Sector__c",
+        "Account.Sub_Sector__c",
+        "Account.Support_LoB__c",
+        "Account.Region__c",
+        "Account.Subregion__c",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.MarketSegment__c",
+        "Account.MC_Social_AOV_Band",
+        "Account.MC_EMW_AOV_Band",
+        "Account.MC_Services_AOV_Band",
+        "Account.Company.Id",
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Tenant",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Register_ALI": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC Asset Line Item",
+      "alias": "MC_AssetLineItem_Account",
+      "source": "augment_ali_tenant"
+    }
+  },
+  "Digest_UsageEntitlement": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "EndDate"
+        },
+        {
+          "name": "Setting"
+        },
+        {
+          "name": "MasterLabel"
+        },
+        {
+          "name": "IsDeleted"
+        },
+        {
+          "name": "CurrentAmountAllowed"
+        },
+        {
+          "name": "StartDate"
+        },
+        {
+          "name": "TenantId"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "UsageEntitlement"
+    }
+  },
+  "augment_ali_tenant_info": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_ali_contract",
+      "left_key": [
+        "Apttus_Config2__LocationId__c"
+      ],
+      "right_select": [
+        "SfdcTenant__c"
+      ],
+      "right": "digest_tenant_information",
+      "relationship": "TenantInfo",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "augment_ali_product": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "digest_asset_line_item",
+      "left_key": [
+        "Apttus_Config2__ProductId__c"
+      ],
+      "right_select": [
+        "Id",
+        "Name",
+        "ProductCode",
+        "IsActive",
+        "sfbase__Status__c",
+        "sfbase__SKU__c",
+        "SELA_Enabled__c",
+        "Cloud__c",
+        "SKU_Type__c",
+        "Provisionable__c",
+        "L1_Business_Line__c",
+        "L2_Product_Line__c",
+        "L3_Product_Family__c",
+        "L4_Product_Offering__c"
+      ],
+      "right": "digest_product",
+      "relationship": "Product",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "digest_asset_line_item": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Apttus_Config2__LocationId__c"
+        },
+        {
+          "name": "SfdcAssetContract__c"
+        },
+        {
+          "name": "Apttus_Config2__Quantity__c"
+        },
+        {
+          "name": "Apttus_Config2__StartDate__c"
+        },
+        {
+          "name": "Apttus_Config2__EndDate__c"
+        },
+        {
+          "name": "SfdcSales_Price__c"
+        },
+        {
+          "name": "Apttus_Config2__IsInactive__c"
+        },
+        {
+          "name": "Apttus_Config2__LineType__c"
+        },
+        {
+          "name": "Apttus_Config2__ProductId__c"
+        }
+      ],
+      "object": "Apttus_Config2__AssetLineItem__c"
+    }
+  },
+  "Edgemart_JBActivity": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "JBActivity5"
+    }
+  },
+  "Augment_MC_GroupConnect_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_MC_GroupConnect",
+      "left_key": [
+        "EnterpriseID"
+      ],
+      "right_select": [
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name",
+        "Account.Type",
+        "Account.Industry",
+        "Account.Combo_Sector__c",
+        "Account.Segment__c",
+        "Account.SFDC_Sector__c",
+        "Account.Sub_Sector__c",
+        "Account.Support_LoB__c",
+        "Account.Region__c",
+        "Account.Subregion__c",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.MarketSegment__c",
+        "Account.MC_Social_AOV_Band",
+        "Account.MC_EMW_AOV_Band",
+        "Account.MC_Services_AOV_Band",
+        "Account.Company.Id",
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Ten"
+    }
+  },
+  "Register_mc_ees": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC EES Scores",
+      "alias": "mc_ees_scores",
+      "source": "Augment_mc_ees_account"
+    }
+  },
+  "Register_DimMember_Full": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC DimMember Full",
+      "alias": "MC_DimMember_Full",
+      "source": "Augment_DimMember_Account"
+    }
+  },
+  "Digest_RecordType": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "SobjectType"
+        },
+        {
+          "name": "DeveloperName"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "RecordType"
+    }
+  },
+  "Digest_EntitlementTransactions": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "ChildExternalProvisionId__c"
+        },
+        {
+          "name": "CurrencyIsoCode"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "QuantityFactor__c"
+        },
+        {
+          "name": "RawQuantity__c"
+        },
+        {
+          "name": "sfbase__EntitlementSchedule__c"
+        },
+        {
+          "name": "sfbase__ExternalSystemId__c"
+        },
+        {
+          "name": "sfbase__OrderItemId__c"
+        },
+        {
+          "name": "sfbase__OrganizationId__c"
+        },
+        {
+          "name": "sfbase__OrganizationInstanceId__c"
+        },
+        {
+          "name": "sfbase__Quantity__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbase__TransactionDate__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "sfbase__TransactionSubType__c"
+        },
+        {
+          "name": "sfbase__TransactionType__c"
+        },
+        {
+          "name": "UniqueReferenceKey__c"
+        },
+        {
+          "name": "UsageTypeComponent__c"
+        }
+      ],
+      "object": "sfbase__EntitlementTransaction__c"
+    }
+  },
+  "augment_UsageEntitlementPeriod_UsageEntitlement": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Digest_UsageEntitlementPeriod",
+      "left_key": [
+        "UsageEntitlementId"
+      ],
+      "right_select": [
+        "Name",
+        "CreatedDate",
+        "EndDate",
+        "Setting",
+        "MasterLabel",
+        "IsDeleted",
+        "CurrentAmountAllowed",
+        "StartDate",
+        "TenantId"
+      ],
+      "right": "Digest_UsageEntitlement",
+      "relationship": "UsageEntitlement"
+    }
+  },
+  "Append_PushAsset_Push": {
+    "action": "append",
+    "parameters": {
+      "enableDisjointedSchemaMerge": false,
+      "sources": [
+        "Compute_PushColumn",
+        "Append_PushAssetJBTrigger"
+      ]
+    }
+  },
+  "Register_GA360": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC GA360 Integration",
+      "alias": "mc_ga360_integration",
+      "source": "Augment_GA360_DimMember"
+    }
+  },
+  "Filter_PushAssetNotInteraction": {
+    "action": "filter",
+    "parameters": {
+      "source": "Edgemart_PushAssetSend",
+      "saqlFilter": "TriggerType != \"Interaction\""
+    }
+  },
+  "Filter_Digest_Tenant_Exacttarget": {
+    "action": "filter",
+    "parameters": {
+      "filter": "ServiceProviderKey:EQ:exacttarget",
+      "source": "Digest_Tenant2"
+    }
+  },
+  "Digest_EntitlementSchedule": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "fiscalMonthOffset": 1,
+          "name": "EstimatedOverageDate__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Intermediate_Usage__c"
+        },
+        {
+          "name": "IsDeleted"
+        },
+        {
+          "name": "IsLocked"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "RecommendedRemainingQuantity__c"
+        },
+        {
+          "name": "RecommendedUpsellQuantity__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Remaining_Balance__c"
+        },
+        {
+          "name": "sfbase__Allowance__c"
+        },
+        {
+          "name": "AverageDailyUsage__c"
+        },
+        {
+          "name": "sfbase__Entitlement__c"
+        },
+        {
+          "name": "sfbase__SitesStatus__c"
+        },
+        {
+          "name": "sfbase__UsageBalance__c"
+        },
+        {
+          "name": "Usage__c"
+        },
+        {
+          "name": "SystemModstamp"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "sfbase__StartDate__c"
+        },
+        {
+          "name": "sfbase__EndDate__c"
+        }
+      ],
+      "object": "sfbase__EntitlementSchedule__c"
+    }
+  },
+  "augment_Tenant_socialEntitlement": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_UsageEntitlementPeriod_UsageEntitlement",
+      "left_key": [
+        "UsageEntitlement.TenantId"
+      ],
+      "right_select": [
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "Id",
+        "ExternalId",
+        "Name",
+        "SystemModstamp",
+        "ServiceProviderKey",
+        "HasEntitlements",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name",
+        "Account.Type",
+        "Account.Industry",
+        "Account.Combo_Sector__c",
+        "Account.Segment__c",
+        "Account.SFDC_Sector__c",
+        "Account.Sub_Sector__c",
+        "Account.Support_LoB__c",
+        "Account.Region__c",
+        "Account.Subregion__c",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.MarketSegment__c",
+        "Account.MC_Social_AOV_Band",
+        "Account.MC_EMW_AOV_Band",
+        "Account.MC_Services_AOV_Band",
+        "Account.Company.Id",
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_Radian6",
+      "relationship": "Ten"
+    }
+  },
+  "augment_sms_multiplier": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "CountryCode"
+      ],
+      "left": "augment_mc_sms_outbound_country_codes",
+      "left_key": [
+        "CountryCode"
+      ],
+      "right_select": [
+        "new_multiplier",
+        "old_multiplier"
+      ],
+      "right": "edgemart_mc_sms_multiplier",
+      "relationship": "multiplier",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Digest_UsageTypeComponent": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "SystemModstamp"
+        },
+        {
+          "name": "UsageType__c"
+        }
+      ],
+      "object": "UsageTypeComponent__c"
+    }
+  },
+  "Augment_ContentBuilderFeatures_Company": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_MC_ContentBuilderFeatureAdoption",
+      "left_key": [
+        "EnterpriseID"
+      ],
+      "right_select": [
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Id",
+        "Account.Company.Name",
+        "Account.Id",
+        "Account.Name",
+        "HasEntitlements",
+        "Id",
+        "Name",
+        "sfbase__AccountId__c"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Tenant",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "register_MC_ContentBuilderFeatures_Account": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC Content Builder Feature Adoption",
+      "alias": "MC_ContentBuilderFeatures_Account",
+      "source": "Augment_ContentBuilderFeatures_Company"
+    }
+  },
+  "Register_MonthlyActiveUsers_Accounts": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MonthlyActiveUsers_Accounts",
+      "alias": "MonthlyActiveUsers_Accounts",
+      "source": "601"
+    }
+  },
+  "Register_MC_ContentBuilderUsage_Account": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC Content Builder Usage",
+      "alias": "MC_ContentBuilderUsage_Account",
+      "source": "Augment_ContentBuilderUsage_Company"
+    }
+  },
+  "Register_Automation_Accounts": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Automation_Accounts",
+      "alias": "Automation_Accounts",
+      "source": "801"
+    }
+  },
+  "digest_tenant_information": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "SfdcTenant__c"
+        }
+      ],
+      "object": "Apttus_Config2__AccountLocation__c"
+    }
+  },
+  "augment_ali_contract": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_ali_product",
+      "left_key": [
+        "SfdcAssetContract__c"
+      ],
+      "right_select": [
+        "Id",
+        "ContractNumber",
+        "Status",
+        "sfbase__ContractType__c",
+        "StartDate",
+        "EndDate",
+        "ContractTerm",
+        "InitialContractTerm__c",
+        "sfbase__PriceBookCategory__c",
+        "AutoRenewCode"
+      ],
+      "right": "digest_contract",
+      "relationship": "Contract",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Digest_UsageType": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "SystemModstamp"
+        },
+        {
+          "name": "ExternalName__c"
+        }
+      ],
+      "object": "UsageType__c"
+    }
+  },
+  "Augment_Company_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Digest_Account",
+      "left_key": [
+        "Global_Company__c"
+      ],
+      "right_select": [
+        "Id",
+        "AOV_Band__c",
+        "Name"
+      ],
+      "right": "Digest_Company",
+      "relationship": "Company",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "digest_contract": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "ContractNumber"
+        },
+        {
+          "name": "Status"
+        },
+        {
+          "name": "sfbase__ContractType__c"
+        },
+        {
+          "name": "StartDate"
+        },
+        {
+          "name": "Initial_Contract_End_Date__c"
+        },
+        {
+          "name": "EndDate"
+        },
+        {
+          "name": "ContractTerm"
+        },
+        {
+          "name": "InitialContractTerm__c"
+        },
+        {
+          "name": "sfbase__PriceBookCategory__c"
+        },
+        {
+          "name": "AutoRenewCode"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Contract"
+    }
+  },
+  "Augment_SchedulesTransactions": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Digest_EntitlementTransactions",
+      "left_key": [
+        "sfbase__EntitlementSchedule__c"
+      ],
+      "right_select": [
+        "EstimatedOverageDate__c",
+        "Intermediate_Usage__c",
+        "IsDeleted",
+        "IsLocked",
+        "Name",
+        "RecommendedRemainingQuantity__c",
+        "RecommendedUpsellQuantity__c",
+        "RecordTypeId",
+        "Remaining_Balance__c",
+        "sfbase__Allowance__c",
+        "AverageDailyUsage__c",
+        "sfbase__Entitlement__c",
+        "sfbase__SitesStatus__c",
+        "sfbase__UsageBalance__c",
+        "Usage__c",
+        "SystemModstamp",
+        "sfbase__StartDate__c",
+        "sfbase__EndDate__c"
+      ],
+      "right": "Digest_EntitlementSchedule",
+      "relationship": "Schedule"
+    }
+  },
+  "Register_DailyActivity_SE": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "DailyActivity_SE",
+      "alias": "DailyActivity_SE",
+      "source": "Slice_DailyActivity_Tenants"
+    }
+  },
+  "Edgemart_GA360_Link": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "Google_Analytics_360_Integration_Linked_Accounts"
+    }
+  },
+  "Digest_UsageEntitlementPeriod": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "EndDate"
+        },
+        {
+          "name": "StartDate"
+        },
+        {
+          "name": "AccountTenantInfo__c"
+        },
+        {
+          "name": "AmountAllowed"
+        },
+        {
+          "name": "AmountRemaining"
+        },
+        {
+          "name": "AmountUsed"
+        },
+        {
+          "name": "BaseAmountAllowed"
+        },
+        {
+          "name": "Component__c"
+        },
+        {
+          "name": "Setting"
+        },
+        {
+          "name": "UsageEntitlementId"
+        }
+      ],
+      "object": "UsageEntitlementPeriod"
+    }
+  },
+  "Filter_Digest_Tenant_Radian6": {
+    "action": "filter",
+    "parameters": {
+      "filter": "ServiceProviderKey:EQ:radian6",
+      "source": "Digest_Tenant2"
+    }
+  },
+  "Register_MC_ContentBuilderAsset_Account": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC Content Builder Asset",
+      "alias": "MC_ContentBuilderAsset_Account",
+      "source": "Augment_ContentBuilderAsset_Company"
+    }
+  },
+  "Edgemart_ActiveAudience_Allotted": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "ActiveAudience_Allotted"
+    }
+  },
+  "Join_Tenant_Account_All": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Digest_Tenant2",
+      "left_key": [
+        "AccountIdKey"
+      ],
+      "right_select": [
+        "Id",
+        "Name",
+        "Type",
+        "Industry",
+        "Combo_Sector__c",
+        "Segment__c",
+        "SFDC_Sector__c",
+        "Sub_Sector__c",
+        "Support_LoB__c",
+        "Region__c",
+        "Subregion__c",
+        "BillingCountry",
+        "BillingState",
+        "MarketSegment__c",
+        "MC_Social_AOV_Band",
+        "MC_EMW_AOV_Band",
+        "MC_Services_AOV_Band",
+        "Company.Id",
+        "Company.AOV_Band__c",
+        "Company.Name"
+      ],
+      "right": "Augment_Company_Account",
+      "relationship": "Account"
+    }
+  },
+  "Edgemart_MC_ContentBuilderAsset": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "MC_ContentBuilderAsset"
+    }
+  },
+  "Edgemart_MC_Salesperson": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "mc_salesperson"
+    }
+  },
+  "Augment_ContentBuilderUsage_Company": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_MC_ContentBuilderUsage",
+      "left_key": [
+        "EnterpriseID"
+      ],
+      "right_select": [
+        "Account.Id",
+        "Account.Name",
+        "Account.Company.Id",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Tenant",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Digest_Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "Industry"
+        },
+        {
+          "name": "Combo_Sector__c"
+        },
+        {
+          "name": "Segment__c"
+        },
+        {
+          "name": "SFDC_Sector__c"
+        },
+        {
+          "name": "Support_LoB__c"
+        },
+        {
+          "name": "Global_Company__c"
+        },
+        {
+          "name": "Sub_Sector__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Subregion__c"
+        },
+        {
+          "name": "BillingCountry"
+        },
+        {
+          "name": "BillingState"
+        },
+        {
+          "name": "MarketSegment__c"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "Digest_Tenant2": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Digest_Tenant",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "AccountIdKey",
+          "saqlExpression": "case when sfbase__AccountId__c is not null then sfbase__AccountId__c else AccountId end",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "digest_product": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "ProductCode"
+        },
+        {
+          "name": "IsActive"
+        },
+        {
+          "name": "sfbase__Status__c"
+        },
+        {
+          "name": "sfbase__SKU__c"
+        },
+        {
+          "name": "SELA_Enabled__c"
+        },
+        {
+          "name": "Cloud__c"
+        },
+        {
+          "name": "SKU_Type__c"
+        },
+        {
+          "name": "Provisionable__c"
+        },
+        {
+          "name": "L1_Business_Line__c"
+        },
+        {
+          "name": "L2_Product_Line__c"
+        },
+        {
+          "name": "L3_Product_Family__c"
+        },
+        {
+          "name": "L4_Product_Offering__c"
+        }
+      ],
+      "object": "Product2"
+    }
+  },
+  "Edgemart_MC_Push": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "MC_Push"
+    }
+  },
+  "Register_SocialStudio_Accounts": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SocialStudio_Accounts",
+      "alias": "SocialStudio_Accounts",
+      "source": "701"
+    }
+  },
+  "Register_ActiveAudience_Allotted": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "ActiveAudience_Allotted Account",
+      "alias": "ActiveAudience_Allotted_Account",
+      "source": "Augment_ActiveAudience_Allotted"
+    }
+  },
+  "Edgemart_Journey_Builder_Activity_Type_Groups": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "Journey_Builder_Activity_Type_Groups"
+    }
+  },
+  "Edgemart_MC_GroupConnect": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "MC_GroupConnect"
+    }
+  },
+  "compute_sms_calcs": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_sms_multiplier",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "precision": 16,
+          "name": "SuperMessages_New",
+          "saqlExpression": "'multiplier.new_multiplier'*TotalCount",
+          "scale": 0,
+          "label": "SuperMessages (New)",
+          "type": "Numeric"
+        },
+        {
+          "precision": 16,
+          "name": "SuperMessages_Old",
+          "saqlExpression": "'multiplier.old_multiplier'*TotalCount",
+          "scale": 0,
+          "label": "SuperMessages (Old)",
+          "type": "Numeric"
+        }
+      ]
+    }
+  },
+  "Edgemart_ContactUtilization": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "ContactUtilization"
+    }
+  },
+  "Augment_Entitlements_Members": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Mid"
+      ],
+      "left": "Filter_RecordType",
+      "left_key": [
+        "ChildExternalProvisionId__c"
+      ],
+      "right_select": [
+        "Name",
+        "Eid"
+      ],
+      "right": "Edgemart_Members",
+      "relationship": "Members"
+    }
+  },
+  "Digest_User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "Edgemart_MC_ContentBuilderUsage": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "MC_ContentBuilderUsage"
+    }
+  },
+  "augment_mc_sms_outbound_country_codes": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ISO3166_alpha2"
+      ],
+      "left": "edgemart_mc_sms_outbound",
+      "left_key": [
+        "CountryCode"
+      ],
+      "right_select": [
+        "Country",
+        "ISO3166_alpha2",
+        "ISO3166_alpha3",
+        "TLD"
+      ],
+      "right": "edgemart_country_codes",
+      "relationship": "Country",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Edgemart_mc_ees": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "mc_ees"
+    }
+  },
+  "Edgemart_MC_Approvals": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "MC_Approvals"
+    }
+  },
+  "Register_MC_Push": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC Push Account",
+      "alias": "MC_Push_Account",
+      "source": "Augment_MC_Push"
+    }
+  },
+  "Edgemart_MonthlyActiveUsers": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "MonthlyActiveUsers"
+    }
+  },
+  "Register_RedAccounts": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Red_Accounts",
+      "alias": "Red_Accounts",
+      "source": "506"
+    }
+  },
+  "Join_Tenant_Account_Radian6": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Filter_Digest_Tenant_Radian6",
+      "left_key": [
+        "AccountIdKey"
+      ],
+      "right_select": [
+        "Id",
+        "Name",
+        "Type",
+        "Industry",
+        "Combo_Sector__c",
+        "Segment__c",
+        "SFDC_Sector__c",
+        "Sub_Sector__c",
+        "Support_LoB__c",
+        "Region__c",
+        "Subregion__c",
+        "BillingCountry",
+        "BillingState",
+        "MarketSegment__c",
+        "MC_Social_AOV_Band",
+        "MC_EMW_AOV_Band",
+        "MC_Services_AOV_Band",
+        "Company.Id",
+        "Company.AOV_Band__c",
+        "Company.Name"
+      ],
+      "right": "Augment_Company_Account",
+      "relationship": "Account"
+    }
+  },
+  "Augment_SchedulesRecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_SchedulesEntitlements",
+      "left_key": [
+        "Schedule.Entitlement.RecordTypeId"
+      ],
+      "right_select": [
+        "Name",
+        "SobjectType",
+        "DeveloperName"
+      ],
+      "right": "Digest_RecordType",
+      "relationship": "Schedule.Entitlement.RecordTypeId"
+    }
+  },
+  "Register_MC_Approvals_Accounts": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC_Approvals_Account",
+      "alias": "MC_Approvals_Account",
+      "source": "Augment_MC_Approvals_Account"
+    }
+  },
+  "Augment_Entitlements_AEs": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ACCOUNT_ID"
+      ],
+      "left": "Augment_Entitlements_Members",
+      "left_key": [
+        "Schedule.Entitlement.sfbase__Account__c"
+      ],
+      "right_select": [
+        "ACCOUNT_NAME",
+        "MC_AE",
+        "ECS_MC",
+        "MC_ADS_OR_KRUX_AE",
+        "MC_RM",
+        "TENANT_ID",
+        "ACCOUNT_NUMBER",
+        "ACCOUNT_ID_15",
+        "MC_SOCIAL_AE"
+      ],
+      "right": "Edgemart_MC_Salesperson",
+      "relationship": "salesperson"
+    }
+  },
+  "Register_MCSMS_Accounts": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC SMS Outbound w/ Account",
+      "alias": "mc_sms_outbound_account",
+      "source": "Augment_MCSMS_Account"
+    }
+  },
+  "Compute_PushColumn": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Edgemart_MC_Push",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "MeasureType",
+          "saqlExpression": "\"MessagesSent\"",
+          "label": "MeasureType",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Digest_Tenant": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "CloudServiceProviderId"
+        },
+        {
+          "name": "SystemModstamp"
+        },
+        {
+          "name": "ExternalId"
+        },
+        {
+          "name": "ServiceProviderKey"
+        },
+        {
+          "name": "HasEntitlements"
+        },
+        {
+          "name": "sfbase__AccountId__c"
+        },
+        {
+          "name": "AccountId"
+        }
+      ],
+      "object": "Tenant"
+    }
+  },
+  "Compute_PushAssetJBTrigger": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Slice_PushAssetInteraction",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "saqlExpression": "\"JB\"",
+          "name": "TriggerType",
+          "label": "TriggerType",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Augment_MC_CloudPages_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_MC_CloudPages",
+      "left_key": [
+        "EnterpriseID"
+      ],
+      "right_select": [
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name",
+        "Account.Type",
+        "Account.Industry",
+        "Account.Combo_Sector__c",
+        "Account.Segment__c",
+        "Account.SFDC_Sector__c",
+        "Account.Sub_Sector__c",
+        "Account.Support_LoB__c",
+        "Account.Region__c",
+        "Account.Subregion__c",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.MarketSegment__c",
+        "Account.MC_Social_AOV_Band",
+        "Account.MC_EMW_AOV_Band",
+        "Account.MC_Services_AOV_Band",
+        "Account.Company.Id",
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Ten"
+    }
+  },
+  "Augment_UsageTypeUsageType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_SchedulesUsageType",
+      "left_key": [
+        "Component.UsageType__c"
+      ],
+      "right_select": [
+        "ExternalName__c",
+        "Name",
+        "SystemModstamp"
+      ],
+      "right": "Digest_UsageType",
+      "relationship": "Component.Type"
+    }
+  },
+  "Register_DailyActivity_Tenants": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "DailyActivity_Tenants",
+      "alias": "DailyActivity_Tenants",
+      "source": "202"
+    }
+  },
+  "Edgemart_MC_ContentBuilderFeatureAdoption": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "MC_ContentBuilderFeatureAdoption"
+    }
+  },
+  "edgemart_mc_sms_outbound": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "MC_SMS_outbound"
+    }
+  },
+  "Edgemart_Automation": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "Automation"
+    }
+  },
+  "Register_DimMember_Account": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC DimMember Account",
+      "alias": "MC_DimMember_Account",
+      "source": "Augment_DimMember_Account"
+    }
+  },
+  "Join_Contacts_AEs": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ACCOUNT_ID"
+      ],
+      "left": "Join_Contacts_Accounts",
+      "left_key": [
+        "Tenant.AccountIdKey"
+      ],
+      "right_select": [
+        "ACCOUNT_NAME",
+        "MC_AE",
+        "ECS_MC",
+        "MC_ADS_OR_KRUX_AE",
+        "MC_RM",
+        "TENANT_ID",
+        "ACCOUNT_NUMBER",
+        "ACCOUNT_ID_15",
+        "MC_SOCIAL_AE"
+      ],
+      "right": "Edgemart_MC_Salesperson",
+      "relationship": "salesperson"
+    }
+  },
+  "Digest_RedAccounts": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Days_to_Renewal_at_Red_Start_Date__c"
+        },
+        {
+          "name": "Key_Risk_Category__c"
+        },
+        {
+          "name": "Issue_Product__c"
+        },
+        {
+          "name": "ACV_at_Risk__c"
+        },
+        {
+          "name": "At_Level_3_escalated_to__c"
+        },
+        {
+          "name": "EVP_Escalation__c"
+        },
+        {
+          "name": "Days_Red__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Red_Account__c"
+        },
+        {
+          "name": "Salesforce_Cloud__c"
+        },
+        {
+          "name": "Executive_Action_Requested__c"
+        },
+        {
+          "name": "Executive_Sponsor_2__c"
+        },
+        {
+          "name": "Instance__c"
+        },
+        {
+          "name": "Issue_Owner__c"
+        },
+        {
+          "name": "SystemModstamp"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Current_Red_Start_Date__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Parent_Red_Account__c"
+        },
+        {
+          "name": "Parent_Account__c"
+        },
+        {
+          "name": "Stage__c"
+        },
+        {
+          "name": "EPM_Owner__c"
+        },
+        {
+          "name": "Risk_Detail__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Product_RCA_Sub_category__c"
+        },
+        {
+          "name": "Executive_Outreach_2__c"
+        }
+      ],
+      "object": "Red_Account__c"
+    }
+  },
+  "Join_Contacts_Accounts": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_ContactUtilization",
+      "left_key": [
+        "EnterpriseID"
+      ],
+      "right_select": [
+        "Id",
+        "Name",
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Tenant"
+    }
+  },
+  "Slice_DailyActivity_Tenants": {
+    "action": "sliceDataset",
+    "parameters": {
+      "mode": "select",
+      "source": "202",
+      "fields": [
+        {
+          "name": "Tenant.AccountId"
+        },
+        {
+          "name": "Account.Name"
+        },
+        {
+          "name": "EnterpriseID"
+        },
+        {
+          "name": "EnterpriseName"
+        },
+        {
+          "name": "MemberID"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "StackID"
+        },
+        {
+          "name": "DBID"
+        },
+        {
+          "name": "Account.Company.Name"
+        },
+        {
+          "name": "Account.Company.Id"
+        },
+        {
+          "name": "period"
+        },
+        {
+          "name": "TotalSend"
+        }
+      ]
+    }
+  },
+  "Edgemart_DimMember": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "mc_dim_member"
+    }
+  },
+  "Edgemart_Members": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "Members2"
+    }
+  },
+  "Register_MC_GroupConnect_Accounts": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC_GroupConnect_Account",
+      "alias": "MC_GroupConnect_Account",
+      "source": "Augment_MC_GroupConnect_Account"
+    }
+  },
+  "Filter_PushAssetInteraction": {
+    "action": "filter",
+    "parameters": {
+      "source": "Edgemart_PushAssetSend",
+      "saqlFilter": "TriggerType == \"Interaction\""
+    }
+  },
+  "Augment_EES_activations_account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_EES_activations",
+      "left_key": [
+        "EID"
+      ],
+      "right_select": [
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "Id",
+        "Name",
+        "SystemModstamp",
+        "ServiceProviderKey",
+        "HasEntitlements",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name",
+        "Account.Type",
+        "Account.Industry",
+        "Account.Combo_Sector__c",
+        "Account.Segment__c",
+        "Account.SFDC_Sector__c",
+        "Account.Sub_Sector__c",
+        "Account.Support_LoB__c",
+        "Account.Region__c",
+        "Account.Subregion__c",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.MarketSegment__c",
+        "Account.MC_Social_AOV_Band",
+        "Account.MC_EMW_AOV_Band",
+        "Account.MC_Services_AOV_Band",
+        "Account.Company.Id",
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Ten"
+    }
+  },
+  "Edgemart_PushAssetSend": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "MC_PushAssetSend"
+    }
+  },
+  "Register_ActiveAudience_Tenants": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "ActiveAudience_Tenants",
+      "alias": "ActiveAudience_Tenants",
+      "source": "301"
+    }
+  },
+  "Augment_UsageTypeComponent": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Name"
+      ],
+      "left": "Augment_UsageTypeUsageType",
+      "left_key": [
+        "Component.Name"
+      ],
+      "right_select": [
+        "Realated_DB__c"
+      ],
+      "right": "Edgemart_ComponentLookup",
+      "relationship": "Component.Lookup"
+    }
+  },
+  "Edgemart_SocialStudio": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "SocialStudio"
+    }
+  },
+  "Augment_MCSMS_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "compute_sms_calcs",
+      "left_key": [
+        "EnterpriseID"
+      ],
+      "right_select": [
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "Id",
+        "Name",
+        "SystemModstamp",
+        "ServiceProviderKey",
+        "HasEntitlements",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name",
+        "Account.Type",
+        "Account.Industry",
+        "Account.Combo_Sector__c",
+        "Account.Segment__c",
+        "Account.SFDC_Sector__c",
+        "Account.Sub_Sector__c",
+        "Account.Region__c",
+        "Account.Subregion__c",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.MarketSegment__c",
+        "Account.MC_Social_AOV_Band",
+        "Account.MC_EMW_AOV_Band",
+        "Account.MC_Services_AOV_Band",
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Id",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Enterprise"
+    }
+  },
+  "Edgemart_DailyActivity": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "Daily_Activity"
+    }
+  },
+  "edgemart_country_codes": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "iso3166_country_codes"
+    }
+  },
+  "Augment_SchedulesEntitlements": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_SchedulesTransactions",
+      "left_key": [
+        "Schedule.sfbase__Entitlement__c"
+      ],
+      "right_select": [
+        "IsDeleted",
+        "Name",
+        "IsLocked",
+        "RecordTypeId",
+        "sfbase__Account__c",
+        "sfbase__Contract__c",
+        "sfbase__EntitlementEdition__c",
+        "sfbase__EntitlementName__c",
+        "sfbase__EntitlementDefinition__c",
+        "sfbase__OverageMonthsAllowed__c",
+        "sfbase__MaxThreshold__c",
+        "sfbase__SitesStatus__c",
+        "Status__c"
+      ],
+      "right": "Digest_Entitlement",
+      "relationship": "Schedule.Entitlement"
+    }
+  },
+  "Digest_Entitlement": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "IsDeleted"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "IsLocked"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "sfbase__Account__c"
+        },
+        {
+          "name": "sfbase__Contract__c"
+        },
+        {
+          "name": "sfbase__EntitlementEdition__c"
+        },
+        {
+          "name": "sfbase__EntitlementName__c"
+        },
+        {
+          "name": "sfbase__EntitlementDefinition__c"
+        },
+        {
+          "name": "sfbase__OverageMonthsAllowed__c"
+        },
+        {
+          "name": "sfbase__MaxThreshold__c"
+        },
+        {
+          "name": "sfbase__SitesStatus__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Status__c"
+        }
+      ],
+      "object": "sfbase__Entitlement__c"
+    }
+  },
+  "augment_ali_tenant": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_ali_tenant_info",
+      "left_key": [
+        "TenantInfo.SfdcTenant__c"
+      ],
+      "right_select": [
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "Id",
+        "Name",
+        "ExternalId",
+        "SystemModstamp",
+        "ServiceProviderKey",
+        "HasEntitlements",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name",
+        "Account.Type",
+        "Account.Industry",
+        "Account.Combo_Sector__c",
+        "Account.Segment__c",
+        "Account.SFDC_Sector__c",
+        "Account.Sub_Sector__c",
+        "Account.Region__c",
+        "Account.Subregion__c",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.MarketSegment__c",
+        "Account.MC_Social_AOV_Band",
+        "Account.MC_EMW_AOV_Band",
+        "Account.MC_Services_AOV_Band",
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Id",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_All",
+      "relationship": "Tenant",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Augment_DimMember_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_DimMember",
+      "left_key": [
+        "EID"
+      ],
+      "right_select": [
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "Id",
+        "Name",
+        "SystemModstamp",
+        "ServiceProviderKey",
+        "HasEntitlements",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name",
+        "Account.Type",
+        "Account.Industry",
+        "Account.Combo_Sector__c",
+        "Account.Segment__c",
+        "Account.SFDC_Sector__c",
+        "Account.Sub_Sector__c",
+        "Account.Support_LoB__c",
+        "Account.Region__c",
+        "Account.Subregion__c",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.MarketSegment__c",
+        "Account.MC_Social_AOV_Band",
+        "Account.MC_EMW_AOV_Band",
+        "Account.MC_Services_AOV_Band",
+        "Account.Company.Id",
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Tenant"
+    }
+  },
+  "Append_PushAssetJBTrigger": {
+    "action": "append",
+    "parameters": {
+      "enableDisjointedSchemaMerge": false,
+      "sources": [
+        "Compute_PushAssetJBTrigger",
+        "Filter_PushAssetNotInteraction"
+      ]
+    }
+  },
+  "Join_Tenant_Account_Exacttarget": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Filter_Digest_Tenant_Exacttarget",
+      "left_key": [
+        "AccountIdKey"
+      ],
+      "right_select": [
+        "Id",
+        "Name",
+        "Type",
+        "Industry",
+        "Combo_Sector__c",
+        "Segment__c",
+        "SFDC_Sector__c",
+        "Sub_Sector__c",
+        "Support_LoB__c",
+        "Region__c",
+        "Subregion__c",
+        "BillingCountry",
+        "BillingState",
+        "MarketSegment__c",
+        "MC_Social_AOV_Band",
+        "MC_EMW_AOV_Band",
+        "MC_Services_AOV_Band",
+        "Company.Id",
+        "Company.AOV_Band__c",
+        "Company.Name"
+      ],
+      "right": "Augment_Company_Account",
+      "relationship": "Account"
+    }
+  },
+  "Augment_SchedulesAccount": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_SchedulesRecordType",
+      "left_key": [
+        "Schedule.Entitlement.sfbase__Account__c"
+      ],
+      "right_select": [
+        "Name",
+        "Type",
+        "Industry",
+        "Combo_Sector__c",
+        "Segment__c",
+        "SFDC_Sector__c",
+        "Sub_Sector__c",
+        "Support_LoB__c",
+        "Region__c",
+        "Subregion__c",
+        "BillingCountry",
+        "BillingState",
+        "MarketSegment__c",
+        "MC_Social_AOV_Band",
+        "MC_EMW_AOV_Band",
+        "MC_Services_AOV_Band"
+      ],
+      "right": "Augment_Company_Account",
+      "relationship": "Schedule.Entitlement.Account"
+    }
+  },
+  "register_usage_entitlement_0": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC Social Entitlement Transactions",
+      "alias": "mc_social_entitlement_usage",
+      "source": "augment_Tenant_socialEntitlement"
+    }
+  },
+  "Register_EES_activations": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC EES Activations",
+      "alias": "mc_ees_activations",
+      "source": "Augment_EES_activations_account"
+    }
+  },
+  "edgemart_mc_sms_multiplier": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "mc_sms_multiplier"
+    }
+  },
+  "Digest_Company": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Red_Account__c"
+        },
+        {
+          "name": "AOV_Band__c"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "Company__c"
+    }
+  },
+  "Edgemart_ActiveAudience": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "Active_Audience"
+    }
+  },
+  "Register_Entitlements": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "EntitlementTransactions",
+      "alias": "EntitlementTransactions",
+      "source": "Augment_Entitlements_AEs"
+    }
+  },
+  "Augment_MC_Push": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_MC_Push",
+      "left_key": [
+        "EnterpriseID"
+      ],
+      "right_select": [
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name",
+        "Account.Type",
+        "Account.Industry",
+        "Account.Combo_Sector__c",
+        "Account.Segment__c",
+        "Account.SFDC_Sector__c",
+        "Account.Sub_Sector__c",
+        "Account.Support_LoB__c",
+        "Account.Region__c",
+        "Account.Subregion__c",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.MarketSegment__c",
+        "Account.MC_Social_AOV_Band",
+        "Account.MC_EMW_AOV_Band",
+        "Account.MC_Services_AOV_Band",
+        "Account.Company.Id",
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Tenant",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Edgemart_ComponentLookup": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "ComponentLookup"
+    }
+  },
+  "Register_MC_PushFull": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC Push Account (Full)",
+      "alias": "MC_Push_Account_Full",
+      "source": "Augment_MC_PushFull"
+    }
+  },
+  "Augment_ContentBuilderAsset_Company": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_MC_ContentBuilderAsset",
+      "left_key": [
+        "EnterpriseID"
+      ],
+      "right_select": [
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Id",
+        "Account.Company.Name",
+        "Account.Id",
+        "Account.Name",
+        "ExternalId",
+        "HasEntitlements",
+        "Id",
+        "Name",
+        "sfbase__AccountId__c"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Tenant",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Augment_JBActivity_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_JBActivity",
+      "left_key": [
+        "EnterpriseID"
+      ],
+      "right_select": [
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name",
+        "Account.Type",
+        "Account.Industry",
+        "Account.Combo_Sector__c",
+        "Account.Segment__c",
+        "Account.SFDC_Sector__c",
+        "Account.Sub_Sector__c",
+        "Account.Support_LoB__c",
+        "Account.Region__c",
+        "Account.Subregion__c",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.MarketSegment__c",
+        "Account.MC_Social_AOV_Band",
+        "Account.MC_EMW_AOV_Band",
+        "Account.MC_Services_AOV_Band",
+        "Account.Company.Id",
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Ten"
+    }
+  },
+  "Edgemart_MC_CloudPages": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "mc_cloudpages"
+    }
+  },
+  "Augment_MC_Approvals_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_MC_Approvals",
+      "left_key": [
+        "EnterpriseID"
+      ],
+      "right_select": [
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name",
+        "Account.Type",
+        "Account.Industry",
+        "Account.Combo_Sector__c",
+        "Account.Segment__c",
+        "Account.SFDC_Sector__c",
+        "Account.Sub_Sector__c",
+        "Account.Support_LoB__c",
+        "Account.Region__c",
+        "Account.Subregion__c",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.MarketSegment__c",
+        "Account.MC_Social_AOV_Band",
+        "Account.MC_EMW_AOV_Band",
+        "Account.MC_Services_AOV_Band",
+        "Account.Company.Id",
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Ten"
+    }
+  },
+  "Augment_mc_ees_account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_mc_ees",
+      "left_key": [
+        "Score_Eid"
+      ],
+      "right_select": [
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "Id",
+        "Name",
+        "SystemModstamp",
+        "ServiceProviderKey",
+        "HasEntitlements",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name",
+        "Account.Type",
+        "Account.Industry",
+        "Account.Combo_Sector__c",
+        "Account.Segment__c",
+        "Account.SFDC_Sector__c",
+        "Account.Sub_Sector__c",
+        "Account.Support_LoB__c",
+        "Account.Region__c",
+        "Account.Subregion__c",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.MarketSegment__c",
+        "Account.MC_Social_AOV_Band",
+        "Account.MC_EMW_AOV_Band",
+        "Account.MC_Services_AOV_Band",
+        "Account.Company.Id",
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Ten"
+    }
+  },
+  "Slice_PushAssetInteraction": {
+    "action": "sliceDataset",
+    "parameters": {
+      "mode": "drop",
+      "source": "Filter_PushAssetInteraction",
+      "fields": [
+        {
+          "name": "TriggerType"
+        }
+      ]
+    }
+  },
+  "Augment_ActiveAudience_Allotted": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Edgemart_ActiveAudience_Allotted",
+      "left_key": [
+        "EnterpriseID"
+      ],
+      "right_select": [
+        "CloudServiceProviderId",
+        "sfbase__AccountId__c",
+        "AccountId",
+        "AccountIdKey",
+        "Account.Name",
+        "Account.Type",
+        "Account.Industry",
+        "Account.Combo_Sector__c",
+        "Account.Segment__c",
+        "Account.SFDC_Sector__c",
+        "Account.Sub_Sector__c",
+        "Account.Support_LoB__c",
+        "Account.Region__c",
+        "Account.Subregion__c",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.MarketSegment__c",
+        "Account.MC_Social_AOV_Band",
+        "Account.MC_EMW_AOV_Band",
+        "Account.MC_Services_AOV_Band",
+        "Account.Company.Id",
+        "Account.Company.AOV_Band__c",
+        "Account.Company.Name"
+      ],
+      "right": "Join_Tenant_Account_Exacttarget",
+      "relationship": "Tenant"
+    }
+  },
+  "Register_Contacts_Accounts": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "ContactUtilization_Accounts",
+      "alias": "ContactUtilization_Accounts",
+      "source": "Join_Contacts_AEs"
+    }
+  },
+  "Augment_GA360_DimMember": {
+    "parameters:": {
+      "right_key": [
+        "MID"
+      ],
+      "left": "Edgemart_GA360_Link",
+      "left_key": [
+        "MID"
+      ],
+      "right_select": [
+        "DBID",
+        "EID",
+        "EnterpriseName",
+        "IsActive",
+        "IsInternal",
+        "IsTest",
+        "MemberName",
+        "StackID",
+        "AcctType",
+        "AcctState",
+        "Last12MonthsVolume",
+        "Last30DaysVolume",
+        "Tenant.CloudServiceProviderId",
+        "Tenant.sfbase__AccountId__c",
+        "Tenant.Id",
+        "Tenant.Name",
+        "Tenant.SystemModstamp",
+        "Tenant.ServiceProviderKey",
+        "Tenant.HasEntitlements",
+        "Tenant.AccountId",
+        "Tenant.AccountIdKey",
+        "Tenant.Account.Name",
+        "Tenant.Account.Type",
+        "Tenant.Account.Industry",
+        "Tenant.Account.Combo_Sector__c",
+        "Tenant.Account.Segment__c",
+        "Tenant.Account.SFDC_Sector__c",
+        "Tenant.Account.Sub_Sector__c",
+        "Tenant.Account.Account_Classification__c",
+        "Tenant.Account.Cloud_Customer__c",
+        "Tenant.Account.Marketing_Cloud_AOV_Band__c",
+        "Tenant.Account.Support_LoB__c",
+        "Tenant.Account.Region__c",
+        "Tenant.Account.Subregion__c",
+        "Tenant.Account.BillingCountry",
+        "Tenant.Account.BillingState",
+        "Tenant.Account.MarketSegment__c",
+        "Tenant.Account.MC_Social_AOV_Band",
+        "Tenant.Account.MC_EMW_AOV_Band",
+        "Tenant.Account.MC_Services_AOV_Band",
+        "Tenant.Account.Company.Id",
+        "Tenant.Account.Company.AOV_Band__c",
+        "Tenant.Account.Company.Name"
+      ],
+      "right": "Augment_DimMember_Account",
+      "relationship": "Member"
+    },
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "MID"
+      ],
+      "left": "Edgemart_GA360_Link",
+      "left_key": [
+        "MID"
+      ],
+      "right_select": [
+        "DBID",
+        "EID",
+        "EnterpriseName",
+        "IsActive",
+        "IsInternal",
+        "IsTest",
+        "StackID",
+        "MemberName",
+        "AcctState",
+        "AcctType",
+        "Last30DaysVolume",
+        "Last12MonthsVolume",
+        "Tenant.Id",
+        "Tenant.Name",
+        "Tenant.SystemModstamp",
+        "Tenant.ServiceProviderKey",
+        "Tenant.HasEntitlements",
+        "Tenant.AccountId",
+        "Tenant.AccountIdKey",
+        "Tenant.Account.Name",
+        "Tenant.Account.Type",
+        "Tenant.Account.Industry",
+        "Tenant.Account.Combo_Sector__c",
+        "Tenant.Account.Segment__c",
+        "Tenant.Account.SFDC_Sector__c",
+        "Tenant.Account.Sub_Sector__c",
+        "Tenant.Account.Support_LoB__c",
+        "Tenant.Account.Region__c",
+        "Tenant.Account.Subregion__c",
+        "Tenant.Account.BillingState",
+        "Tenant.Account.BillingCountry",
+        "Tenant.Account.MarketSegment__c",
+        "Tenant.Account.MC_Social_AOV_Band",
+        "Tenant.Account.MC_EMW_AOV_Band",
+        "Tenant.Account.MC_Services_AOV_Band",
+        "Tenant.Account.Company.Id",
+        "Tenant.Account.Company.AOV_Band__c",
+        "Tenant.Account.Company.Name"
+      ],
+      "right": "Augment_DimMember_Account",
+      "relationship": "Member",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Augment_SchedulesUsageType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_SchedulesAccount",
+      "left_key": [
+        "UsageTypeComponent__c"
+      ],
+      "right_select": [
+        "Name",
+        "SystemModstamp",
+        "UsageType__c"
+      ],
+      "right": "Digest_UsageTypeComponent",
+      "relationship": "Component"
+    }
+  },
+  "Register_JBActivity_Accounts": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "JBActivity_Account",
+      "alias": "JBActivity_Account",
+      "source": "Augment_JBActivity_Type"
+    }
+  },
+  "Augment_JBActivity_Type": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "TypeName"
+      ],
+      "left": "Augment_JBActivity_Account",
+      "left_key": [
+        "TypeName"
+      ],
+      "right_select": [
+        "GroupName",
+        "FriendlyTypeName"
+      ],
+      "right": "Edgemart_Journey_Builder_Activity_Type_Groups",
+      "relationship": "JBGroup"
+    }
+  },
+  "Filter_RecordType": {
+    "action": "filter",
+    "parameters": {
+      "filter": "Schedule.Entitlement.RecordTypeId:EQ:01230000001lsUFAAY",
+      "source": "Augment_UsageTypeComponent"
+    }
+  },
+  "Register_ActiveAudience_Tenants_Clean": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC Ad Studio",
+      "alias": "MC_Ad_Studio",
+      "source": "301"
+    }
+  },
+  "Register_ALI_clean": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC Asset Line Item (Shared)",
+      "alias": "MC_AssetLineItem_Shared",
+      "source": "augment_ali_tenant"
+    }
+  },
+  "Register_MC_CloudPages_Accounts": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC_CloudPages_Account",
+      "alias": "MC_CloudPages_Account",
+      "source": "Augment_MC_CloudPages_Account"
+    }
+  },
+  "Edgemart_EES_activations": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "EES_activations"
+    }
+  }
+}

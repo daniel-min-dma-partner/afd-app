@@ -1,0 +1,3746 @@
+{
+  "Extract_Opportunity": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "Amount"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "sfbase__ACV__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CloseDate"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbase__Contract_EndDate__c"
+        },
+        {
+          "name": "StageName"
+        },
+        {
+          "name": "ForecastCategory"
+        },
+        {
+          "name": "ForecastCategoryName"
+        },
+        {
+          "name": "sfbase__PriorContractTerm__c"
+        },
+        {
+          "name": "sfbase__PriorRenewalTerm__c"
+        },
+        {
+          "name": "pse__Region__c"
+        },
+        {
+          "name": "Sub_Type__c"
+        },
+        {
+          "name": "pse__Primary_Project__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "ContractId"
+        },
+        {
+          "name": "pse__Practice__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "RecordTypeId"
+        }
+      ],
+      "object": "Opportunity"
+    }
+  },
+  "Join_TransactionLine_Transaction_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_TransactionLine_Product",
+      "left_key": [
+        "sfbill__Transaction__c"
+      ],
+      "right_select": [
+        "Account.Region__c",
+        "Account.Ultimate_Parent_Name__c",
+        "Account.Name",
+        "Account.Industry",
+        "Account.Credit_Check__c",
+        "Account.AccountNumber",
+        "Account.Write_Off_Reviewer__c",
+        "Account.Write_Off_Date__c",
+        "Account.Retention_Score__c",
+        "Account.Retention_Category__c",
+        "Account.Usage_Score__c",
+        "Account.License_Utilization_CRM__c",
+        "Account.Usage_Segment_Reporting__c",
+        "Account.Org_Status_DW__c",
+        "Account.Ultimate_Parent_DUNS__c",
+        "Collector.Name",
+        "Name",
+        "Contract.StartDate",
+        "Contract.EndDate",
+        "Contract.ContractNumber",
+        "Contract.CustomerType__c",
+        "Contract.Id",
+        "Contract.ParentRevenueOwner__c",
+        "Contract.BillingCompany",
+        "Contract.sfbase__Billing_Frequency__c",
+        "Contract.Contract_Collector.Name",
+        "Contract.Channel_Sales_Partner.Name",
+        "Contract.Outsource_partner__c",
+        "Manager_Internal_Comments__c",
+        "sfbill__ExchangeRate__c",
+        "Einstein_Bad_Debt_Guidance__c",
+        "Einstein_Collections_GuidanceO30__c",
+        "Einstein_Collection_Guidance__c",
+        "Einstein_Collections_Score__c",
+        "Einstein_Collections_Score_v1__c",
+        "sfbill__TransactionDate__c",
+        "sfbill__TotalWriteOff__c",
+        "sfbill__TotalCredit__c",
+        "sfbill__TotalAmount__c",
+        "Revenue_Owner__c",
+        "sfbill__DueDate__c",
+        "Outsource_Partner__c",
+        "sfbill__BalanceDue__c",
+        "sfbill__RevOwner__c",
+        "Total_Account_TCV__c",
+        "sfbill__InvoiceAge__c",
+        "Invoice_Age__c",
+        "sfbill__PaymentType__c",
+        "sfbill__BillingCountry__c",
+        "sfbill__ShippingCountry__c",
+        "sfbill__BillingLanguage__c"
+      ],
+      "right": "Join_Transaction_Contract",
+      "relationship": "Transaction"
+    }
+  },
+  "Extract_Product": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Product2"
+    }
+  },
+  "Join_PaymentApp_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_PaymentApp_Payment",
+      "left_key": [
+        "sfbill__AppliedToTransaction__c"
+      ],
+      "right_select": [
+        "sfbill__TransactionDate__c",
+        "sfbill__DueDate__c",
+        "Name",
+        "sfbill__TotalAmount__c",
+        "sfbill__Contract__c",
+        "sfbill__Check__c",
+        "Outsource_Partner__c",
+        "Collector.Name",
+        "Account.Credit_Check__c",
+        "Account.Name",
+        "Account.AccountNumber",
+        "Account.Industry",
+        "Account.sfbase__SFDCPORequired__c",
+        "Account.Ultimate_Parent_DUNS__c",
+        "Account.Region__c",
+        "Account.Ultimate_Parent_Name__c",
+        "Account.Collections_Market_Segment__c",
+        "Account.E_Invoicing_System__c",
+        "Account.E_Invoicing_Status__c",
+        "Account.Payment_Terms__c",
+        "Account.Write_Off_Reviewer__c",
+        "Account.Write_Off_Date__c",
+        "Account.Global_Company.Name",
+        "Account.Retention_Score__c",
+        "Account.Retention_Category__c",
+        "Account.Usage_Score__c",
+        "Account.License_Utilization_CRM__c",
+        "Account.Usage_Segment_Reporting__c",
+        "Account.Org_Status_DW__c",
+        "Account.Jitterbit_Exclusion__c",
+        "Total_Account_TCV__c",
+        "Manager_Internal_Comments__c",
+        "sfbill__ExchangeRate__c",
+        "sfbill__BillingCountry__c",
+        "sfbill__ShippingCountry__c",
+        "sfbill__BalanceDue__c",
+        "Mid_Month_Forecast__c",
+        "sfbill__Forecast__c",
+        "Revenue_Owner__c",
+        "sfbill__CollectionStatus__c",
+        "sfbill__StatusDetail__c",
+        "sfbill__InternalComments__c",
+        "Einstein_Bad_Debt_Guidance__c",
+        "Einstein_Collections_GuidanceO30__c",
+        "Einstein_Collection_Guidance__c",
+        "Einstein_Collections_Score__c",
+        "Einstein_Collections_Score_v1__c"
+      ],
+      "right": "Join_Transaction_Account",
+      "relationship": "TransactionAccount",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_Opportunity_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Opportunity_RecordType",
+      "left_key": [
+        "AccountId"
+      ],
+      "right_select": [
+        "Region__c",
+        "Ultimate_Parent_Name__c",
+        "Name",
+        "Industry",
+        "Credit_Check__c",
+        "AccountNumber",
+        "Write_Off_Reviewer__c",
+        "Write_Off_Date__c",
+        "Retention_Score__c",
+        "Retention_Category__c",
+        "Usage_Score__c",
+        "License_Utilization_CRM__c",
+        "Usage_Segment_Reporting__c",
+        "Org_Status_DW__c",
+        "Ultimate_Parent_DUNS__c",
+        "Account_Owner.User_MGMT_LVL_01.Name",
+        "Account_Owner.User_MGMT_LVL_02.Name",
+        "Account_Owner.User_MGMT_LVL_03.Name",
+        "Account_Owner.User_MGMT_LVL_04.Name",
+        "Account_Owner.User_MGMT_LVL_05.Name",
+        "Account_Owner.User_MGMT_LVL_06.Name",
+        "Account_Owner.User_MGMT_LVL_07.Name",
+        "Account_Owner.User_MGMT_LVL_08.Name",
+        "Account_Owner.User_MGMT_LVL_09.Name",
+        "Account_Owner.User_MGMT_LVL_10.Name",
+        "Account_Owner.User_MGMT_LVL_12.Name"
+      ],
+      "right": "Join_Account_User_on_Owner",
+      "relationship": "Account"
+    }
+  },
+  "Join_User_Manager": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_User",
+      "left_key": [
+        "sf62user__manager__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "User_Manager",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_Case": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Contract__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Invoice_Date__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Suspended_On__c"
+        },
+        {
+          "name": "X1st_Touch_Milestone_Status__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "CaseNumber"
+        },
+        {
+          "name": "Account_Number__c"
+        },
+        {
+          "name": "IsClosed"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Collection_Status__c"
+        },
+        {
+          "name": "Status"
+        },
+        {
+          "name": "Do_Not_Place_With_Third_Party_Collection__c"
+        },
+        {
+          "name": "Forecast__c"
+        },
+        {
+          "name": "Handled_By_Sales_Ops__c"
+        },
+        {
+          "name": "Outcome__c"
+        },
+        {
+          "name": "SLA_Misses__c"
+        },
+        {
+          "name": "PO_Required__c"
+        },
+        {
+          "name": "Invoice_Number__c"
+        },
+        {
+          "name": "AOV_Band__c"
+        },
+        {
+          "name": "Reason_for_write_off__c"
+        },
+        {
+          "name": "Reconciliation_Category__c"
+        },
+        {
+          "name": "Reconciliation_Reason__c"
+        },
+        {
+          "name": "Reconciliation_Type__c"
+        },
+        {
+          "name": "Related_Case__c"
+        },
+        {
+          "name": "Apttus_Config2__SLAViolation__c"
+        },
+        {
+          "name": "Revenue_Owner__c"
+        },
+        {
+          "name": "Payment_Method__c"
+        },
+        {
+          "name": "Amount__c"
+        },
+        {
+          "name": "SE_Milestone_Due__c"
+        },
+        {
+          "name": "SE_Milestone_Indicator__c"
+        },
+        {
+          "name": "Payments__c"
+        },
+        {
+          "name": "AnnualOrderValueLoss__c"
+        },
+        {
+          "name": "Annual_Recurring_Contract_Value__c"
+        },
+        {
+          "name": "Rejection_Comments__c"
+        },
+        {
+          "name": "Customer_Service_Category__c"
+        },
+        {
+          "name": "Customer_Service_Status__c"
+        },
+        {
+          "name": "Customer_Service_Sub_type__c"
+        },
+        {
+          "name": "Customer_Service_Type__c"
+        },
+        {
+          "name": "Escalated_By__c"
+        },
+        {
+          "name": "Balance_Due__c"
+        },
+        {
+          "name": "Comments"
+        },
+        {
+          "name": "Total_Amount__c"
+        },
+        {
+          "name": "Number_of_Invoices__c"
+        },
+        {
+          "name": "Quantity_Of_Invoices_Past_Due__c"
+        },
+        {
+          "name": "DUNS__c"
+        },
+        {
+          "name": "Begining_Forecast_Amt__c"
+        },
+        {
+          "name": "Final_Forecast_Amt__c"
+        },
+        {
+          "name": "Escalated_To__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Date_Time_Opened__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "ClosedDate"
+        },
+        {
+          "name": "Age_days__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Effective_Date__c"
+        },
+        {
+          "name": "Escalated_Status__c"
+        },
+        {
+          "name": "IsEscalated"
+        },
+        {
+          "name": "Priority"
+        },
+        {
+          "name": "Origin"
+        },
+        {
+          "name": "Subject"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "Reason"
+        },
+        {
+          "name": "Status_Detail__c"
+        },
+        {
+          "name": "Collections_Status__c"
+        },
+        {
+          "name": "Payment_Number__c"
+        },
+        {
+          "name": "ParentId"
+        },
+        {
+          "name": "Global_Company__c"
+        },
+        {
+          "name": "Approved_By__c"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Last_Public_Activity_Date_Time__c"
+        },
+        {
+          "name": "Customer_Type__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Last_Owner_Activity_Date_Time__c"
+        },
+        {
+          "name": "Root_Cause_Analysis_Code__c"
+        },
+        {
+          "name": "Manual_Invoice_Reason__c"
+        },
+        {
+          "name": "Completion_Deadline__c"
+        },
+        {
+          "name": "Sales_Alignment_Comments__c"
+        },
+        {
+          "name": "Comments__c"
+        },
+        {
+          "name": "Quote_CPQ__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "End_Date__c"
+        },
+        {
+          "name": "Related_Opportunity__c"
+        },
+        {
+          "name": "Requestor__c"
+        }
+      ],
+      "object": "Case"
+    }
+  },
+  "Extract_PSA_Project": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "pse__Project_ID__c"
+        },
+        {
+          "name": "pse__Billing_Type__c"
+        },
+        {
+          "name": "ProjectManagerUser__c"
+        },
+        {
+          "name": "pse__Stage__c"
+        }
+      ],
+      "object": "pse__Proj__c"
+    }
+  },
+  "Extract_Company2": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "Company__c"
+    }
+  },
+  "Join_PaymentApp_Account_TransactionLine": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "sfbill__Transaction__c"
+      ],
+      "left": "Extract_PaymentApplication",
+      "left_key": [
+        "sfbill__AppliedToTransaction__c"
+      ],
+      "right_select": [
+        "sfbill__StartDate__c"
+      ],
+      "right": "Filter_Max_LineAmount",
+      "relationship": "TransactionLine",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_Quote_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Quote_User",
+      "left_key": [
+        "Apttus_Proposal__Account__c"
+      ],
+      "right_select": [
+        "Name",
+        "Retention_Score__c",
+        "Retention_Category__c",
+        "Usage_Score__c",
+        "License_Utilization_CRM__c",
+        "Usage_Segment_Reporting__c",
+        "Org_Status_DW__c",
+        "Ultimate_Parent_DUNS__c",
+        "Ultimate_Parent_Name__c",
+        "AccountNumber",
+        "Account_Owner.User_MGMT_LVL_01.Name",
+        "Account_Owner.User_MGMT_LVL_02.Name",
+        "Account_Owner.User_MGMT_LVL_03.Name",
+        "Account_Owner.User_MGMT_LVL_04.Name",
+        "Account_Owner.User_MGMT_LVL_05.Name",
+        "Account_Owner.User_MGMT_LVL_06.Name",
+        "Account_Owner.User_MGMT_LVL_07.Name",
+        "Account_Owner.User_MGMT_LVL_08.Name",
+        "Account_Owner.User_MGMT_LVL_09.Name",
+        "Account_Owner.User_MGMT_LVL_10.Name",
+        "Account_Owner.User_MGMT_LVL_12.Name"
+      ],
+      "right": "Join_Account_User_on_Owner",
+      "relationship": "Account"
+    }
+  },
+  "Join_CaseAccount_Contract": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Case_Account",
+      "left_key": [
+        "Contract__c"
+      ],
+      "right_select": [
+        "ContractNumber",
+        "Account.Manager_Internal_Comments__c",
+        "Account.sfbill__ExchangeRate__c",
+        "BillingCountry",
+        "ShippingCountry",
+        "Account.Einstein_Bad_Debt_Guidance__c",
+        "Account.Einstein_Collections_GuidanceO30__c",
+        "Account.Einstein_Collection_Guidance__c",
+        "Account.Einstein_Collections_Score__c",
+        "Account.Einstein_Collections_Score_v1__c"
+      ],
+      "right": "Join_Contract_Tran_Account",
+      "relationship": "Account"
+    }
+  },
+  "Join_Account_GlobalCompany": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Account",
+      "left_key": [
+        "Global_Company__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Company2",
+      "relationship": "Global_Company",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_ContractOldPB_PriceBook": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Contract_OldPriceBook",
+      "left_key": [
+        "Pricebook2Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Pricebook",
+      "relationship": "Pricebook"
+    }
+  },
+  "Join_Transaction_Contract": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Transaction_Account",
+      "left_key": [
+        "sfbill__Contract__c"
+      ],
+      "right_select": [
+        "ContractNumber",
+        "CustomerType__c",
+        "sfbase__ContractCreationSource__c",
+        "Status",
+        "Id",
+        "StartDate",
+        "EndDate",
+        "Contract_Collector.Name",
+        "ParentRevenueOwner__c",
+        "sfbase__ContractType__c",
+        "sfbase__Billing_Frequency__c",
+        "OrderPrebillDays",
+        "BillingCountry",
+        "BillingCompany",
+        "Outsource_partner__c",
+        "ShippingCountry",
+        "Pricebook2.Name",
+        "Opportunity.pse__Region__c",
+        "Opportunity.pse__Practice__c",
+        "Opportunity.Sub_Type__c",
+        "Channel_Sales_Partner.Name",
+        "Reseller_Partner_Type__c",
+        "Opportunity.PSA_Project.Manager.Name",
+        "Opportunity.Owner.Name"
+      ],
+      "right": "Join_Contract_Opportunity",
+      "relationship": "Contract",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_Transaction_CreadtedBy": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Transaction",
+      "left_key": [
+        "CreatedById"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "CreatedBy"
+    }
+  },
+  "Join_Transaction_CMCreadtedBy": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Transaction_CreadtedBy",
+      "left_key": [
+        "sfbill__CMCreatedBy__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "CMCreatedBy"
+    }
+  },
+  "Join_TransactionCaseAccountTransaction_Case": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_TransactionCaseAccount_Transaction",
+      "left_key": [
+        "CaseNumber__c"
+      ],
+      "right_select": [
+        "CaseNumber",
+        "Completion_Deadline__c",
+        "Sales_Alignment_Comments__c",
+        "Comments__c",
+        "Quote_CPQ__c",
+        "End_Date__c",
+        "Related_Opportunity__c",
+        "Requestor__c"
+      ],
+      "right": "Extract_Case",
+      "relationship": "Case"
+    }
+  },
+  "Join_Case_RecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Case_UserByCreated",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "RecordType"
+    }
+  },
+  "Join_Transaction_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Transaction_LastModifiedby",
+      "left_key": [
+        "sfbill__Collector__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Collector"
+    }
+  },
+  "Extract_Contract": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "AccountId"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbase__AutoRenewalStartDate__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "EndDate"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "StartDate"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "NextSuspensionDate__c"
+        },
+        {
+          "name": "AutoRenewCode"
+        },
+        {
+          "name": "BillingCompany"
+        },
+        {
+          "name": "BillingEmail"
+        },
+        {
+          "name": "ParentRevenueOwner__c"
+        },
+        {
+          "name": "Contract_Billing_Language__c"
+        },
+        {
+          "name": "sfbase__Brand__c"
+        },
+        {
+          "name": "sfbase__Billing_Frequency__c"
+        },
+        {
+          "name": "sfbase__ContractCreationSource__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "ContractNumber"
+        },
+        {
+          "name": "sfbase__PaymentType__c"
+        },
+        {
+          "name": "PaymentTerm"
+        },
+        {
+          "name": "sfbase__RevenueOwner__c"
+        },
+        {
+          "name": "Status"
+        },
+        {
+          "name": "Collector__c"
+        },
+        {
+          "name": "Outsource_partner__c"
+        },
+        {
+          "name": "sfbase__ContractType__c"
+        },
+        {
+          "name": "sfbase__PriceBookCategory__c"
+        },
+        {
+          "name": "Reseller_List__c"
+        },
+        {
+          "name": "Reseller_Partner_Type__c"
+        },
+        {
+          "name": "IsDunningSuppressed"
+        },
+        {
+          "name": "IsSuspensionSuppressed__c"
+        },
+        {
+          "name": "sfbase__AnnualContractValue__c"
+        },
+        {
+          "name": "sfbase__MonthlyContractValue__c"
+        },
+        {
+          "name": "RelatedNBOpportunity__c"
+        },
+        {
+          "name": "CurrencyIsoCode"
+        },
+        {
+          "name": "sfbase__TotalContractValue__c"
+        },
+        {
+          "name": "sfbase__BalanceDue__c"
+        },
+        {
+          "name": "sfbill__MaxBillThroughDate__c"
+        },
+        {
+          "name": "OrderPrebillDays"
+        },
+        {
+          "name": "sfbase__TotalBilled__c"
+        },
+        {
+          "name": "sfbase__TotalBilledRevenue__c"
+        },
+        {
+          "name": "sfbase__TotalCredit__c"
+        },
+        {
+          "name": "CustomerType__c"
+        },
+        {
+          "name": "ContractTerm"
+        },
+        {
+          "name": "InitialContractTerm__c"
+        },
+        {
+          "name": "sfdcOriginalContractTerm__c"
+        },
+        {
+          "name": "RenewalTerm"
+        },
+        {
+          "name": "sfbase__OrderLifeTimeValue__c"
+        },
+        {
+          "name": "sfbase__BillingContact__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "SfdcOld_Price_Book__c"
+        },
+        {
+          "name": "Pricebook2Id"
+        },
+        {
+          "name": "Channel_Sales_Partner__c"
+        },
+        {
+          "name": "BillingCountry"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "ShippingCountry"
+        }
+      ],
+      "object": "Contract"
+    }
+  },
+  "Join_Contract_OldPriceBook": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Contract_User",
+      "left_key": [
+        "SfdcOld_Price_Book__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Pricebook",
+      "relationship": "Old_PriceBook"
+    }
+  },
+  "Extract_PaymentApplication": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__ApplyDate__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__GlDate__c"
+        },
+        {
+          "name": "sfbill__AppliedTransactionType__c"
+        },
+        {
+          "name": "sfbill__ContractNumber__c"
+        },
+        {
+          "name": "sfbill__Payment__c"
+        },
+        {
+          "name": "sfbill__Amount__c"
+        },
+        {
+          "name": "sfbill__ExternalSystemAppliedTransactionID__c"
+        },
+        {
+          "name": "sfbill__ExternalSystemTransactionID__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "sfbill__Display__c"
+        },
+        {
+          "name": "sfbill__Account__c"
+        },
+        {
+          "name": "sfbill__AppliedToTransaction__c"
+        },
+        {
+          "name": "sfbill__CMTransaction__c"
+        },
+        {
+          "name": "sfbill__PaymentMethod__c"
+        }
+      ],
+      "object": "sfbill__PaymentApplication2__c"
+    }
+  },
+  "Join_PaymentApp_Account_w_Contract": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_PaymentApp_Account",
+      "left_key": [
+        "TransactionAccount.sfbill__Contract__c"
+      ],
+      "right_select": [
+        "sfbase__ContractCreationSource__c",
+        "sfbase__ContractType__c",
+        "OrderPrebillDays",
+        "CustomerType__c",
+        "Channel_Sales_Partner__c",
+        "PaymentTerm",
+        "BillingCountry",
+        "ShippingCountry"
+      ],
+      "right": "Extract_Contract",
+      "relationship": "Contract",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_CaseParentCase_Company": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Case_ParentCase",
+      "left_key": [
+        "Global_Company__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Company",
+      "relationship": "Global_Company"
+    }
+  },
+  "Register_TransactionCase": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "AR_TransactionCase",
+      "alias": "AR_TransactionCase",
+      "source": "Join_TransactionCaseAccountTransactionCase_Collector",
+      "folderid": "00l0M0000033gFXQAY"
+    }
+  },
+  "Register_Adjustment": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "AR_Adjustment",
+      "alias": "AR_Adjustment",
+      "source": "Join_Adjustment_Account",
+      "folderid": "00l0M0000033gFXQAY"
+    }
+  },
+  "computeTransactionLine": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbill__Transaction__c"
+      ],
+      "orderBy": [
+        {
+          "name": "sfbill__LineAmount__c",
+          "direction": "desc"
+        }
+      ],
+      "source": "Extract_TransactionLine",
+      "computedFields": [
+        {
+          "expression": {
+            "default": "",
+            "saqlExpression": "case when previous(sfbill__LineAmount__c) is null then \"1\" else \"0\" end",
+            "type": "Text"
+          },
+          "name": "GetMax_LineAmount",
+          "description": "Tags the TransactionLine with the max line amount as 1",
+          "label": "Get Max Line Amount"
+        }
+      ]
+    }
+  },
+  "Register_Approval_Request": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "AR_Approval_Request",
+      "alias": "AR_Approval_Request",
+      "source": "Join_Approval_Request_Quote",
+      "folderid": "00l0M0000033gFXQAY"
+    }
+  },
+  "Join_Opportunity_PSA_Project": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "pse__Project_ID__c"
+      ],
+      "left": "Join_Opportunity_Owner",
+      "left_key": [
+        "pse__Primary_Project__c"
+      ],
+      "right_select": [
+        "pse__Billing_Type__c",
+        "Manager.Name",
+        "pse__Stage__c"
+      ],
+      "right": "Join_PSA_Project_Manager",
+      "relationship": "PSA_Project"
+    }
+  },
+  "Register_Milestone": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "AR_Milestone",
+      "alias": "AR_Milestone",
+      "source": "Join_Milestone_Case_Account",
+      "folderid": "00l0M0000033gFXQAY"
+    }
+  },
+  "Filter_Max_LineAmount": {
+    "action": "filter",
+    "parameters": {
+      "filter": "GetMax_LineAmount:EQ:1",
+      "source": "computeTransactionLine"
+    }
+  },
+  "Extract_EBO_Transaction": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Account_Name__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Contract_current_End_Date__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Contract_Original_End_Date__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Contract_Start_Date__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Transaction_Date__c"
+        },
+        {
+          "name": "Transaction_ID__c"
+        },
+        {
+          "name": "Org62_Account_Id__c"
+        },
+        {
+          "name": "Days_to_Pay__c"
+        },
+        {
+          "name": "Comments__c"
+        },
+        {
+          "name": "Internal_comments__c"
+        },
+        {
+          "name": "Total_Amount__c"
+        },
+        {
+          "defaultValue": "0",
+          "name": "Balance_Due__c"
+        },
+        {
+          "name": "Balance_Due_currency__c"
+        },
+        {
+          "name": "Total_Payment__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Payment_Date__c"
+        },
+        {
+          "name": "Total_credit__c"
+        },
+        {
+          "name": "Total_Writeoff__c"
+        },
+        {
+          "name": "Total_Tax__c"
+        },
+        {
+          "name": "Reseller__c"
+        },
+        {
+          "name": "Contract_creation_Source__c"
+        },
+        {
+          "name": "Legacy_contract_Number__c"
+        },
+        {
+          "name": "CollectionStatus__c"
+        },
+        {
+          "name": "StatusDetail__c"
+        },
+        {
+          "name": "Outcome__c"
+        },
+        {
+          "name": "EInvoicing__c"
+        },
+        {
+          "name": "Revenue_Owner__c"
+        },
+        {
+          "name": "Billing_country__c"
+        },
+        {
+          "name": "Payment_Method__c"
+        },
+        {
+          "name": "Payment_Term__c"
+        },
+        {
+          "name": "Legacy_Invoice_Number__c"
+        },
+        {
+          "name": "Legacy_Account_Number__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Invoice_Due_Date__c"
+        },
+        {
+          "name": "Invoice_Age__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "GL_Date__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Collector__c"
+        },
+        {
+          "name": "Outsource_Partner__c"
+        }
+      ],
+      "object": "EBO_Transaction__c"
+    }
+  },
+  "Extract_Adjustment": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__ApplyDate__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__GLDate__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "sfbill__Type__c"
+        },
+        {
+          "name": "sfbill__AppliedTransactionType__c"
+        },
+        {
+          "name": "sfbill__AdjustmentName__c"
+        },
+        {
+          "name": "sfbill__ReasonCode__c"
+        },
+        {
+          "name": "sfbill__Amount__c"
+        },
+        {
+          "name": "sfbill__LineAdjusted__c"
+        },
+        {
+          "name": "sfbill__TaxAdjusted__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "sfbill__ExternalSystemTransactionID__c"
+        },
+        {
+          "name": "sfbill__Transaction__c"
+        },
+        {
+          "name": "sfbill__Account__c"
+        },
+        {
+          "name": "sfbill__Contract__c"
+        }
+      ],
+      "object": "sfbill__Adjustment__c"
+    }
+  },
+  "Join_Contract_Oppty": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Contract",
+      "left_key": [
+        "RelatedNBOpportunity__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Opportunity",
+      "relationship": "Opportunity"
+    }
+  },
+  "Register_Account": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "AR_Account",
+      "alias": "AR_Account",
+      "source": "Join_Account_Company",
+      "folderid": "00l0M0000033gFXQAY"
+    }
+  },
+  "Augment_Quote_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Quote",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "sfbase__Region__c",
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Owner"
+    }
+  },
+  "Join_Quote_OpportunityAccount": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Quote_User",
+      "left_key": [
+        "Apttus_Proposal__Opportunity__c"
+      ],
+      "right_select": [
+        "Account.Name",
+        "StageName",
+        "Name",
+        "Account.Retention_Score__c",
+        "Account.Retention_Category__c",
+        "Account.Usage_Score__c",
+        "Account.License_Utilization_CRM__c",
+        "Account.Usage_Segment_Reporting__c",
+        "Account.Org_Status_DW__c",
+        "Account.Ultimate_Parent_DUNS__c",
+        "Account.Ultimate_Parent_Name__c",
+        "Account.AccountNumber"
+      ],
+      "right": "Join_Opportunity_Account",
+      "relationship": "Opportunity"
+    }
+  },
+  "Join_Transaction_Agg_Quantity": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "sfbill__Transaction__c"
+      ],
+      "left": "Join_Transaction_Contract",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Sum_Of_Quantity"
+      ],
+      "right": "Aggregate_Licenses_For_Transaction",
+      "relationship": "TransactionLine"
+    }
+  },
+  "Register_Quote_Account": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "New_AR_Quote",
+      "alias": "New_AR_Quote",
+      "source": "Join_Quote_Account"
+    }
+  },
+  "Join_Contract_Opportunity": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ContractId"
+      ],
+      "left": "Join_Contract_PriceBook",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "pse__Region__c",
+        "pse__Practice__c",
+        "Sub_Type__c",
+        "PSA_Project.Manager.Name",
+        "Owner.Name"
+      ],
+      "right": "Join_Opportunity_PSA_Project",
+      "relationship": "Opportunity",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_Pricebook": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Pricebook2"
+    }
+  },
+  "Register_Payment": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "AR_Payment",
+      "alias": "AR_Payment",
+      "source": "Join_PaymentAccount_Contract",
+      "folderid": "00l0M0000033gFXQAY"
+    }
+  },
+  "Join_Case_ParentCase": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Case_oppty_Requestor",
+      "left_key": [
+        "ParentId"
+      ],
+      "right_select": [
+        "CaseNumber",
+        "Completion_Deadline__c",
+        "Sales_Alignment_Comments__c",
+        "Comments__c",
+        "Quote_CPQ__c",
+        "End_Date__c",
+        "Related_Opportunity__c",
+        "Requestor__c"
+      ],
+      "right": "Extract_Case",
+      "relationship": "Parent"
+    }
+  },
+  "Join_Contract_Channel_Sales_Partner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Contract_Oppty",
+      "left_key": [
+        "Channel_Sales_Partner__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Account",
+      "relationship": "Channel_Sales_Partner"
+    }
+  },
+  "Extract_TransactionCase": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "fullRefreshToken": "1-1-2015",
+      "fields": [
+        {
+          "name": "TransactionNumber__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "InvoiceDueDate__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "TransactionBalancedue__c"
+        },
+        {
+          "name": "TotalAmount__c"
+        },
+        {
+          "name": "X30_Day_Contract_Extension__c"
+        },
+        {
+          "name": "Account__c"
+        },
+        {
+          "name": "CaseNumber__c"
+        },
+        {
+          "name": "CollectionStatus__c"
+        },
+        {
+          "name": "Collector__c"
+        },
+        {
+          "name": "Escalation__c"
+        },
+        {
+          "name": "InternalComments__c"
+        },
+        {
+          "name": "InvoiceStatus__c"
+        },
+        {
+          "name": "Outcome__c"
+        },
+        {
+          "name": "Overdue__c"
+        },
+        {
+          "name": "StatusDetail__c"
+        }
+      ],
+      "object": "TransactionCase__c"
+    }
+  },
+  "Join_Contract_Tran_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Account.Id"
+      ],
+      "left": "Join_Contract_RecordType",
+      "left_key": [
+        "AccountId"
+      ],
+      "right_select": [
+        "Account.Region__c",
+        "Account.Ultimate_Parent_Name__c",
+        "Account.Name",
+        "Account.Industry",
+        "Account.Credit_Check__c",
+        "Account.Bad_Debt_Status__c",
+        "Account.AccountNumber",
+        "Account.Write_Off_Reviewer__c",
+        "Account.Write_Off_Date__c",
+        "Account.Retention_Score__c",
+        "Account.Retention_Category__c",
+        "Account.Usage_Score__c",
+        "Account.License_Utilization_CRM__c",
+        "Account.Usage_Segment_Reporting__c",
+        "Account.Org_Status_DW__c",
+        "Account.Ultimate_Parent_DUNS__c",
+        "Collector.Name",
+        "Account.sfbase__SFDCPORequired__c",
+        "Account.Collections_Market_Segment__c",
+        "Account.E_Invoicing_System__c",
+        "Account.E_Invoicing_Status__c",
+        "Account.Global_Company.Name",
+        "Account.Jitterbit_Exclusion__c",
+        "Account.Non_Profit_Account__c",
+        "Manager_Internal_Comments__c",
+        "sfbill__ExchangeRate__c",
+        "Einstein_Bad_Debt_Guidance__c",
+        "Einstein_Collections_GuidanceO30__c",
+        "Einstein_Collection_Guidance__c",
+        "Einstein_Collections_Score__c",
+        "Einstein_Collections_Score_v1__c",
+        "Id",
+        "Account.Account_Owner.Name",
+        "Account.Account_Owner.User_MGMT_LVL_01.Name",
+        "Account.Account_Owner.User_MGMT_LVL_02.Name",
+        "Account.Account_Owner.User_MGMT_LVL_03.Name",
+        "Account.Account_Owner.User_MGMT_LVL_04.Name",
+        "Account.Account_Owner.User_MGMT_LVL_05.Name",
+        "Account.Account_Owner.User_MGMT_LVL_06.Name",
+        "Account.Account_Owner.User_MGMT_LVL_07.Name",
+        "Account.Account_Owner.User_MGMT_LVL_08.Name",
+        "Account.Account_Owner.User_MGMT_LVL_09.Name",
+        "Account.Account_Owner.User_MGMT_LVL_10.Name",
+        "Account.Account_Owner.User_MGMT_LVL_11.Name",
+        "Account.Account_Owner.User_MGMT_LVL_12.Name"
+      ],
+      "right": "Join_Transaction_Account",
+      "relationship": "Account"
+    }
+  },
+  "Join_Account_Company": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Account_User_on_Owner",
+      "left_key": [
+        "Global_Company__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Company",
+      "relationship": "Company"
+    }
+  },
+  "Join_Contract_Creator": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Contract_Channel_Sales_Partner",
+      "left_key": [
+        "CreatedById"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "CreatedBy"
+    }
+  },
+  "Extract_Company": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Company__c"
+    }
+  },
+  "Extract_Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Decision_Date__c"
+        },
+        {
+          "name": "Credit_Check__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "SoldDate__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "AccountNumber"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "Account_Owner_Role__c"
+        },
+        {
+          "name": "Industry"
+        },
+        {
+          "name": "sfbase__SFDCPORequired__c"
+        },
+        {
+          "name": "Paydex_Score__c"
+        },
+        {
+          "name": "Sic"
+        },
+        {
+          "name": "Ultimate_Parent_DUNS__c"
+        },
+        {
+          "name": "AnnualRevenue"
+        },
+        {
+          "name": "NumberOfEmployees"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Ultimate_Parent_Name__c"
+        },
+        {
+          "name": "Collections_Market_Segment__c"
+        },
+        {
+          "name": "E_Invoicing_System__c"
+        },
+        {
+          "name": "E_Invoicing_Status__c"
+        },
+        {
+          "name": "Payment_Terms__c"
+        },
+        {
+          "name": "edw_num_licenses__c"
+        },
+        {
+          "name": "Currentlicenses__c"
+        },
+        {
+          "name": "Reviewed_By__c"
+        },
+        {
+          "name": "Write_Off_Reviewer__c"
+        },
+        {
+          "name": "Bad_Debt_Status__c"
+        },
+        {
+          "name": "Open_Red_Account_Report__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Write_Off_Date__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Global_Company__c"
+        },
+        {
+          "name": "Retention_Score__c"
+        },
+        {
+          "name": "Retention_Category__c"
+        },
+        {
+          "name": "Usage_Score__c"
+        },
+        {
+          "name": "License_Utilization_CRM__c"
+        },
+        {
+          "name": "Usage_Segment_Reporting__c"
+        },
+        {
+          "name": "Organization_ID_DW__c"
+        },
+        {
+          "name": "ISV_AE__c"
+        },
+        {
+          "name": "ISV_Program_Tier__c"
+        },
+        {
+          "name": "ISV_Senior_AE__c"
+        },
+        {
+          "name": "Jitterbit_Exclusion__c"
+        },
+        {
+          "name": "Non_Profit_Account__c"
+        },
+        {
+          "name": "Org_Status_DW__c"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "Join_PaymentApp_Payment": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_PaymentApp_Account_TransactionLine",
+      "left_key": [
+        "sfbill__Payment__c"
+      ],
+      "right_select": [
+        "Name",
+        "sfbill__GLDate__c"
+      ],
+      "right": "Extract_Payment",
+      "relationship": "Payment",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_PaymentApp_Account_w_Contract_w_ResellerPartner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_PaymentApp_Account_w_Contract",
+      "left_key": [
+        "Contract.Channel_Sales_Partner__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Account",
+      "relationship": "ResellerPartner",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Register_Transaction": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "AR_Transaction",
+      "alias": "AR_Transaction",
+      "source": "Join_Transaction_Agg_Quantity",
+      "folderid": "00l0M0000033gFXQAY"
+    }
+  },
+  "Augment_Case_Opportunity": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Case_Quote",
+      "left_key": [
+        "Related_Opportunity__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Opportunity",
+      "relationship": "Related_Opportunity"
+    }
+  },
+  "Join_Opportunity_Creator": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Opportunity",
+      "left_key": [
+        "CreatedById"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "CreatedBy"
+    }
+  },
+  "Join_Case_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Case_UserOwner",
+      "left_key": [
+        "Escalated_To__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Escalated_To"
+    }
+  },
+  "Extract_Milestone": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "IsCompleted"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CompletionDate"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "StartDate"
+        },
+        {
+          "name": "IsViolated"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "TargetDate"
+        },
+        {
+          "name": "ElapsedTimeInDays"
+        },
+        {
+          "name": "ElapsedTimeInMins"
+        },
+        {
+          "name": "ElapsedTimeInHrs"
+        },
+        {
+          "name": "CaseId"
+        }
+      ],
+      "object": "CaseMilestone"
+    }
+  },
+  "Join_PSA_Project_Manager": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_PSA_Project",
+      "left_key": [
+        "ProjectManagerUser__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Manager"
+    }
+  },
+  "Extract_Payment": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__PaymentDate__c"
+        },
+        {
+          "name": "sfbill__PaymentType__c"
+        },
+        {
+          "name": "sfbill__Account__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__GLDate__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__ReceiptDate__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "sfbill__Status__c"
+        },
+        {
+          "name": "sfbill__Amount__c"
+        },
+        {
+          "name": "sfbill__AppliedAmount__c"
+        },
+        {
+          "name": "sfbill__UnappliedAmount__c"
+        },
+        {
+          "name": "sfbill__Contract__c"
+        },
+        {
+          "name": "Unapplied_Amount_Payment_Currency__c"
+        },
+        {
+          "name": "CurrencyIsoCode"
+        },
+        {
+          "name": "Revenue_Owner__c"
+        },
+        {
+          "name": "sfbill__RevenueOwner__c"
+        }
+      ],
+      "object": "sfbill__Payment2__c"
+    }
+  },
+  "Join_Adjustment_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Adjustment",
+      "left_key": [
+        "sfbill__Contract__c"
+      ],
+      "right_select": [
+        "Account.Account.Region__c",
+        "Account.Account.Ultimate_Parent_Name__c",
+        "Account.Account.Ultimate_Parent_DUNS__c",
+        "Account.Account.Name",
+        "Account.Account.Industry",
+        "Account.Account.Credit_Check__c",
+        "Account.Account.Bad_Debt_Status__c",
+        "Account.Account.AccountNumber",
+        "Account.Account.Write_Off_Reviewer__c",
+        "Account.Account.Write_Off_Date__c",
+        "Account.Account.Retention_Score__c",
+        "Account.Account.Retention_Category__c",
+        "Account.Account.Usage_Score__c",
+        "Account.Account.License_Utilization_CRM__c",
+        "Account.Account.Usage_Segment_Reporting__c",
+        "Account.Account.Org_Status_DW__c",
+        "Account.Collector.Name",
+        "ContractNumber",
+        "Account.Manager_Internal_Comments__c",
+        "Account.sfbill__ExchangeRate__c",
+        "BillingCountry",
+        "ShippingCountry",
+        "Account.Einstein_Bad_Debt_Guidance__c",
+        "Account.Einstein_Collections_GuidanceO30__c",
+        "Account.Einstein_Collection_Guidance__c",
+        "Account.Einstein_Collections_Score__c",
+        "Account.Einstein_Collections_Score_v1__c"
+      ],
+      "right": "Join_Contract_Tran_Account",
+      "relationship": "Account"
+    }
+  },
+  "Augment_Case_oppty_Requestor": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Case_Opportunity",
+      "left_key": [
+        "Requestor__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Requestor"
+    }
+  },
+  "Join_Contract_PriceBook": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Contract_User",
+      "left_key": [
+        "Pricebook2Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Pricebook",
+      "relationship": "Pricebook2"
+    }
+  },
+  "Join_Quote_Price_list": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Quote",
+      "left_key": [
+        "Apttus_QPConfig__PriceListId__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Price_list",
+      "relationship": "Price_list"
+    }
+  },
+  "Extract_User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "sf62user__manager__c"
+        },
+        {
+          "name": "sfbase__Region__c"
+        },
+        {
+          "name": "MediumPhotoUrl"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Mgmt_Chain_Level_01__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_02__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_03__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_04__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_05__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_06__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_07__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_08__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_09__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_10__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_11__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_12__c"
+        },
+        {
+          "name": "LastLoginDate"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "Register_User_Dataset": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "AR_User",
+      "alias": "AR_User",
+      "source": "Join_User_MGMT_LVL_12"
+    }
+  },
+  "Join_Payment_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Account.Id"
+      ],
+      "left": "Extract_Payment",
+      "left_key": [
+        "sfbill__Account__c"
+      ],
+      "right_select": [
+        "Collector.Name",
+        "Account.Credit_Check__c",
+        "Account.Name",
+        "Account.AccountNumber",
+        "Account.Industry",
+        "Account.sfbase__SFDCPORequired__c",
+        "Account.Ultimate_Parent_DUNS__c",
+        "Account.Region__c",
+        "Account.Ultimate_Parent_Name__c",
+        "Account.Collections_Market_Segment__c",
+        "Account.E_Invoicing_System__c",
+        "Account.E_Invoicing_Status__c",
+        "Account.Payment_Terms__c",
+        "Account.Write_Off_Reviewer__c",
+        "Account.Write_Off_Date__c",
+        "Account.Global_Company.Name",
+        "Account.Retention_Score__c",
+        "Account.Retention_Category__c",
+        "Account.Usage_Score__c",
+        "Account.License_Utilization_CRM__c",
+        "Account.Usage_Segment_Reporting__c",
+        "Account.Org_Status_DW__c",
+        "Account.Jitterbit_Exclusion__c",
+        "sfbill__TotalAmount__c",
+        "sfbill__TransactionDate__c",
+        "sfbill__DueDate__c",
+        "Outsource_Partner__c",
+        "Manager_Internal_Comments__c",
+        "sfbill__ExchangeRate__c",
+        "Einstein_Bad_Debt_Guidance__c",
+        "Einstein_Collections_GuidanceO30__c",
+        "Einstein_Collection_Guidance__c",
+        "Einstein_Collections_Score__c",
+        "Einstein_Collections_Score_v1__c",
+        "Account.Account_Owner.User_MGMT_LVL_01.Name",
+        "Account.Account_Owner.User_MGMT_LVL_02.Name",
+        "Account.Account_Owner.User_MGMT_LVL_03.Name",
+        "Account.Account_Owner.User_MGMT_LVL_04.Name",
+        "Account.Account_Owner.User_MGMT_LVL_05.Name",
+        "Account.Account_Owner.User_MGMT_LVL_06.Name",
+        "Account.Account_Owner.User_MGMT_LVL_07.Name",
+        "Account.Account_Owner.User_MGMT_LVL_08.Name",
+        "Account.Account_Owner.User_MGMT_LVL_09.Name",
+        "Account.Account_Owner.User_MGMT_LVL_10.Name",
+        "Account.Account_Owner.User_MGMT_LVL_11.Name",
+        "Account.Account_Owner.User_MGMT_LVL_12.Name"
+      ],
+      "right": "Join_Transaction_Account",
+      "relationship": "Account",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_CaseAccountContract_Payment": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_CaseAccount_Contract",
+      "left_key": [
+        "Payment_Number__c"
+      ],
+      "right_select": [
+        "CurrencyIsoCode",
+        "Revenue_Owner__c",
+        "sfbill__RevenueOwner__c",
+        "Name",
+        "sfbill__UnappliedAmount__c",
+        "Unapplied_Amount_Payment_Currency__c"
+      ],
+      "right": "Extract_Payment",
+      "relationship": "Payment"
+    }
+  },
+  "Extract_RecordType": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "DeveloperName"
+        }
+      ],
+      "object": "RecordType"
+    }
+  },
+  "Extract_Transaction": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "fullRefreshToken": "1-1-2015",
+      "fields": [
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__TransactionDate__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__DueDate__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "NextSuspensionDate__c"
+        },
+        {
+          "name": "sfbill__BillingCountry__c"
+        },
+        {
+          "name": "LastModifiedById"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "LastModifiedDate"
+        },
+        {
+          "name": "sfbill__BillingState__c"
+        },
+        {
+          "name": "sfbill__InternalReason__c"
+        },
+        {
+          "name": "CurrencyIsoCode"
+        },
+        {
+          "name": "sfbill__ShippingCountry__c"
+        },
+        {
+          "name": "sfbill__ShippingState__c"
+        },
+        {
+          "name": "SuspensionRequestProcessStatus__c"
+        },
+        {
+          "name": "sfbill__BillingCompanyName__c"
+        },
+        {
+          "name": "sfbill__BillingLanguage__c"
+        },
+        {
+          "name": "sfbill__CMCode__c"
+        },
+        {
+          "name": "sfbill__CMReason__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "sfbill__ExternalSystemReference__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "sfbill__PaymentTerm__c"
+        },
+        {
+          "name": "sfbill__TotalPayment__c"
+        },
+        {
+          "name": "Revenue_Owner__c"
+        },
+        {
+          "name": "sfbill__RevOwner__c"
+        },
+        {
+          "name": "sfbill__TotalTax__c"
+        },
+        {
+          "name": "sfbill__TotalWriteOff__c"
+        },
+        {
+          "name": "sfbill__TotalAmount__c"
+        },
+        {
+          "name": "Invoice_Age__c"
+        },
+        {
+          "name": "sfbill__InvoiceAge__c"
+        },
+        {
+          "name": "Total_Account_TCV__c"
+        },
+        {
+          "name": "sfbill__BalanceDue__c"
+        },
+        {
+          "name": "sfbill__Contract__c"
+        },
+        {
+          "name": "sfbill__AccountName__c"
+        },
+        {
+          "name": "sfbill__X30DayContractExtension__c"
+        },
+        {
+          "name": "Outsource_Partner__c"
+        },
+        {
+          "name": "sfbill__CollectionStatus__c"
+        },
+        {
+          "name": "sfbill__Escalation__c"
+        },
+        {
+          "name": "sfbill__Outcome__c"
+        },
+        {
+          "name": "sfbill__StatusDetail__c"
+        },
+        {
+          "name": "sfbill__TransactionType__c"
+        },
+        {
+          "name": "OrganizationId__c"
+        },
+        {
+          "name": "sfbill__Collector__c"
+        },
+        {
+          "name": "sfbill__InternalComments__c"
+        },
+        {
+          "name": "Reseller__c"
+        },
+        {
+          "name": "sfbill__BillingEmail__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__GLDate__c"
+        },
+        {
+          "name": "sfbill__TotalCredit__c"
+        },
+        {
+          "name": "sfbill__PaymentType__c"
+        },
+        {
+          "name": "sfbill__Forecast__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__SuspendedDate__c"
+        },
+        {
+          "name": "sfbill__Tracking__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__PromiseDate__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__MailDate__c"
+        },
+        {
+          "name": "sfbill__Check__c"
+        },
+        {
+          "name": "sfbill__CheckAmount__c"
+        },
+        {
+          "name": "Mid_Month_Forecast__c"
+        },
+        {
+          "name": "Einstein_Collections_Score__c"
+        },
+        {
+          "name": "Manager_Internal_Comments__c"
+        },
+        {
+          "name": "sfbill__ExchangeRate__c"
+        },
+        {
+          "name": "Einstein_Bad_Debt_Guidance__c"
+        },
+        {
+          "name": "Einstein_Collections_GuidanceO30__c"
+        },
+        {
+          "name": "Einstein_Collection_Guidance__c"
+        },
+        {
+          "name": "Einstein_Payment_Confidence__c"
+        },
+        {
+          "name": "Einstein_Collections_Score_v1__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__DateScheduledCancellation__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__DateScheduledFDL__c"
+        },
+        {
+          "name": "sfbill__Status__c"
+        },
+        {
+          "name": "sfbill__CMCreatedBy__c"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "StatementNumber__c"
+        },
+        {
+          "name": "Transaction__c"
+        }
+      ],
+      "object": "sfbill__Transaction__c"
+    }
+  },
+  "Add_DateFields_To_PaymentApp": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Join_PaymentApp_Account_w_Contract_w_ResellerPartner",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "defaultValue": "0",
+          "precision": 10,
+          "name": "Prebill_Days",
+          "saqlExpression": "daysBetween(toDate('TransactionAccount.sfbill__TransactionDate__c_Year' + \"-\" + 'TransactionAccount.sfbill__TransactionDate__c_Month' + \"-\" + 'TransactionAccount.sfbill__TransactionDate__c_Day',\"yyyy-MM-dd\"), toDate('TransactionLine.sfbill__StartDate__c_Year' + \"-\" + 'TransactionLine.sfbill__StartDate__c_Month' + \"-\" + 'TransactionLine.sfbill__StartDate__c_Day', \"yyyy-MM-dd\"))",
+          "scale": 2,
+          "label": "Prebill_Days",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 10,
+          "saqlExpression": "daysBetween(toDate('TransactionAccount.sfbill__DueDate__c_Year' + \"-\" + 'TransactionAccount.sfbill__DueDate__c_Month' + \"-\" + 'TransactionAccount.sfbill__DueDate__c_Day',\"yyyy-MM-dd\"), toDate('TransactionLine.sfbill__StartDate__c_Year' + \"-\" + 'TransactionLine.sfbill__StartDate__c_Month' + \"-\" + 'TransactionLine.sfbill__StartDate__c_Day', \"yyyy-MM-dd\"))\n",
+          "name": "Service_Days",
+          "scale": 2,
+          "label": "Service_Days",
+          "type": "Numeric"
+        }
+      ]
+    }
+  },
+  "Register_PaymentApp": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "AR_PaymentApp",
+      "alias": "AR_PaymentApp",
+      "source": "Add_DateFields_To_PaymentApp",
+      "folderid": "00l0M0000033gFXQAY"
+    }
+  },
+  "Join_Milestone_Case_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Milestone",
+      "left_key": [
+        "CaseId"
+      ],
+      "right_select": [
+        "Revenue_Owner__c",
+        "Account.Ultimate_Parent_Name__c",
+        "Account.Name",
+        "Account.Industry",
+        "Account.Credit_Check__c",
+        "Account.AccountNumber",
+        "Account.Write_Off_Reviewer__c",
+        "Account.Write_Off_Date__c",
+        "Account.Retention_Score__c",
+        "Account.Retention_Category__c",
+        "Account.Usage_Score__c",
+        "Account.License_Utilization_CRM__c",
+        "Account.Usage_Segment_Reporting__c",
+        "Account.Org_Status_DW__c",
+        "Account.Ultimate_Parent_DUNS__c",
+        "Owner.Name",
+        "RecordType.Name",
+        "Completion_Deadline__c",
+        "Sales_Alignment_Comments__c",
+        "Comments__c",
+        "Quote_CPQ__c",
+        "End_Date__c",
+        "Related_Opportunity__c",
+        "Requestor__c",
+        "Parent.Completion_Deadline__c",
+        "Parent.Sales_Alignment_Comments__c",
+        "Parent.Comments__c",
+        "Parent.Quote_CPQ__c",
+        "Parent.End_Date__c",
+        "Parent.Related_Opportunity__c",
+        "Parent.Requestor__c"
+      ],
+      "right": "Join_Case_Account",
+      "relationship": "Case"
+    }
+  },
+  "Extract_TransactionLine": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "sfbill__MonthlyUnitNetPrice__c"
+        },
+        {
+          "name": "sfbill__Quantity__c"
+        },
+        {
+          "name": "sfbill__LineAmount__c"
+        },
+        {
+          "name": "sfbill__TotalLineTax__c"
+        },
+        {
+          "name": "sfbill__TotalPrice__c"
+        },
+        {
+          "name": "sfbill__Transaction__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__StartDate__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "sfbill__EndDate__c"
+        },
+        {
+          "name": "sfbill__TransactionType__c"
+        },
+        {
+          "name": "Cloud__c"
+        },
+        {
+          "name": "sfbill__RelatedOrderItem__c"
+        },
+        {
+          "name": "Related_Quote__c"
+        },
+        {
+          "name": "sfbill__LineDescription__c"
+        },
+        {
+          "name": "sfbill__QuoteNumber__c"
+        },
+        {
+          "name": "sfbill__QuoteId__c"
+        },
+        {
+          "name": "sfbill__Product__c"
+        }
+      ],
+      "object": "sfbill__TransactionLine__c"
+    }
+  },
+  "Join_TransactionCaseAccountTransactionCase_Collector": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_TransactionCaseAccountTransaction_Case",
+      "left_key": [
+        "Collector__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Collector"
+    }
+  },
+  "Join_TransactionLine_Product": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_TransactionLine",
+      "left_key": [
+        "sfbill__Product__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Product",
+      "relationship": "Product"
+    }
+  },
+  "Register_Opportunity": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "AR_Opportunity",
+      "alias": "AR_Opportunity",
+      "source": "Join_Opportunity_Account",
+      "folderid": "00l0M0000033gFXQAY"
+    }
+  },
+  "Join_User_MGMT_LVL_07": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_User_MGMT_LVL_06",
+      "left_key": [
+        "Mgmt_Chain_Level_07__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "User_MGMT_LVL_07",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_User_MGMT_LVL_06": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_User_MGMT_LVL_05",
+      "left_key": [
+        "Mgmt_Chain_Level_06__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "User_MGMT_LVL_06",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_User_MGMT_LVL_05": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_User_MGMT_LVL_04",
+      "left_key": [
+        "Mgmt_Chain_Level_05__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "User_MGMT_LVL_05",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Register_EBOTran": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "AR_EBOTran",
+      "alias": "AR_EBOTran",
+      "source": "Extract_EBO_Transaction",
+      "folderid": "00l0M0000033gFXQAY"
+    }
+  },
+  "Join_User_MGMT_LVL_04": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_User_MGMT_LVL_03",
+      "left_key": [
+        "Mgmt_Chain_Level_04__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "User_MGMT_LVL_04",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aggregate_Licenses_For_Transaction": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "sfbill__Transaction__c"
+      ],
+      "orderBy": [
+        {
+          "name": "sfbill__LineAmount__c",
+          "direction": "desc"
+        }
+      ],
+      "source": "Extract_TransactionLine",
+      "computedFields": [
+        {
+          "expression": {
+            "default": "0",
+            "precision": 5,
+            "saqlExpression": "case when previous(Sum_Of_Quantity) is null then sfbill__Quantity__c else previous(Sum_Of_Quantity) + sfbill__Quantity__c end",
+            "scale": 2,
+            "type": "Numeric"
+          },
+          "name": "Sum_Of_Quantity",
+          "description": "Aggregate the Quantity for all transaction lines with respect to Transaction ID",
+          "label": "Sum Of TransLine Quantity"
+        }
+      ]
+    }
+  },
+  "Join_CaseParentCaseCompany_ApprovedBy": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_CaseParentCase_Company",
+      "left_key": [
+        "Approved_By__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Approved_By"
+    }
+  },
+  "Join_Account_ISV_PAM_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Account_Quote",
+      "left_key": [
+        "ISV_AE__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "ISV_PAM"
+    }
+  },
+  "Join_User_MGMT_LVL_09": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_User_MGMT_LVL_08",
+      "left_key": [
+        "Mgmt_Chain_Level_09__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "User_MGMT_LVL_09",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_User_MGMT_LVL_08": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_User_MGMT_LVL_07",
+      "left_key": [
+        "Mgmt_Chain_Level_08__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "User_MGMT_LVL_08",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Register_Quote": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "AR_Quote",
+      "alias": "AR_Quote",
+      "source": "Join_Quote_OpportunityAccount",
+      "folderid": "00l0M0000033gFXQAY"
+    }
+  },
+  "Register_TransactionLine_Updated_Dataset": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "TransactionLine Max LineAmount",
+      "alias": "TransactionLine_Max_LineAmount",
+      "source": "Filter_Max_LineAmount"
+    }
+  },
+  "Join_TransactionCase_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_TransactionCase",
+      "left_key": [
+        "Account__c"
+      ],
+      "right_select": [
+        "Name",
+        "Retention_Score__c",
+        "Retention_Category__c",
+        "Usage_Score__c",
+        "License_Utilization_CRM__c",
+        "Usage_Segment_Reporting__c",
+        "Org_Status_DW__c"
+      ],
+      "right": "Join_Account_Company",
+      "relationship": "Account"
+    }
+  },
+  "Join_Opportunity_Owner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Opportunity_Creator",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Owner"
+    }
+  },
+  "Join_Opportunity_Contract": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Opportunity_PSA_Project",
+      "left_key": [
+        "ContractId"
+      ],
+      "right_select": [
+        "ContractNumber"
+      ],
+      "right": "Extract_Contract",
+      "relationship": "Contract"
+    }
+  },
+  "Join_Account_Quote": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Apttus_Proposal__Account__c"
+      ],
+      "left": "Join_Account_GlobalCompany",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name",
+        "Id",
+        "Apttus_Proposal__Proposal_Name__c"
+      ],
+      "right": "Extract_Quote",
+      "relationship": "Quote"
+    }
+  },
+  "Join_Case_UserByCreated": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_CaseParentCaseCompany_ApprovedBy",
+      "left_key": [
+        "CreatedById"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "CreatedById"
+    }
+  },
+  "Join_User_MGMT_LVL_10": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_User_MGMT_LVL_09",
+      "left_key": [
+        "Mgmt_Chain_Level_10__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "User_MGMT_LVL_10",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_Account_ISV_Strategic_PAM_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Account_ISV_PAM_User",
+      "left_key": [
+        "ISV_Senior_AE__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "ISV_Strategic_PAM"
+    }
+  },
+  "Join_Approval_Request_Quote": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Approval_Request_User",
+      "left_key": [
+        "SfdcQuote__c"
+      ],
+      "right_select": [
+        "SfdcPaymentMethod__c",
+        "SfdcBillingCountry__c",
+        "SfdcBillingFrequency__c",
+        "Apttus_QPConfig__PriceListId__c",
+        "Apttus_Proposal__Payment_Term__c",
+        "Price_list.Name",
+        "SfdcBillingContact__c"
+      ],
+      "right": "Join_Quote_Price_list",
+      "relationship": "Quote"
+    }
+  },
+  "Register_Contract": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "AR_Contract",
+      "alias": "AR_Contract",
+      "source": "Join_Contract_Tran_Account",
+      "folderid": "00l0M0000033gFXQAY"
+    }
+  },
+  "Join_User_MGMT_LVL_12": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_User_MGMT_LVL_11",
+      "left_key": [
+        "Mgmt_Chain_Level_12__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "User_MGMT_LVL_12",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_User_MGMT_LVL_11": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_User_MGMT_LVL_10",
+      "left_key": [
+        "Mgmt_Chain_Level_11__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "User_MGMT_LVL_11",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_Transaction_LastModifiedby": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Transaction_CMCreadtedBy",
+      "left_key": [
+        "LastModifiedById"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "LastModifiedby"
+    }
+  },
+  "Join_Contract_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Contract_Creator",
+      "left_key": [
+        "Collector__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Contract_Collector"
+    }
+  },
+  "Join_PaymentAccount_Contract": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Payment_Account",
+      "left_key": [
+        "sfbill__Contract__c"
+      ],
+      "right_select": [
+        "sfbase__ContractCreationSource__c",
+        "ContractNumber",
+        "sfbase__ContractType__c",
+        "OrderPrebillDays",
+        "CustomerType__c",
+        "Channel_Sales_Partner__c",
+        "Channel_Sales_Partner.Name",
+        "PaymentTerm",
+        "Account.Manager_Internal_Comments__c",
+        "Account.sfbill__ExchangeRate__c",
+        "BillingCountry",
+        "ShippingCountry",
+        "Contract_Collector.Name",
+        "Outsource_partner__c"
+      ],
+      "right": "Join_Contract_Tran_Account",
+      "relationship": "Contract",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Augment_Case_Quote": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Case",
+      "left_key": [
+        "Quote_CPQ__c"
+      ],
+      "right_select": [
+        "SfdcTotalQuoteAmountUSD__c",
+        "SfdcConvertedManually__c",
+        "Name"
+      ],
+      "right": "Extract_Quote",
+      "relationship": "Quote_CPQ"
+    }
+  },
+  "Join_TransactionCaseAccount_Transaction": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_TransactionCase_Account",
+      "left_key": [
+        "TransactionNumber__c"
+      ],
+      "right_select": [
+        "Name",
+        "Manager_Internal_Comments__c",
+        "sfbill__ExchangeRate__c",
+        "Einstein_Bad_Debt_Guidance__c",
+        "Einstein_Collections_GuidanceO30__c",
+        "Einstein_Collection_Guidance__c",
+        "Einstein_Collections_Score__c",
+        "Einstein_Collections_Score_v1__c"
+      ],
+      "right": "Extract_Transaction",
+      "relationship": "Transaction"
+    }
+  },
+  "Extract_Approval_Request": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "sfdcQuote_Owner_Role__c"
+        },
+        {
+          "name": "Account_Owner_Role__c"
+        },
+        {
+          "name": "Apttus_Approval__Status_Link__c"
+        },
+        {
+          "name": "sfdcQuote_Status__c"
+        },
+        {
+          "name": "sfdcOpportunity_Stage__c"
+        },
+        {
+          "name": "SfdcQuote__c"
+        },
+        {
+          "name": "SfdcQuoteAmount__c"
+        },
+        {
+          "name": "Apttus_Approval__StepLabel__c"
+        },
+        {
+          "name": "SfdcMyApprovals2__c"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Apttus_Approval__DateAssigned__c"
+        },
+        {
+          "name": "sfdcAccount__c"
+        },
+        {
+          "name": "sfdcOpportunity__c"
+        },
+        {
+          "name": "sfdcAccount_Region__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Days_from_Submit_to_Approve__c"
+        },
+        {
+          "name": "Apttus_Approval__Actual_Approver__c"
+        },
+        {
+          "name": "Apttus_Approval__ActualApproverName__c"
+        },
+        {
+          "name": "Apttus_Approval__Assigned_To_Name__c"
+        },
+        {
+          "name": "Apttus_Approval__DateApproved__c"
+        },
+        {
+          "name": "Apttus_Approval__DateRejected__c"
+        },
+        {
+          "name": "Apttus_Approval__Approval_Status__c"
+        }
+      ],
+      "object": "Apttus_Approval__Approval_Request__c"
+    }
+  },
+  "Join_Contract_RecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_ContractOldPB_PriceBook",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name",
+        "DeveloperName"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "RecordType"
+    }
+  },
+  "Join_Case_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Case_User",
+      "left_key": [
+        "AccountId"
+      ],
+      "right_select": [
+        "Ultimate_Parent_Name__c",
+        "Name",
+        "Industry",
+        "Credit_Check__c",
+        "AccountNumber",
+        "Write_Off_Reviewer__c",
+        "Write_Off_Date__c",
+        "Retention_Score__c",
+        "Retention_Category__c",
+        "Usage_Score__c",
+        "License_Utilization_CRM__c",
+        "Usage_Segment_Reporting__c",
+        "Org_Status_DW__c",
+        "Ultimate_Parent_DUNS__c",
+        "Account_Owner.User_MGMT_LVL_01.Name",
+        "Account_Owner.User_MGMT_LVL_02.Name",
+        "Account_Owner.User_MGMT_LVL_03.Name",
+        "Account_Owner.User_MGMT_LVL_04.Name",
+        "Account_Owner.User_MGMT_LVL_05.Name",
+        "Account_Owner.User_MGMT_LVL_06.Name",
+        "Account_Owner.User_MGMT_LVL_07.Name",
+        "Account_Owner.User_MGMT_LVL_08.Name",
+        "Account_Owner.User_MGMT_LVL_09.Name",
+        "Account_Owner.User_MGMT_LVL_10.Name",
+        "Account_Owner.User_MGMT_LVL_12.Name"
+      ],
+      "right": "Join_Account_User_on_Owner",
+      "relationship": "Account"
+    }
+  },
+  "Join_Account_User_on_Owner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Account_ISV_Strategic_PAM_User",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "User_MGMT_LVL_01.Name",
+        "User_MGMT_LVL_02.Name",
+        "User_MGMT_LVL_03.Name",
+        "User_MGMT_LVL_04.Name",
+        "User_MGMT_LVL_05.Name",
+        "User_MGMT_LVL_06.Name",
+        "User_MGMT_LVL_07.Name",
+        "User_MGMT_LVL_08.Name",
+        "User_MGMT_LVL_09.Name",
+        "User_MGMT_LVL_10.Name",
+        "User_MGMT_LVL_11.Name",
+        "User_MGMT_LVL_12.Name"
+      ],
+      "right": "Join_User_MGMT_LVL_12",
+      "relationship": "Account_Owner"
+    }
+  },
+  "Join_Opportunity_RecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Opportunity_Contract",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "DeveloperName",
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "RecordType"
+    }
+  },
+  "Extract_Quote": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Apttus_Proposal__Account__c"
+        },
+        {
+          "name": "SfdcQuoteStatus__c"
+        },
+        {
+          "name": "SfdcOwnerRoleName__c"
+        },
+        {
+          "name": "Apttus_Proposal__Proposal_Name__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "SfdcTotalQuoteAmountApproval__c"
+        },
+        {
+          "name": "SfdcTotalQuoteAmountUSD__c"
+        },
+        {
+          "name": "Apttus_Proposal__Opportunity__c"
+        },
+        {
+          "name": "Apttus_QPApprov__Approval_Status__c"
+        },
+        {
+          "name": "SfdcPaymentMethod__c"
+        },
+        {
+          "name": "SfdcBillingCountry__c"
+        },
+        {
+          "name": "SfdcBillingFrequency__c"
+        },
+        {
+          "name": "Apttus_QPConfig__PriceListId__c"
+        },
+        {
+          "name": "Apttus_Proposal__Payment_Term__c"
+        },
+        {
+          "name": "SfdcBillingContact__c"
+        },
+        {
+          "name": "SfdcAOVUSD__c"
+        },
+        {
+          "name": "Apttus_Proposal__Amount__c"
+        },
+        {
+          "name": "SfdcInvoiceAmountUSD__c"
+        },
+        {
+          "name": "Apttus_Proposal__Approval_Stage__c"
+        },
+        {
+          "name": "PO_Exception_NOT_Allowed__c"
+        },
+        {
+          "name": "SfdcPOExceptionReason__c"
+        },
+        {
+          "name": "SfdcPOExpirationDate__c"
+        },
+        {
+          "name": "SFDC_PO_Required__c"
+        },
+        {
+          "name": "SfdcRejectionReason__c"
+        },
+        {
+          "name": "SfdcRejectReason__c"
+        },
+        {
+          "name": "SfdcRejectCategory__c"
+        },
+        {
+          "name": "Apttus_Proposal__ExpectedStartDate__c"
+        },
+        {
+          "name": "Apttus_Proposal__ExpectedEndDate__c"
+        },
+        {
+          "name": "SfdcService_Start_Date__c"
+        },
+        {
+          "name": "SfdcConvertedManually__c"
+        },
+        {
+          "name": "OwnerId"
+        }
+      ],
+      "object": "Apttus_Proposal__Proposal__c"
+    }
+  },
+  "Extract_Price_list": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "Apttus_Config2__PriceList__c"
+    }
+  },
+  "Join_Approval_Request_Owner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Approval_Request",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Approval_Request_Owner"
+    }
+  },
+  "Register_TransactionLine": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "AR_TransactionLine",
+      "alias": "AR_TransactionLine",
+      "source": "Join_TransactionLine_Transaction_Account",
+      "folderid": "00l0M0000033gFXQAY"
+    }
+  },
+  "Join_Transaction_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Transaction_User",
+      "left_key": [
+        "sfbill__AccountName__c"
+      ],
+      "right_select": [
+        "Credit_Check__c",
+        "Id",
+        "Name",
+        "AccountNumber",
+        "Industry",
+        "Ultimate_Parent_DUNS__c",
+        "Region__c",
+        "Ultimate_Parent_Name__c",
+        "Payment_Terms__c",
+        "Write_Off_Reviewer__c",
+        "Bad_Debt_Status__c",
+        "Write_Off_Date__c",
+        "Retention_Score__c",
+        "Retention_Category__c",
+        "Usage_Score__c",
+        "License_Utilization_CRM__c",
+        "Usage_Segment_Reporting__c",
+        "Org_Status_DW__c",
+        "Account_Owner.Name",
+        "Quote.Name",
+        "Quote.Id",
+        "Organization_ID_DW__c",
+        "ISV_PAM.Name",
+        "ISV_Program_Tier__c",
+        "ISV_Strategic_PAM.Name",
+        "Non_Profit_Account__c",
+        "Quote.Apttus_Proposal__Proposal_Name__c",
+        "E_Invoicing_Status__c",
+        "E_Invoicing_System__c",
+        "Global_Company.Name",
+        "Collections_Market_Segment__c",
+        "sfbase__SFDCPORequired__c",
+        "Jitterbit_Exclusion__c",
+        "Account_Owner.User_MGMT_LVL_01.Name",
+        "Account_Owner.User_MGMT_LVL_02.Name",
+        "Account_Owner.User_MGMT_LVL_03.Name",
+        "Account_Owner.User_MGMT_LVL_04.Name",
+        "Account_Owner.User_MGMT_LVL_05.Name",
+        "Account_Owner.User_MGMT_LVL_06.Name",
+        "Account_Owner.User_MGMT_LVL_07.Name",
+        "Account_Owner.User_MGMT_LVL_08.Name",
+        "Account_Owner.User_MGMT_LVL_09.Name",
+        "Account_Owner.User_MGMT_LVL_10.Name",
+        "Account_Owner.User_MGMT_LVL_11.Name",
+        "Account_Owner.User_MGMT_LVL_12.Name"
+      ],
+      "right": "Join_Account_User_on_Owner",
+      "relationship": "Account",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_User_MGMT_LVL_03": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_User_MGMT_LVL_02",
+      "left_key": [
+        "Mgmt_Chain_Level_03__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "User_MGMT_LVL_03",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Register_Case": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "AR_Case",
+      "alias": "AR_Case",
+      "source": "Join_CaseAccountContract_Payment",
+      "folderid": "00l0M0000033gFXQAY"
+    }
+  },
+  "Join_User_MGMT_LVL_02": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_User_MGMT_LVL_01",
+      "left_key": [
+        "Mgmt_Chain_Level_02__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "User_MGMT_LVL_02",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_Approval_Request_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Approval_Request_Owner",
+      "left_key": [
+        "CreatedById"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Approval_Request_CreatedBy"
+    }
+  },
+  "Join_User_MGMT_LVL_01": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_User_Manager",
+      "left_key": [
+        "Mgmt_Chain_Level_01__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "User_MGMT_LVL_01",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_Case_UserOwner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_Case_RecordType",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "LastLoginDate"
+      ],
+      "right": "Extract_User",
+      "relationship": "Owner"
+    }
+  }
+}

@@ -3,7 +3,7 @@
 	url = https://HeanGee:810002148gitlab114@gitlab.com/HeanGee/tcrm_automation.git
 [submodule "libs/interactor"]
 	path = libs/interactor
-	url = https://Bluewine:810002148github114@github.com/Bluewine/interactor.git
+	url = https://github.com/Bluewine/interactor.git
 [submodule "libs/diff2htmlcompare"]
 	path = libs/diff2htmlcompare
 	url = https://HeanGee:810002148gitlab114@gitlab.com/HeanGee/diff2htmlcompare.git

@@ -1,0 +1,3081 @@
+{
+  "104": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_ProfileSkillUser",
+      "left_key": [
+        "UserId"
+      ],
+      "right_select": [
+        "Name",
+        "sf62user__manager__c",
+        "Mgmt_Chain_Level_01__c",
+        "Mgmt_Chain_Level_02__c",
+        "Mgmt_Chain_Level_03__c",
+        "Mgmt_Chain_Level_09__c",
+        "Mgmt_Chain_Level_08__c",
+        "Mgmt_Chain_Level_07__c",
+        "Mgmt_Chain_Level_06__c",
+        "Mgmt_Chain_Level_05__c",
+        "Mgmt_Chain_Level_04__c",
+        "Id",
+        "Username",
+        "IsActive",
+        "Hire_Date__c",
+        "TimeinGTMJobFunctionMonths__c",
+        "JobGrade__c",
+        "GTMJobFunction__c",
+        "GTMJobFunctionDetail__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "UserId"
+    }
+  },
+  "106": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "104",
+      "left_key": [
+        "UserId.Mgmt_Chain_Level_01__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "UserId.Mgmt_Chain_Level_01__c"
+    }
+  },
+  "107": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "106",
+      "left_key": [
+        "UserId.Mgmt_Chain_Level_02__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "UserId.Mgmt_Chain_Level_02__c"
+    }
+  },
+  "108": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "107",
+      "left_key": [
+        "UserId.Mgmt_Chain_Level_03__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "UserId.Mgmt_Chain_Level_03__c"
+    }
+  },
+  "109": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "108",
+      "left_key": [
+        "UserId.Mgmt_Chain_Level_09__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "UserId.Mgmt_Chain_Level_09__c"
+    }
+  },
+  "110": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "109",
+      "left_key": [
+        "UserId.Mgmt_Chain_Level_08__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "UserId.Mgmt_Chain_Level_08__c"
+    }
+  },
+  "111": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "110",
+      "left_key": [
+        "UserId.Mgmt_Chain_Level_07__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "UserId.Mgmt_Chain_Level_07__c"
+    }
+  },
+  "112": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "111",
+      "left_key": [
+        "UserId.Mgmt_Chain_Level_06__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "UserId.Mgmt_Chain_Level_06__c"
+    }
+  },
+  "113": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "112",
+      "left_key": [
+        "UserId.Mgmt_Chain_Level_05__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "UserId.Mgmt_Chain_Level_05__c"
+    }
+  },
+  "114": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "113",
+      "left_key": [
+        "UserId.Mgmt_Chain_Level_04__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "UserId.Mgmt_Chain_Level_04__c"
+    }
+  },
+  "115": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "114",
+      "left_key": [
+        "Employee__c"
+      ],
+      "right_select": [
+        "CSG_Region__c",
+        "CSG_Sub_Region__c",
+        "Top_25_City__c",
+        "Willingness_to_relocate__c",
+        "Willingness_to_travel__c",
+        "Acquisition_Origin__c",
+        "Geo__c"
+      ],
+      "right": "Extract_Employee",
+      "relationship": "Employee__c"
+    }
+  },
+  "117": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "115",
+      "left_key": [
+        "UserId.sf62user__manager__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "UserId.sf62user__manager__c"
+    }
+  },
+  "127": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "117",
+      "left_key": [
+        "ProfileSkillId"
+      ],
+      "right_select": [
+        "Name",
+        "CreatedDate",
+        "LastModifiedDate",
+        "Description",
+        "Type__c",
+        "Category__c",
+        "Sub_Category__c",
+        "Id"
+      ],
+      "right": "Extract_ProfileSkill",
+      "relationship": "ProfileSkillId"
+    }
+  },
+  "128": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Skill User",
+      "alias": "Skill_User",
+      "source": "127",
+      "folderid": "00l30000003em2jAAA"
+    }
+  },
+  "136_Wave_Digest_PSE_Region": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "136_Wave_Digest_PSE_Region",
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "pse__region__c"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L07_Role": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "ManagementLevel07.UserRoleId"
+      ],
+      "left": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L07",
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_EDW_UserRoleHierarchy",
+      "relationship": "ManagementLevel07Role"
+    }
+  },
+  "130_Wave_Digest_PSE_GRP": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "130_Wave_Digest_PSE_GRP",
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "pse__grp__c"
+    }
+  },
+  "179_Wave_Augment_PSE_Proj_Region": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "178_Wave_Augment_PSE_Proj_Recordtype",
+      "left_key": [
+        "PSE_Project__c.pse__Region__c"
+      ],
+      "name": "179_Wave_Augment_PSE_Proj_Region",
+      "right": "170_Wave_Digest_PSE_Region",
+      "relationship": "PSE_Project__c.pse__Region__c"
+    }
+  },
+  "COE_SpecialistForecastLineItem_Register": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "COE_SpecialistForecastLineItem",
+      "alias": "COE_SpecialistForecastLineItem",
+      "source": "COE_SpecialistForecastLineItem_Augment_ForecastOwner_Owner"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L06_Role": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "ManagementLevel06.UserRoleId"
+      ],
+      "left": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L06",
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_EDW_UserRoleHierarchy",
+      "relationship": "ManagementLevel06Role"
+    }
+  },
+  "170_Wave_Digest_PSE_Region": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "170_Wave_Digest_PSE_Region",
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "pse__region__c"
+    }
+  },
+  "Extract_UTIL_YearMapping": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "util_year_mapping"
+    }
+  },
+  "BASE_UserWithRoles_Augment_Manager_UserRole": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "ManagerId"
+      ],
+      "left": "Extract_ORG62_User",
+      "right_select": [
+        "Id",
+        "Name",
+        "Managers",
+        "ManagerPath"
+      ],
+      "right": "BASE_UserWithRoles_Flatten_Manager",
+      "relationship": "Manager",
+      "operation": "LookupMultiValue"
+    }
+  },
+  "168_Wave_Digest_User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "168_Wave_Digest_User",
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "user"
+    }
+  },
+  "AW_Opportunity_Augment_Owner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id_15"
+      ],
+      "left_key": [
+        "OwnerId"
+      ],
+      "left": "AW_Opportunity_Augment_Account",
+      "right_select": [
+        "Id",
+        "Name",
+        "Macro_Segment_c",
+        "Coverage_Country_c",
+        "Role_Name",
+        "User_Path",
+        "FORCST_USR_ID_PATH",
+        "User_Role_Path",
+        "User_Role_Id_Path",
+        "OwnerManager.Name",
+        "OwnerManager.Department",
+        "OwnerManager.Manager.Id",
+        "OwnerManager.Manager.Name",
+        "OwnerManager.Manager.Managers",
+        "OwnerManager.Manager.ManagerPath"
+      ],
+      "right": "SW_UserWithRoles_Augment_Manager",
+      "relationship": "Owner"
+    }
+  },
+  "GBU_Opportunity_Granular_Register": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "GBU_Opportunity",
+      "alias": "GBU_Opportunity",
+      "source": "GBU_Opportunity_Augment_OwnerDetails_GB1000_FY_Quarter",
+      "folderid": "00l30000003WHT1AAO"
+    }
+  },
+  "Extract_F1_ACV_TARGETS": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "ACV_TARGETS"
+    }
+  },
+  "GBU_Opportunity_Augment_OwnerDetails_GB1000_FY_Quarter": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Original"
+      ],
+      "left_key": [
+        "FiscalYearQuarter"
+      ],
+      "left": "GBU_Opportunity_Augment_OwnerDetails_GB1000_FY",
+      "right_select": [
+        "Quarter"
+      ],
+      "right": "Extract_UTIL_YearQuarterMapping",
+      "relationship": "FY"
+    }
+  },
+  "138_Wave_Augment_137_Oppty": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "137_Wave_Augment_Oppty_PSE_GRP",
+      "left_key": [
+        "Related_License_Oppty__c"
+      ],
+      "name": "138_Wave_Augment_137_Oppty",
+      "right": "129_Wave_Digest_Opportunity",
+      "relationship": "Related_License_Oppty__c"
+    }
+  },
+  "137_Wave_Augment_Oppty_PSE_GRP": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "129_Wave_Digest_Opportunity",
+      "left_key": [
+        "pse__Group__c"
+      ],
+      "name": "137_Wave_Augment_Oppty_PSE_GRP",
+      "right": "130_Wave_Digest_PSE_GRP",
+      "relationship": "pse__Group__c"
+    }
+  },
+  "135_Wave_Digest_PSE_PRACTICE": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "135_Wave_Digest_PSE_PRACTICE",
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "pse__practice__c"
+    }
+  },
+  "COE_ACV_TARGETS_Analytics_Filter": {
+    "action": "filter",
+    "parameters": {
+      "filter": "DERIVED_PARENT_CLOUD_VALUE:EQ:Analytics",
+      "source": "Extract_F1_ACV_TARGETS"
+    }
+  },
+  "175_Wave_Augment_Survey_Recordtype": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "166_Wave_Digest_Survey_Results",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "name": "175_Wave_Augment_Survey_Recordtype",
+      "right": "167_Wave_Digest_Recordtype",
+      "relationship": "RecordTypeId"
+    }
+  },
+  "177_Wave_Augment_Survey_PSE_Proj": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name",
+        "RecordTypeId",
+        "pse__Billing_Type__c",
+        "pse__Stage__c",
+        "Reporting_Category__c",
+        "pse__Start_Date__c",
+        "pse__End_Date__c",
+        "pse__Region__c",
+        "pse__Practice__c",
+        "pse__Group__c",
+        "T_M_Amount_Remaining__c",
+        "pse__Billings__c",
+        "pse__Bookings__c",
+        "OwnerId"
+      ],
+      "left": "176_Wave_Augment_Survey_User",
+      "left_key": [
+        "PSE_Project__c"
+      ],
+      "name": "177_Wave_Augment_Survey_PSE_Proj",
+      "right": "169_Wave_Digest_PSE_Proj",
+      "relationship": "PSE_Project__c"
+    }
+  },
+  "BASE_UserWithRoles_Flatten_Manager": {
+    "schema": {
+      "objects": [
+        {
+          "label": "SW_UserWithRoles_Flatten_Manager",
+          "fields": [
+            {
+              "name": "Managers",
+              "label": "Managers_Multi_field",
+              "isSystemField": false
+            }
+          ]
+        }
+      ]
+    },
+    "action": "flatten",
+    "parameters": {
+      "self_field": "Id",
+      "multi_field": "Managers",
+      "parent_field": "ManagerId",
+      "path_field": "ManagerPath",
+      "source": "Extract_ORG62_User"
+    }
+  },
+  "172_Wave_Digest_PSE_Group": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "172_Wave_Digest_PSE_Group",
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "pse__grp__c"
+    }
+  },
+  "Extract_PTB_Wave": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "raw_pds_ptb_wave"
+    }
+  },
+  "CPA_PTB_Register": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "CPA_PTB",
+      "alias": "CPA_PTB",
+      "source": "CPA_PTB_Wave_Augment_Account",
+      "folderid": "00l300000037X62AAE"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "ManagerName.UserRoleId"
+      ],
+      "left": "SW_Org62UserBase_Augment_ManagerName",
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_EDW_UserRoleHierarchy",
+      "relationship": "ManagerRole"
+    }
+  },
+  "171_Wave_Digest_PSE_Practice": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "171_Wave_Digest_PSE_Practice",
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "pse__practice__c"
+    }
+  },
+  "Extract_ORG62_Opportunity": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "AmountConverted__c"
+        },
+        {
+          "name": "sfbase__ACV__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "ForecastCategoryName"
+        },
+        {
+          "name": "ForecastCategory"
+        },
+        {
+          "name": "Manager_Forecast_Judgement__c"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Opportunity"
+    }
+  },
+  "AW_Opportunity_Augment_Owner_Product_RecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "RecordType"
+      ],
+      "left": "AW_Opportunity_Augment_Owner_Product",
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_ORG62_RecordType",
+      "relationship": "RecordType"
+    }
+  },
+  "132_Wave_Digest_Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "132_Wave_Digest_Account",
+      "fields": [
+        {
+          "name": "CSG_Region_formula__c"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Region_AOV_Band__c"
+        },
+        {
+          "name": "ShippingState"
+        },
+        {
+          "name": "Subregion__c"
+        },
+        {
+          "name": "ShippingCountry"
+        },
+        {
+          "name": "ShippingPostalCode"
+        },
+        {
+          "name": "ShippingCity"
+        },
+        {
+          "name": "BillingCity"
+        },
+        {
+          "name": "BillingState"
+        },
+        {
+          "name": "BillingCountry"
+        },
+        {
+          "name": "BillingPostalCode"
+        },
+        {
+          "name": "NumberOfEmployees"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Industry"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "ParentId"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "account"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "ManagerId"
+      ],
+      "left": "Extract_ORG62_User",
+      "right_select": [
+        "Name",
+        "UserRoleId"
+      ],
+      "right": "Extract_ORG62_User",
+      "relationship": "ManagerName"
+    }
+  },
+  "146_Wave_Augment_Oppty_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name",
+        "Division",
+        "Department",
+        "sf62user__manager__c",
+        "sfbase__Region__c"
+      ],
+      "left": "145_Wave_Augment_Oppty_PSE_Region",
+      "left_key": [
+        "OwnerId"
+      ],
+      "name": "146_Wave_Augment_Oppty_User",
+      "right": "133_Wave_Digest_User",
+      "relationship": "OwnerId"
+    }
+  },
+  "AW_RedAccount_Register": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "aw_RedAccount",
+      "alias": "aw_red_account",
+      "source": "AW_RedAccount_Augment_Account_RecordType",
+      "folderid": "00l0M0000033i0oQAA"
+    }
+  },
+  "185_Wave_Augment_Oppty_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name",
+        "AOV_Band__c",
+        "Region_AOV_Band__c",
+        "Premier_AOV_Band__c",
+        "Type",
+        "AccountStatus__c",
+        "Industry",
+        "Region__c"
+      ],
+      "left": "184_Wave_Augment_OpptyOwner_User",
+      "left_key": [
+        "Opportunity__c.AccountId"
+      ],
+      "name": "185_Wave_Augment_Oppty_Account",
+      "right": "174_Wave_Digest_Account",
+      "relationship": "Opportunity__c.AccountId"
+    }
+  },
+  "GBU_Opportunity_Augment_OwnerDetails_GB1000": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Account_ID"
+      ],
+      "left_key": [
+        "AccountId"
+      ],
+      "left": "GBU_Opportunity_Augment_OwnerDetails",
+      "right_select": [
+        "Top_MSA",
+        "Band"
+      ],
+      "right": "Extract_RAW_GB1000Account",
+      "relationship": "GB1000"
+    }
+  },
+  "183_Wave_Augment_PSE_Proj_Oppty": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name",
+        "OwnerId",
+        "AccountId",
+        "CFL_Region__c",
+        "Type",
+        "Sub_Type__c",
+        "LeadSource",
+        "CloseDate",
+        "AmountConverted__c",
+        "RecordTypeId"
+      ],
+      "left": "182_Wave_Augment_PSE_Proj_User",
+      "left_key": [
+        "Opportunity__c"
+      ],
+      "name": "183_Wave_Augment_PSE_Proj_Oppty",
+      "right": "173_Wave_Digest_Oppty",
+      "relationship": "Opportunity__c"
+    }
+  },
+  "131_Wave_Digest_Contact": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "131_Wave_Digest_Contact",
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "contact"
+    }
+  },
+  "187_Wave_Register_CSAT": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "187_Wave_Register_CSAT",
+      "alias": "CSAT",
+      "source": "186_Wave_Augment_Oppty_Recordtype"
+    }
+  },
+  "174_Wave_Digest_Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "174_Wave_Digest_Account",
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "AOV_Band__c"
+        },
+        {
+          "name": "Region_AOV_Band__c"
+        },
+        {
+          "name": "Premier_AOV_Band__c"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "AccountStatus__c"
+        },
+        {
+          "name": "Industry"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "account"
+    }
+  },
+  "AW_Case_Augment_Account_AllAccess": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Joinkey"
+      ],
+      "left_key": [
+        "CASE_IS_CLOSED_ON_CREATE"
+      ],
+      "left": "AW_Case_Augment_Account",
+      "right_select": [
+        "Dataset_Access"
+      ],
+      "right": "Extract_RAW_ViewAll",
+      "relationship": "Access"
+    }
+  },
+  "SW_UserWithRoles_Augment_Manager": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "Id"
+      ],
+      "left": "Extract_EDW_UserRoleHierarchy",
+      "right_select": [
+        "Name",
+        "JobFamily__c",
+        "Mgmt_Chain_Level_01__c",
+        "Mgmt_Chain_Level_02__c",
+        "Mgmt_Chain_Level_03__c",
+        "Mgmt_Chain_Level_04__c",
+        "Mgmt_Chain_Level_05__c",
+        "Mgmt_Chain_Level_06__c",
+        "Mgmt_Chain_Level_07__c",
+        "Mgmt_Chain_Level_08__c",
+        "Mgmt_Chain_Level_09__c",
+        "Department",
+        "Manager.Id",
+        "Manager.Name",
+        "Manager.Managers",
+        "Manager.ManagerPath"
+      ],
+      "right": "BASE_UserWithRoles_Augment_Manager_UserRole",
+      "relationship": "OwnerManager",
+      "operation": "LookupMultiValue"
+    }
+  },
+  "181_Wave_Augment_PSE_Proj_Group": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "180_Wave_Augment_PSE_Proj_Practice",
+      "left_key": [
+        "PSE_Project__c.pse__Group__c"
+      ],
+      "name": "181_Wave_Augment_PSE_Proj_Group",
+      "right": "172_Wave_Digest_PSE_Group",
+      "relationship": "PSE_Project__c.pse__Group__c"
+    }
+  },
+  "178_Wave_Augment_PSE_Proj_Recordtype": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "177_Wave_Augment_Survey_PSE_Proj",
+      "left_key": [
+        "PSE_Project__c.RecordTypeId"
+      ],
+      "name": "178_Wave_Augment_PSE_Proj_Recordtype",
+      "right": "167_Wave_Digest_Recordtype",
+      "relationship": "PSE_Project__c.RecordTypeId"
+    }
+  },
+  "182_Wave_Augment_PSE_Proj_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "181_Wave_Augment_PSE_Proj_Group",
+      "left_key": [
+        "PSE_Project__c.OwnerId"
+      ],
+      "name": "182_Wave_Augment_PSE_Proj_User",
+      "right": "168_Wave_Digest_User",
+      "relationship": "PSE_Project__c.OwnerId"
+    }
+  },
+  "167_Wave_Digest_Recordtype": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "167_Wave_Digest_Recordtype",
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "recordtype"
+    }
+  },
+  "148_Wave_Register_IT_LOB_V1": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "148_Wave_Register_IT_LOB_V1",
+      "alias": "IT_LOB_V1",
+      "source": "Create_Measure_From_Dimension"
+    }
+  },
+  "Extract_EDW_UserRoleHierarchy": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "UsersWithRoles"
+    }
+  },
+  "COE_SpecialistForecast_Augment_Opportunity_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ID"
+      ],
+      "left_key": [
+        "Opportunity.AccountId"
+      ],
+      "left": "COE_SpecialistForecast_Augment_Opportunity",
+      "right_select": [
+        "ACCT_NM",
+        "OWNER_NM"
+      ],
+      "right": "Extract_AW_Account",
+      "relationship": "Opportunity__c.AccountId"
+    }
+  },
+  "Create_Measure_From_Dimension": {
+    "action": "dim2mea",
+    "parameters": {
+      "measure": "Age_Custom_Measure",
+      "measureDefault": "0",
+      "source": "147_Wave_Augment_Oppty_Owner_Mgr",
+      "dimension": "Age_Custom__c",
+      "measureType": "long"
+    }
+  },
+  "SW_ACV_Grain_Ownership_Augment_OwnerDetails": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id_15"
+      ],
+      "left_key": [
+        "OVA_OWNER_ID"
+      ],
+      "left": "Extract_F1_ACV_Grain",
+      "right_select": [
+        "Coverage_Country_c",
+        "Id_15",
+        "Id",
+        "Macro_Segment_c",
+        "Name",
+        "Role_Name",
+        "User_Path",
+        "User_Role_Id_Path",
+        "User_Role_Path",
+        "FORCST_USR_ID_PATH",
+        "UserOrg62Augment.Area__c",
+        "UserOrg62Augment.Business_Unit__c",
+        "UserOrg62Augment.Company__c",
+        "UserOrg62Augment.CompanyName",
+        "UserOrg62Augment.JobFamily__c",
+        "UserOrg62Augment.ManagerId",
+        "UserOrg62Augment.ManagementLevel02.Name",
+        "UserOrg62Augment.ManagementLevel02.UserRoleId",
+        "UserOrg62Augment.ManagementLevel03.Name",
+        "UserOrg62Augment.ManagementLevel03.UserRoleId",
+        "UserOrg62Augment.ManagementLevel04.Name",
+        "UserOrg62Augment.ManagementLevel04.UserRoleId",
+        "UserOrg62Augment.ManagementLevel05.Name",
+        "UserOrg62Augment.ManagementLevel05.UserRoleId",
+        "UserOrg62Augment.ManagementLevel06.Name",
+        "UserOrg62Augment.ManagementLevel06.UserRoleId",
+        "UserOrg62Augment.ManagementLevel07.Name",
+        "UserOrg62Augment.ManagementLevel07.UserRoleId",
+        "UserOrg62Augment.ManagementLevel08.Name",
+        "UserOrg62Augment.ManagementLevel08.UserRoleId",
+        "UserOrg62Augment.ManagementLevel09.Name",
+        "UserOrg62Augment.ManagementLevel09.UserRoleId",
+        "UserOrg62Augment.ManagerName.Name",
+        "UserOrg62Augment.ManagerName.UserRoleId",
+        "UserOrg62Augment.Name",
+        "UserOrg62Augment.sfbase__Region__c",
+        "UserOrg62Augment.sfbase__Subregion__c",
+        "UserOrg62Augment.UserRoleId",
+        "UserRoleId"
+      ],
+      "right": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L09_Role_SFUser",
+      "relationship": "OwnerDetails"
+    }
+  },
+  "147_Wave_Augment_Oppty_Owner_Mgr": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "146_Wave_Augment_Oppty_User",
+      "left_key": [
+        "OwnerId.sf62user__manager__c"
+      ],
+      "name": "147_Wave_Augment_Oppty_Owner_Mgr",
+      "right": "133_Wave_Digest_User",
+      "relationship": "OwnerId.sf62user__manager__c"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L02_Role": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "ManagementLevel02.UserRoleId"
+      ],
+      "left": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L02",
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_EDW_UserRoleHierarchy",
+      "relationship": "ManagementLevel02Role"
+    }
+  },
+  "Extract_RAW_GB1000Account": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "raw_gb1000_account"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L08_Role": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "ManagementLevel08.UserRoleId"
+      ],
+      "left": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L08",
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_EDW_UserRoleHierarchy",
+      "relationship": "ManagementLevel08Role"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L05_Role": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "ManagementLevel05.UserRoleId"
+      ],
+      "left": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L05",
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_EDW_UserRoleHierarchy",
+      "relationship": "ManagementLevel05Role"
+    }
+  },
+  "COE_SpecialistForecast_Augment_Opportunity_Account_DateFormatUtility": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Original"
+      ],
+      "left_key": [
+        "FiscalQuarter__c"
+      ],
+      "left": "COE_SpecialistForecast_Augment_Opportunity_Account",
+      "right_select": [
+        "YearQuarter"
+      ],
+      "right": "Extract_UTIL_YearQuarterMapping",
+      "relationship": "Formatted"
+    }
+  },
+  "Extract_AW_EWS1": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "aw_EWS1"
+    }
+  },
+  "Extract_Employee": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "User__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "CSG_Region__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "Geo__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "CSG_Sub_Region__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "Top_25_City__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "Willingness_to_relocate__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "Willingness_to_travel__c"
+        },
+        {
+          "name": "Manager_Name__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "Acquisition_Origin__c"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Employee__c"
+    }
+  },
+  "AW_Case_Augment_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ID"
+      ],
+      "left_key": [
+        "CASE_ACCOUNTID"
+      ],
+      "left": "Extract_SupportAnalytics_Case",
+      "right_select": [
+        "ID",
+        "GLOBAL_CO_ID",
+        "CO_ID",
+        "ACCT_NM",
+        "INDUSTRY",
+        "BILL_CNTRY_NM",
+        "SHPPNG_CNTRY_NM",
+        "REGN_NM",
+        "CO_NM",
+        "GLOBAL_CO_NM",
+        "CSM_ID_PATH",
+        "AOV_BAND_TYP",
+        "ACCT_TYPE",
+        "SOLD_DT",
+        "ACCT_OWN_ID",
+        "OWNER_NM",
+        "MACRO_SEG_NM",
+        "COVR_CNTRY_NM",
+        "USR_ROLE_NM",
+        "USR_PATH",
+        "FORCST_USR_ID_PATH",
+        "SFDC_TEAM_USR_ID",
+        "USR_ROLE_PATH",
+        "USR_ROLE_ID_PATH",
+        "SE_ROLE_ID_PATH",
+        "MGR_USR_ID_PATH",
+        "MGR_USR_NM_PATH",
+        "PRXY_USR_ID_PATH"
+      ],
+      "right": "Extract_AW_Account",
+      "relationship": "Account"
+    }
+  },
+  "Extract_SupportAnalytics_Case": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "SUPPORT_ANALYTICS_CASE_CONTACT_ACCOUNT"
+    }
+  },
+  "180_Wave_Augment_PSE_Proj_Practice": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "179_Wave_Augment_PSE_Proj_Region",
+      "left_key": [
+        "PSE_Project__c.pse__Practice__c"
+      ],
+      "name": "180_Wave_Augment_PSE_Proj_Practice",
+      "right": "171_Wave_Digest_PSE_Practice",
+      "relationship": "PSE_Project__c.pse__Practice__c"
+    }
+  },
+  "CPA_PTB_Wave_Augment_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ID"
+      ],
+      "left_key": [
+        "Account_ID"
+      ],
+      "left": "Extract_PTB_Wave",
+      "right_select": [
+        "ID",
+        "ACCT_NM",
+        "INDUSTRY",
+        "BILL_CNTRY_NM",
+        "SHPPNG_CNTRY_NM",
+        "REGN_NM",
+        "CO_NM",
+        "AOV_BAND_TYP",
+        "ACCT_TYPE",
+        "SOLD_DT",
+        "ACCT_OWN_ID",
+        "OWNER_NM",
+        "MACRO_SEG_NM",
+        "COVR_CNTRY_NM",
+        "USR_ROLE_NM",
+        "USR_PATH",
+        "FORCST_USR_ID_PATH",
+        "SFDC_TEAM_USR_ID",
+        "USR_ROLE_PATH",
+        "USR_ROLE_ID_PATH"
+      ],
+      "right": "Extract_AW_Account",
+      "relationship": "Account"
+    }
+  },
+  "Extract_AW_OpportunityProducts": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "aw_opportunityProduct"
+    }
+  },
+  "Extract_ProfileSkillUser": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "UserId"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "Employee__c"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "LastModifiedDate"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "Company_Functional_Experience_Desc__c"
+        },
+        {
+          "name": "EndorsementCount"
+        },
+        {
+          "name": "Expertise_Certified__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "Expertise_Rating__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "ProfileSkillId"
+        }
+      ],
+      "object": "ProfileSkillUser"
+    }
+  },
+  "GBU_ACV_Grain_Augment_GB1000_AllAccess": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Joinkey"
+      ],
+      "left_key": [
+        "DERIVED_SUB_REG_VALUE"
+      ],
+      "left": "GBU_ACV_Grain_Augment_GB1000",
+      "right_select": [
+        "Dataset_Access"
+      ],
+      "right": "Extract_RAW_ViewAll",
+      "relationship": "Access"
+    }
+  },
+  "141_Wave_Augment_Oppty_Contact_Account_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "140_Wave_Augment_Oppty_Contact_Account",
+      "left_key": [
+        "AccountId.OwnerId"
+      ],
+      "name": "141_Wave_Augment_Oppty_Contact_Account_User",
+      "right": "133_Wave_Digest_User",
+      "relationship": "AccountId.OwnerId"
+    }
+  },
+  "Extract_User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "filterConditions": [
+        {
+          "conditions": [
+            {
+              "field": "Username",
+              "value": "%salesforce.com",
+              "operator": "LIKE"
+            },
+            {
+              "field": "Mgmt_Chain_Level_01__c",
+              "value": "0050000000000SD",
+              "operator": "="
+            }
+          ],
+          "operator": "OR"
+        }
+      ],
+      "fields": [
+        {
+          "name": "sf62user__manager__c"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "Mgmt_Chain_Level_01__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_02__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_03__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_09__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_08__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_07__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_06__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_05__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_04__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Username"
+        },
+        {
+          "name": "ManagerId"
+        },
+        {
+          "name": "IsActive"
+        },
+        {
+          "name": "Hire_Date__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "JobGrade__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "TimeinGTMJobFunctionMonths__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "GTMJobFunction__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "GTMJobFunctionDetail__c"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "186_Wave_Augment_Oppty_Recordtype": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "185_Wave_Augment_Oppty_Account",
+      "left_key": [
+        "Opportunity__c.RecordTypeId"
+      ],
+      "name": "186_Wave_Augment_Oppty_Recordtype",
+      "right": "167_Wave_Digest_Recordtype",
+      "relationship": "Opportunity__c.RecordTypeId"
+    }
+  },
+  "Extract_ORG62_SpecialistForecastLineItem": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "ForecastOwner__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "CurrencyIsoCode"
+        },
+        {
+          "name": "ExcludeFromCalculation__c"
+        },
+        {
+          "name": "ExtIdentifier__c"
+        },
+        {
+          "name": "FiscalYear__c"
+        },
+        {
+          "name": "ForecastNotes__c"
+        },
+        {
+          "name": "FYMonth__c"
+        },
+        {
+          "name": "MayEdit"
+        },
+        {
+          "name": "MyBestcaseOverriden__c"
+        },
+        {
+          "name": "MyCommitOverriden__c"
+        },
+        {
+          "name": "OriginalBestCaseAmount__c"
+        },
+        {
+          "name": "OriginalClosedAmount__c"
+        },
+        {
+          "name": "OriginalCommitAmount__c"
+        },
+        {
+          "name": "OriginalPipelineAmount__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "SubmittedDate__c"
+        }
+      ],
+      "object": "SpecialistForecastLineItem__c"
+    }
+  },
+  "166_Wave_Digest_Survey_Results": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "166_Wave_Digest_Survey_Results",
+      "fields": [
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "PSE_Project__c"
+        },
+        {
+          "name": "Opportunity__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name__c"
+        },
+        {
+          "name": "Survey_Sent_Date__c"
+        },
+        {
+          "name": "Survey_Status__c"
+        },
+        {
+          "name": "COMPLETIONTIME__c"
+        },
+        {
+          "name": "US_Overall_Satisfaction__c"
+        },
+        {
+          "name": "EMP_201_FEEDBACK__c"
+        },
+        {
+          "name": "Services_Team_s_Professionalism_Knowle__c"
+        },
+        {
+          "name": "Timeliness__c"
+        },
+        {
+          "name": "Value_Achieved__c"
+        },
+        {
+          "name": "Likelihood_to_Recommend_to_Others__c"
+        },
+        {
+          "name": "Reason_for_recommend__c"
+        }
+      ],
+      "object": "clicktools_survey_results__c"
+    }
+  },
+  "144_Wave_Augment_Oppty_PSE_Practice": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "143_Wave_Augment_Account_PSE_Project",
+      "left_key": [
+        "pse__Practice__c"
+      ],
+      "name": "144_Wave_Augment_Oppty_PSE_Practice",
+      "right": "135_Wave_Digest_PSE_PRACTICE",
+      "relationship": "pse__Practice__c"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L02": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "Mgmt_Chain_Level_02__c"
+      ],
+      "left": "SW_Org62UserBase_Augment_ManagerName_ManagerRole",
+      "right_select": [
+        "Name",
+        "UserRoleId"
+      ],
+      "right": "Extract_ORG62_User",
+      "relationship": "ManagementLevel02"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L04": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "Mgmt_Chain_Level_04__c"
+      ],
+      "left": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L03_Role",
+      "right_select": [
+        "Name",
+        "UserRoleId"
+      ],
+      "right": "Extract_ORG62_User",
+      "relationship": "ManagementLevel04"
+    }
+  },
+  "COE_SpecialistForecast_Augment_Opportunity": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "Opportunity__c"
+      ],
+      "left": "Extract_ORG62_SpecialistForecast",
+      "right_select": [
+        "AmountConverted__c",
+        "sfbase__ACV__c",
+        "Name",
+        "ForecastCategoryName",
+        "ForecastCategory",
+        "Manager_Forecast_Judgement__c",
+        "AccountId",
+        "OwnerId"
+      ],
+      "right": "Extract_ORG62_Opportunity",
+      "relationship": "Opportunity"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L03": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "Mgmt_Chain_Level_03__c"
+      ],
+      "left": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L02_Role",
+      "right_select": [
+        "Name",
+        "UserRoleId"
+      ],
+      "right": "Extract_ORG62_User",
+      "relationship": "ManagementLevel03"
+    }
+  },
+  "145_Wave_Augment_Oppty_PSE_Region": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "144_Wave_Augment_Oppty_PSE_Practice",
+      "left_key": [
+        "pse__Region__c"
+      ],
+      "name": "145_Wave_Augment_Oppty_PSE_Region",
+      "right": "136_Wave_Digest_PSE_Region",
+      "relationship": "pse__Region__c"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L06": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "Mgmt_Chain_Level_06__c"
+      ],
+      "left": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L05_Role",
+      "right_select": [
+        "Name",
+        "UserRoleId"
+      ],
+      "right": "Extract_ORG62_User",
+      "relationship": "ManagementLevel06"
+    }
+  },
+  "134_Wave_Digest_Recordtype": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "134_Wave_Digest_Recordtype",
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "recordtype"
+    }
+  },
+  "169_Wave_Digest_PSE_Proj": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "169_Wave_Digest_PSE_Proj",
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "pse__Billing_Type__c"
+        },
+        {
+          "name": "pse__Stage__c"
+        },
+        {
+          "name": "Reporting_Category__c"
+        },
+        {
+          "name": "pse__Start_Date__c"
+        },
+        {
+          "name": "pse__End_Date__c"
+        },
+        {
+          "name": "pse__Region__c"
+        },
+        {
+          "name": "pse__Practice__c"
+        },
+        {
+          "name": "pse__Group__c"
+        },
+        {
+          "name": "T_M_Amount_Remaining__c"
+        },
+        {
+          "name": "pse__Billings__c"
+        },
+        {
+          "name": "pse__Bookings__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "pse__proj__c"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L05": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "Mgmt_Chain_Level_05__c"
+      ],
+      "left": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L04_Role",
+      "right_select": [
+        "Name",
+        "UserRoleId"
+      ],
+      "right": "Extract_ORG62_User",
+      "relationship": "ManagementLevel05"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L08": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "Mgmt_Chain_Level_08__c"
+      ],
+      "left": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L07_Role",
+      "right_select": [
+        "Name",
+        "UserRoleId"
+      ],
+      "right": "Extract_ORG62_User",
+      "relationship": "ManagementLevel08"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L07": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "Mgmt_Chain_Level_07__c"
+      ],
+      "left": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L06_Role",
+      "right_select": [
+        "Name",
+        "UserRoleId"
+      ],
+      "right": "Extract_ORG62_User",
+      "relationship": "ManagementLevel07"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L09": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "Mgmt_Chain_Level_09__c"
+      ],
+      "left": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L08_Role",
+      "right_select": [
+        "Name",
+        "UserRoleId"
+      ],
+      "right": "Extract_ORG62_User",
+      "relationship": "ManagementLevel09"
+    }
+  },
+  "AW_Opportunity_Augment_Owner_Product": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "OPTY_ID"
+      ],
+      "left_key": [
+        "Id_15"
+      ],
+      "left": "AW_Opportunity_Augment_Owner",
+      "right_select": [
+        "PROD_CD",
+        "PROD_FAMILY_NM"
+      ],
+      "right": "Extract_AW_OpportunityProducts",
+      "relationship": "Products",
+      "operation": "LookupMultiValue"
+    }
+  },
+  "AW_RedAccount_Augment_Account_RecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "left": "AW_RedAccount_Augment_Account",
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_ORG62_RecordType",
+      "relationship": "RecordType"
+    }
+  },
+  "142_Wave_Augment_Account_Recordtype": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "141_Wave_Augment_Oppty_Contact_Account_User",
+      "left_key": [
+        "AccountId.RecordTypeId"
+      ],
+      "name": "142_Wave_Augment_Account_Recordtype",
+      "right": "134_Wave_Digest_Recordtype",
+      "relationship": "AccountId.RecordTypeId"
+    }
+  },
+  "COE_SpecialistForecast_Augment_Opportunity_Account_DateFormatUtility_EDW_Opportunity": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "Opportunity__c"
+      ],
+      "left": "COE_SpecialistForecast_Augment_Opportunity_Account_DateFormatUtility",
+      "right_select": [
+        "Id_15"
+      ],
+      "right": "Extract_EDW_Opportunity",
+      "relationship": "DW_Opportunity"
+    }
+  },
+  "Extract_F1_ACV_Grain": {
+    "action": "edgemart",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "skipLocalCache": false,
+      "alias": "ACV_Grain"
+    }
+  },
+  "SW_Org62UserBase_Register": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Org62 User Base",
+      "alias": "Org62UserBase",
+      "source": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L09_Role_SFUser",
+      "folderid": "00l30000003WHT1AAO"
+    }
+  },
+  "Extract_UTIL_YearQuarterMapping": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "util_yearquarter_mapping"
+    }
+  },
+  "184_Wave_Augment_OpptyOwner_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "183_Wave_Augment_PSE_Proj_Oppty",
+      "left_key": [
+        "Opportunity__c.OwnerId"
+      ],
+      "name": "184_Wave_Augment_OpptyOwner_User",
+      "right": "168_Wave_Digest_User",
+      "relationship": "Opportunity__c.OwnerId"
+    }
+  },
+  "COE_SpecialistForecast_Register": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "COE_SpecialistForecast",
+      "alias": "COE_SpecialistForecast",
+      "source": "COE_SpecialistForecast_Augment_Opportunity_Account_DateFormatUtility_EDW_Opportunity"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L09_Role_SFUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "Id"
+      ],
+      "left": "SW_UserWithRoles_Augment_Manager",
+      "right_select": [
+        "ManagerId",
+        "UserRoleId",
+        "Company__c",
+        "LastName",
+        "sfbase__Subregion__c",
+        "Area__c",
+        "sfbase__Region__c",
+        "ManagementLevel04.Name",
+        "ManagementLevel05.Name",
+        "ManagementLevel02.Name",
+        "ManagementLevel02.UserRoleId",
+        "ManagementLevel08.Name",
+        "ManagementLevel06.Name",
+        "ManagementLevel05.UserRoleId",
+        "ManagementLevel06.UserRoleId",
+        "ManagementLevel09.UserRoleId",
+        "ManagerName.Name",
+        "Business_Unit__c",
+        "JobFamily__c",
+        "CompanyName",
+        "ManagerName.UserRoleId",
+        "ManagementLevel07.UserRoleId",
+        "ManagementLevel09.Name",
+        "Name",
+        "ManagementLevel08.UserRoleId",
+        "ManagementLevel04.UserRoleId",
+        "ManagementLevel03.Name",
+        "ManagementLevel03.UserRoleId",
+        "ManagementLevel07.Name"
+      ],
+      "right": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L09_Role",
+      "relationship": "UserOrg62Augment"
+    }
+  },
+  "173_Wave_Digest_Oppty": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "173_Wave_Digest_Oppty",
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "CFL_Region__c"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "Sub_Type__c"
+        },
+        {
+          "name": "LeadSource"
+        },
+        {
+          "name": "CloseDate"
+        },
+        {
+          "name": "AmountConverted__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "opportunity"
+    }
+  },
+  "COE_SpecialistForecastLineItem_Augment_ForecastOwner_Owner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "OwnerId"
+      ],
+      "left": "COE_SpecialistForecastLineItem_Augment_ForecastOwner",
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_EDW_UserRoleHierarchy",
+      "relationship": "OwnerId"
+    }
+  },
+  "GBU_ACV_Grain_Augment_GB1000": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Account_ID"
+      ],
+      "left_key": [
+        "ACCT_ID"
+      ],
+      "left": "SW_ACV_Grain_Ownership_Augment_OwnerDetails",
+      "right_select": [
+        "Top_MSA",
+        "Band"
+      ],
+      "right": "Extract_RAW_GB1000Account",
+      "relationship": "GB1000"
+    }
+  },
+  "GBU_Opportunity_Augment_OwnerDetails_GB1000_FY": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Original"
+      ],
+      "left_key": [
+        "FiscalYear"
+      ],
+      "left": "GBU_Opportunity_Augment_OwnerDetails_GB1000",
+      "right_select": [
+        "FiscalYear"
+      ],
+      "right": "Extract_UTIL_YearMapping",
+      "relationship": "FY"
+    }
+  },
+  "Extract_ORG62_User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "LastName"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "FirstName"
+        },
+        {
+          "name": "CompanyName"
+        },
+        {
+          "name": "Area__c"
+        },
+        {
+          "name": "sfbase__Region__c"
+        },
+        {
+          "name": "sfbase__Subregion__c"
+        },
+        {
+          "name": "Business_Unit__c"
+        },
+        {
+          "name": "JobProfile__c"
+        },
+        {
+          "name": "UserRoleId"
+        },
+        {
+          "name": "ManagerId"
+        },
+        {
+          "name": "Company__c"
+        },
+        {
+          "name": "Division"
+        },
+        {
+          "name": "Email"
+        },
+        {
+          "name": "JobFamily__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_01__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_02__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_03__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_04__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_05__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_06__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_07__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_08__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_09__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "IsActive"
+        },
+        {
+          "name": "Department"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "Extract_EDW_Opportunity": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "DW_OPPORTUNITY"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L04_Role": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "ManagementLevel04.UserRoleId"
+      ],
+      "left": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L04",
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_EDW_UserRoleHierarchy",
+      "relationship": "ManagementLevel04Role"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L09_Role": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "ManagementLevel09.UserRoleId"
+      ],
+      "left": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L09",
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_EDW_UserRoleHierarchy",
+      "relationship": "ManagementLevel09Role"
+    }
+  },
+  "140_Wave_Augment_Oppty_Contact_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "CSG_Region_formula__c",
+        "Region__c",
+        "OwnerId",
+        "Region_AOV_Band__c",
+        "ShippingState",
+        "Subregion__c",
+        "ShippingCountry",
+        "ShippingPostalCode",
+        "ShippingCity",
+        "BillingCity",
+        "BillingState",
+        "BillingCountry",
+        "BillingPostalCode",
+        "NumberOfEmployees",
+        "RecordTypeId",
+        "Industry",
+        "Type",
+        "ParentId",
+        "Name",
+        "Id"
+      ],
+      "left": "139_Wave_Augment_Oppty_Contact",
+      "left_key": [
+        "AccountId"
+      ],
+      "name": "140_Wave_Augment_Oppty_Contact_Account",
+      "right": "132_Wave_Digest_Account",
+      "relationship": "AccountId"
+    }
+  },
+  "AW_EWS_Augment_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ID_15"
+      ],
+      "left_key": [
+        "ACCT_ID_15"
+      ],
+      "left": "Extract_AW_EWS1",
+      "right_select": [
+        "SE_ROLE_ID_PATH",
+        "MGR_USR_ID_PATH",
+        "MGR_USR_NM_PATH",
+        "ACCT_OWN_ID",
+        "SFDC_TEAM_USR_ID",
+        "CO_NM",
+        "CSM_ID_PATH",
+        "PRXY_USR_ID_PATH"
+      ],
+      "right": "Extract_AW_Account",
+      "relationship": "Account"
+    }
+  },
+  "COE_SpecialistForecastLineItem_Augment_ForecastOwner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "ForecastOwner__c"
+      ],
+      "left": "Extract_ORG62_SpecialistForecastLineItem",
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_EDW_UserRoleHierarchy",
+      "relationship": "ForecastOwner__c"
+    }
+  },
+  "GBU_Opportunity_Augment_OwnerDetails": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id_15"
+      ],
+      "left_key": [
+        "OwnerId"
+      ],
+      "left": "AW_Opportunity_Augment_Owner_Product_RecordType_AllAccess",
+      "right_select": [
+        "UserOrg62Augment.Area__c",
+        "UserOrg62Augment.Business_Unit__c",
+        "UserOrg62Augment.Company__c",
+        "UserOrg62Augment.CompanyName",
+        "UserOrg62Augment.JobFamily__c",
+        "UserOrg62Augment.ManagerId",
+        "UserOrg62Augment.ManagementLevel02.Name",
+        "UserOrg62Augment.ManagementLevel02.UserRoleId",
+        "UserOrg62Augment.ManagementLevel03.Name",
+        "UserOrg62Augment.ManagementLevel03.UserRoleId",
+        "UserOrg62Augment.ManagementLevel04.Name",
+        "UserOrg62Augment.ManagementLevel04.UserRoleId",
+        "UserOrg62Augment.ManagementLevel05.Name",
+        "UserOrg62Augment.ManagementLevel05.UserRoleId",
+        "UserOrg62Augment.ManagementLevel06.Name",
+        "UserOrg62Augment.ManagementLevel06.UserRoleId",
+        "UserOrg62Augment.ManagementLevel07.Name",
+        "UserOrg62Augment.ManagementLevel07.UserRoleId",
+        "UserOrg62Augment.ManagementLevel08.Name",
+        "UserOrg62Augment.ManagementLevel08.UserRoleId",
+        "UserOrg62Augment.ManagementLevel09.Name",
+        "UserOrg62Augment.ManagementLevel09.UserRoleId",
+        "UserOrg62Augment.ManagerName.Name",
+        "UserOrg62Augment.ManagerName.UserRoleId",
+        "UserOrg62Augment.Name",
+        "UserOrg62Augment.sfbase__Region__c",
+        "UserOrg62Augment.sfbase__Subregion__c"
+      ],
+      "right": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L09_Role_SFUser",
+      "relationship": "OwnerDetails"
+    }
+  },
+  "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L03_Role": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left_key": [
+        "ManagementLevel03.UserRoleId"
+      ],
+      "left": "SW_Org62UserBase_Augment_ManagerName_ManagerRole_L03",
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_EDW_UserRoleHierarchy",
+      "relationship": "ManagementLevel03Role"
+    }
+  },
+  "129_Wave_Digest_Opportunity": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "129_Wave_Digest_Opportunity",
+      "fields": [
+        {
+          "name": "Amount_Won__c"
+        },
+        {
+          "name": "AmountConverted__c"
+        },
+        {
+          "name": "sfquote__AdjustmentAmount__c"
+        },
+        {
+          "name": "sfquote__Add_on_Amount__c"
+        },
+        {
+          "name": "Amount"
+        },
+        {
+          "name": "pse__Group__c"
+        },
+        {
+          "name": "Sub_Type__c"
+        },
+        {
+          "name": "Related_License_Oppty__c"
+        },
+        {
+          "name": "pse__Is_Services_Opportunity__c"
+        },
+        {
+          "name": "Change_Order__c"
+        },
+        {
+          "name": "Sub_Region__c"
+        },
+        {
+          "name": "ForecastCategoryName"
+        },
+        {
+          "name": "Delivery_Manager__c"
+        },
+        {
+          "name": "ContractType__c"
+        },
+        {
+          "name": "Discount__c"
+        },
+        {
+          "name": "Age_Custom__c"
+        },
+        {
+          "precision": 255,
+          "name": "FiscalYear",
+          "type": "Text"
+        },
+        {
+          "name": "Fiscal"
+        },
+        {
+          "name": "Probability"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "pse__Practice__c"
+        },
+        {
+          "name": "StageName"
+        },
+        {
+          "name": "LeadSource"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "CloseDate"
+        },
+        {
+          "name": "Cloud_Type__c"
+        },
+        {
+          "name": "pse__Region__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Premier_Specialist__c"
+        }
+      ],
+      "object": "opportunity"
+    }
+  },
+  "Extract_ORG62_RecordType": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "RecordType"
+    }
+  },
+  "Extract_ORG62_SpecialistForecast": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Opportunity__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Account__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "ForecastCloseDate__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate"
+        },
+        {
+          "name": "CurrencyIsoCode"
+        },
+        {
+          "name": "ExcludeFromCalculation__c"
+        },
+        {
+          "name": "ExtIdentifier__c"
+        },
+        {
+          "name": "FiscalQuarter__c"
+        },
+        {
+          "name": "FiscalYear__c"
+        },
+        {
+          "name": "ForecastStatus__c"
+        },
+        {
+          "name": "ForecastNotes__c"
+        },
+        {
+          "name": "ForecastType__c"
+        },
+        {
+          "name": "FYMonth__c"
+        },
+        {
+          "name": "If_Completed_Provide_Details__c"
+        },
+        {
+          "name": "MgrForecastNotes__c"
+        },
+        {
+          "name": "MayEdit"
+        },
+        {
+          "name": "Next_Action__c"
+        },
+        {
+          "name": "OwnerManager__c"
+        },
+        {
+          "name": "PlatformNamedAccount__c"
+        },
+        {
+          "name": "Manager_Gap_to_Most_Likely__c"
+        },
+        {
+          "name": "Manager_Commit__c"
+        },
+        {
+          "name": "ProductLead__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "ROI_Business_Case_Completed__c"
+        },
+        {
+          "name": "ServiceCloudNamedAccount__c"
+        },
+        {
+          "name": "ForecastAmount__c"
+        },
+        {
+          "name": "ForecastStage__c"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "SpecialistForecast__c"
+    }
+  },
+  "COE_ACV_TARGETS_Analytics_Register": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "ACV_Targets_Analytics",
+      "alias": "ACV_Targets_Analytics",
+      "source": "COE_ACV_TARGETS_Analytics_Filter"
+    }
+  },
+  "GBU_ACV_Grain_Register": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "GBU_ACV_Grain",
+      "alias": "GBU_ACV_Grain",
+      "source": "GBU_ACV_Grain_Augment_GB1000_AllAccess",
+      "folderid": "00l30000003WHT1AAO"
+    }
+  },
+  "AW_Case_Register": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "aw_case",
+      "alias": "aw_case",
+      "source": "AW_Case_Augment_Account_AllAccess",
+      "folderid": "00l0M0000033i0oQAA"
+    }
+  },
+  "176_Wave_Augment_Survey_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "175_Wave_Augment_Survey_Recordtype",
+      "left_key": [
+        "OwnerId"
+      ],
+      "name": "176_Wave_Augment_Survey_User",
+      "right": "168_Wave_Digest_User",
+      "relationship": "OwnerId"
+    }
+  },
+  "143_Wave_Augment_Account_PSE_Project": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "142_Wave_Augment_Account_Recordtype",
+      "left_key": [
+        "AccountId.ParentId"
+      ],
+      "name": "143_Wave_Augment_Account_PSE_Project",
+      "right": "132_Wave_Digest_Account",
+      "relationship": "AccountId.ParentId"
+    }
+  },
+  "AW_RedAccount_Augment_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ID"
+      ],
+      "left_key": [
+        "Red_Account__c"
+      ],
+      "left": "Extract_ORG62_RedAccount",
+      "right_select": [
+        "ID",
+        "ACCT_NM",
+        "INDUSTRY",
+        "BILL_CNTRY_NM",
+        "SHPPNG_CNTRY_NM",
+        "REGN_NM",
+        "CO_NM",
+        "GLOBAL_CO_NM",
+        "CSM_ID_PATH",
+        "AOV_BAND_TYP",
+        "ACCT_TYPE",
+        "SOLD_DT",
+        "ACCT_OWN_ID",
+        "OWNER_NM",
+        "MACRO_SEG_NM",
+        "COVR_CNTRY_NM",
+        "USR_ROLE_NM",
+        "USR_PATH",
+        "FORCST_USR_ID_PATH",
+        "SFDC_TEAM_USR_ID",
+        "USR_ROLE_PATH",
+        "USR_ROLE_ID_PATH",
+        "SE_ROLE_ID_PATH",
+        "MGR_USR_ID_PATH",
+        "MGR_USR_NM_PATH",
+        "PRXY_USR_ID_PATH"
+      ],
+      "right": "Extract_AW_Account",
+      "relationship": "Account"
+    }
+  },
+  "139_Wave_Augment_Oppty_Contact": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "left": "138_Wave_Augment_137_Oppty",
+      "left_key": [
+        "Delivery_Manager__c"
+      ],
+      "name": "139_Wave_Augment_Oppty_Contact",
+      "right": "131_Wave_Digest_Contact",
+      "relationship": "Delivery_Manager__c"
+    }
+  },
+  "AW_Opportunity_Augment_Owner_Product_RecordType_AllAccess": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Joinkey"
+      ],
+      "left_key": [
+        "IsClosed"
+      ],
+      "left": "AW_Opportunity_Augment_Owner_Product_RecordType",
+      "right_select": [
+        "Dataset_Access"
+      ],
+      "right": "Extract_RAW_ViewAll",
+      "relationship": "Access"
+    }
+  },
+  "Extract_ProfileSkill": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Description"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "LastModifiedDate"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "Type__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "Category__c"
+        },
+        {
+          "defaultValue": "--Empty--",
+          "name": "Sub_Category__c"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "ProfileSkill"
+    }
+  },
+  "AW_EWS_Register": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "aw_EWS",
+      "alias": "aw_EWS",
+      "source": "AW_EWS_Augment_Account",
+      "folderid": "00l0M0000033i0oQAA"
+    }
+  },
+  "Extract_RAW_ViewAll": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "viewall_augment"
+    }
+  },
+  "Extract_AW_Account": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "aw_account"
+    }
+  },
+  "Extract_ORG62_RedAccount": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "maxAllowedOffset": 1500,
+      "fields": [
+        {
+          "name": "Id",
+          "type": "Text"
+        },
+        {
+          "name": "Name",
+          "type": "Text"
+        },
+        {
+          "name": "Red_Start_Date__c",
+          "type": "Date"
+        },
+        {
+          "name": "Red_End_Date__c",
+          "type": "Date"
+        },
+        {
+          "name": "Stage__c",
+          "type": "Text"
+        },
+        {
+          "name": "Support_Level__c",
+          "type": "Text"
+        },
+        {
+          "name": "CreatedDate",
+          "type": "Date"
+        },
+        {
+          "name": "Current_Red_Start_Date__c",
+          "type": "Date"
+        },
+        {
+          "name": "Days_Red__c",
+          "type": "Numeric"
+        },
+        {
+          "name": "Red_Account__c",
+          "type": "Text"
+        },
+        {
+          "name": "RecordTypeId",
+          "type": "Text"
+        }
+      ],
+      "concurrentBatches": 12,
+      "object": "Red_Account__c"
+    }
+  },
+  "133_Wave_Digest_User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "name": "133_Wave_Digest_User",
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Division"
+        },
+        {
+          "name": "Department"
+        },
+        {
+          "name": "sf62user__manager__c"
+        },
+        {
+          "name": "sfbase__Region__c"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "user"
+    }
+  },
+  "AW_Opportunity_Augment_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ID_15"
+      ],
+      "left_key": [
+        "AccountId"
+      ],
+      "left": "Extract_EDW_Opportunity",
+      "right_select": [
+        "ID",
+        "ACCT_NM",
+        "INDUSTRY",
+        "BILL_CNTRY_NM",
+        "SHPPNG_CNTRY_NM",
+        "REGN_NM",
+        "CO_NM",
+        "GLOBAL_CO_NM",
+        "CSM_ID_PATH",
+        "AOV_BAND_TYP",
+        "ACCT_TYPE",
+        "SOLD_DT",
+        "ACCT_OWN_ID",
+        "OWNER_NM",
+        "MACRO_SEG_NM",
+        "COVR_CNTRY_NM",
+        "USR_ROLE_NM",
+        "USR_PATH",
+        "FORCST_USR_ID_PATH",
+        "SFDC_TEAM_USR_ID",
+        "USR_ROLE_PATH",
+        "USR_ROLE_ID_PATH",
+        "SE_ROLE_ID_PATH",
+        "MGR_USR_ID_PATH",
+        "MGR_USR_NM_PATH"
+      ],
+      "right": "Extract_AW_Account",
+      "relationship": "Account"
+    }
+  }
+}
