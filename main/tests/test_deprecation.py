@@ -33,13 +33,13 @@ class DeprecationTestCase(TestCase):
         self.deprecation_md = json.load(open(os.getcwd() + "/main/fixtures/test-data/Field-Deprecation-Metadata.json"))
         self.objects = list(self.deprecation_md.keys())
         self.fields = [fields for _, fields in self.deprecation_md.items()]
-        self.dataflows_path = f"{os.getcwd()}/main/fixtures/test-data/dataflows"
-        self.media_path = "media/"
+        self.dataflows_path = f"{os.getcwd()}/main/fixtures/test-data/dataflows/"
+        self.media_path = f"{os.getcwd()}/media/"
         self.test_temp_path = self.media_path + 'test-temp/'
         os.makedirs(self.test_temp_path) if not os.path.isdir(self.test_temp_path) else None
 
-        [shutil.move(self.dataflows_path + file, self.test_temp_path + file) for file in os.listdir(self.dataflows_path)
-         if os.path.isfile(self.dataflows_path + file) and '--modified' not in file]
+        [shutil.copy(self.dataflows_path + file, self.test_temp_path + file) for file in os.listdir(self.dataflows_path)
+         if os.path.isfile(self.dataflows_path + file) and '.json' in file]
 
         self.df_files = [self.test_temp_path + file for file in os.listdir(self.test_temp_path)
                          if os.path.isfile(self.test_temp_path + file) and '--modified' not in file]
@@ -48,7 +48,6 @@ class DeprecationTestCase(TestCase):
         shutil.rmtree(self.test_temp_path)
 
     def test_field_deprecation(self):
-        evaluations = []
         for file in self.df_files:
             basename = os.path.basename(file)
             with open(file, 'r') as df_file, open(self.test_temp_path + f"{basename} log.log", 'w') as log_file, \
@@ -76,6 +75,5 @@ class DeprecationTestCase(TestCase):
                 )
                 json_modified = delete_fields_of_deleted_node(json_modified)
 
-                evaluations.append(self.assertTrue(json.dumps(prev_deprecated_df) == json.dumps(json_modified)))
-
-        self.assertTrue(all(evaluations))
+                self.assertTrue(json.dumps(prev_deprecated_df) == json.dumps(json_modified),
+                                f"{basename} failed.")
