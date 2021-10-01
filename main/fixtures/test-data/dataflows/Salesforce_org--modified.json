@@ -1,0 +1,3553 @@
+{
+  "augment_Company__c_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Account_Account_3",
+      "left_key": [
+        "Company__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Company__c_3",
+      "relationship": "Company__c"
+    }
+  },
+  "augment_Company__c_4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_7_4",
+      "left_key": [
+        "Account__c.Global_Company__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Company__c_4",
+      "relationship": "Account__c.Global_Company__c"
+    }
+  },
+  "sfdcDigest_UserRole_0": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "UserRole"
+    }
+  },
+  "sfdcDigest_Product2": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Cloud__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "L1_Business_Line__c"
+        },
+        {
+          "name": "L2_Product_Line__c"
+        },
+        {
+          "name": "L3_Product_Family__c"
+        },
+        {
+          "name": "L4_Product_Offering__c"
+        },
+        {
+          "name": "sfbase__ProductFamily__c"
+        },
+        {
+          "name": "Family"
+        }
+      ],
+      "object": "Product2"
+    }
+  },
+  "sfdcDigest_UserRole_3": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "UserRole"
+    }
+  },
+  "sfdcDigest_RecordType": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "DeveloperName"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "RecordType"
+    }
+  },
+  "augment_UserRole_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_5_3",
+      "left_key": [
+        "OwnerId.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_UserRole_3",
+      "relationship": "OwnerId.UserRoleId"
+    }
+  },
+  "augment_UserRole_5": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_3_5",
+      "left_key": [
+        "OwnerId.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_UserRole_5",
+      "relationship": "OwnerId.UserRoleId"
+    }
+  },
+  "augment_sfbase__SalesforceTeam__c_Account_7": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "sfdcDigest_sfbase__SalesforceTeam__c_7",
+      "left_key": [
+        "sfbase__Account__c"
+      ],
+      "right_select": [
+        "Id",
+        "Name",
+        "Non_Profit_Account__c",
+        "OwnerId"
+      ],
+      "right": "sfdcDigest_Account_7",
+      "relationship": "sfbase__Account__c"
+    }
+  },
+  "augment_User_4_5": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_UserRole_5",
+      "left_key": [
+        "sfbase__Salesperson_2__c"
+      ],
+      "right_select": [
+        "Name",
+        "ProfileId",
+        "Username"
+      ],
+      "right": "sfdcDigest_User_5",
+      "relationship": "sfbase__Salesperson_2__c"
+    }
+  },
+  "augment_User_4_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_3_3",
+      "left_key": [
+        "OwnerId.Mgmt_Chain_Level_05__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_3",
+      "relationship": "OwnerId.Mgmt_Chain_Level_05__c"
+    }
+  },
+  "augment_OrderItem_Order_6": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "sfdcDigest_OrderItem_6",
+      "left_key": [
+        "OrderId"
+      ],
+      "right_select": [
+        "Id",
+        "IsDeleted",
+        "Status",
+        "EffectiveDate",
+        "sfbase__OrderEndDate__c",
+        "EndDate",
+        "OrderNumber",
+        "ContractId"
+      ],
+      "right": "sfdcDigest_Order_6",
+      "relationship": "OrderId"
+    }
+  },
+  "augment_User_4_4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_3_4",
+      "left_key": [
+        "Account__c.OwnerId.Mgmt_Chain_Level_04__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_4",
+      "relationship": "Account__c.OwnerId.Mgmt_Chain_Level_04__c"
+    }
+  },
+  "augment_User_8_0": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_7_0",
+      "left_key": [
+        "Mgmt_Chain_Level_08__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_0",
+      "relationship": "Mgmt_Chain_Level_08__c",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "augment_Opportunity_RecordType_5": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "sfdcDigest_Opportunity_5",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_RecordType_5",
+      "relationship": "RecordTypeId"
+    }
+  },
+  "augment_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_UserRole",
+      "left_key": [
+        "OpportunityId.AccountId"
+      ],
+      "right_select": [
+        "Id",
+        "Name",
+        "Team_Territory__c",
+        "Region__c",
+        "Ultimate_Parent_Name__c",
+        "Account_Owner_Role__c",
+        "ShippingCountry",
+        "Non_Profit_Account__c",
+        "OwnerId"
+      ],
+      "right": "sfdcDigest_Account",
+      "relationship": "OpportunityId.AccountId"
+    }
+  },
+  "augment_Contact_5": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Territory__c_5",
+      "left_key": [
+        "Decision_Maker__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Contact_5",
+      "relationship": "Decision_Maker__c"
+    }
+  },
+  "augment_Account_1_5": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Account_5",
+      "left_key": [
+        "Implementation_Partner_new__c"
+      ],
+      "right_select": [
+        "Name",
+        "Non_Profit_Account__c"
+      ],
+      "right": "sfdcDigest_Account_5",
+      "relationship": "Implementation_Partner_new__c"
+    }
+  },
+  "augment_OpportunityLineItem_Product2": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "sfdcDigest_OpportunityLineItem",
+      "left_key": [
+        "Product2Id"
+      ],
+      "right_select": [
+        "Cloud__c",
+        "L1_Business_Line__c",
+        "L2_Product_Line__c",
+        "L3_Product_Family__c",
+        "L4_Product_Offering__c",
+        "sfbase__ProductFamily__c",
+        "Family"
+      ],
+      "right": "sfdcDigest_Product2",
+      "relationship": "Product2Id"
+    }
+  },
+  "augment_Account_Intelligence__c_Account_4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "sfdcDigest_Account_Intelligence__c_4",
+      "left_key": [
+        "Account__c"
+      ],
+      "right_select": [
+        "Id",
+        "Name",
+        "Team_Territory__c",
+        "OwnerId",
+        "Account_Owner_Role__c",
+        "Account_Owner_Role__pc",
+        "AccountStatus__c",
+        "Non_Profit_Account__c",
+        "ShippingCountry",
+        "Region__c",
+        "Ultimate_Parent_Name__c",
+        "AnnualRevenue",
+        "Foundation_AOV__c",
+        "Data_Storage_Allowance_Mb__c",
+        "File_Storage_Used_Mb__c",
+        "File_Storage_Allowance_Mb__c",
+        "NumberOfEmployees",
+        "Locked_Employees__c",
+        "EOS_Account_ID__c",
+        "Data_Storage_Used_Mb__c",
+        "SoldDate__c",
+        "NonProfit_Agree_To_Terms_Date__c",
+        "Nonprofit_Industry__c",
+        "Global_Company__c",
+        "Industry",
+        "FY_SIC__c",
+        "Sic",
+        "Master_Carve__c",
+        "NTEE_Category__c",
+        "NTEE_Code__c",
+        "Org_Status_DW__c",
+        "ShippingState",
+        "ShippingCity",
+        "ShippingStreet",
+        "ShippingPostalCode",
+        "Storage_Last_Calculated__c",
+        "SupportLevel__c",
+        "Support_LoB__c",
+        "Tax_ID_E_I_N__c",
+        "Company__c",
+        "Locked_Company__c",
+        "Ultimate_Parent_ID__c",
+        "EBU_Sales_Programs__c",
+        "ShippingLatitude",
+        "ShippingLongitude"
+      ],
+      "right": "sfdcDigest_Account_4",
+      "relationship": "Account__c"
+    }
+  },
+  "augment_User_3_0": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_2_0",
+      "left_key": [
+        "Mgmt_Chain_Level_03__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_0",
+      "relationship": "Mgmt_Chain_Level_03__c"
+    }
+  },
+  "augment_Master_Carve__c_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Company__c_2_3",
+      "left_key": [
+        "Master_Carve__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Master_Carve__c_3",
+      "relationship": "Master_Carve__c"
+    }
+  },
+  "augment_Master_Carve__c_4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Company__c_4",
+      "left_key": [
+        "Account__c.Master_Carve__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Master_Carve__c_4",
+      "relationship": "Account__c.Master_Carve__c"
+    }
+  },
+  "register_SFDO_SalesforceTeam_7": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SFDO_SalesforceTeam",
+      "alias": "SFDO_SalesforceTeam",
+      "source": "augment_User_1_7"
+    }
+  },
+  "sfdcDigest_UserRole_5": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "UserRole"
+    }
+  },
+  "augment_Opportunity": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_OpportunityLineItem_Product2",
+      "left_key": [
+        "OpportunityId"
+      ],
+      "right_select": [
+        "OwnerId",
+        "Age_Custom__c",
+        "Stage_2_Flag__c",
+        "AccountId",
+        "Id",
+        "Name",
+        "CloseDate",
+        "AmountConverted__c",
+        "Amount",
+        "CurrencyIsoCode",
+        "RecordTypeId",
+        "StageName",
+        "ForecastCategory",
+        "ForecastCategoryName",
+        "Type",
+        "IsWon",
+        "IsClosed",
+        "Opportunity_Source__c",
+        "BD_Solution__c",
+        "Lead_Sales_Partner_Role__c",
+        "Lead_Sales_Partner_new__c",
+        "Implementation_Partner_Role__c",
+        "Implementation_Partner_new__c",
+        "Reseller_Partner_Type__c",
+        "Reseller_Partner__c",
+        "sfbase__Salesperson_2__c",
+        "PrimaryCompetitor__c",
+        "Next_Steps__c",
+        "Manager_Notes__c",
+        "Tech_Exec__c"
+      ],
+      "right": "sfdcDigest_Opportunity",
+      "relationship": "OpportunityId"
+    }
+  },
+  "augment_Territory__c": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Account",
+      "left_key": [
+        "OpportunityId.AccountId.Team_Territory__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Territory__c",
+      "relationship": "OpportunityId.AccountId.Team_Territory__c"
+    }
+  },
+  "sfdcDigest_Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Team_Territory__c"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Ultimate_Parent_Name__c"
+        },
+        {
+          "name": "Account_Owner_Role__c"
+        },
+        {
+          "name": "ShippingCountry"
+        },
+        {
+          "name": "Non_Profit_Account__c"
+        },
+        {
+          "name": "OwnerId"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "augment_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Opportunity",
+      "left_key": [
+        "OpportunityId.OwnerId"
+      ],
+      "right_select": [
+        "sf62user__manager__c",
+        "UserRoleId"
+      ],
+      "right": "sfdcDigest_User",
+      "relationship": "OpportunityId.OwnerId"
+    }
+  },
+  "augment_Pricebook2_8": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Proposal_Line__c_Proposal__c_8",
+      "left_key": [
+        "Proposal__c.Price_Book__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Pricebook2_8",
+      "relationship": "Proposal__c.Price_Book__c"
+    }
+  },
+  "augment_User_7_4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_6_4",
+      "left_key": [
+        "Account__c.OwnerId.Mgmt_Chain_Level_07__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_4",
+      "relationship": "Account__c.OwnerId.Mgmt_Chain_Level_07__c"
+    }
+  },
+  "register_SFDO_Account_v2": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SFDO_Account_v2",
+      "alias": "SFDO_Account_v2",
+      "source": "augment_Territory__c_3"
+    }
+  },
+  "sfdcDigest_Profile_0": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "Profile"
+    }
+  },
+  "augment_User_7_0": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_6_0",
+      "left_key": [
+        "Mgmt_Chain_Level_07__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_0",
+      "relationship": "Mgmt_Chain_Level_07__c"
+    }
+  },
+  "sfdcDigest_Master_Carve__c_4": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Master_Carve__c"
+    }
+  },
+  "augment_User_3_4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_2_4",
+      "left_key": [
+        "Account__c.OwnerId.Mgmt_Chain_Level_03__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_4",
+      "relationship": "Account__c.OwnerId.Mgmt_Chain_Level_03__c"
+    }
+  },
+  "sfdcDigest_Master_Carve__c_3": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Master_Carve__c"
+    }
+  },
+  "augment_User_3_5": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_2_5",
+      "left_key": [
+        "OwnerId.sf62user__manager__c"
+      ],
+      "right_select": [
+        "Name",
+        "ProfileId",
+        "Username"
+      ],
+      "right": "sfdcDigest_User_5",
+      "relationship": "OwnerId.sf62user__manager__c"
+    }
+  },
+  "sfdcDigest_Territory__c_4": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Territory__c"
+    }
+  },
+  "sfdcDigest_Territory__c_3": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Territory__c"
+    }
+  },
+  "augment_User_3_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_2_3",
+      "left_key": [
+        "OwnerId.Mgmt_Chain_Level_04__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_3",
+      "relationship": "OwnerId.Mgmt_Chain_Level_04__c"
+    }
+  },
+  "sfdcDigest_Territory__c_6": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Territory__c"
+    }
+  },
+  "sfdcDigest_Territory__c_5": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Territory__c"
+    }
+  },
+  "sfdcDigest_Proposal_Line__c_8": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Proposal__c"
+        },
+        {
+          "name": "Line_Item_AOV__c"
+        },
+        {
+          "name": "Line_Term_Months__c"
+        },
+        {
+          "name": "Opportunity__c"
+        },
+        {
+          "name": "OpportunityLineItem__c"
+        },
+        {
+          "name": "Product_Id__c"
+        },
+        {
+          "name": "Product_Name__c"
+        },
+        {
+          "name": "Proposal_Line_Total_Price__c"
+        },
+        {
+          "name": "Quantity__c"
+        },
+        {
+          "name": "PricebookEntry__c"
+        },
+        {
+          "name": "Product__c"
+        }
+      ],
+      "object": "Proposal_Line__c"
+    }
+  },
+  "sfdcDigest_RecordType_5": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "RecordType"
+    }
+  },
+  "sfdcDigest_Profile_7": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Profile"
+    }
+  },
+  "sfdcDigest_RecordType_6": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "DeveloperName"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "RecordType"
+    }
+  },
+  "sfdcDigest_Profile_8": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Profile"
+    }
+  },
+  "augment_Account_2": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Account_1",
+      "left_key": [
+        "OpportunityId.Implementation_Partner_new__c"
+      ],
+      "right_select": [
+        "Name",
+        "Non_Profit_Account__c",
+        "OwnerId"
+      ],
+      "right": "sfdcDigest_Account",
+      "relationship": "OpportunityId.Implementation_Partner_new__c"
+    }
+  },
+  "augment_User_4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Territory__c_4",
+      "left_key": [
+        "Account__c.OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "Mgmt_Chain_Level_01__c",
+        "Mgmt_Chain_Level_02__c",
+        "Mgmt_Chain_Level_03__c",
+        "Mgmt_Chain_Level_04__c",
+        "Mgmt_Chain_Level_05__c",
+        "Mgmt_Chain_Level_06__c",
+        "Mgmt_Chain_Level_07__c"
+      ],
+      "right": "sfdcDigest_User_4",
+      "relationship": "Account__c.OwnerId"
+    }
+  },
+  "augment_Account_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Account_2",
+      "left_key": [
+        "OpportunityId.Reseller_Partner__c"
+      ],
+      "right_select": [
+        "Name",
+        "Non_Profit_Account__c",
+        "OwnerId"
+      ],
+      "right": "sfdcDigest_Account",
+      "relationship": "OpportunityId.Reseller_Partner__c"
+    }
+  },
+  "register_SFDO_Opportunity_Product": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SFDO_Opportunity_Product",
+      "alias": "SFDO_Opportunity_Product",
+      "source": "Non_Profit_filter_oppty_prod"
+    }
+  },
+  "augment_User_5": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Account_2_5",
+      "left_key": [
+        "Tech_Exec__c"
+      ],
+      "right_select": [
+        "Name",
+        "ProfileId",
+        "Username"
+      ],
+      "right": "sfdcDigest_User_5",
+      "relationship": "Tech_Exec__c"
+    }
+  },
+  "augment_User_2": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Account_3",
+      "left_key": [
+        "OpportunityId.sfbase__Salesperson_2__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User",
+      "relationship": "OpportunityId.sfbase__Salesperson_2__c"
+    }
+  },
+  "augment_Account_1": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_RecordType",
+      "left_key": [
+        "OpportunityId.Lead_Sales_Partner_new__c"
+      ],
+      "right_select": [
+        "Name",
+        "Non_Profit_Account__c",
+        "OwnerId"
+      ],
+      "right": "sfdcDigest_Account",
+      "relationship": "OpportunityId.Lead_Sales_Partner_new__c"
+    }
+  },
+  "augment_User_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Master_Carve__c_3",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Mgmt_Chain_Level_02__c",
+        "Mgmt_Chain_Level_03__c",
+        "Mgmt_Chain_Level_04__c",
+        "Mgmt_Chain_Level_05__c",
+        "Mgmt_Chain_Level_06__c",
+        "UserRoleId",
+        "Name"
+      ],
+      "right": "sfdcDigest_User_3",
+      "relationship": "OwnerId",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "augment_User_0": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_UserRole_0",
+      "left_key": [
+        "sf62user__manager__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_0",
+      "relationship": "sf62user__manager__c"
+    }
+  },
+  "augment_Account_6": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Contract_6",
+      "left_key": [
+        "OrderId.ContractId.AccountId"
+      ],
+      "right_select": [
+        "Name",
+        "Ultimate_Parent_Name__c",
+        "Id",
+        "Non_Profit_Account__c",
+        "Territory__c",
+        "Account_Record_Count__c",
+        "RecordTypeId",
+        "Team_Territory__c",
+        "OwnerId",
+        "IsDeleted"
+      ],
+      "right": "sfdcDigest_Account_6",
+      "relationship": "OrderId.ContractId.AccountId"
+    }
+  },
+  "augment_User_1": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User",
+      "left_key": [
+        "OpportunityId.OwnerId.sf62user__manager__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User",
+      "relationship": "OpportunityId.OwnerId.sf62user__manager__c"
+    }
+  },
+  "augment_Account_4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Company__c_2_4",
+      "left_key": [
+        "Account__c.Ultimate_Parent_ID__c"
+      ],
+      "right_select": [
+        "Id"
+      ],
+      "right": "sfdcDigest_Account_4",
+      "relationship": "Account__c.Ultimate_Parent_ID__c"
+    }
+  },
+  "augment_Account_5": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Opportunity_RecordType_5",
+      "left_key": [
+        "Lead_Sales_Partner_new__c"
+      ],
+      "right_select": [
+        "Name",
+        "Non_Profit_Account__c"
+      ],
+      "right": "sfdcDigest_Account_5",
+      "relationship": "Lead_Sales_Partner_new__c"
+    }
+  },
+  "sfdcDigest_Proposal__c_8": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Price_Book__c"
+        },
+        {
+          "name": "Contract_End_Date__c"
+        },
+        {
+          "name": "Contract_Term_Months__c"
+        },
+        {
+          "name": "New_Proposal_Amount__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Contract_Start_Date__c"
+        },
+        {
+          "name": "Status__c"
+        },
+        {
+          "name": "Total_Proposal_AOV__c"
+        },
+        {
+          "name": "Account__c"
+        }
+      ],
+      "object": "Proposal__c"
+    }
+  },
+  "augment_Account_8": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Pricebook2_8",
+      "left_key": [
+        "Proposal__c.Account__c"
+      ],
+      "right_select": [
+        "Name",
+        "Non_Profit_Account__c",
+        "OwnerId"
+      ],
+      "right": "sfdcDigest_Account_8",
+      "relationship": "Proposal__c.Account__c"
+    }
+  },
+  "augment_User_2_0": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_1_0",
+      "left_key": [
+        "Mgmt_Chain_Level_02__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_0",
+      "relationship": "Mgmt_Chain_Level_02__c"
+    }
+  },
+  "augment_Account_2_5": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Account_1_5",
+      "left_key": [
+        "Reseller_Partner__c"
+      ],
+      "right_select": [
+        "Name",
+        "Non_Profit_Account__c"
+      ],
+      "right": "sfdcDigest_Account_5",
+      "relationship": "Reseller_Partner__c"
+    }
+  },
+  "sfdcDigest_UserRole": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "UserRole"
+    }
+  },
+  "sfdcDigest_Opportunity": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Age_Custom__c"
+        },
+        {
+          "name": "Stage_2_Flag__c"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "CloseDate"
+        },
+        {
+          "name": "AmountConverted__c"
+        },
+        {
+          "name": "Amount"
+        },
+        {
+          "name": "CurrencyIsoCode"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "StageName"
+        },
+        {
+          "name": "ForecastCategory"
+        },
+        {
+          "name": "ForecastCategoryName"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "IsWon"
+        },
+        {
+          "name": "IsClosed"
+        },
+        {
+          "name": "Opportunity_Source__c"
+        },
+        {
+          "name": "BD_Solution__c"
+        },
+        {
+          "name": "Lead_Sales_Partner_Role__c"
+        },
+        {
+          "name": "Lead_Sales_Partner_new__c"
+        },
+        {
+          "name": "Implementation_Partner_Role__c"
+        },
+        {
+          "name": "Implementation_Partner_new__c"
+        },
+        {
+          "name": "Reseller_Partner_Type__c"
+        },
+        {
+          "name": "Reseller_Partner__c"
+        },
+        {
+          "name": "sfbase__Salesperson_2__c"
+        },
+        {
+          "name": "PrimaryCompetitor__c"
+        },
+        {
+          "name": "Next_Steps__c"
+        },
+        {
+          "name": "Manager_Notes__c"
+        },
+        {
+          "name": "Tech_Exec__c"
+        }
+      ],
+      "object": "Opportunity"
+    }
+  },
+  "augment_RecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Territory__c",
+      "left_key": [
+        "OpportunityId.RecordTypeId"
+      ],
+      "right_select": [
+        "DeveloperName"
+      ],
+      "right": "sfdcDigest_RecordType",
+      "relationship": "OpportunityId.RecordTypeId"
+    }
+  },
+  "augment_User_8": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Account_8",
+      "left_key": [
+        "Proposal__c.Account__c.OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "Id",
+        "ProfileId"
+      ],
+      "right": "sfdcDigest_User_8",
+      "relationship": "Proposal__c.Account__c.OwnerId"
+    }
+  },
+  "augment_UserRole": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_1",
+      "left_key": [
+        "OpportunityId.OwnerId.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_UserRole",
+      "relationship": "OpportunityId.OwnerId.UserRoleId"
+    }
+  },
+  "augment_User_6": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Territory__c_6",
+      "left_key": [
+        "OrderId.ContractId.AccountId.OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "Id"
+      ],
+      "right": "sfdcDigest_User_6",
+      "relationship": "OrderId.ContractId.AccountId.OwnerId"
+    }
+  },
+  "augment_User_7": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Non_profit_filter",
+      "left_key": [
+        "sfbase__Account__c.OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "ProfileId"
+      ],
+      "right": "sfdcDigest_User_7",
+      "relationship": "sfbase__Account__c.OwnerId",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Non_Profit_filter_oppty_prod": {
+    "action": "filter",
+    "parameters": {
+      "source": "Tech_exec_oppty_user",
+      "saqlFilter": "'OpportunityId.AccountId.Non_Profit_Account__c'==\"true\"\n"
+    }
+  },
+  "sfdcDigest_Opportunity_5": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "CloseDate"
+        },
+        {
+          "name": "Amount"
+        },
+        {
+          "name": "CurrencyIsoCode"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "StageName"
+        },
+        {
+          "name": "ForecastCategory"
+        },
+        {
+          "name": "ForecastCategoryName"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "IsWon"
+        },
+        {
+          "name": "IsClosed"
+        },
+        {
+          "name": "Opportunity_Source__c"
+        },
+        {
+          "name": "BD_Solution__c"
+        },
+        {
+          "name": "Lead_Sales_Partner_Role__c"
+        },
+        {
+          "name": "Lead_Sales_Partner_new__c"
+        },
+        {
+          "name": "Implementation_Partner_Role__c"
+        },
+        {
+          "name": "Implementation_Partner_new__c"
+        },
+        {
+          "name": "Reseller_Partner_Type__c"
+        },
+        {
+          "name": "Reseller_Partner__c"
+        },
+        {
+          "name": "Stage_2_Flag__c"
+        },
+        {
+          "name": "PrimaryCompetitor__c"
+        },
+        {
+          "name": "Age_Custom__c"
+        },
+        {
+          "name": "Next_Steps__c"
+        },
+        {
+          "name": "Manager_Notes__c"
+        },
+        {
+          "name": "Customer_Use_Case__c"
+        },
+        {
+          "name": "Customer_Goals__c"
+        },
+        {
+          "name": "CurrentSystem__c"
+        },
+        {
+          "name": "Compelling_Event__c"
+        },
+        {
+          "name": "Close_Plan__c"
+        },
+        {
+          "name": "Red_Flags__c"
+        },
+        {
+          "name": "Business_Case_ROI__c"
+        },
+        {
+          "name": "Tech_Exec__c"
+        },
+        {
+          "name": "IsDeleted"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Decision_Maker__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "sfbase__Salesperson_2__c"
+        },
+        {
+          "name": "SE_Engagement__c"
+        },
+        {
+          "name": "SE_Next_Steps__c"
+        },
+        {
+          "name": "SE_Comments_History__c"
+        },
+        {
+          "name": "SE_Comments__c"
+        },
+        {
+          "name": "Issues__c"
+        }
+      ],
+      "object": "Opportunity"
+    }
+  },
+  "sfdcDigest_User_0": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "FirstName"
+        },
+        {
+          "name": "LastName"
+        },
+        {
+          "name": "UserRoleId"
+        },
+        {
+          "name": "sf62user__manager__c"
+        },
+        {
+          "name": "ProfileId"
+        },
+        {
+          "name": "Username"
+        },
+        {
+          "name": "Alias"
+        },
+        {
+          "name": "IsActive"
+        },
+        {
+          "name": "Mgmt_Chain_Level_01__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_02__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_03__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_04__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_05__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_06__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_07__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_08__c"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "augment_User_6_4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_5_4",
+      "left_key": [
+        "Account__c.OwnerId.Mgmt_Chain_Level_06__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_4",
+      "relationship": "Account__c.OwnerId.Mgmt_Chain_Level_06__c"
+    }
+  },
+  "augment_User_2_5": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Contact_5",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "sf62user__manager__c",
+        "UserRoleId",
+        "ProfileId",
+        "Username"
+      ],
+      "right": "sfdcDigest_User_5",
+      "relationship": "OwnerId"
+    }
+  },
+  "augment_User_2_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_1_3",
+      "left_key": [
+        "OwnerId.Mgmt_Chain_Level_03__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_3",
+      "relationship": "OwnerId.Mgmt_Chain_Level_03__c"
+    }
+  },
+  "augment_User_6_0": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_5_0",
+      "left_key": [
+        "Mgmt_Chain_Level_06__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_0",
+      "relationship": "Mgmt_Chain_Level_06__c"
+    }
+  },
+  "augment_User_2_4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_1_4",
+      "left_key": [
+        "Account__c.OwnerId.Mgmt_Chain_Level_02__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_4",
+      "relationship": "Account__c.OwnerId.Mgmt_Chain_Level_02__c"
+    }
+  },
+  "register_SFDO_oppty_v2_5": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SFDO_oppty_v2",
+      "alias": "SFDO_oppty_v2",
+      "source": "Non-profit.account"
+    }
+  },
+  "sfdcDigest_User_7": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "ProfileId"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "sfdcDigest_User_8": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "ProfileId"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "sfdcDigest_User_5": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "EmployeeNumber"
+        },
+        {
+          "name": "sf62user__Employee_Number__c"
+        },
+        {
+          "name": "sf62user__manager__c"
+        },
+        {
+          "name": "UserRoleId"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "ProfileId"
+        },
+        {
+          "name": "Username"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "sfdcDigest_Account_Intelligence__c_4": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Account__c"
+        },
+        {
+          "name": "Account_PTB_Score__c"
+        },
+        {
+          "name": "Account_PTB_Notes__c"
+        },
+        {
+          "name": "Account_PTB_Segment__c"
+        },
+        {
+          "name": "Service_Cloud_PTB_Score__c"
+        },
+        {
+          "name": "Customer_Communities_PTB_Score__c"
+        },
+        {
+          "name": "Analytics_Cloud_PTB_Score__c"
+        },
+        {
+          "name": "Marketing_Cloud_PTB_Notes__c"
+        },
+        {
+          "name": "Marketing_Cloud_PTB_Score__c"
+        },
+        {
+          "name": "Pardot_PTB_Score__c"
+        },
+        {
+          "name": "Partner_Communities_PTB_Score__c"
+        },
+        {
+          "name": "Next_Best_Product_1__c"
+        },
+        {
+          "name": "Next_Best_Product_2__c"
+        },
+        {
+          "name": "Next_Best_Product_3__c"
+        },
+        {
+          "name": "Next_Best_Product_As_Of_Date__c"
+        },
+        {
+          "name": "Account_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Pardot_PTB_Segment_Num__c"
+        }
+      ],
+      "object": "Account_Intelligence__c"
+    }
+  },
+  "sfdcDigest_User_6": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "sfdcDigest_User_3": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Username"
+        },
+        {
+          "name": "Mgmt_Chain_Level_02__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_03__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_04__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_05__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_06__c"
+        },
+        {
+          "name": "UserRoleId"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "sfdcDigest_User_4": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Mgmt_Chain_Level_01__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_02__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_03__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_04__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_05__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_06__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_07__c"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "sfdcDigest_Product2_new": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "L1_Business_Line__c"
+        },
+        {
+          "name": "L2_Product_Line__c"
+        },
+        {
+          "name": "L3_Product_Family__c"
+        },
+        {
+          "name": "L4_Product_Offering__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Family"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "Product2"
+    }
+  },
+  "sfdcDigest_OpportunityLineItem": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Product_Name__c"
+        },
+        {
+          "name": "Quantity"
+        },
+        {
+          "name": "Product2Id"
+        },
+        {
+          "name": "Adjusted_Total_price__c"
+        },
+        {
+          "name": "OpportunityId"
+        },
+        {
+          "name": "IsDeleted"
+        }
+      ],
+      "object": "OpportunityLineItem"
+    }
+  },
+  "FIlter_Account_v3": {
+    "action": "filter",
+    "parameters": {
+      "filter": "Non_Profit_Account__c:EQ:true",
+      "source": "sfdcDigest_Account_3"
+    }
+  },
+  "sfdcDigest_Order_6": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "IsDeleted"
+        },
+        {
+          "name": "Status"
+        },
+        {
+          "name": "EffectiveDate"
+        },
+        {
+          "name": "sfbase__OrderEndDate__c"
+        },
+        {
+          "name": "EndDate"
+        },
+        {
+          "name": "OrderNumber"
+        },
+        {
+          "name": "ContractId"
+        }
+      ],
+      "object": "Order"
+    }
+  },
+  "sfdcDigest_Contact_5": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Contact"
+    }
+  },
+  "augment_User_UserRole_0": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "sfdcDigest_User_0",
+      "left_key": [
+        "UserRoleId"
+      ],
+      "right_select": [
+        "Id",
+        "Name"
+      ],
+      "right": "sfdcDigest_UserRole_0",
+      "relationship": "UserRoleId"
+    }
+  },
+  "sfdcDigest_Territory__c": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Territory__c"
+    }
+  },
+  "augment_User_1_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_3",
+      "left_key": [
+        "OwnerId.Mgmt_Chain_Level_02__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_3",
+      "relationship": "OwnerId.Mgmt_Chain_Level_02__c"
+    }
+  },
+  "augment_User_1_0": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Profile_0",
+      "left_key": [
+        "Mgmt_Chain_Level_01__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_0",
+      "relationship": "Mgmt_Chain_Level_01__c"
+    }
+  },
+  "Tech_exec_oppty_user": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_2",
+      "left_key": [
+        "OpportunityId.Tech_Exec__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User",
+      "relationship": "Techexec",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "augment_Account_3_5": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_5",
+      "left_key": [
+        "AccountId"
+      ],
+      "right_select": [
+        "Name",
+        "Region__c",
+        "Ultimate_Parent_Name__c",
+        "OwnerId",
+        "ShippingCountry",
+        "Team_Territory__c",
+        "Non_Profit_Account__c"
+      ],
+      "right": "sfdcDigest_Account_5",
+      "relationship": "AccountId"
+    }
+  },
+  "sfdcDigest_OrderItem_6": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "OrderId"
+        },
+        {
+          "name": "Quantity"
+        },
+        {
+          "name": "Product2Id"
+        },
+        {
+          "name": "TotalPrice"
+        },
+        {
+          "name": "UnitPrice"
+        }
+      ],
+      "object": "OrderItem"
+    }
+  },
+  "augment_Company__c_2_4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Company__c_1_4",
+      "left_key": [
+        "Account__c.Locked_Company__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Company__c_4",
+      "relationship": "Account__c.Locked_Company__c"
+    }
+  },
+  "augment_Company__c_2_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Company__c_1_3",
+      "left_key": [
+        "Locked_Company__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Company__c_3",
+      "relationship": "Locked_Company__c"
+    }
+  },
+  "Augment_Profile_Product_new": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Profile_8",
+      "left_key": [
+        "Product__c"
+      ],
+      "right_select": [
+        "L1_Business_Line__c",
+        "L2_Product_Line__c",
+        "L3_Product_Family__c",
+        "L4_Product_Offering__c",
+        "Family",
+        "Name"
+      ],
+      "right": "sfdcDigest_Product2_new",
+      "relationship": "Product2",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "augment_Proposal_Line__c_Proposal__c_8": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "sfdcDigest_Proposal_Line__c_8",
+      "left_key": [
+        "Proposal__c"
+      ],
+      "right_select": [
+        "Price_Book__c",
+        "Contract_End_Date__c",
+        "Contract_Term_Months__c",
+        "New_Proposal_Amount__c",
+        "Name",
+        "Id",
+        "Contract_Start_Date__c",
+        "Status__c",
+        "Total_Proposal_AOV__c",
+        "Account__c"
+      ],
+      "right": "sfdcDigest_Proposal__c_8",
+      "relationship": "Proposal__c"
+    }
+  },
+  "sfdcDigest_User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "sf62user__manager__c"
+        },
+        {
+          "name": "UserRoleId"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "Non_profit_filter": {
+    "action": "filter",
+    "parameters": {
+      "source": "augment_sfbase__SalesforceTeam__c_Account_7",
+      "saqlFilter": "'sfbase__Account__c.Non_Profit_Account__c'==\"true\" and 'sfbase__EndDate__c' is null"
+    }
+  },
+  "register_SFDO_User_0": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SFDO_User",
+      "alias": "SFDO_User",
+      "source": "augment_User_8_0"
+    }
+  },
+  "augment_Territory__c_4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Account_Intelligence__c_Account_4",
+      "left_key": [
+        "Account__c.Team_Territory__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Territory__c_4",
+      "relationship": "Account__c.Team_Territory__c"
+    }
+  },
+  "augment_Territory__c_5": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_1_5",
+      "left_key": [
+        "AccountId.Team_Territory__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Territory__c_5",
+      "relationship": "AccountId.Team_Territory__c"
+    }
+  },
+  "augment_Territory__c_6": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_RecordType_6",
+      "left_key": [
+        "OrderId.ContractId.AccountId.Team_Territory__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Territory__c_6",
+      "relationship": "OrderId.ContractId.AccountId.Team_Territory__c"
+    }
+  },
+  "augment_Territory__c_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_UserRole_3",
+      "left_key": [
+        "Team_Territory__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Territory__c_3",
+      "relationship": "Team_Territory__c"
+    }
+  },
+  "sfdcDigest_Product2_6": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Cloud__c"
+        },
+        {
+          "name": "L1_Business_Line__c"
+        },
+        {
+          "name": "L2_Product_Line__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "L3_Product_Family__c"
+        },
+        {
+          "name": "L4_Product_Offering__c"
+        }
+      ],
+      "object": "Product2"
+    }
+  },
+  "sfdcDigest_Account_4": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Team_Territory__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Account_Owner_Role__c"
+        },
+        {
+          "name": "Account_Owner_Role__pc"
+        },
+        {
+          "name": "AccountStatus__c"
+        },
+        {
+          "name": "Non_Profit_Account__c"
+        },
+        {
+          "name": "ShippingCountry"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Ultimate_Parent_Name__c"
+        },
+        {
+          "name": "AnnualRevenue"
+        },
+        {
+          "name": "Foundation_AOV__c"
+        },
+        {
+          "name": "Data_Storage_Allowance_Mb__c"
+        },
+        {
+          "name": "File_Storage_Used_Mb__c"
+        },
+        {
+          "name": "File_Storage_Allowance_Mb__c"
+        },
+        {
+          "name": "NumberOfEmployees"
+        },
+        {
+          "name": "Locked_Employees__c"
+        },
+        {
+          "name": "EOS_Account_ID__c"
+        },
+        {
+          "name": "Data_Storage_Used_Mb__c"
+        },
+        {
+          "name": "SoldDate__c"
+        },
+        {
+          "name": "NonProfit_Agree_To_Terms_Date__c"
+        },
+        {
+          "name": "Nonprofit_Industry__c"
+        },
+        {
+          "name": "Global_Company__c"
+        },
+        {
+          "name": "Industry"
+        },
+        {
+          "name": "FY_SIC__c"
+        },
+        {
+          "name": "Sic"
+        },
+        {
+          "name": "Master_Carve__c"
+        },
+        {
+          "name": "NTEE_Category__c"
+        },
+        {
+          "name": "NTEE_Code__c"
+        },
+        {
+          "name": "Org_Status_DW__c"
+        },
+        {
+          "name": "ShippingState"
+        },
+        {
+          "name": "ShippingCity"
+        },
+        {
+          "name": "ShippingStreet"
+        },
+        {
+          "name": "ShippingPostalCode"
+        },
+        {
+          "name": "Storage_Last_Calculated__c"
+        },
+        {
+          "name": "SupportLevel__c"
+        },
+        {
+          "name": "Support_LoB__c"
+        },
+        {
+          "name": "Tax_ID_E_I_N__c"
+        },
+        {
+          "name": "Company__c"
+        },
+        {
+          "name": "Locked_Company__c"
+        },
+        {
+          "name": "Ultimate_Parent_ID__c"
+        },
+        {
+          "name": "EBU_Sales_Programs__c"
+        },
+        {
+          "name": "ShippingLatitude"
+        },
+        {
+          "name": "ShippingLongitude"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "register_SFDO_Account_Intelligence_4": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SFDO_Account_Intelligence",
+      "alias": "SFDO_Account_Intelligence",
+      "source": "augment_Account_4"
+    }
+  },
+  "sfdcDigest_Account_3": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Organization_ID_DW__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "AccountStatus__c"
+        },
+        {
+          "name": "Non_Profit_Account__c"
+        },
+        {
+          "name": "ShippingCountry"
+        },
+        {
+          "name": "ShippingState"
+        },
+        {
+          "name": "ShippingCity"
+        },
+        {
+          "name": "ShippingPostalCode"
+        },
+        {
+          "name": "ShippingStreet"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "AnnualRevenue"
+        },
+        {
+          "name": "Foundation_AOV__c"
+        },
+        {
+          "name": "Data_Storage_Allowance_Mb__c"
+        },
+        {
+          "name": "Data_Storage_Used_Mb__c"
+        },
+        {
+          "name": "NumberOfEmployees"
+        },
+        {
+          "name": "Locked_Employees__c"
+        },
+        {
+          "name": "File_Storage_Allowance_Mb__c"
+        },
+        {
+          "name": "File_Storage_Used_Mb__c"
+        },
+        {
+          "name": "SoldDate__c"
+        },
+        {
+          "name": "NonProfit_Agree_To_Terms_Date__c"
+        },
+        {
+          "name": "Nonprofit_Industry__c"
+        },
+        {
+          "name": "Industry"
+        },
+        {
+          "name": "FY_SIC__c"
+        },
+        {
+          "name": "NTEE_Category__c"
+        },
+        {
+          "name": "NTEE_Code__c"
+        },
+        {
+          "name": "Org_Status_DW__c"
+        },
+        {
+          "name": "sfbase__OrgStatusLocked__c"
+        },
+        {
+          "name": "ShippingLatitude"
+        },
+        {
+          "name": "ShippingLongitude"
+        },
+        {
+          "name": "Sic"
+        },
+        {
+          "name": "SicDesc"
+        },
+        {
+          "name": "Storage_Last_Calculated__c"
+        },
+        {
+          "name": "SupportLevel__c"
+        },
+        {
+          "name": "Support_LoB__c"
+        },
+        {
+          "name": "Tax_ID_E_I_N__c"
+        },
+        {
+          "name": "Ultimate_Parent_Name__c"
+        },
+        {
+          "name": "Ultimate_Parent_ID__c"
+        },
+        {
+          "name": "EBU_Sales_Programs__c"
+        },
+        {
+          "name": "Rating"
+        },
+        {
+          "name": "Leads__c"
+        },
+        {
+          "name": "Mass_Emails__c"
+        },
+        {
+          "name": "Core_Edition__c"
+        },
+        {
+          "name": "Description"
+        },
+        {
+          "name": "TrueLogin__c"
+        },
+        {
+          "name": "Pardot_Support_Level__c"
+        },
+        {
+          "name": "IsDeleted"
+        },
+        {
+          "name": "Company__c"
+        },
+        {
+          "name": "Global_Company__c"
+        },
+        {
+          "name": "Locked_Company__c"
+        },
+        {
+          "name": "Master_Carve__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Team_Territory__c"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "LastActivityDate"
+        },
+        {
+          "name": "edw_num_licenses__c"
+        },
+        {
+          "name": "Number_of_Open_Opportunities__c"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "sfdcDigest_sfbase__SalesforceTeam__c_7": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "sfbase__Account__c"
+        },
+        {
+          "name": "sfbase__User__c"
+        },
+        {
+          "name": "sfbase__TeamRole__c"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "sfbase__EndDate__c"
+        },
+        {
+          "name": "sfbase__StartDate__c"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "sfbase__SalesforceTeam__c"
+    }
+  },
+  "augment_User_5_4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_4_4",
+      "left_key": [
+        "Account__c.OwnerId.Mgmt_Chain_Level_05__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_4",
+      "relationship": "Account__c.OwnerId.Mgmt_Chain_Level_05__c"
+    }
+  },
+  "sfdcDigest_Account_6": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Ultimate_Parent_Name__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Non_Profit_Account__c"
+        },
+        {
+          "name": "Territory__c"
+        },
+        {
+          "name": "Account_Record_Count__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Team_Territory__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "IsDeleted"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "sfdcDigest_Account_5": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Ultimate_Parent_Name__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "ShippingCountry"
+        },
+        {
+          "name": "Team_Territory__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Non_Profit_Account__c"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "sfdcDigest_Account_8": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Non_Profit_Account__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "augment_User_5_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_4_3",
+      "left_key": [
+        "OwnerId.Mgmt_Chain_Level_06__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_3",
+      "relationship": "OwnerId.Mgmt_Chain_Level_06__c"
+    }
+  },
+  "sfdcDigest_Account_7": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Non_Profit_Account__c"
+        },
+        {
+          "name": "OwnerId"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "augment_User_1_7": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Profile_7",
+      "left_key": [
+        "sfbase__User__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_7",
+      "relationship": "sfbase__User__c"
+    }
+  },
+  "augment_User_5_0": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_4_0",
+      "left_key": [
+        "Mgmt_Chain_Level_05__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_0",
+      "relationship": "Mgmt_Chain_Level_05__c"
+    }
+  },
+  "augment_User_1_4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_4",
+      "left_key": [
+        "Account__c.OwnerId.Mgmt_Chain_Level_01__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_4",
+      "relationship": "Account__c.OwnerId.Mgmt_Chain_Level_01__c"
+    }
+  },
+  "augment_Product2_6": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_6",
+      "left_key": [
+        "Product2Id"
+      ],
+      "right_select": [
+        "Name",
+        "Cloud__c",
+        "L1_Business_Line__c",
+        "L2_Product_Line__c",
+        "Id",
+        "L3_Product_Family__c",
+        "L4_Product_Offering__c"
+      ],
+      "right": "sfdcDigest_Product2_6",
+      "relationship": "Product2Id"
+    }
+  },
+  "augment_User_1_5": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Account_3_5",
+      "left_key": [
+        "AccountId.OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "EmployeeNumber",
+        "sf62user__Employee_Number__c",
+        "ProfileId",
+        "Username"
+      ],
+      "right": "sfdcDigest_User_5",
+      "relationship": "AccountId.OwnerId"
+    }
+  },
+  "augment_Contract_6": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_OrderItem_Order_6",
+      "left_key": [
+        "OrderId.ContractId"
+      ],
+      "right_select": [
+        "Id",
+        "StartDate",
+        "EndDate",
+        "ContractNumber",
+        "sfbase__Billing_Frequency__c",
+        "PaymentTerm",
+        "AccountId",
+        "sfbase__ContractCreationSource__c",
+        "Source_Contract_Number__c"
+      ],
+      "right": "sfdcDigest_Contract_6",
+      "relationship": "OrderId.ContractId"
+    }
+  },
+  "augment_Profile_0": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_0",
+      "left_key": [
+        "ProfileId"
+      ],
+      "right_select": [
+        "Id",
+        "Name"
+      ],
+      "right": "sfdcDigest_Profile_0",
+      "relationship": "ProfileId"
+    }
+  },
+  "Non-profit.account": {
+    "action": "filter",
+    "parameters": {
+      "source": "augment_User_4_5",
+      "saqlFilter": "'AccountId.Non_Profit_Account__c'==\"true\""
+    }
+  },
+  "augment_User_4_0": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_3_0",
+      "left_key": [
+        "Mgmt_Chain_Level_04__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User_0",
+      "relationship": "Mgmt_Chain_Level_04__c"
+    }
+  },
+  "register_SFDO_Proposal_Line_8": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SFDO_Proposal_Line",
+      "alias": "SFDO_Proposal_Line",
+      "source": "Augment_Profile_Product_new"
+    }
+  },
+  "sfdcDigest_Company__c_3": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Company__c"
+    }
+  },
+  "sfdcDigest_Company__c_4": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Company__c"
+    }
+  },
+  "augment_Company__c_1_4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Master_Carve__c_4",
+      "left_key": [
+        "Account__c.Company__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Company__c_4",
+      "relationship": "Account__c.Company__c"
+    }
+  },
+  "augment_Company__c_1_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Company__c_3",
+      "left_key": [
+        "Global_Company__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Company__c_3",
+      "relationship": "Global_Company__c"
+    }
+  },
+  "sfdcDigest_Pricebook2_8": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Pricebook2"
+    }
+  },
+  "augment_Account_Account_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "FIlter_Account_v3",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Id",
+        "Ultimate_Parent_Name__c",
+        "AccountStatus__c",
+        "AnnualRevenue",
+        "Company__c",
+        "Core_Edition__c",
+        "Data_Storage_Allowance_Mb__c",
+        "Data_Storage_Used_Mb__c",
+        "Description",
+        "EBU_Sales_Programs__c",
+        "File_Storage_Allowance_Mb__c",
+        "File_Storage_Used_Mb__c",
+        "Foundation_AOV__c",
+        "FY_SIC__c",
+        "Global_Company__c",
+        "Industry",
+        "IsDeleted",
+        "Leads__c",
+        "Locked_Company__c",
+        "Locked_Employees__c",
+        "Mass_Emails__c",
+        "Master_Carve__c",
+        "Name",
+        "NonProfit_Agree_To_Terms_Date__c",
+        "Nonprofit_Industry__c",
+        "Non_Profit_Account__c",
+        "NTEE_Category__c",
+        "NTEE_Code__c",
+        "NumberOfEmployees",
+        "Organization_ID_DW__c",
+        "Org_Status_DW__c",
+        "OwnerId",
+        "Pardot_Support_Level__c",
+        "Rating",
+        "Region__c",
+        "sfbase__OrgStatusLocked__c",
+        "ShippingCity",
+        "ShippingCountry",
+        "ShippingLatitude",
+        "ShippingLongitude",
+        "ShippingPostalCode",
+        "ShippingState",
+        "ShippingStreet",
+        "Sic",
+        "SicDesc",
+        "SoldDate__c",
+        "Storage_Last_Calculated__c",
+        "SupportLevel__c",
+        "Support_LoB__c",
+        "Tax_ID_E_I_N__c",
+        "Team_Territory__c",
+        "TrueLogin__c",
+        "Ultimate_Parent_ID__c",
+        "Type",
+        "LastActivityDate",
+        "edw_num_licenses__c",
+        "Number_of_Open_Opportunities__c"
+      ],
+      "right": "sfdcDigest_Account_3",
+      "relationship": "Ultimate_Parent_ID__c",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "sfdcDigest_Contract_6": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "StartDate"
+        },
+        {
+          "name": "EndDate"
+        },
+        {
+          "name": "ContractNumber"
+        },
+        {
+          "name": "sfbase__Billing_Frequency__c"
+        },
+        {
+          "name": "PaymentTerm"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "sfbase__ContractCreationSource__c"
+        },
+        {
+          "name": "Source_Contract_Number__c"
+        }
+      ],
+      "object": "Contract"
+    }
+  },
+  "augment_RecordType_6": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Account_6",
+      "left_key": [
+        "OrderId.ContractId.AccountId.RecordTypeId"
+      ],
+      "right_select": [
+        "DeveloperName"
+      ],
+      "right": "sfdcDigest_RecordType_6",
+      "relationship": "OrderId.ContractId.AccountId.RecordTypeId"
+    }
+  },
+  "augment_Profile_7": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_7",
+      "left_key": [
+        "sfbase__Account__c.OwnerId.ProfileId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Profile_7",
+      "relationship": "sfbase__Account__c.OwnerId.ProfileId"
+    }
+  },
+  "register_SFDO_Order_Product_6": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SFDO_Order_Product",
+      "alias": "SFDO_Order_Product",
+      "source": "augment_Product2_6"
+    }
+  },
+  "augment_Profile_8": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_8",
+      "left_key": [
+        "Proposal__c.Account__c.OwnerId.ProfileId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_Profile_8",
+      "relationship": "Proposal__c.Account__c.OwnerId.ProfileId"
+    }
+  },
+  "filter_team": {
+    "action": "filter",
+    "parameters": {
+      "source": "opportunity_team",
+      "saqlFilter": "'sfbase__EndDate__c' is null"
+    }
+  },
+  "register_opportunity_product": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SFDO Opportunity Team",
+      "alias": "register_opp_team",
+      "source": "filter_nonprofit"
+    }
+  },
+  "append_oppty": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "filter_team",
+      "left_key": [
+        "sfbase__Opportunity__c"
+      ],
+      "right_select": [
+        "AccountId",
+        "OwnerId"
+      ],
+      "right": "sfdcDigest_oppty",
+      "relationship": "opportunity__c",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "filter_nonprofit": {
+    "action": "filter",
+    "parameters": {
+      "source": "augment_acc",
+      "saqlFilter": "'accId.Non_Profit_Account__c' == \"true\""
+    }
+  },
+  "sfdcDigest_oppty": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "OwnerId"
+        }
+      ],
+      "object": "Opportunity"
+    }
+  },
+  "augment_acc": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "append_oppty",
+      "left_key": [
+        "opportunity__c.AccountId"
+      ],
+      "right_select": [
+        "Account_Owner_Role__c",
+        "OwnerId",
+        "Non_Profit_Account__c",
+        "Team_Territory__c",
+        "Id"
+      ],
+      "right": "sfdcDigest_Account",
+      "relationship": "accId",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "opportunity_team": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "sfbase__Opportunity__c"
+        },
+        {
+          "name": "sfbase__User__c"
+        },
+        {
+          "name": "sfbase__TeamRole__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "sfbase__StartDate__c"
+        },
+        {
+          "name": "sfbase__EndDate__c"
+        },
+        {
+          "name": "sfbase__OpptyOwner__c"
+        },
+        {
+          "name": "sfbase__CompValidationRole__c"
+        },
+        {
+          "name": "sfbase__Source__c"
+        },
+        {
+          "name": "sfbase__TerritoryException__c"
+        },
+        {
+          "name": "sfbase__SplitPercent__c"
+        },
+        {
+          "name": "sfbase__LevelOfAccess__c"
+        },
+        {
+          "name": "Territory__c"
+        },
+        {
+          "name": "LastModifiedById"
+        },
+        {
+          "name": "TeamRoleLookup__c"
+        },
+        {
+          "name": "sfbase__Validated__c"
+        },
+        {
+          "name": "User_Role__c"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "User_Is_Active__c"
+        },
+        {
+          "name": "Est_Split_Amount__c"
+        },
+        {
+          "name": "Opportunity_Split_Value__c"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "HoldoutDate__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "IsDeleted"
+        },
+        {
+          "name": "IsLocked"
+        },
+        {
+          "name": "LastModifiedDate"
+        },
+        {
+          "name": "MayEdit"
+        },
+        {
+          "name": "sfbase__CompOwnerRole__c"
+        },
+        {
+          "name": "sfbase__DealRole__c"
+        },
+        {
+          "name": "sfbase__Division__c"
+        },
+        {
+          "name": "sfbase__EligibleForRenewalComp__c"
+        },
+        {
+          "name": "sfbase__Exclude__c"
+        },
+        {
+          "name": "sfbase__MarketSegment__c"
+        },
+        {
+          "name": "sfbase__Primary__c"
+        },
+        {
+          "name": "sfbase__TeamProcessExclude__c"
+        },
+        {
+          "name": "sfbase__TeamQuota__c"
+        },
+        {
+          "name": "Status__c"
+        },
+        {
+          "name": "AutoApproved__c"
+        },
+        {
+          "name": "ApprovedException__c"
+        },
+        {
+          "name": "ApprovedTime__c"
+        }
+      ],
+      "object": "sfbase__OpportunityTeam__c"
+    }
+  }
+}

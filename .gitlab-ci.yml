@@ -3,15 +3,19 @@ image: "python:3.8"
 before_script:
   - python --version
   - pip install -r requirements.txt
-  - python3 manage.py collectstatic
-  - curl https://downloads.apache.org/ant/binaries/apache-ant-1.10.11-bin.tar.gz --output ant/apache-ant.bin.tar.gz
-  - tar -xvf ant/apache-ant.bin.tar.gz -C ant
 
 stages:
   - Static Analysis
+  - Unit Test
 
 flake8:
   stage: Static Analysis
   needs: []
   script:
   - flake8 --max-line-length=120 *.py
+
+unit_test:
+  stage: Unit Test
+  needs: []
+  script:
+    - python manage.py test

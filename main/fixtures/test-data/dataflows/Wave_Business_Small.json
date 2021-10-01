@@ -1,0 +1,7421 @@
+{
+  "Compute_Messaging Journeys": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Messaging_Journeys_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Messaging_Journeys_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Messaging Journeys\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Messaging_Journeys_Segment_Numeric__c == 1 then \"\u2605\" when Messaging_Journeys_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Messaging_Journeys_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Messaging_Journeys_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Messaging_Journeys_Segment_Numeric__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"03f - Messaging Journeys\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Messaging_Journeys_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "AOV_Band__c"
+        },
+        {
+          "name": "NameLocal"
+        },
+        {
+          "name": "Site"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Industry"
+        },
+        {
+          "name": "NumberOfEmployees"
+        },
+        {
+          "name": "PersonTitle"
+        },
+        {
+          "name": "PersonDepartment"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Subregion__c"
+        },
+        {
+          "name": "Support_Reqd_Region__pc"
+        },
+        {
+          "name": "ParentId"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "Compute_SalesforceInbox": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "SalesforceIQ_PTB_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "SalesforceIQ_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Salesforce Inbox\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when SalesforceIQ_PTB_Segment_Numeric__c == 1 then \"\u2605\" when SalesforceIQ_PTB_Segment_Numeric__c == 2 then \"\u2605\u2605\" when SalesforceIQ_PTB_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when SalesforceIQ_PTB_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "SalesforceIQ_PTB_Segment_Numeric__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"01f - Inbox\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Salesforce_Inbox_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "CreateDerivedFields_Roberto": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Augment_Roberto_Case_User_Vendor_UserRole_RecordType_Contact",
+      "computedFields": [
+        {
+          "precision": 15,
+          "name": "Derived_Age",
+          "saqlExpression": "case when 'IsClosed' == \"false\" then abs(daysBetween( toDate('CreatedDate_Year' + \"-\" + 'CreatedDate_Month' + \"-\" +'CreatedDate_Day', \"yyyy-MM-dd\" ), now())) else abs(daysBetween( toDate('CreatedDate_Year' + \"-\" + 'CreatedDate_Month' + \"-\" +'CreatedDate_Day', \"yyyy-MM-dd\" ), toDate('ClosedDate_Year' + \"-\" + 'ClosedDate_Month' + \"-\" +'ClosedDate_Day', \"yyyy-MM-dd\" ))) end",
+          "scale": 5,
+          "label": "Age Calculated",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Extract_Opportunity": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fullRefreshToken": "08012017",
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "Service_Amount__c"
+        },
+        {
+          "name": "SEM__c"
+        },
+        {
+          "name": "Delivery_Manager__c"
+        },
+        {
+          "name": "Related_License_Oppty__c"
+        },
+        {
+          "name": "Related_Services_Opportunity__c"
+        },
+        {
+          "name": "Lead_Sales_Partner_new__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CloseDate"
+        },
+        {
+          "name": "Acquisition_Oppty_ID__c"
+        },
+        {
+          "name": "sfquote__Term__c"
+        },
+        {
+          "name": "Term__c"
+        },
+        {
+          "name": "Implementation_Partner__c"
+        },
+        {
+          "name": "Reseller_Partner_Type__c"
+        },
+        {
+          "name": "IsPremier_Attached__c"
+        },
+        {
+          "name": "IsPremierUpsell__c"
+        },
+        {
+          "name": "Opportunity_Record_Count__c"
+        },
+        {
+          "name": "Sub_Type__c"
+        },
+        {
+          "name": "ForecastCategory"
+        },
+        {
+          "name": "Change_Order__c"
+        },
+        {
+          "name": "ForecastCategoryName"
+        },
+        {
+          "name": "AmountConverted__c"
+        },
+        {
+          "name": "Age_Custom__c"
+        },
+        {
+          "name": "Manager_Notes_Last_Update__c"
+        },
+        {
+          "name": "Push_Counter__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "StageName"
+        },
+        {
+          "name": "pse__Region__c"
+        },
+        {
+          "name": "IsWon"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "Segment__c"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Owner_Manager_Name__c"
+        },
+        {
+          "name": "PartnerAccountId"
+        },
+        {
+          "name": "Original_Opportunity_Owner_Role__c"
+        },
+        {
+          "name": "Specialist_Sales_Notes__c"
+        },
+        {
+          "name": "sfbase__ACV__c"
+        },
+        {
+          "name": "Amount"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Cloud_Type__c"
+        },
+        {
+          "name": "Stage_2_Flag__c"
+        },
+        {
+          "name": "ExpectedRevenue"
+        },
+        {
+          "name": "sfquote__Adjustment_Amount__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate"
+        },
+        {
+          "name": "PrimaryCampaignSourceSyncNeeded__c"
+        },
+        {
+          "name": "CampaignId"
+        },
+        {
+          "name": "PrimaryCompetitor__c"
+        },
+        {
+          "name": "LeadSource"
+        },
+        {
+          "name": "Probability"
+        },
+        {
+          "name": "Secondary_Opportunity_Source__c"
+        },
+        {
+          "name": "Fiscal"
+        },
+        {
+          "name": "FiscalYear"
+        },
+        {
+          "name": "Billing_State_Province__c"
+        },
+        {
+          "name": "sfquote__AdjustmentAmount__c"
+        },
+        {
+          "name": "CompetitiveStatus__c"
+        },
+        {
+          "name": "IsClosed"
+        },
+        {
+          "name": "Platform_Cloud_Sales_Amount__c"
+        },
+        {
+          "name": "Marketing_Amount__c"
+        },
+        {
+          "name": "Steelbrick_Amount__c"
+        },
+        {
+          "name": "Other_Description__c"
+        },
+        {
+          "name": "Sales_Amount__c"
+        },
+        {
+          "name": "Custom_Amount__c"
+        },
+        {
+          "name": "SR_Non_SFA_Product_Amount__c"
+        }
+      ],
+      "object": "Opportunity"
+    }
+  },
+  "Extract_Contact": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "Contact"
+    }
+  },
+  "Augment_csg_so_Oppty_Account_User_Product": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_csg_so_Oppty_Account_User",
+      "left_key": [
+        "Product2Id"
+      ],
+      "right_select": [
+        "Support_License_Type__c",
+        "Support_Tax__c",
+        "Name",
+        "sfbase__SKU__c",
+        "Cloud__c",
+        "sfbase__Product_Line__c",
+        "sfbase__GLAccountCode__c",
+        "GlAccountCode",
+        "UE_Support_Allocation__c",
+        "sfbase__Edition__c",
+        "sfbase__BusinessUnit__c",
+        "sfbase__Detail__c",
+        "ProductCode",
+        "sfbase__Type__c"
+      ],
+      "right": "Extract_Product2",
+      "relationship": "Product2Id"
+    }
+  },
+  "ProgEnga_Case": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ProgEnga_Account",
+      "left_key": [
+        "Case__c"
+      ],
+      "right_select": [
+        "CaseNumber",
+        "CaseOwner.Name",
+        "CaseOwner.UserManager.Name",
+        "Case_SuccesProgram.Name",
+        "Case_SuccesProgram.Status__c",
+        "Case_SuccesProgram.SuccessPrgOwner.Name",
+        "Case_SuccesProgram.SuccessPrgOwner.UserManager.Name",
+        "Status",
+        "Subject",
+        "Sub_Status__c",
+        "Success_Program__c"
+      ],
+      "right": "Case_SuccesProgram",
+      "relationship": "ProgEnga_Case",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "UserEvents": {
+    "action": "update",
+    "parameters": {
+      "right_key": [
+        "Event_Email"
+      ],
+      "left": "Donations_FY17",
+      "left_key": [
+        "Email"
+      ],
+      "update_columns": {
+        "Email": "Sponsor",
+        "Event": "Event_Type",
+        "Participant_Name": "Event"
+      },
+      "right": "Events",
+      "relationship": "UserEvents"
+    }
+  },
+  "Augment_Roberto_Case_User_Vendor_UserRole_RecordType_Contact": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Roberto_Case_User_Vendor_UserRole_RecordType",
+      "left_key": [
+        "ContactId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Contact",
+      "relationship": "ContactId"
+    }
+  },
+  "Extract_Case": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "ADO_Until_Management_Escalated__c"
+        },
+        {
+          "name": "Age_days__c"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "ClosedDate"
+        },
+        {
+          "name": "Date_Time_Opened__c"
+        },
+        {
+          "name": "Effective_Date__c"
+        },
+        {
+          "name": "End_Date__c"
+        },
+        {
+          "name": "CaseNumber"
+        },
+        {
+          "name": "Origin"
+        },
+        {
+          "name": "Reason"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "IsClosed"
+        },
+        {
+          "name": "ContactId"
+        },
+        {
+          "name": "Escalate_to_Technical_Support_Tier_3__c"
+        },
+        {
+          "name": "Escalated_Date__c"
+        },
+        {
+          "name": "Escalated_Status__c"
+        },
+        {
+          "name": "Escalation_Comments__c"
+        },
+        {
+          "name": "FunctionalArea__c"
+        },
+        {
+          "name": "Last_Support_Update__c"
+        },
+        {
+          "name": "Management_Escalation_Count__c"
+        },
+        {
+          "name": "Skill_Group__c"
+        },
+        {
+          "name": "Status"
+        },
+        {
+          "name": "Support_Case_Owner_Group__c"
+        },
+        {
+          "name": "Support_Case_Owner_Subgroup__c"
+        },
+        {
+          "name": "Support_Level__c"
+        },
+        {
+          "name": "IsVisibleInSelfService"
+        },
+        {
+          "name": "Escalated_By__c"
+        },
+        {
+          "name": "Date_Escalation_Action_Taken__c"
+        },
+        {
+          "name": "Low_CSAT_Action__c"
+        },
+        {
+          "name": "Low_CSAT__c"
+        },
+        {
+          "name": "Low_CSAT_Root_Cause__c"
+        },
+        {
+          "name": "Severity_Level__c"
+        },
+        {
+          "name": "SLA_Miss_Root_Cause__c"
+        },
+        {
+          "name": "SLA_Misses__c"
+        },
+        {
+          "name": "SLA_SMART_Action__c"
+        },
+        {
+          "name": "Why_SLA_Missed__c"
+        },
+        {
+          "name": "Support_Case_Owner_Delivery_Segmentation__c"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Support_Tier_3_Owner_lkup__c"
+        },
+        {
+          "name": "Escalation_Reason_Code__c"
+        },
+        {
+          "name": "Escalation_Root_Cause__c"
+        },
+        {
+          "name": "Escalation_SMART_Action__c"
+        },
+        {
+          "name": "Escalation_Summary__c"
+        },
+        {
+          "name": "LastModifiedDate"
+        }
+      ],
+      "object": "Case"
+    }
+  },
+  "Extract_Product2": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fullRefreshToken": "08012017",
+      "fields": [
+        {
+          "name": "Support_License_Type__c"
+        },
+        {
+          "name": "Support_Tax__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "sfbase__SKU__c"
+        },
+        {
+          "name": "Cloud__c"
+        },
+        {
+          "name": "sfbase__ProductFamily__c"
+        },
+        {
+          "name": "Family"
+        },
+        {
+          "name": "sfbase__Product_Line__c"
+        },
+        {
+          "name": "sfbase__GLAccountCode__c"
+        },
+        {
+          "name": "GlAccountCode"
+        },
+        {
+          "name": "IsActive"
+        },
+        {
+          "name": "UE_Support_Allocation__c"
+        },
+        {
+          "name": "sfbase__Edition__c"
+        },
+        {
+          "name": "Product_Classification__c"
+        },
+        {
+          "name": "sfbase__BusinessUnit__c"
+        },
+        {
+          "name": "sfbase__Detail__c"
+        },
+        {
+          "name": "ProductCode"
+        },
+        {
+          "name": "sfbase__Type__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "L1_Business_Line__c"
+        },
+        {
+          "name": "L2_Product_Line__c"
+        },
+        {
+          "name": "L3_Product_Family__c"
+        },
+        {
+          "name": "L4_Product_Offering__c"
+        }
+      ],
+      "object": "Product2"
+    }
+  },
+  "ProgEnga_Oppty": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ProgEnga_SuccessProgram",
+      "left_key": [
+        "Related_Opportunity__c"
+      ],
+      "right_select": [
+        "Amount",
+        "CloseDate",
+        "Name",
+        "OpptyOwner.Name",
+        "OpptyOwner.UserManager.Name",
+        "StageName"
+      ],
+      "right": "OpptyOwner",
+      "relationship": "ProgEnga_Oppty",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Filter_pipegen_rodoni": {
+    "action": "filter",
+    "parameters": {
+      "filter": "OVA_LVL_03_USR_ROLE_NM:EQ:AMER - GEO - SMB - EVP",
+      "source": "Extract_sw_pipegen"
+    }
+  },
+  "Augment_csg_OpptyLn_Oppty": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_OpportunityLineItem",
+      "left_key": [
+        "OpportunityId"
+      ],
+      "right_select": [
+        "OwnerId",
+        "Delivery_Manager__c",
+        "Related_License_Oppty__c",
+        "Related_Services_Opportunity__c",
+        "SEM__c",
+        "Lead_Sales_Partner_new__c",
+        "AccountId",
+        "RecordTypeId",
+        "Amount",
+        "CloseDate",
+        "Sub_Type__c",
+        "Type",
+        "Name",
+        "Id",
+        "Opportunity_Record_Count__c",
+        "ForecastCategoryName",
+        "ForecastCategory",
+        "Cloud_Type__c",
+        "IsPremier_Attached__c",
+        "IsPremierUpsell__c",
+        "Change_Order__c",
+        "StageName",
+        "Acquisition_Oppty_ID__c",
+        "sfquote__Term__c",
+        "Term__c",
+        "Implementation_Partner__c",
+        "Reseller_Partner_Type__c",
+        "Platform_Cloud_Sales_Amount__c",
+        "Marketing_Amount__c",
+        "Steelbrick_Amount__c",
+        "Other_Description__c",
+        "Sales_Amount__c",
+        "Custom_Amount__c",
+        "SR_Non_SFA_Product_Amount__c"
+      ],
+      "right": "Extract_Opportunity",
+      "relationship": "OpportunityId"
+    }
+  },
+  "Extract_aw_account": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "aw_account"
+    }
+  },
+  "SuccessPrgOwner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "SuccessProgram",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "UserManager.Name",
+        "Name"
+      ],
+      "right": "UserManager",
+      "relationship": "SuccessPrgOwner",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Augment_AcctIntelUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_AcctIntelAccount",
+      "left_key": [
+        "Account__c.OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "Id",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "Account__c.OwnerId"
+    }
+  },
+  "Augment_UserManager_ACVGrain": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "USR_NM"
+      ],
+      "left": "Extract_acvgrain",
+      "left_key": [
+        "BB_DRVD_SVP_NM"
+      ],
+      "right_select": [
+        "User.SmallPhotoUrl"
+      ],
+      "right": "Extract_WaveAE_2_UserManager",
+      "relationship": "Name",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Augment_AcctIntelAccount": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Compute_SegmentNumeric",
+      "left_key": [
+        "Account__c"
+      ],
+      "right_select": [
+        "Combo_Company__c",
+        "Name",
+        "Id",
+        "OwnerId"
+      ],
+      "right": "Extract_Account",
+      "relationship": "Account__c"
+    }
+  },
+  "Compute_Heroku": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Heroku_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Heroku_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Heroku\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Heroku_PTB_Segment_Numeric__c == 1 then \"\u2605\" when Heroku_PTB_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Heroku_PTB_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Heroku_PTB_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Heroku_PTB_Segment_Numeric__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"05b - Heroku\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Heroku_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Compute_Einstein": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "0",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "0",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Einstein Lead Scoring\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "\" \"",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "0",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"01e - Einstein\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "0",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Compute_Pardot": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Pardot_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Pardot_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Pardot\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Pardot_PTB_Segment_Num__c == 1 then \"\u2605\" when Pardot_PTB_Segment_Num__c == 2 then \"\u2605\u2605\" when Pardot_PTB_Segment_Num__c == 3 then \"\u2605\u2605\u2605\" when Pardot_PTB_Segment_Num__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Pardot_PTB_Segment_Num__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"01b - Pardot\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Pardot_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Compute_FieldService": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Field_Service_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Field_Service_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Field Service\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Field_Service_PTB_Segment_Numeric__c == 1 then \"\u2605\" when Field_Service_PTB_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Field_Service_PTB_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Field_Service_PTB_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Field_Service_PTB_Segment_Numeric__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"02g - Field_Service\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Field_Service_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Augment_Florian_Oppty_Product": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_OpportunityLineItem",
+      "left_key": [
+        "OpportunityId"
+      ],
+      "right_select": [
+        "Id",
+        "Name",
+        "Platform_Cloud_Sales_Amount__c",
+        "Marketing_Amount__c",
+        "Steelbrick_Amount__c",
+        "Other_Description__c",
+        "Sales_Amount__c",
+        "Custom_Amount__c",
+        "SR_Non_SFA_Product_Amount__c"
+      ],
+      "right": "Extract_Opportunity",
+      "relationship": "OpportunityId"
+    }
+  },
+  "Register_ACVGrain_TonywithURL": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "acvgrain_tony",
+      "alias": "acvgrain_tony",
+      "source": "Augment_UserManager_ACVGrain"
+    }
+  },
+  "Augment_Florian_Oppty_Product2": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Florian_Oppty_Product",
+      "left_key": [
+        "Product2Id"
+      ],
+      "right_select": [
+        "Cloud__c",
+        "Id"
+      ],
+      "right": "Extract_Product2",
+      "relationship": "Product2Id"
+    }
+  },
+  "Extract_Status_Indicator": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Project_Pulse__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Status_Date__c"
+        },
+        {
+          "name": "Trend__c"
+        },
+        {
+          "name": "Employee_Satisfaction__c"
+        },
+        {
+          "name": "Customer_Satisfaction__c"
+        },
+        {
+          "name": "Customer_Obligations__c"
+        },
+        {
+          "name": "Cust_Oblig__c"
+        },
+        {
+          "name": "Renewal_Management__c"
+        },
+        {
+          "name": "Renewal_Mgmt__c"
+        },
+        {
+          "name": "Partner_Perf__c"
+        },
+        {
+          "name": "Partner_Performance__c"
+        },
+        {
+          "name": "Accomplishments_this_period__c"
+        },
+        {
+          "name": "Top_Priorities__c"
+        },
+        {
+          "name": "Top_Obstacles__c"
+        }
+      ],
+      "object": "Status_Indicator__c"
+    }
+  },
+  "RegisterDonationsWithUsers": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "DonationsWithUsers",
+      "alias": "DonationsWithUsers",
+      "source": "DonationsWithUsers"
+    }
+  },
+  "Compute_AdvisoryServices": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Advisory_Services_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Advisory_Services_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Advisory Services\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Advisory_Services_PTB_Segment_Numeric__c == 1 then \"\u2605\" when Advisory_Services_PTB_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Advisory_Services_PTB_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Advisory_Services_PTB_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Advisory_Services_PTB_Segment_Numeric__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"07b - Advisory_Services\"",
+          "label": "Product Order",
+          "type": "Text"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Create Todd_Opportunity_Account_User": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Opportunity_Account_User",
+      "alias": "Opportunity_Account_User",
+      "source": "Augment_Todd_Opportunity_User_Account",
+      "folderId": "00l0M000003KqtfQAC"
+    }
+  },
+  "Create Keith_OpportunityLineItem_Opportunity": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "OpportunityLineItem_Opportunity",
+      "alias": "OpportunityLineItem_Opportunity",
+      "source": "Augment_Keith_OpportunityLineItem_Opportunity",
+      "folderId": "00l0M000003KqjGQAS"
+    }
+  },
+  "Create Roberto_Case_Contact_User_Role": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "CaseContactUserRole",
+      "alias": "CaseContactUserRole",
+      "source": "CreateDerivedFields_Roberto",
+      "folderId": "00l0M000003KqlvQAC"
+    }
+  },
+  "Compute_Shield": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Shield_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Shield_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Shield\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Shield_PTB_Segment_Num__c == 1 then \"\u2605\" when Shield_PTB_Segment_Num__c == 2 then \"\u2605\u2605\" when Shield_PTB_Segment_Num__c == 3 then \"\u2605\u2605\u2605\" when Shield_PTB_Segment_Num__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Shield_PTB_Segment_Num__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"05d - Shield\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Shield_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Create dataset Competitive Intelligence_Oppty_Acct_User": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Oppty_Acct_User",
+      "alias": "Oppty_Acct_User",
+      "source": "Augment_Comp_Intel_Oppty_Acct_User7",
+      "folderId": "00l0M000003YMsvQAG"
+    }
+  },
+  "Create Florian_Campaign_Dataset": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Campaign_dataset",
+      "alias": "Campaign_dataset",
+      "source": "Extract_Campaign",
+      "folderId": "00l300000033g2xAAA"
+    }
+  },
+  "Compute_Quip": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Quip_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Quip_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Quip\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Quip_PTB_Segment_Numeric__c == 1 then \"\u2605\" when Quip_PTB_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Quip_PTB_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Quip_PTB_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Quip_PTB_Segment_Numeric__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"01g - Quip\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Quip_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Augment_Comp_Intel_Opportunity_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Opptylineitem_Oppty_Acct_Product2",
+      "left_key": [
+        "OpportunityId.OwnerId"
+      ],
+      "right_select": [
+        "Mgmt_Chain_Level_03__c",
+        "Mgmt_Chain_Level_04__c",
+        "Mgmt_Chain_Level_05__c",
+        "Mgmt_Chain_Level_06__c",
+        "Name",
+        "Id",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId"
+    }
+  },
+  "Case_SuccesProgram": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "CaseOwner",
+      "left_key": [
+        "Success_Program__c"
+      ],
+      "right_select": [
+        "Name",
+        "Status__c",
+        "SuccessPrgOwner.Name",
+        "SuccessPrgOwner.UserManager.Name"
+      ],
+      "right": "SuccessPrgOwner",
+      "relationship": "Case_SuccesProgram",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Compute_Health Cloud": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Health_Cloud_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Health_Cloud_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Health Cloud\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Health_Cloud_Segment_Numeric__c == 1 then \"\u2605\" when Health_Cloud_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Health_Cloud_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Health_Cloud_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Health_Cloud_Segment_Numeric__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"02h - Health Cloud \"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Health_Cloud_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "openpipe_tony": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "openpipe_tony",
+      "alias": "openpipe_tony",
+      "source": "Extract_openpipe"
+    }
+  },
+  "SliceFields": {
+    "action": "sliceDataset",
+    "parameters": {
+      "mode": "drop",
+      "source": "ProgEnga_Oppty",
+      "fields": [
+        {
+          "name": "Account__c"
+        },
+        {
+          "name": "Case__c"
+        },
+        {
+          "name": "Related_Opportunity__c"
+        },
+        {
+          "name": "ProgEnga_Case.Success_Program__c"
+        }
+      ]
+    }
+  },
+  "Extract_sw_acvgrain": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "sw_acv_grain"
+    }
+  },
+  "Case": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "CaseNumber"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Subject"
+        },
+        {
+          "name": "Status"
+        },
+        {
+          "name": "Sub_Status__c"
+        },
+        {
+          "name": "Success_Program__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "Account_Number__c"
+        },
+        {
+          "name": "ContactId"
+        },
+        {
+          "name": "Priority"
+        },
+        {
+          "name": "Origin"
+        },
+        {
+          "name": "General_Application_Area__c"
+        },
+        {
+          "name": "FunctionalArea__c"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "ClosedDate"
+        },
+        {
+          "name": "Age_hours__c"
+        },
+        {
+          "name": "IsEscalated"
+        },
+        {
+          "name": "Support_Level__c"
+        },
+        {
+          "name": "Cloud__c"
+        },
+        {
+          "name": "cloud_product__c"
+        },
+        {
+          "name": "Reason"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Support_Affiliation__c"
+        },
+        {
+          "name": "Agent_Support_Region__c"
+        },
+        {
+          "name": "LOB__c"
+        },
+        {
+          "name": "Language__c"
+        },
+        {
+          "name": "Delivery_Language__c"
+        },
+        {
+          "name": "Language"
+        },
+        {
+          "name": "Skill_Group__c"
+        },
+        {
+          "name": "Support_Case_Owner_Group__c"
+        },
+        {
+          "name": "Support_Case_Owner_Skill_Group__c"
+        },
+        {
+          "name": "Support_Case_Owner_Subgroup__c"
+        },
+        {
+          "name": "Support_Case_Owner_Delivery_Segmentation__c"
+        },
+        {
+          "name": "Low_CSAT_Action__c"
+        },
+        {
+          "name": "Low_CSAT_Detail__c"
+        },
+        {
+          "name": "Low_CSAT__c"
+        },
+        {
+          "name": "Low_CSAT_Root_Cause__c"
+        }
+      ],
+      "object": "Case"
+    }
+  },
+  "Register_grain_rodoni": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "sw_acv_grain_rodoni",
+      "alias": "sw_acv_grain_rodoni",
+      "source": "Filter_grain_rodoni"
+    }
+  },
+  "Append_AllClouds": {
+    "action": "append",
+    "parameters": {
+      "enableDisjointedSchemaMerge": true,
+      "sources": [
+        "Compute_AnalyticsCloud",
+        "Compute_AppCloud",
+        "Compute_CustCommunities",
+        "Compute_DataCom",
+        "Compute_Einstein",
+        "Compute_FieldService",
+        "Compute_Pardot",
+        "Compute_PartnerCommunities",
+        "Compute_Quip",
+        "Compute_SalesCloud",
+        "Compute_SalesforceInbox",
+        "Compute_SalesforceQTC",
+        "Compute_Sandbox",
+        "Compute_ServiceCloud",
+        "Compute_Shield",
+        "Compute_AdvisoryServices",
+        "Compute_SuccessPlans",
+        "Compute_Heroku",
+        "Compute_Sales Cloud Einstein",
+        "Compute_Advertising Studio",
+        "Compute_Data Studio",
+        "Compute_Salesforce DMP",
+        "Compute_Social Studio",
+        "Compute_Messaging Journeys",
+        "Compute_Commerce Cloud",
+        "Compute_Health Cloud",
+        "Compute_Technical Acct Mgr",
+        "Compute_Financial Services",
+        "Compute_Digital Engagement",
+        "Compute_b2bCommerce Cloud",
+        "Compute_Mulesoft"
+      ]
+    }
+  },
+  "Events": {
+    "action": "edgemart",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "alias": "Events"
+    }
+  },
+  "Compute_Mulesoft": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Product",
+          "saqlExpression": "\"Mulesoft\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when MuleSoft_Segment_Numeric__c == 1 then \"\u2605\" when MuleSoft_Segment_Numeric__c == 2 then \"\u2605\u2605\" when MuleSoft_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when MuleSoft_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "MuleSoft_Segment_Numeric__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"09a - Mulesoft\"",
+          "label": "Product Order",
+          "type": "Text"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Augment_Opptyline_User1": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Opptyline_Userrole2",
+      "left_key": [
+        "OpportunityId.CreatedById"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OpportunityId.CreatedById"
+    }
+  },
+  "Augment_Roberto_Case_User_Vendor_UserRole": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Roberto_Case_User_Vendor",
+      "left_key": [
+        "OwnerId.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_UserRole",
+      "relationship": "OwnerId.UserRoleId"
+    }
+  },
+  "Compute_ServiceCloud": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Service_Cloud_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Service_Cloud_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Service Cloud\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Service_Cloud_PTB_Segment_Num__c == 1 then \"\u2605\" when Service_Cloud_PTB_Segment_Num__c == 2 then \"\u2605\u2605\" when Service_Cloud_PTB_Segment_Num__c == 3 then \"\u2605\u2605\u2605\" when Service_Cloud_PTB_Segment_Num__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Service_Cloud_PTB_Segment_Num__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"02a - Service\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Core_Service_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Compute_Financial Services": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Financial_Services_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Financial_Services_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Financial Services\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Financial_Services_PTB_Segment_Numeric__c == 1 then \"\u2605\" when Financial_Services_PTB_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Financial_Services_PTB_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Financial_Services_PTB_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Financial_Services_PTB_Segment_Numeric__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"01h - Financial Services \"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Financial_Services_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Create dataset Comp_Intel_Test_Oppty_Acct_User": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "New_Oppty_Acct_User",
+      "alias": "New_Oppty_Acct_User",
+      "source": "Augment_Comp_Intel_Oppty_Acct_User7",
+      "folderId": "00l0M000003ZBWGQA4"
+    }
+  },
+  "Register_Salah_User": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "row_security": "",
+      "name": "PBUTeamPhotos",
+      "alias": "PBUTeamPhotos",
+      "source": "Extract_Salah_User"
+    }
+  },
+  "Create Dataset Compe_Intel_Test_Opportunity_Product": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "New_Opportunity_Product",
+      "alias": "New_Opportunity_Product",
+      "source": "Augment_Comp_Intel_Opptylineitem_Oppty_Acct_Product2",
+      "folderId": "00l0M000003ZBWGQA4"
+    }
+  },
+  "Augment_Opptyline_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Opptyline_Record",
+      "left_key": [
+        "OpportunityId.OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "UserRoleId",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OpportunityId.OwnerId"
+    }
+  },
+  "Register_OPportunity_Account": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "CSG S&O Oppty w Account",
+      "alias": "CSG_SO_Oppty_w_Account",
+      "source": "Augment_Florian_Opportunity_Account"
+    }
+  },
+  "Register_CSG_SO_Oppty_w_Products": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "CSG S&O Oppty w Products",
+      "alias": "CSG_SO_Oppty_w_Products",
+      "source": "Augment_csg_so_Oppty_Account_User_Product"
+    }
+  },
+  "AccountOwner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Account",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "UserManager.Name"
+      ],
+      "right": "UserManager",
+      "relationship": "AccountOwner",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Augment_Opptyline_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Opptyline_Oppty",
+      "left_key": [
+        "OpportunityId.AccountId"
+      ],
+      "right_select": [
+        "Region__c",
+        "Name",
+        "Account_Owner_Role__c"
+      ],
+      "right": "Extract_Account",
+      "relationship": "OpportunityId.AccountId"
+    }
+  },
+  "Augment_Comp_Intel_Opptylineitem_Oppty_Acct_Product2": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Opptylineitem_Oppty_Acct_User07",
+      "left_key": [
+        "Product2Id"
+      ],
+      "right_select": [
+        "Id",
+        "L1_Business_Line__c",
+        "L2_Product_Line__c",
+        "L3_Product_Family__c",
+        "L4_Product_Offering__c"
+      ],
+      "right": "Extract_Product2",
+      "relationship": "Product2Id"
+    }
+  },
+  "Compute_PartnerCommunities": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Partner_Communities_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Partner_Communities_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Partner_Communities_PTB_Segment_Num__c == 1 then \"\u2605\" when Partner_Communities_PTB_Segment_Num__c == 2 then \"\u2605\u2605\" when Partner_Communities_PTB_Segment_Num__c == 3 then \"\u2605\u2605\u2605\" when Partner_Communities_PTB_Segment_Num__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Partner_Communities_PTB_Segment_Num__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Partner Community\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"01d - Partner_Community\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Partner_Communities_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Compute_CustCommunities": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Customer_Communities_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Customer_Communities_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Customer Community\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"02f - Customer Communities\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Customer_Communities_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Extract_WaveAE_2_UserManager": {
+    "action": "edgemart",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "alias": "WaveAE_2_UserManager"
+    }
+  },
+  "Augment_Comp_Intel_Oppty_Account_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Oppty_Account",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "Macro_Segment__c",
+        "sfbase__Market_Segment__c",
+        "Mgmt_Chain_Level_03__c",
+        "Mgmt_Chain_Level_04__c",
+        "Mgmt_Chain_Level_05__c",
+        "Mgmt_Chain_Level_06__c",
+        "Mgmt_Chain_Level_07__c",
+        "sfbase__Classification__c",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId"
+    }
+  },
+  "Extract_Company": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Locked_Total_Employees__c"
+        },
+        {
+          "name": "LastModifiedDate"
+        }
+      ],
+      "object": "Company__c"
+    }
+  },
+  "Augment_Roberto_Case_User_Vendor_UserRole_RecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Roberto_Case_User_Vendor_UserRole",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "DeveloperName"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "RecordTypeId"
+    }
+  },
+  "Augment_Roberto_Case_User_Vendor": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Roberto_Case_User",
+      "left_key": [
+        "OwnerId.Vendor_Manager__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId.Vendor_Manager__c"
+    }
+  },
+  "Augment_Keith_OpportunityLineItem_Opportunity": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_OpportunityLineItem",
+      "left_key": [
+        "OpportunityId"
+      ],
+      "right_select": [
+        "Name",
+        "Service_Amount__c",
+        "CloseDate",
+        "ForecastCategoryName",
+        "AmountConverted__c",
+        "Age_Custom__c",
+        "Manager_Notes_Last_Update__c",
+        "FiscalYear",
+        "Billing_State_Province__c",
+        "Push_Counter__c",
+        "Id",
+        "Platform_Cloud_Sales_Amount__c",
+        "Marketing_Amount__c",
+        "Steelbrick_Amount__c",
+        "Other_Description__c",
+        "Sales_Amount__c",
+        "Custom_Amount__c",
+        "SR_Non_SFA_Product_Amount__c"
+      ],
+      "right": "Extract_Opportunity",
+      "relationship": "OpportunityId"
+    }
+  },
+  "Extract_Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fullRefreshToken": "08012017",
+      "fields": [
+        {
+          "name": "Account_Owner_Role__c"
+        },
+        {
+          "name": "SupportLevel__c"
+        },
+        {
+          "name": "Currentlicenses__c"
+        },
+        {
+          "name": "Current_Account_AOV__c"
+        },
+        {
+          "name": "Global_Company__c"
+        },
+        {
+          "name": "CSM_lookup__c"
+        },
+        {
+          "name": "AOV_Band__c"
+        },
+        {
+          "name": "SI_Program_Tier__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "CSG_Region__c"
+        },
+        {
+          "name": "CSG_Subregion__c"
+        },
+        {
+          "name": "CSG_Portfolio__c"
+        },
+        {
+          "name": "Support_LoB__c"
+        },
+        {
+          "name": "Industry"
+        },
+        {
+          "name": "edw_num_licenses__c"
+        },
+        {
+          "name": "Consumed_Licenses__c"
+        },
+        {
+          "name": "Account_Record_Count__c"
+        },
+        {
+          "name": "Org_Status_DW__c"
+        },
+        {
+          "name": "Support_SBR_Category__c"
+        },
+        {
+          "name": "ISV_Program_Tier__c"
+        },
+        {
+          "name": "G4GAccount_Owner__c"
+        },
+        {
+          "name": "BillingCountry"
+        },
+        {
+          "name": "CFL_Region__c"
+        },
+        {
+          "name": "Combo_Sector__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Combo_Company__c"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "Augment_Keith_SpecialistForecast_Opportunity": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_SpecialistForecast",
+      "left_key": [
+        "Opportunity__c"
+      ],
+      "right_select": [
+        "Name",
+        "Service_Amount__c",
+        "CloseDate",
+        "ForecastCategoryName",
+        "AmountConverted__c",
+        "Age_Custom__c",
+        "Manager_Notes_Last_Update__c",
+        "FiscalYear",
+        "Billing_State_Province__c",
+        "Push_Counter__c",
+        "Id",
+        "Platform_Cloud_Sales_Amount__c",
+        "Marketing_Amount__c",
+        "Steelbrick_Amount__c",
+        "Other_Description__c",
+        "Sales_Amount__c",
+        "Custom_Amount__c",
+        "SR_Non_SFA_Product_Amount__c"
+      ],
+      "right": "Extract_Opportunity",
+      "relationship": "OpportunityId"
+    }
+  },
+  "Register_Jason_Opptyline_Product": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Jason_Opportunity_Product",
+      "alias": "Jason_Opportunity_Product",
+      "source": "Augment_Opptyline_Product"
+    }
+  },
+  "Augment_Comp_Intel_Opportunity_User06": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Opportunity_User05",
+      "left_key": [
+        "OwnerId.Mgmt_Chain_Level_06__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId.Mgmt_Chain_Level_06__c"
+    }
+  },
+  "ProgEnga_SuccessProgram": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ProgEnga_Case",
+      "left_key": [
+        "Success_Program__c"
+      ],
+      "right_select": [
+        "Name",
+        "Status__c",
+        "SuccessPrgOwner.Name",
+        "SuccessPrgOwner.UserManager.Name"
+      ],
+      "right": "SuccessPrgOwner",
+      "relationship": "ProgEnga_SuccessProgram",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "augment_Account_Intelligence__c_RecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_AccountIntelligence",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "RecordTypeId"
+    }
+  },
+  "UserManager": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "User",
+      "left_key": [
+        "ManagerId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "User",
+      "relationship": "UserManager",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_UserRole": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "DeveloperName"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "UserRole"
+    }
+  },
+  "Augment_csg_so_Oppty_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_csg_OpptyLn_Oppty",
+      "left_key": [
+        "OpportunityId.AccountId"
+      ],
+      "right_select": [
+        "OwnerId",
+        "Account_Owner_Role__c",
+        "Name",
+        "Id",
+        "SupportLevel__c",
+        "Currentlicenses__c",
+        "Current_Account_AOV__c",
+        "Global_Company__c",
+        "CSM_lookup__c",
+        "AOV_Band__c",
+        "SI_Program_Tier__c",
+        "Region__c",
+        "Type",
+        "CSG_Region__c",
+        "CSG_Subregion__c",
+        "CSG_Portfolio__c",
+        "Support_LoB__c",
+        "Industry",
+        "edw_num_licenses__c",
+        "Consumed_Licenses__c",
+        "Account_Record_Count__c",
+        "Org_Status_DW__c",
+        "Support_SBR_Category__c",
+        "ISV_Program_Tier__c",
+        "G4GAccount_Owner__c",
+        "BillingCountry",
+        "CFL_Region__c"
+      ],
+      "right": "Extract_Account",
+      "relationship": "OpportunityId.AccountId"
+    }
+  },
+  "Augment_User_Manager_Chain11": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_User_Manager_Chain10",
+      "left_key": [
+        "Mgmt_Chain_Level_11__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_11__c"
+    }
+  },
+  "Augment_User_Manager_Chain10": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_User_Manager_Chain09",
+      "left_key": [
+        "Mgmt_Chain_Level_10__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_10__c"
+    }
+  },
+  "Extract_SpecialistForecast": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "ForecastAmount__c"
+        },
+        {
+          "name": "Opportunity__c"
+        }
+      ],
+      "object": "SpecialistForecast__c"
+    }
+  },
+  "Augment_User_Manager_Chain12": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_User_Manager_Chain11",
+      "left_key": [
+        "Mgmt_Chain_Level_12__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_12__c"
+    }
+  },
+  "Compute_Advertising Studio": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Advertising_Studio_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Advertising_Studio_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Advertising Studio\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Advertising_Studio_Segment_Numeric__c == 1 then \"\u2605\" when Advertising_Studio_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Advertising_Studio_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Advertising_Studio_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Advertising_Studio_Segment_Numeric__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"03b - Advertising Studio \"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Advertising_Studio_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Augment_Comp_Intel_Opportunity_User04": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Opportunity_User03",
+      "left_key": [
+        "OwnerId.Mgmt_Chain_Level_04__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId.Mgmt_Chain_Level_04__c"
+    }
+  },
+  "Register_AccIntelHeader": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "eas_AccountIntelHeader ",
+      "alias": "eas_AccountIntelHeader",
+      "source": "Augment_Wave62Acc_AccIntelHeader"
+    }
+  },
+  "Augment_Comp_Intel_Opportunity_User05": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Opportunity_User04",
+      "left_key": [
+        "OwnerId.Mgmt_Chain_Level_05__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId.Mgmt_Chain_Level_05__c"
+    }
+  },
+  "Extract_openpipe": {
+    "action": "edgemart",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "alias": "sw_open_pipe"
+    }
+  },
+  "Augment_Comp_Intel_Opportunity_User03": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Opportunity_User",
+      "left_key": [
+        "OwnerId.Mgmt_Chain_Level_03__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId.Mgmt_Chain_Level_03__c"
+    }
+  },
+  "Augment_User_Manager_Chain08": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_User_Manager_Chain07",
+      "left_key": [
+        "Mgmt_Chain_Level_08__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_08__c"
+    }
+  },
+  "Augment_User_Manager_Chain07": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_User_Manager_Chain06",
+      "left_key": [
+        "Mgmt_Chain_Level_07__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_07__c"
+    }
+  },
+  "Extract_acvgrain": {
+    "action": "edgemart",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "alias": "sw_acv_grain"
+    }
+  },
+  "Compute_SalesCloud": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Sales_Cloud_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Sales_Cloud_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Sales Cloud\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Sales_Cloud_PTB_Segment_Num__c == 1 then \"\u2605\" when Sales_Cloud_PTB_Segment_Num__c == 2 then \"\u2605\u2605\" when Sales_Cloud_PTB_Segment_Num__c == 3 then \"\u2605\u2605\u2605\" when Sales_Cloud_PTB_Segment_Num__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Sales_Cloud_PTB_Segment_Num__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"01a - Sales\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Core_Sales_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Augment_User_Manager_Chain09": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_User_Manager_Chain08",
+      "left_key": [
+        "Mgmt_Chain_Level_09__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_09__c"
+    }
+  },
+  "Extract_Salah_User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "refresh": "",
+      "fields": [
+        {
+          "name": "FullPhotoUrl"
+        },
+        {
+          "name": "SmallPhotoUrl"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "Augment_Florian_Opportunity_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Opportunity",
+      "left_key": [
+        "AccountId"
+      ],
+      "right_select": [
+        "OwnerId",
+        "Account_Owner_Role__c",
+        "Name",
+        "Id",
+        "SupportLevel__c",
+        "Currentlicenses__c",
+        "Current_Account_AOV__c",
+        "Global_Company__c",
+        "CSM_lookup__c",
+        "AOV_Band__c",
+        "SI_Program_Tier__c",
+        "Region__c",
+        "Type",
+        "CSG_Region__c",
+        "CSG_Subregion__c",
+        "CSG_Portfolio__c",
+        "Support_LoB__c",
+        "Industry",
+        "edw_num_licenses__c",
+        "Consumed_Licenses__c",
+        "Account_Record_Count__c",
+        "Org_Status_DW__c",
+        "Support_SBR_Category__c",
+        "ISV_Program_Tier__c",
+        "G4GAccount_Owner__c",
+        "BillingCountry",
+        "CFL_Region__c"
+      ],
+      "right": "Extract_Account",
+      "relationship": "AccountId"
+    }
+  },
+  "Create Florian_Opportunity_User_Account_UserRole": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Opportunity_User_Account",
+      "alias": "Opportunity_User_Account",
+      "source": "Augment_Florian_Opportunity_User_Owner_Role",
+      "folderId": "00l300000033g2xAAA"
+    }
+  },
+  "Augment_csg_so_Oppty_Account_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_csg_so_Oppty_Account",
+      "left_key": [
+        "OpportunityId.OwnerId"
+      ],
+      "right_select": [
+        "Coverage_Country__c",
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OpportunityId.OwnerId"
+    }
+  },
+  "Augment_Status_Health_Check": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Status_Indicator",
+      "left_key": [
+        "Project_Pulse__c"
+      ],
+      "right_select": [
+        "Opportunity_Name__c",
+        "Project__c",
+        "Name",
+        "Not_Primary_Pulse_Record__c",
+        "Project_on_Hold__c",
+        "Id",
+        "Project_Health_Summary__c",
+        "Red_Account_Reason__c",
+        "Control__c",
+        "Overall_Health__c",
+        "Trend_new__c",
+        "Trend__c",
+        "Close_Date__c",
+        "Project_Close_Date__c",
+        "Last_Status_Date__c"
+      ],
+      "right": "Extract_Prj_Health_Chk",
+      "relationship": "Project_Pulse__c"
+    }
+  },
+  "Create Florian_Product_Dataset": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Product_Dataset",
+      "alias": "Product_Dataset",
+      "source": "Augment_Florian_Oppty_Product2",
+      "folderId": "00l300000033g2xAAA"
+    }
+  },
+  "Augment_Comp_Intel_Opptylineitem_Oppty_Acct_User07": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Opptylineitem_Oppty_Acct_User06",
+      "left_key": [
+        "OpportunityId.AccountId.OwnerId.Mgmt_Chain_Level_07__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OpportunityId.AccountId.OwnerId.Mgmt_Chain_Level_07__c"
+    }
+  },
+  "Augment_Comp_Intel_Opptylineitem_Oppty_Acct_User06": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Opptylineitem_Oppty_Acct_User05",
+      "left_key": [
+        "OpportunityId.AccountId.OwnerId.Mgmt_Chain_Level_06__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OpportunityId.AccountId.OwnerId.Mgmt_Chain_Level_06__c"
+    }
+  },
+  "Augment_Comp_Intel_Opptylineitem_Oppty_Acct_User05": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Opptylineitem_Oppty_Acct_User04",
+      "left_key": [
+        "OpportunityId.AccountId.OwnerId.Mgmt_Chain_Level_05__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OpportunityId.AccountId.OwnerId.Mgmt_Chain_Level_05__c"
+    }
+  },
+  "Augment_Comp_Intel_Opptylineitem_Oppty_Acct_User04": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Opptylineitem_Oppty_Acct_User03",
+      "left_key": [
+        "OpportunityId.AccountId.OwnerId.Mgmt_Chain_Level_04__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OpportunityId.AccountId.OwnerId.Mgmt_Chain_Level_04__c"
+    }
+  },
+  "Extract_Prj_Health_Chk": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Opportunity_Name__c"
+        },
+        {
+          "name": "Project__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Not_Primary_Pulse_Record__c"
+        },
+        {
+          "name": "Project_on_Hold__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Project_Health_Summary__c"
+        },
+        {
+          "name": "Red_Account_Reason__c"
+        },
+        {
+          "name": "Control__c"
+        },
+        {
+          "name": "Overall_Health__c"
+        },
+        {
+          "name": "Trend_new__c"
+        },
+        {
+          "name": "Trend__c"
+        },
+        {
+          "name": "Close_Date__c"
+        },
+        {
+          "name": "Project_Close_Date__c"
+        },
+        {
+          "name": "Last_Status_Date__c"
+        }
+      ],
+      "object": "Project_Health_Check__c"
+    }
+  },
+  "Extract_User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fullRefreshToken": "08012017",
+      "fields": [
+        {
+          "name": "Acquired_Company__c"
+        },
+        {
+          "name": "ETSF_User_ID__c"
+        },
+        {
+          "name": "Alias"
+        },
+        {
+          "name": "IsActive"
+        },
+        {
+          "name": "sfbase__Approval_Level__c"
+        },
+        {
+          "name": "BU__c"
+        },
+        {
+          "name": "Business_Unit__c"
+        },
+        {
+          "name": "MobilePhone"
+        },
+        {
+          "name": "City"
+        },
+        {
+          "name": "sfbase__Classification__c"
+        },
+        {
+          "name": "Company__c"
+        },
+        {
+          "name": "CompanyName"
+        },
+        {
+          "name": "Cost_Center__c"
+        },
+        {
+          "name": "Country"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "sfbase__CorporateDivision__c"
+        },
+        {
+          "name": "CSG_Portfolio__c"
+        },
+        {
+          "name": "CSG_Region__c"
+        },
+        {
+          "name": "CSG_Subregion__c"
+        },
+        {
+          "name": "CurrencyIsoCode"
+        },
+        {
+          "name": "DefaultCurrencyIsoCode"
+        },
+        {
+          "name": "Department"
+        },
+        {
+          "name": "Department_Number__c"
+        },
+        {
+          "name": "Division"
+        },
+        {
+          "name": "ECOMM__c"
+        },
+        {
+          "name": "Email"
+        },
+        {
+          "name": "sf62user__Employee_Payroll_ID__c"
+        },
+        {
+          "name": "EmployeeNumber"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "GTMJobFunction__c"
+        },
+        {
+          "name": "GTMJobFunctionDetail__c"
+        },
+        {
+          "name": "GTMJobFunctionStartDate__c"
+        },
+        {
+          "name": "GTMJobFunctionDetailStartDate__c"
+        },
+        {
+          "name": "Hire_Date__c"
+        },
+        {
+          "name": "IsManager__c"
+        },
+        {
+          "name": "ISO_Country__c"
+        },
+        {
+          "name": "JobCode__c"
+        },
+        {
+          "name": "JobFamily__c"
+        },
+        {
+          "name": "JobGrade__c"
+        },
+        {
+          "name": "JobProfile__c"
+        },
+        {
+          "name": "LanguageLocaleKey"
+        },
+        {
+          "name": "LastModifiedDate"
+        },
+        {
+          "name": "Macro_Segment__c"
+        },
+        {
+          "name": "sfbase__Market_Segment__c"
+        },
+        {
+          "name": "Phone"
+        },
+        {
+          "name": "SmallPhotoUrl"
+        },
+        {
+          "name": "sfbase__Region__c"
+        },
+        {
+          "name": "FederationIdentifier"
+        },
+        {
+          "name": "UserPermissionsSFContentUser"
+        },
+        {
+          "name": "State"
+        },
+        {
+          "name": "Street"
+        },
+        {
+          "name": "sfbase__Subregion__c"
+        },
+        {
+          "name": "TimeZoneSidKey"
+        },
+        {
+          "name": "Title"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "UserType"
+        },
+        {
+          "name": "Username"
+        },
+        {
+          "name": "PostalCode"
+        },
+        {
+          "name": "WorkLocation__c"
+        },
+        {
+          "name": "Area__c"
+        },
+        {
+          "name": "Boot_Camp_Date__c"
+        },
+        {
+          "name": "sf62user__manager__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_01__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_02__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_03__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_04__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_05__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_06__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_07__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_08__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_09__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_10__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_11__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_12__c"
+        },
+        {
+          "name": "UserRoleId"
+        },
+        {
+          "name": "Vendor_Manager__c"
+        },
+        {
+          "name": "Coverage_Country__c"
+        },
+        {
+          "name": "LastName"
+        },
+        {
+          "name": "FirstName"
+        },
+        {
+          "name": "WirelessEmail"
+        },
+        {
+          "name": "ManagerId"
+        },
+        {
+          "name": "sf62user__Employee_Number__c"
+        },
+        {
+          "name": "Nickname__c"
+        },
+        {
+          "name": "MarketSegment__c"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "Donations_FY17": {
+    "action": "edgemart",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "alias": "Donations_FY17"
+    }
+  },
+  "Augment_Comp_Intel_Opptylineitem_Oppty_Acct_User03": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Opptylineitem_Oppty_Acct_User",
+      "left_key": [
+        "OpportunityId.AccountId.OwnerId.Mgmt_Chain_Level_03__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OpportunityId.AccountId.OwnerId.Mgmt_Chain_Level_03__c"
+    }
+  },
+  "Filter_grain_rodoni": {
+    "action": "filter",
+    "parameters": {
+      "filter": "BB_LVL_3_USR_ROLE_NM:EQ:AMER - GEO - SMB - EVP",
+      "source": "Extract_sw_acvgrain"
+    }
+  },
+  "Augment_Comp_Intel_Opptylineitem_Oppty_Acct": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Opptylineitem_Oppty",
+      "left_key": [
+        "OpportunityId.AccountId"
+      ],
+      "right_select": [
+        "OwnerId",
+        "Region__c",
+        "Name",
+        "Industry",
+        "Combo_Sector__c",
+        "Id"
+      ],
+      "right": "Extract_Account",
+      "relationship": "OpportunityId.AccountId"
+    }
+  },
+  "Compute_Technical Acct Mgr": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "0",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "0",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Technical Acct Mgr\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "\" \"",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "0",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"07c - Tech Acc Mgr\"",
+          "label": "Product Order",
+          "type": "Text"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Augment_Comp_Intel_Oppty_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Opportunity",
+      "left_key": [
+        "AccountId"
+      ],
+      "right_select": [
+        "Id",
+        "Name",
+        "Industry",
+        "OwnerId",
+        "Region__c",
+        "Combo_Sector__c",
+        "Account_Owner_Role__c"
+      ],
+      "right": "Extract_Account",
+      "relationship": "AccountId"
+    }
+  },
+  "Extract_AccountIntelligence": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Account__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Account_PTB_Score__c"
+        },
+        {
+          "name": "Next_Best_Product_1__c"
+        },
+        {
+          "name": "Next_Best_Product_2__c"
+        },
+        {
+          "name": "Next_Best_Product_3__c"
+        },
+        {
+          "name": "Analytics_Cloud_Order_Quantity__c"
+        },
+        {
+          "name": "App_Cloud_Order_Quantity__c"
+        },
+        {
+          "name": "Customer_Communities_Order_Quantity__c"
+        },
+        {
+          "name": "Pardot_Order_Quantity__c"
+        },
+        {
+          "name": "Partner_Communities_Order_Quantity__c"
+        },
+        {
+          "name": "Quip_Order_Quantity__c"
+        },
+        {
+          "name": "Sales_Cloud_Order_Quantity__c"
+        },
+        {
+          "name": "Steelbrick_Order_Quantity__c"
+        },
+        {
+          "name": "Sandbox_Order_Quantity__c"
+        },
+        {
+          "name": "Service_Cloud_Order_Quantity__c"
+        },
+        {
+          "name": "Shield_Order_Quantity__c"
+        },
+        {
+          "name": "Analytics_Cloud_PTB_Score__c"
+        },
+        {
+          "name": "App_Cloud_PTB_Score__c"
+        },
+        {
+          "name": "Customer_Communities_PTB_Score__c"
+        },
+        {
+          "name": "Marketing_Cloud_PTB_Score__c"
+        },
+        {
+          "name": "Pardot_PTB_Score__c"
+        },
+        {
+          "name": "Partner_Communities_PTB_Score__c"
+        },
+        {
+          "name": "Quip_PTB_Score__c"
+        },
+        {
+          "name": "Sales_Cloud_PTB_Score__c"
+        },
+        {
+          "name": "Steelbrick_PTB_Score__c"
+        },
+        {
+          "name": "Sandbox_PTB_Score__c"
+        },
+        {
+          "name": "Service_Cloud_PTB_Score__c"
+        },
+        {
+          "name": "Shield_PTB_Score__c"
+        },
+        {
+          "name": "Field_Service_Order_Quantity__c"
+        },
+        {
+          "name": "Field_Service_PTB_Score__c"
+        },
+        {
+          "name": "SalesforceIQ_PTB_Order_Quantity__c"
+        },
+        {
+          "name": "SalesforceIQ_PTB_Score__c"
+        },
+        {
+          "name": "Heroku_Order_Quantity__c"
+        },
+        {
+          "name": "Advisory_Services_Order_Quantity__c"
+        },
+        {
+          "name": "Advisory_Services_PTB_Score__c"
+        },
+        {
+          "name": "Success_Plans_Order_Quantity__c"
+        },
+        {
+          "name": "Success_Plans_PTB_Score__c"
+        },
+        {
+          "name": "Account_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "Field_Service_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "Advisory_Services_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "Analytics_Cloud_PTB_Segment_Num__c"
+        },
+        {
+          "name": "App_Cloud_PTB_Segment_Num__c"
+        },
+        {
+          "name": "Pardot_PTB_Segment_Num__c"
+        },
+        {
+          "name": "Quip_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "Sales_Cloud_PTB_Segment_Num__c"
+        },
+        {
+          "name": "SalesforceIQ_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "Steelbrick_PTB_Segment_Num__c"
+        },
+        {
+          "name": "Sandbox_PTB_Segment_Num__c"
+        },
+        {
+          "name": "Service_Cloud_PTB_Segment_Num__c"
+        },
+        {
+          "name": "Shield_PTB_Segment_Num__c"
+        },
+        {
+          "name": "Success_Plans_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Advisory_Services_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Analytics_Cloud_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "App_Cloud_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Customer_Communities_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Field_Service_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Pardot_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Partner_Communities_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Quip_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Sales_Cloud_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Salesforce_Inbox_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Salesforce_QTC_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Sandbox_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Service_Cloud_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Shield_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Success_Plans_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Service_Cloud_PTB_Score_formula__c"
+        },
+        {
+          "name": "Steelbrick_PTB_Segment_New__c"
+        },
+        {
+          "name": "Sales_Cloud_PTB_Score_formula__c"
+        },
+        {
+          "name": "App_Cloud_PTB_Segment_New__c"
+        },
+        {
+          "name": "Platform_PTB_Score__c"
+        },
+        {
+          "name": "Partner_Communities_PTB_Segment_New__c"
+        },
+        {
+          "name": "Partner_Communities_PTB_Segment_Num__c"
+        },
+        {
+          "name": "Advertising_Studio_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Advertising_Studio_Order_Quantity__c"
+        },
+        {
+          "name": "Advertising_Studio_PTB_Score__c"
+        },
+        {
+          "name": "Advertising_Studio_Segment_Numeric__c"
+        },
+        {
+          "name": "Data_Studio_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Data_Studio_Order_Quantity__c"
+        },
+        {
+          "name": "Data_Studio_PTB_Score__c"
+        },
+        {
+          "name": "Data_Studio_Segment_Numeric__c"
+        },
+        {
+          "name": "Datanyze_Score__c"
+        },
+        {
+          "name": "Salesforce_DMP_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Salesforce_DMP_Order_Quantity__c"
+        },
+        {
+          "name": "Salesforce_DMP_PTB_Score__c"
+        },
+        {
+          "name": "Salesforce_DMP_Segment_Numeric__c"
+        },
+        {
+          "name": "Social_Studio_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Social_Studio_Order_Quantity__c"
+        },
+        {
+          "name": "Social_Studio_PTB_Score__c"
+        },
+        {
+          "name": "Social_Studio_Segment_Numeric__c"
+        },
+        {
+          "name": "Messaging_Journeys_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Messaging_Journeys_Order_Quantity__c"
+        },
+        {
+          "name": "Messaging_Journeys_PTB_Score__c"
+        },
+        {
+          "name": "Messaging_Journeys_Segment_Numeric__c"
+        },
+        {
+          "name": "CloudCraze_PTB_Score__c"
+        },
+        {
+          "name": "CloudCraze_Segment_Numeric__c"
+        },
+        {
+          "name": "Commerce_Cloud_Order_Quantity__c"
+        },
+        {
+          "name": "Commerce_Cloud_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Commerce_Cloud_Segment_Numeric__c"
+        },
+        {
+          "name": "Commerce_Cloud_PTB_Score__c"
+        },
+        {
+          "name": "Health_Cloud_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Health_Cloud_Order_Quantity__c"
+        },
+        {
+          "name": "Health_Cloud_PTB_Score__c"
+        },
+        {
+          "name": "Health_Cloud_Segment_Numeric__c"
+        },
+        {
+          "name": "Total_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "UE_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "UE_Order_Quantity__c"
+        },
+        {
+          "name": "PTB_Market_Segment__c"
+        },
+        {
+          "name": "Heroku_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Heroku_PTB_Score__c"
+        },
+        {
+          "name": "Heroku_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "Financial_Services_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Financial_Services_Order_Quantity__c"
+        },
+        {
+          "name": "Financial_Services_PTB_Score__c"
+        },
+        {
+          "name": "Financial_Services_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "Analytics_Cloud_PTB_Segment_New__c"
+        },
+        {
+          "name": "Digital_Engagement_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Digital_Engagement_Order_Quantity__c"
+        },
+        {
+          "name": "Digital_Engagement_PTB_Score__c"
+        },
+        {
+          "name": "Digital_Engagement_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "Customer_Communities_PTB_Segment_New__c"
+        },
+        {
+          "name": "Customer_Communities_PTB_Segment_Num__c"
+        },
+        {
+          "name": "Advertising_Studio_ACV_Potential__c"
+        },
+        {
+          "name": "B2B_Commerce_ACV_Potential__c"
+        },
+        {
+          "name": "Commerce_ACV_Potential__c"
+        },
+        {
+          "name": "Core_Sales_ACV_Potential__c"
+        },
+        {
+          "name": "Core_Service_ACV_Potential__c"
+        },
+        {
+          "name": "Customer_Communities_ACV_Potential__c"
+        },
+        {
+          "name": "Data_Studio_ACV_Potential__c"
+        },
+        {
+          "name": "Digital_Engagement_ACV_Potential__c"
+        },
+        {
+          "name": "Einstein_Analytics_ACV_Potential__c"
+        },
+        {
+          "name": "Field_Service_ACV_Potential__c"
+        },
+        {
+          "name": "Financial_Services_ACV_Potential__c"
+        },
+        {
+          "name": "Health_Cloud_ACV_Potential__c"
+        },
+        {
+          "name": "Heroku_ACV_Potential__c"
+        },
+        {
+          "name": "Lighting_Platform_ACV_Potential__c"
+        },
+        {
+          "name": "Messaging_Journeys_ACV_Potential__c"
+        },
+        {
+          "name": "Pardot_ACV_Potential__c"
+        },
+        {
+          "name": "Partner_Communities_ACV_Potential__c"
+        },
+        {
+          "name": "Quip_ACV_Potential__c"
+        },
+        {
+          "name": "Sales_Cloud_Einstein_ACV_Potential__c"
+        },
+        {
+          "name": "Salesforce_CPQ_ACV_Potential__c"
+        },
+        {
+          "name": "Salesforce_DMP_ACV_Potential__c"
+        },
+        {
+          "name": "Salesforce_Inbox_ACV_Potential__c"
+        },
+        {
+          "name": "Sandbox_ACV_Potential__c"
+        },
+        {
+          "name": "Shield_ACV_Potential__c"
+        },
+        {
+          "name": "Social_Studio_ACV_Potential__c"
+        },
+        {
+          "name": "B2B_Commerce_Order_Quantity__c"
+        },
+        {
+          "name": "MuleSoft_PTB_Segment__c"
+        },
+        {
+          "name": "MuleSoft_Segment_Numeric__c"
+        },
+        {
+          "name": "B2B_Commerce_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Initial_Best_Product_1__c"
+        },
+        {
+          "name": "Initial_Best_Product_2__c"
+        },
+        {
+          "name": "Initial_Best_Product_3__c"
+        },
+        {
+          "name": "Next_Best_Up_Sell_Product_1__c"
+        },
+        {
+          "name": "Next_Best_Up_Sell_Product_2__c"
+        },
+        {
+          "name": "Next_Best_Up_Sell_Product_3__c"
+        },
+        {
+          "name": "Account_PTB_Segment__c"
+        }
+      ],
+      "object": "Account_Intelligence__c"
+    }
+  },
+  "Augment_Comp_Intel_Oppty_Acct_User6": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Oppty_Acct_User5",
+      "left_key": [
+        "OwnerId.Mgmt_Chain_Level_06__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId.Mgmt_Chain_Level_06__c"
+    }
+  },
+  "Extract_RecordType": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "DeveloperName"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "RecordType"
+    }
+  },
+  "Extract_Pse_Region": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Status__c"
+        }
+      ],
+      "object": "pse__Region__c"
+    }
+  },
+  "Extract_acvcommit": {
+    "action": "edgemart",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "alias": "sw_acv_commit"
+    }
+  },
+  "Augment_Comp_Intel_Oppty_Acct_User5": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Oppty_Acct_User4",
+      "left_key": [
+        "OwnerId.Mgmt_Chain_Level_05__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId.Mgmt_Chain_Level_05__c"
+    }
+  },
+  "Compute_SalesforceQTC": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Steelbrick_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Steelbrick_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Salesforce CPQ\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Steelbrick_PTB_Segment_Num__c == 1 then \"\u2605\" when Steelbrick_PTB_Segment_Num__c == 2 then \"\u2605\u2605\" when Steelbrick_PTB_Segment_Num__c == 3 then \"\u2605\u2605\u2605\" when Steelbrick_PTB_Segment_Num__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Steelbrick_PTB_Segment_Num__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"01c - Steelbrick\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Salesforce_CPQ_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Compute_SuccessPlans": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Success_Plans_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Success_Plans_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Success Plans\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Success_Plans_PTB_Segment_Numeric__c == 1 then \"\u2605\" when Success_Plans_PTB_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Success_Plans_PTB_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Success_Plans_PTB_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Success_Plans_PTB_Segment_Numeric__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"07a - Success Plans\"",
+          "label": "Product Order",
+          "type": "Text"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Augment_User_Manager_Chain02": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_User_Manager_Chain01",
+      "left_key": [
+        "Mgmt_Chain_Level_02__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_02__c"
+    }
+  },
+  "Augment_Comp_Intel_Oppty_Acct_User7": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Oppty_Acct_User6",
+      "left_key": [
+        "OwnerId.Mgmt_Chain_Level_07__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId.Mgmt_Chain_Level_07__c"
+    }
+  },
+  "Augment_User_Manager_Chain01": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_User_Manager",
+      "left_key": [
+        "Mgmt_Chain_Level_01__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_01__c"
+    }
+  },
+  "Compute_DataCom": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Product",
+          "saqlExpression": "\"Data.com\"",
+          "label": "Product",
+          "type": "Text"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Compute_b2bCommerce Cloud": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "CloudCraze_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"B2B Commerce\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "B2B_Commerce_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when CloudCraze_Segment_Numeric__c == 1 then \"\u2605\" when CloudCraze_Segment_Numeric__c == 2 then \"\u2605\u2605\" when CloudCraze_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when CloudCraze_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "CloudCraze_Segment_Numeric__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"08a - B2B Commerce\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "B2B_Commerce_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Augment_User_Manager_Chain04": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_User_Manager_Chain03",
+      "left_key": [
+        "Mgmt_Chain_Level_04__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_04__c"
+    }
+  },
+  "Augment_Roberto_Case_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Roberto_Case_Account",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Vendor_Manager__c",
+        "UserRoleId",
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId"
+    }
+  },
+  "Augment_User_Manager_Chain03": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_User_Manager_Chain02",
+      "left_key": [
+        "Mgmt_Chain_Level_03__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_03__c"
+    }
+  },
+  "Augment_Comp_Intel_Oppty_Acct_User4": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Oppty_Acct_User3",
+      "left_key": [
+        "OwnerId.Mgmt_Chain_Level_04__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId.Mgmt_Chain_Level_04__c"
+    }
+  },
+  "Augment_User_Manager_Chain06": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_User_Manager_Chain05",
+      "left_key": [
+        "Mgmt_Chain_Level_06__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_06__c"
+    }
+  },
+  "Compute_SegmentNumeric": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Sandbox_Segment_Numeric",
+          "saqlExpression": "case when Sandbox_PTB_Segment_Num__c == 1 then \"\u2605\" when Sandbox_PTB_Segment_Num__c == 2 then \"\u2605\u2605\" when Sandbox_PTB_Segment_Num__c == 3 then \"\u2605\u2605\u2605\" when Sandbox_PTB_Segment_Num__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "Sandbox PTB Segment",
+          "type": "Text"
+        },
+        {
+          "name": "Shield_Segment_Numeric",
+          "saqlExpression": "case when Shield_PTB_Segment_Num__c == 1 then \"\u2605\" when Shield_PTB_Segment_Num__c == 2 then \"\u2605\u2605\" when Shield_PTB_Segment_Num__c == 3 then \"\u2605\u2605\u2605\" when Shield_PTB_Segment_Num__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "Shield PTB Segment",
+          "type": "Text"
+        },
+        {
+          "name": "Sales_Cloud_Segment_Numeric",
+          "saqlExpression": "case when Sales_Cloud_PTB_Segment_Num__c == 1 then \"\u2605\" when Sales_Cloud_PTB_Segment_Num__c == 2 then \"\u2605\u2605\" when Sales_Cloud_PTB_Segment_Num__c == 3 then \"\u2605\u2605\u2605\" when Sales_Cloud_PTB_Segment_Num__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "Sales Cloud PTB Segment",
+          "type": "Text"
+        },
+        {
+          "name": "Salesforce_Inbox_Segment_Numeric",
+          "saqlExpression": "case when SalesforceIQ_PTB_Segment_Numeric__c == 1 then \"\u2605\" when SalesforceIQ_PTB_Segment_Numeric__c == 2 then \"\u2605\u2605\" when SalesforceIQ_PTB_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when SalesforceIQ_PTB_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "Salesforce Inbox PTB Segment",
+          "type": "Text"
+        },
+        {
+          "name": "Quip_Segment_Numeric",
+          "saqlExpression": "case when Quip_PTB_Segment_Numeric__c == 1 then \"\u2605\" when Quip_PTB_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Quip_PTB_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Quip_PTB_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "Quip PTB Segment",
+          "type": "Text"
+        },
+        {
+          "name": "Success_Plans_Segment_Numeric",
+          "saqlExpression": "case when Success_Plans_PTB_Segment_Numeric__c == 1 then \"\u2605\" when Success_Plans_PTB_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Success_Plans_PTB_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Success_Plans_PTB_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "Success Plans PTB Segment",
+          "type": "Text"
+        },
+        {
+          "name": "Salesforce_QTC_Segment_Numeric",
+          "saqlExpression": "case when Steelbrick_PTB_Segment_Num__c == 1 then \"\u2605\" when Steelbrick_PTB_Segment_Num__c == 2 then \"\u2605\u2605\" when Steelbrick_PTB_Segment_Num__c == 3 then \"\u2605\u2605\u2605\" when Steelbrick_PTB_Segment_Num__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "Salesforce QTC PTB Segment",
+          "type": "Text"
+        },
+        {
+          "name": "Service_Cloud_Segment_Numeric",
+          "saqlExpression": "case when Service_Cloud_PTB_Segment_Num__c == 1 then \"\u2605\" when Service_Cloud_PTB_Segment_Num__c == 2 then \"\u2605\u2605\" when Service_Cloud_PTB_Segment_Num__c == 3 then \"\u2605\u2605\u2605\" when Service_Cloud_PTB_Segment_Num__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "Service Cloud PTB Segment",
+          "type": "Text"
+        },
+        {
+          "name": "Analytics_Cloud_Segment_Numeric",
+          "saqlExpression": "case when Analytics_Cloud_PTB_Segment_Num__c == 1 then \"\u2605\" when Analytics_Cloud_PTB_Segment_Num__c == 2 then \"\u2605\u2605\" when Analytics_Cloud_PTB_Segment_Num__c == 3 then \"\u2605\u2605\u2605\" when Analytics_Cloud_PTB_Segment_Num__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "Analytics Cloud PTB Segment",
+          "type": "Text"
+        },
+        {
+          "name": "Pardot_Segment_Numeric",
+          "saqlExpression": "case when Pardot_PTB_Segment_Num__c == 1 then \"\u2605\" when Pardot_PTB_Segment_Num__c == 2 then \"\u2605\u2605\" when Pardot_PTB_Segment_Num__c == 3 then \"\u2605\u2605\u2605\" when Pardot_PTB_Segment_Num__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "Pardot PTB Segment",
+          "type": "Text"
+        },
+        {
+          "name": "Einstein_Segment_Numeric",
+          "saqlExpression": "\" \"",
+          "label": "Einstein PTB Segment",
+          "type": "Text"
+        },
+        {
+          "name": "Field_Services_Segment_Numeric",
+          "saqlExpression": "case when Field_Service_PTB_Segment_Numeric__c == 1 then \"\u2605\" when Field_Service_PTB_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Field_Service_PTB_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Field_Service_PTB_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "Field Services PTB Segment",
+          "type": "Text"
+        },
+        {
+          "name": "Advisory_Services_Segment_Numeric",
+          "saqlExpression": "case when Advisory_Services_PTB_Segment_Numeric__c == 1 then \"\u2605\" when Advisory_Services_PTB_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Advisory_Services_PTB_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Advisory_Services_PTB_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "Advisory Services PTB Segment",
+          "type": "Text"
+        },
+        {
+          "name": "Marketing_Cloud_Segment_Numeric",
+          "saqlExpression": "\" \"",
+          "label": "Marketing Cloud PTB Segment",
+          "type": "Text"
+        },
+        {
+          "name": "App_Cloud_Segment_Numeric",
+          "saqlExpression": "case when App_Cloud_PTB_Segment_Num__c == 1 then \"\u2605\" when App_Cloud_PTB_Segment_Num__c == 2 then \"\u2605\u2605\" when App_Cloud_PTB_Segment_Num__c == 3 then \"\u2605\u2605\u2605\" when App_Cloud_PTB_Segment_Num__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "App Cloud PTB Segment",
+          "type": "Text"
+        },
+        {
+          "name": "Account_Segment_Numeric",
+          "saqlExpression": "case when Account_PTB_Segment_Numeric__c == 1 then \"\u2605\" when Account_PTB_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Account_PTB_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Account_PTB_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "Account PTB Segment",
+          "type": "Text"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Compute_AnalyticsCloud": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Analytics_Cloud_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Analytics_Cloud_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Einstein Analytics\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Analytics_Cloud_PTB_Segment_Num__c == 1 then \"\u2605\" when Analytics_Cloud_PTB_Segment_Num__c == 2 then \"\u2605\u2605\" when Analytics_Cloud_PTB_Segment_Num__c == 3 then \"\u2605\u2605\u2605\" when Analytics_Cloud_PTB_Segment_Num__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Analytics_Cloud_PTB_Segment_Num__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"06a - Analytics\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Einstein_Analytics_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Augment_Comp_Intel_Oppty_Acct_User3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Oppty_Account_User",
+      "left_key": [
+        "OwnerId.Mgmt_Chain_Level_03__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId.Mgmt_Chain_Level_03__c"
+    }
+  },
+  "Augment_User_Manager_Chain05": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_User_Manager_Chain04",
+      "left_key": [
+        "Mgmt_Chain_Level_05__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "Mgmt_Chain_Level_05__c"
+    }
+  },
+  "RegisterUserEvents": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "UserEvents",
+      "alias": "UserEvents",
+      "source": "UserEvents"
+    }
+  },
+  "Compute_Sandbox": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Sandbox_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Sandbox_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Sandbox\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Sandbox_PTB_Segment_Num__c == 1 then \"\u2605\" when Sandbox_PTB_Segment_Num__c == 2 then \"\u2605\u2605\" when Sandbox_PTB_Segment_Num__c == 3 then \"\u2605\u2605\u2605\" when Sandbox_PTB_Segment_Num__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Sandbox_PTB_Segment_Num__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"05g - Sandbox\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Sandbox_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Compute_Sales Cloud Einstein": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "0",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "0",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Sales Cloud Einstein\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "\" \"",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "0",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"01h - Sales Cloud Einstein\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Sales_Cloud_Einstein_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Augment_Florian_Opportunity_Account_User_UserRole09": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Florian_Opportunity_Account_User_UserRole08",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_09__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_09__c"
+    }
+  },
+  "Augment_Opptyline_Userrole2": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Opptyline_User",
+      "left_key": [
+        "OpportunityId.OwnerId.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_UserRole",
+      "relationship": "OpportunityId.OwnerId.UserRoleId"
+    }
+  },
+  "Compute_Data Studio": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Data_Studio_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Data_Studio_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Data Studio\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Data_Studio_Segment_Numeric__c == 1 then \"\u2605\" when Data_Studio_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Data_Studio_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Data_Studio_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Data_Studio_Segment_Numeric__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"03c - Data Studio \"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Data_Studio_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Compute_Digital Engagement": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Digital_Engagement_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Digital_Engagement_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Digital Engagement\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Digital_Engagement_PTB_Segment_Numeric__c == 1 then \"\u2605\" when Digital_Engagement_PTB_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Digital_Engagement_PTB_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Digital_Engagement_PTB_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Digital_Engagement_PTB_Segment_Numeric__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"02i - Digital Eng \"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Digital_Engagement_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Register_AccountIntelligenceDetailWaveAEAccount": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "eas_AccountIntelDetails",
+      "alias": "eas_AccountIntelDetails",
+      "source": "ComputeFields_AcctIntelligenceDetail"
+    }
+  },
+  "Extract_OpportunityLineItem": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fullRefreshToken": "08012017",
+      "fields": [
+        {
+          "name": "OpportunityId"
+        },
+        {
+          "name": "Support_Revenue__c"
+        },
+        {
+          "name": "Quantity"
+        },
+        {
+          "name": "Support_Bookings__c"
+        },
+        {
+          "name": "TotalPrice"
+        },
+        {
+          "name": "ProductCode"
+        },
+        {
+          "name": "Product2Id"
+        },
+        {
+          "name": "Analytics_Cloud_ACV__c"
+        },
+        {
+          "name": "BeyondCore_ACV__c"
+        },
+        {
+          "name": "Custom_Cloud_ACV__c"
+        },
+        {
+          "name": "Data_com_ACV__c"
+        },
+        {
+          "name": "Desk_com_ACV__c"
+        },
+        {
+          "name": "MC_ACV__c"
+        },
+        {
+          "name": "MC_Ads_ACV__c"
+        },
+        {
+          "name": "MC_Exact_Target_ACV__c"
+        },
+        {
+          "name": "MC_Krux_ACV__c"
+        },
+        {
+          "name": "MC_Social_ACV__c"
+        },
+        {
+          "name": "Pardot_ACV__c"
+        },
+        {
+          "name": "SalesforceIQ_ACV__c"
+        },
+        {
+          "name": "Service_Cloud_ACV__c"
+        },
+        {
+          "name": "Sales_Cloud_ACV__c"
+        },
+        {
+          "name": "SteelBrick_ACV__c"
+        },
+        {
+          "name": "Quip_Cloud_ACV__c"
+        },
+        {
+          "name": "LiveMessage_ACV__c"
+        },
+        {
+          "name": "Family__c"
+        },
+        {
+          "name": "Work_com_ACV__c"
+        },
+        {
+          "name": "Product_Name__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "UnitPrice"
+        },
+        {
+          "name": "Total_List_Price__c"
+        },
+        {
+          "name": "ListPrice"
+        },
+        {
+          "name": "Discount__c"
+        },
+        {
+          "name": "Adjusted_Total_price__c"
+        },
+        {
+          "name": "Cloud__c"
+        }
+      ],
+      "object": "OpportunityLineItem"
+    }
+  },
+  "Augment_Health_Check_Oppty_Prj": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Health_Region",
+      "left_key": [
+        "Project_Pulse__c.Project__c"
+      ],
+      "right_select": [
+        "Name",
+        "pse__Start_Date__c",
+        "pse__End_Date__c",
+        "pse__Stage__c",
+        "RecordTypeId"
+      ],
+      "right": "Extract_Project",
+      "relationship": "Project_Pulse__c.Project__c"
+    }
+  },
+  "register_ProgramEngagement_Extended": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Program Engagement extended",
+      "alias": "Program_Engagement_extended",
+      "source": "SliceFields"
+    }
+  },
+  "Augment_Health_Check_Oppty": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Status_Health_Check",
+      "left_key": [
+        "Project_Pulse__c.Opportunity_Name__c"
+      ],
+      "right_select": [
+        "Name",
+        "pse__Region__c",
+        "Platform_Cloud_Sales_Amount__c",
+        "Marketing_Amount__c",
+        "Steelbrick_Amount__c",
+        "Other_Description__c",
+        "Sales_Amount__c",
+        "Custom_Amount__c",
+        "SR_Non_SFA_Product_Amount__c"
+      ],
+      "right": "Extract_Opportunity",
+      "relationship": "Project_Pulse__c.Opportunity_Name__c"
+    }
+  },
+  "SuccessProgram": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Status__c"
+        },
+        {
+          "name": "OwnerId"
+        }
+      ],
+      "object": "Success_Program__c"
+    }
+  },
+  "ComputeFields_AcctIntelligenceDetail": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Drop_DetailFields",
+      "computedFields": [
+        {
+          "name": "PTB_Bin",
+          "saqlExpression": "case when 'RecordTypeId.Name' == \"Cross/Up-sell Intelligence\" then (case when 'Order_Quantity' > 0 or 'PTB_Segment_Numeric' <= 1 then \"1\" when 'Order_Quantity' == 0 and 'PTB_Segment_Numeric' >= 2 and 'PTB_Segment_Numeric' <= 3 then \"2\" else \"3\" end) else (case when 'PTB_Segment_Numeric' <= 1 then \"1\" when 'PTB_Segment_Numeric' >= 2 and 'PTB_Segment_Numeric' <= 3 then \"2\" else \"3\" end) end",
+          "label": "PTB Bin",
+          "type": "Text"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Create User_Dataset_SharedApp": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "User_All",
+      "alias": "User_All",
+      "source": "Augment_User_Manager_UserRole"
+    }
+  },
+  "Extract_Campaign": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Activity__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "IsActive"
+        },
+        {
+          "name": "X3_word_summary__c"
+        },
+        {
+          "name": "Address__c"
+        },
+        {
+          "name": "Audience__c"
+        },
+        {
+          "name": "Campaign_Objective__c"
+        },
+        {
+          "name": "Campaign_Partner__c"
+        },
+        {
+          "name": "Campaign_Quarter__c"
+        },
+        {
+          "name": "Campaign_Source_Type__c"
+        },
+        {
+          "name": "Campaign_Tactic__c"
+        },
+        {
+          "name": "City__c"
+        },
+        {
+          "name": "Country__c"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "Dept_Function__c"
+        },
+        {
+          "name": "Description"
+        },
+        {
+          "name": "EndDate"
+        },
+        {
+          "name": "End_Time__c"
+        },
+        {
+          "name": "Event_Program__c"
+        },
+        {
+          "name": "Event_Type__c"
+        },
+        {
+          "name": "Site__c"
+        },
+        {
+          "name": "Industry__c"
+        },
+        {
+          "name": "Landing_Page__c"
+        },
+        {
+          "name": "LastModifiedById"
+        },
+        {
+          "name": "Lead_Source__c"
+        },
+        {
+          "name": "Location__c"
+        },
+        {
+          "name": "Lead_Type__c"
+        },
+        {
+          "name": "ParentId"
+        },
+        {
+          "name": "Parent_Event_Program__c"
+        },
+        {
+          "name": "Parent_Master_Cmpn__c"
+        },
+        {
+          "name": "Parent_Program__c"
+        },
+        {
+          "name": "Parent_Record_Type__c"
+        },
+        {
+          "name": "Parent_Tactic__c"
+        },
+        {
+          "name": "Parent_Top_Metro_Area__c"
+        },
+        {
+          "name": "Product__c"
+        },
+        {
+          "name": "Program__c"
+        },
+        {
+          "name": "Recommended_Next_Steps__c"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Sales_Contact__c"
+        },
+        {
+          "name": "SEM_Budget_Categorization__c"
+        },
+        {
+          "name": "SEM_Focus_Area__c"
+        },
+        {
+          "name": "SEM_Keyword__c"
+        },
+        {
+          "name": "SEM_Type__c"
+        },
+        {
+          "name": "StartDate"
+        },
+        {
+          "name": "Start_Time__c"
+        },
+        {
+          "name": "Status"
+        },
+        {
+          "name": "Sub_Region__c"
+        },
+        {
+          "name": "Top_Metro_Area__c"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "Vendor__c"
+        },
+        {
+          "name": "Venue_City_State_Zip__c"
+        },
+        {
+          "name": "Venue_Country__c"
+        },
+        {
+          "name": "Venue_Name__c"
+        },
+        {
+          "name": "Venue_Phone_Number__c"
+        },
+        {
+          "name": "Venue_State_Province__c"
+        },
+        {
+          "name": "Venue_Street_Address__c"
+        },
+        {
+          "name": "Venue_Zip__c"
+        },
+        {
+          "name": "AdGroup__c"
+        },
+        {
+          "name": "CurrencyIsoCode"
+        },
+        {
+          "name": "Campaign_Fiscal_Year__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Created_By_Profile__c"
+        },
+        {
+          "name": "Event_Size__c"
+        },
+        {
+          "name": "LastModifiedDate"
+        },
+        {
+          "name": "Campaign__c"
+        },
+        {
+          "name": "Match_Type__c"
+        },
+        {
+          "name": "Segment__c"
+        },
+        {
+          "name": "SEM_Campaign__c"
+        },
+        {
+          "name": "Tactic__c"
+        },
+        {
+          "name": "Team__c"
+        },
+        {
+          "name": "RecordTypeId"
+        }
+      ],
+      "object": "Campaign"
+    }
+  },
+  "Augment_Todd_Opportunity_User_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Todd_Opportunity_User",
+      "left_key": [
+        "PartnerAccountId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_Account",
+      "relationship": "PartnerAccountId"
+    }
+  },
+  "Augment_Comp_Intel_Opptylineitem_Oppty": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_OpportunityLineItem",
+      "left_key": [
+        "OpportunityId"
+      ],
+      "right_select": [
+        "Type",
+        "StageName",
+        "Segment__c",
+        "AccountId",
+        "OwnerId",
+        "Name",
+        "Fiscal",
+        "FiscalYear",
+        "Billing_State_Province__c",
+        "sfquote__AdjustmentAmount__c",
+        "CompetitiveStatus__c",
+        "PrimaryCompetitor__c",
+        "CloseDate",
+        "Platform_Cloud_Sales_Amount__c",
+        "Marketing_Amount__c",
+        "Steelbrick_Amount__c",
+        "Other_Description__c",
+        "Sales_Amount__c",
+        "Custom_Amount__c",
+        "SR_Non_SFA_Product_Amount__c"
+      ],
+      "right": "Extract_Opportunity",
+      "relationship": "OpportunityId"
+    }
+  },
+  "ProgEnga_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ProgramEngagement",
+      "left_key": [
+        "Account__c"
+      ],
+      "right_select": [
+        "Id",
+        "Name",
+        "AccountOwner.Name",
+        "AccountOwner.UserManager.Name",
+        "AOV_Band__c"
+      ],
+      "right": "AccountOwner",
+      "relationship": "ProgEnga_Account",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Augment_User_Manager_UserRole": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_User_Manager_Chain12",
+      "left_key": [
+        "UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_UserRole",
+      "relationship": "UserRoleId"
+    }
+  },
+  "Augment_Comp_Intel_Opptylineitem_Oppty_Acct_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Comp_Intel_Opptylineitem_Oppty_Acct",
+      "left_key": [
+        "OpportunityId.AccountId.OwnerId"
+      ],
+      "right_select": [
+        "sfbase__Market_Segment__c",
+        "Name",
+        "Macro_Segment__c",
+        "Mgmt_Chain_Level_03__c",
+        "Mgmt_Chain_Level_04__c",
+        "Mgmt_Chain_Level_05__c",
+        "Mgmt_Chain_Level_06__c",
+        "Mgmt_Chain_Level_07__c",
+        "sfbase__Classification__c",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OpportunityId.AccountId.OwnerId"
+    }
+  },
+  "User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "ManagerId"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "ProgramEngagement": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Account__c"
+        },
+        {
+          "name": "Case__c"
+        },
+        {
+          "name": "Related_Opportunity__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "As_of_Date__c"
+        },
+        {
+          "name": "Status__c"
+        },
+        {
+          "name": "Success_Program__c"
+        }
+      ],
+      "object": "Program_Engagement__c"
+    }
+  },
+  "OpptyOwner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Opportunity",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "UserManager.Name",
+        "Name"
+      ],
+      "right": "UserManager",
+      "relationship": "OpptyOwner",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Augment_Wave62Acc_AccIntelHeader": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ID"
+      ],
+      "left": "Augment_AcctIntelUser",
+      "left_key": [
+        "Account__c"
+      ],
+      "right_select": [
+        "ACCT_OWN_ID",
+        "MGR_USR_ID_PATH",
+        "USER_ID",
+        "BILING_CITY_NM",
+        "MGR_USR_NM_PATH",
+        "CO_ID",
+        "ID",
+        "PRXY_USR_ID_PATH",
+        "AOV_BAND_TYP",
+        "OWNER_NM",
+        "GLOBAL_CO_NM",
+        "USR_PATH",
+        "CO_NM",
+        "SE_ROLE_ID_PATH",
+        "ACCT_TYPE",
+        "SFDC_TEAM_USR_ID",
+        "USR_ROLE_PATH",
+        "SECTOR_NM",
+        "GLOBAL_CO_ID",
+        "COMBO_CO_NM",
+        "FORCST_USR_ID_PATH",
+        "ACCT_NM",
+        "USR_ROLE_NM",
+        "REGN_NM",
+        "MACRO_SEG_NM",
+        "BILL_ST_NM",
+        "DATASET_ACCS",
+        "INDUSTRY",
+        "BILL_CNTRY_NM",
+        "USR_ROLE_ID_PATH",
+        "AVG_SPRT_CSAT_NUM",
+        "NUM_OF_USRS_CRM",
+        "EDW_NUM_LICENSES",
+        "USAGE_SCORE",
+        "CURR_NUM_LICENSES",
+        "LCK_EMP_CNT",
+        "CURR_ACC_AOV",
+        "NUM_OF_LIC_CRM",
+        "RECORD_TYPE_NM"
+      ],
+      "right": "Extract_aw_account",
+      "relationship": "Account",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Compute_Commerce Cloud": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Commerce_Cloud_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Commerce_Cloud_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"B2C Commerce\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Commerce_Cloud_Segment_Numeric__c == 1 then \"\u2605\" when Commerce_Cloud_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Commerce_Cloud_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Commerce_Cloud_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Commerce_Cloud_Segment_Numeric__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"08b - B2C Commerce\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Commerce_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "UsersWithManagers": {
+    "action": "edgemart",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "alias": "UsersWithManagers"
+    }
+  },
+  "Augment_Florian_Opportunity_Account_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Florian_Opportunity_Account",
+      "left_key": [
+        "AccountId.OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "UserRoleId",
+        "Mgmt_Chain_Level_05__c",
+        "Mgmt_Chain_Level_06__c",
+        "Mgmt_Chain_Level_07__c",
+        "Mgmt_Chain_Level_08__c",
+        "Mgmt_Chain_Level_09__c",
+        "Macro_Segment__c",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId"
+    }
+  },
+  "Augment_Florian_Opportunity_User_Owner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Florian_Opportunity_Account_User_UserRole09",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Id",
+        "UserRoleId",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId"
+    }
+  },
+  "Augment_Wave62Account_AccountIntelligenceDetail": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ID"
+      ],
+      "left": "Append_AllClouds",
+      "left_key": [
+        "Account__c"
+      ],
+      "right_select": [
+        "ACCT_OWN_ID",
+        "MGR_USR_ID_PATH",
+        "USER_ID",
+        "BILING_CITY_NM",
+        "MGR_USR_NM_PATH",
+        "CO_ID",
+        "ID",
+        "PRXY_USR_ID_PATH",
+        "OWNER_NM",
+        "GLOBAL_CO_NM",
+        "USR_PATH",
+        "CO_NM",
+        "SE_ROLE_ID_PATH",
+        "ACCT_TYPE",
+        "SFDC_TEAM_USR_ID",
+        "USR_ROLE_PATH",
+        "SECTOR_NM",
+        "GLOBAL_CO_ID",
+        "COMBO_CO_NM",
+        "FORCST_USR_ID_PATH",
+        "ACCT_NM",
+        "USR_ROLE_NM",
+        "REGN_NM",
+        "MACRO_SEG_NM",
+        "BILL_ST_NM",
+        "DATASET_ACCS",
+        "INDUSTRY",
+        "BILL_CNTRY_NM",
+        "USR_ROLE_ID_PATH",
+        "LCK_EMP_CNT",
+        "RECORD_TYPE_NM"
+      ],
+      "right": "Extract_aw_account",
+      "relationship": "AccountId",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_sw_pipegen": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "sw_pipegen"
+    }
+  },
+  "acvcommit_tony": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "acvcommit_tony",
+      "alias": "acvcommit_tony",
+      "source": "Extract_acvcommit"
+    }
+  },
+  "Augment_Opptyline_Record": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Opptyline_Account",
+      "left_key": [
+        "OpportunityId.RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "OpportunityId.RecordTypeId"
+    }
+  },
+  "CaseOwner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Case",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "UserManager.Name"
+      ],
+      "right": "UserManager",
+      "relationship": "CaseOwner",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Opportunity": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "StageName"
+        },
+        {
+          "name": "Amount"
+        },
+        {
+          "name": "CloseDate"
+        },
+        {
+          "name": "OwnerId"
+        }
+      ],
+      "object": "Opportunity"
+    }
+  },
+  "Create Keith_SpecialistForecast_Opportunity": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SpecialistForecast_Opportunity",
+      "alias": "SpecialistForecast_Opportunity",
+      "source": "Augment_Keith_SpecialistForecast_Opportunity",
+      "folderId": "00l0M000003KqjGQAS"
+    }
+  },
+  "Augment_Florian_Opportunity_Account_User_UserRole06": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Florian_Opportunity_Account_User_UserRole05",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_06__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_06__c"
+    }
+  },
+  "Register_pipegen_rodoni": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "sw_pipegen_rodoni",
+      "alias": "sw_pipegen_rodoni",
+      "source": "Filter_pipegen_rodoni"
+    }
+  },
+  "Augment_Florian_Opportunity_Account_User_UserRole05": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Florian_Opportunity_Account_User_UserRole",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_05__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_05__c"
+    }
+  },
+  "Augment_Florian_Opportunity_Account_User_UserRole08": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Florian_Opportunity_Account_User_UserRole07",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_08__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_08__c"
+    }
+  },
+  "Augment_Todd_Opportunity_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Opportunity",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "Name",
+        "Id",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "OwnerId"
+    }
+  },
+  "Augment_Florian_Opportunity_Account_User_UserRole07": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Florian_Opportunity_Account_User_UserRole06",
+      "left_key": [
+        "AccountId.OwnerId.Mgmt_Chain_Level_07__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "AccountId.OwnerId.Mgmt_Chain_Level_07__c"
+    }
+  },
+  "Drop_DetailFields": {
+    "action": "sliceDataset",
+    "parameters": {
+      "mode": "drop",
+      "source": "Augment_Wave62Account_AccountIntelligenceDetail",
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Analytics_Cloud_Order_Quantity__c"
+        },
+        {
+          "name": "App_Cloud_Order_Quantity__c"
+        },
+        {
+          "name": "Customer_Communities_Order_Quantity__c"
+        },
+        {
+          "name": "Pardot_Order_Quantity__c"
+        },
+        {
+          "name": "Partner_Communities_Order_Quantity__c"
+        },
+        {
+          "name": "Quip_Order_Quantity__c"
+        },
+        {
+          "name": "Sales_Cloud_Order_Quantity__c"
+        },
+        {
+          "name": "Steelbrick_Order_Quantity__c"
+        },
+        {
+          "name": "Sandbox_Order_Quantity__c"
+        },
+        {
+          "name": "Service_Cloud_Order_Quantity__c"
+        },
+        {
+          "name": "Shield_Order_Quantity__c"
+        },
+        {
+          "name": "Analytics_Cloud_PTB_Score__c"
+        },
+        {
+          "name": "App_Cloud_PTB_Score__c"
+        },
+        {
+          "name": "Customer_Communities_PTB_Score__c"
+        },
+        {
+          "name": "Marketing_Cloud_PTB_Score__c"
+        },
+        {
+          "name": "Pardot_PTB_Score__c"
+        },
+        {
+          "name": "Partner_Communities_PTB_Score__c"
+        },
+        {
+          "name": "Quip_PTB_Score__c"
+        },
+        {
+          "name": "Sales_Cloud_PTB_Score__c"
+        },
+        {
+          "name": "Steelbrick_PTB_Score__c"
+        },
+        {
+          "name": "Sandbox_PTB_Score__c"
+        },
+        {
+          "name": "Service_Cloud_PTB_Score__c"
+        },
+        {
+          "name": "Shield_PTB_Score__c"
+        },
+        {
+          "name": "Field_Service_Order_Quantity__c"
+        },
+        {
+          "name": "Field_Service_PTB_Score__c"
+        },
+        {
+          "name": "SalesforceIQ_PTB_Order_Quantity__c"
+        },
+        {
+          "name": "SalesforceIQ_PTB_Score__c"
+        },
+        {
+          "name": "Heroku_Order_Quantity__c"
+        },
+        {
+          "name": "Advisory_Services_Order_Quantity__c"
+        },
+        {
+          "name": "Advisory_Services_PTB_Score__c"
+        },
+        {
+          "name": "Success_Plans_Order_Quantity__c"
+        },
+        {
+          "name": "Success_Plans_PTB_Score__c"
+        },
+        {
+          "name": "Field_Service_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "Advisory_Services_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "Analytics_Cloud_PTB_Segment_Num__c"
+        },
+        {
+          "name": "App_Cloud_PTB_Segment_Num__c"
+        },
+        {
+          "name": "Pardot_PTB_Segment_Num__c"
+        },
+        {
+          "name": "Quip_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "Sales_Cloud_PTB_Segment_Num__c"
+        },
+        {
+          "name": "SalesforceIQ_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "Steelbrick_PTB_Segment_Num__c"
+        },
+        {
+          "name": "Sandbox_PTB_Segment_Num__c"
+        },
+        {
+          "name": "Service_Cloud_PTB_Segment_Num__c"
+        },
+        {
+          "name": "Shield_PTB_Segment_Num__c"
+        },
+        {
+          "name": "Success_Plans_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "Advisory_Services_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Analytics_Cloud_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "App_Cloud_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Customer_Communities_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Field_Service_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Pardot_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Partner_Communities_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Quip_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Sales_Cloud_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Salesforce_Inbox_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Salesforce_QTC_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Sandbox_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Service_Cloud_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Shield_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Success_Plans_Open_Pipe_Amount__c"
+        },
+        {
+          "name": "Advertising_Studio_Order_Quantity__c"
+        },
+        {
+          "name": "Advertising_Studio_PTB_Score__c"
+        },
+        {
+          "name": "Advertising_Studio_Segment_Numeric__c"
+        },
+        {
+          "name": "Data_Studio_Order_Quantity__c"
+        },
+        {
+          "name": "Data_Studio_PTB_Score__c"
+        },
+        {
+          "name": "Data_Studio_Segment_Numeric__c"
+        },
+        {
+          "name": "Salesforce_DMP_Order_Quantity__c"
+        },
+        {
+          "name": "Salesforce_DMP_PTB_Score__c"
+        },
+        {
+          "name": "Salesforce_DMP_Segment_Numeric__c"
+        },
+        {
+          "name": "Social_Studio_Order_Quantity__c"
+        },
+        {
+          "name": "Social_Studio_PTB_Score__c"
+        },
+        {
+          "name": "Social_Studio_Segment_Numeric__c"
+        },
+        {
+          "name": "Messaging_Journeys_Order_Quantity__c"
+        },
+        {
+          "name": "Messaging_Journeys_PTB_Score__c"
+        },
+        {
+          "name": "Messaging_Journeys_Segment_Numeric__c"
+        },
+        {
+          "name": "CloudCraze_PTB_Score__c"
+        },
+        {
+          "name": "CloudCraze_Segment_Numeric__c"
+        },
+        {
+          "name": "Commerce_Cloud_Order_Quantity__c"
+        },
+        {
+          "name": "Commerce_Cloud_Segment_Numeric__c"
+        },
+        {
+          "name": "Commerce_Cloud_PTB_Score__c"
+        },
+        {
+          "name": "Health_Cloud_Order_Quantity__c"
+        },
+        {
+          "name": "Health_Cloud_PTB_Score__c"
+        },
+        {
+          "name": "Health_Cloud_Segment_Numeric__c"
+        },
+        {
+          "name": "Heroku_PTB_Score__c"
+        },
+        {
+          "name": "Heroku_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "Financial_Services_Order_Quantity__c"
+        },
+        {
+          "name": "Financial_Services_PTB_Score__c"
+        },
+        {
+          "name": "Financial_Services_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "Digital_Engagement_Order_Quantity__c"
+        },
+        {
+          "name": "Digital_Engagement_PTB_Score__c"
+        },
+        {
+          "name": "Digital_Engagement_PTB_Segment_Numeric__c"
+        },
+        {
+          "name": "Advertising_Studio_ACV_Potential__c"
+        },
+        {
+          "name": "B2B_Commerce_ACV_Potential__c"
+        },
+        {
+          "name": "Commerce_ACV_Potential__c"
+        },
+        {
+          "name": "Core_Sales_ACV_Potential__c"
+        },
+        {
+          "name": "Core_Service_ACV_Potential__c"
+        },
+        {
+          "name": "Customer_Communities_ACV_Potential__c"
+        },
+        {
+          "name": "Data_Studio_ACV_Potential__c"
+        },
+        {
+          "name": "Digital_Engagement_ACV_Potential__c"
+        },
+        {
+          "name": "Einstein_Analytics_ACV_Potential__c"
+        },
+        {
+          "name": "Field_Service_ACV_Potential__c"
+        },
+        {
+          "name": "Financial_Services_ACV_Potential__c"
+        },
+        {
+          "name": "Health_Cloud_ACV_Potential__c"
+        },
+        {
+          "name": "Heroku_ACV_Potential__c"
+        },
+        {
+          "name": "Lighting_Platform_ACV_Potential__c"
+        },
+        {
+          "name": "Messaging_Journeys_ACV_Potential__c"
+        },
+        {
+          "name": "Pardot_ACV_Potential__c"
+        },
+        {
+          "name": "Partner_Communities_ACV_Potential__c"
+        },
+        {
+          "name": "Quip_ACV_Potential__c"
+        },
+        {
+          "name": "Sales_Cloud_Einstein_ACV_Potential__c"
+        },
+        {
+          "name": "Salesforce_CPQ_ACV_Potential__c"
+        },
+        {
+          "name": "Salesforce_DMP_ACV_Potential__c"
+        },
+        {
+          "name": "Salesforce_Inbox_ACV_Potential__c"
+        },
+        {
+          "name": "Sandbox_ACV_Potential__c"
+        },
+        {
+          "name": "Shield_ACV_Potential__c"
+        },
+        {
+          "name": "Social_Studio_ACV_Potential__c"
+        },
+        {
+          "name": "B2B_Commerce_Order_Quantity__c"
+        },
+        {
+          "name": "MuleSoft_Segment_Numeric__c"
+        },
+        {
+          "name": "B2B_Commerce_Open_Pipe_Amount__c"
+        }
+      ]
+    }
+  },
+  "Extract_Project": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "pse__Start_Date__c"
+        },
+        {
+          "name": "pse__End_Date__c"
+        },
+        {
+          "name": "pse__Stage__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Id"
+        }
+      ],
+      "object": "pse__Proj__c"
+    }
+  },
+  "Augment_Florian_Opportunity_Account_User_UserRole": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Florian_Opportunity_Account_User",
+      "left_key": [
+        "AccountId.OwnerId.UserRoleId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_UserRole",
+      "relationship": "AccountId.OwnerId.UserRoleId"
+    }
+  },
+  "DonationsWithUsers": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Username"
+      ],
+      "left": "UserEvents",
+      "left_key": [
+        "Email"
+      ],
+      "right_select": [
+        "Business_Unit__c",
+        "Email",
+        "Company__c",
+        "IsManager__c",
+        "Name",
+        "UserToUserL1.Name",
+        "UserToUserL2.Name",
+        "UserToUserL3.Name",
+        "UserToUserL4.Name",
+        "UserToUserL5.Name",
+        "UserToUserL6.Name",
+        "Department",
+        "WorkLocation__c",
+        "Phone",
+        "State",
+        "Country",
+        "BU__c",
+        "Division",
+        "sf62user__Employee_Number__c",
+        "FirstName",
+        "EmployeeNumber",
+        "Title",
+        "Cost_Center__c",
+        "Username",
+        "Id",
+        "LastName",
+        "UserType",
+        "ManagerId"
+      ],
+      "right": "UsersWithManagers",
+      "relationship": "DonationsWithUsers"
+    }
+  },
+  "Augment_Florian_Opportunity_User_Owner_Role": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Florian_Opportunity_User_Owner",
+      "left_key": [
+        "OwnerId.UserRoleId"
+      ],
+      "right_select": [
+        "DeveloperName"
+      ],
+      "right": "Extract_UserRole",
+      "relationship": "OwnerId.UserRoleId"
+    }
+  },
+  "Augment_Health_Prj_Rec_Type": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Health_Check_Oppty_Prj",
+      "left_key": [
+        "Project_Pulse__c.Project__c.RecordTypeId"
+      ],
+      "right_select": [
+        "DeveloperName"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "Project_Pulse__c.Project__c.RecordTypeId"
+    }
+  },
+  "Create Keith_Company_dataset": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Dataset_Company",
+      "alias": "Dataset_Company",
+      "source": "Extract_Company",
+      "folderId": "00l0M000003KqjGQAS"
+    }
+  },
+  "Augment_User_Manager": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_User",
+      "left_key": [
+        "sf62user__manager__c"
+      ],
+      "right_select": [
+        "Name",
+        "MarketSegment__c"
+      ],
+      "right": "Extract_User",
+      "relationship": "sf62user__manager__c"
+    }
+  },
+  "Augment_Opptyline_Oppty": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_OpportunityLineItem",
+      "left_key": [
+        "OpportunityId"
+      ],
+      "right_select": [
+        "AccountId",
+        "RecordTypeId",
+        "OwnerId",
+        "CreatedById",
+        "sfquote__Adjustment_Amount__c",
+        "CloseDate",
+        "CreatedDate",
+        "IsWon",
+        "IsClosed",
+        "StageName",
+        "Original_Opportunity_Owner_Role__c",
+        "ForecastCategory",
+        "ForecastCategoryName",
+        "Name",
+        "Probability",
+        "Age_Custom__c",
+        "Platform_Cloud_Sales_Amount__c",
+        "Marketing_Amount__c",
+        "Steelbrick_Amount__c",
+        "Other_Description__c",
+        "Sales_Amount__c",
+        "Custom_Amount__c",
+        "SR_Non_SFA_Product_Amount__c"
+      ],
+      "right": "Extract_Opportunity",
+      "relationship": "OpportunityId"
+    }
+  },
+  "Augment_Opptyline_Product": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Opptyline_User1",
+      "left_key": [
+        "Product2Id"
+      ],
+      "right_select": [
+        "sfbase__Product_Line__c",
+        "Name",
+        "Product_Classification__c",
+        "Cloud__c"
+      ],
+      "right": "Extract_Product2",
+      "relationship": "Product2Id"
+    }
+  },
+  "Compute_Social Studio": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Social_Studio_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Social_Studio_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Social Studio\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Social_Studio_Segment_Numeric__c == 1 then \"\u2605\" when Social_Studio_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Social_Studio_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Social_Studio_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Social_Studio_Segment_Numeric__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"03e - Social Studio\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Social_Studio_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Compute_AppCloud": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "App_Cloud_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "App_Cloud_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Lightning_Platform\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when App_Cloud_PTB_Segment_Num__c == 1 then \"\u2605\" when App_Cloud_PTB_Segment_Num__c == 2 then \"\u2605\u2605\" when App_Cloud_PTB_Segment_Num__c == 3 then \"\u2605\u2605\u2605\" when App_Cloud_PTB_Segment_Num__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "App_Cloud_PTB_Segment_Num__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"05a - App_Cloud\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Lighting_Platform_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Augment_Roberto_Case_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Case",
+      "left_key": [
+        "AccountId"
+      ],
+      "right_select": [
+        "Name",
+        "Region__c"
+      ],
+      "right": "Extract_Account",
+      "relationship": "AccountId"
+    }
+  },
+  "Compute_Salesforce DMP": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "augment_Account_Intelligence__c_RecordType",
+      "computedFields": [
+        {
+          "name": "Next_Best_Product_Rank",
+          "saqlExpression": "\"0\"",
+          "label": "Next Best Product Rank",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Order_Quantity",
+          "saqlExpression": "Salesforce_DMP_Order_Quantity__c",
+          "scale": 0,
+          "label": "Order Quantity",
+          "type": "Numeric"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 3,
+          "name": "PTB_Score",
+          "saqlExpression": "Salesforce_DMP_PTB_Score__c",
+          "scale": 2,
+          "label": "PTB Score",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product",
+          "saqlExpression": "\"Salesforce DMP\"",
+          "label": "Product",
+          "type": "Text"
+        },
+        {
+          "name": "Segment_Numeric",
+          "saqlExpression": "case when Salesforce_DMP_Segment_Numeric__c == 1 then \"\u2605\" when Salesforce_DMP_Segment_Numeric__c == 2 then \"\u2605\u2605\" when Salesforce_DMP_Segment_Numeric__c == 3 then \"\u2605\u2605\u2605\" when Salesforce_DMP_Segment_Numeric__c == 4 then \"\u2605\u2605\u2605\u2605\" else \"\u2605\u2605\u2605\u2605\u2605\" end",
+          "label": "PTB Segment",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 1,
+          "name": "PTB_Segment_Numeric",
+          "saqlExpression": "Salesforce_DMP_Segment_Numeric__c",
+          "scale": 0,
+          "label": "PTB Segment Numeric",
+          "type": "Numeric"
+        },
+        {
+          "name": "Product_Order",
+          "saqlExpression": "\"03d - Salesforce DMP\"",
+          "label": "Product Order",
+          "type": "Text"
+        },
+        {
+          "defaultValue": "0",
+          "precision": 9,
+          "name": "Potential_ACV",
+          "saqlExpression": "Salesforce_DMP_ACV_Potential__c",
+          "scale": 0,
+          "label": "Potential ACV",
+          "type": "Numeric"
+        }
+      ],
+      "mergeWithSource": true
+    }
+  },
+  "Augment_Health_Region": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_Health_Check_Oppty",
+      "left_key": [
+        "Project_Pulse__c.Opportunity_Name__c.pse__Region__c"
+      ],
+      "right_select": [
+        "CreatedDate",
+        "Id",
+        "Name",
+        "Status__c"
+      ],
+      "right": "Extract_Pse_Region",
+      "relationship": "Project_Pulse__c.Opportunity_Name__c.pse__Region__c"
+    }
+  },
+  "Register_Project_Health_Check": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Project_Health_Check",
+      "alias": "Project_Health_Check",
+      "source": "Augment_Health_Prj_Rec_Type"
+    }
+  },
+  "Create Dataset Competitive_Intelligence_Opportunity_Product": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Opportunity_Product",
+      "alias": "Opportunity_Product",
+      "source": "Augment_Comp_Intel_Opportunity_User06",
+      "folderId": "00l0M000003YMsvQAG"
+    }
+  },
+  "CaseContact": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "CaseOwner",
+      "left_key": [
+        "ContactId"
+      ],
+      "right_select": [
+        "ContactAccount.Industry",
+        "ContactAccount.Name",
+        "ContactAccount.NameLocal",
+        "ContactAccount.NumberOfEmployees",
+        "ContactAccount.PersonDepartment",
+        "ContactAccount.PersonTitle",
+        "ContactAccount.RecordTypeId",
+        "ContactAccount.Region__c",
+        "ContactAccount.Site",
+        "ContactAccount.Subregion__c",
+        "ContactAccount.Support_Reqd_Region__pc",
+        "ContactAccount.Type",
+        "Department",
+        "FirstNameLocal",
+        "Id",
+        "LastNameLocal",
+        "LeadSource",
+        "Name",
+        "RecordTypeId",
+        "Title"
+      ],
+      "right": "ContactAccount",
+      "relationship": "CaseContact",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "cleanup_Survey_before_register": {
+    "action": "sliceDataset",
+    "parameters": {
+      "mode": "drop",
+      "source": "SurveyFiltered_By_NoDeleted",
+      "fields": [
+        {
+          "name": "Account__c"
+        },
+        {
+          "name": "Case__c"
+        },
+        {
+          "name": "Contact__c"
+        }
+      ]
+    }
+  },
+  "SurveyFiltered_By_NoDeleted": {
+    "action": "filter",
+    "parameters": {
+      "source": "SurveyCase",
+      "saqlFilter": "IsDeleted == \"false\""
+    }
+  },
+  "SurveyAccount": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "SurveyResults",
+      "left_key": [
+        "Account__c"
+      ],
+      "right_select": [
+        "Industry",
+        "Name",
+        "NameLocal",
+        "NumberOfEmployees",
+        "Id",
+        "PersonDepartment",
+        "PersonTitle",
+        "RecordTypeId",
+        "Region__c",
+        "Site",
+        "Subregion__c",
+        "Support_Reqd_Region__pc",
+        "Type",
+        "AccountParent.Name",
+        "AccountParent.NameLocal",
+        "AccountParent.Site",
+        "AccountParent.RecordTypeId",
+        "AccountParent.Industry",
+        "AccountParent.NumberOfEmployees",
+        "AccountParent.PersonTitle",
+        "AccountParent.PersonDepartment",
+        "AccountParent.Region__c"
+      ],
+      "right": "AccountParent",
+      "relationship": "SurveyAccount",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Contact": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "FirstNameLocal"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "LastNameLocal"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Title"
+        },
+        {
+          "name": "Department"
+        },
+        {
+          "name": "LeadSource"
+        }
+      ],
+      "object": "Contact"
+    }
+  },
+  "SurveyResults": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Account__c"
+        },
+        {
+          "name": "Case__c"
+        },
+        {
+          "name": "Contact__c"
+        },
+        {
+          "name": "US_Additional_comments__c"
+        },
+        {
+          "name": "COMPLETIONTIME__c"
+        },
+        {
+          "name": "Technical_Support_Satisfaction__c"
+        },
+        {
+          "name": "Account_Support_Level__c"
+        },
+        {
+          "name": "Case_Owner_Group__c"
+        },
+        {
+          "name": "Case_Owner_Skill_Group__c"
+        },
+        {
+          "name": "Case_Owner_Suggroup__c"
+        },
+        {
+          "name": "Group_name__c"
+        },
+        {
+          "name": "Skill_Group__c"
+        },
+        {
+          "name": "Agent_Satisfaction_Score__c"
+        },
+        {
+          "name": "CS_1st_Instructor_Average_Score__c"
+        },
+        {
+          "name": "CS_2nd_Instructor_Average_Score__c"
+        },
+        {
+          "name": "Customer_Effort_Score__c"
+        },
+        {
+          "name": "Exclude_from_PSA_Score__c"
+        },
+        {
+          "name": "Overall_Score__c"
+        },
+        {
+          "name": "Product_Satisfaction_Score__c"
+        },
+        {
+          "name": "Sentiment_Score__c"
+        },
+        {
+          "name": "Support_Agent_Satisfaction_Score__c"
+        },
+        {
+          "name": "Support_Website_Experience_Score__c"
+        },
+        {
+          "name": "Technical_Support_Satisfaction_Score__c"
+        },
+        {
+          "name": "IsDeleted"
+        }
+      ],
+      "object": "Clicktools_Survey_Results__c"
+    }
+  },
+  "SurveyCase": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "SurveyContact",
+      "left_key": [
+        "Case__c"
+      ],
+      "right_select": [
+        "Account_Number__c",
+        "Agent_Support_Region__c",
+        "Age_hours__c",
+        "CaseContact.ContactAccount.Industry",
+        "CaseContact.ContactAccount.Name",
+        "CaseContact.ContactAccount.NameLocal",
+        "CaseContact.ContactAccount.NumberOfEmployees",
+        "CaseContact.ContactAccount.PersonDepartment",
+        "CaseContact.ContactAccount.PersonTitle",
+        "CaseContact.ContactAccount.RecordTypeId",
+        "CaseContact.ContactAccount.Region__c",
+        "CaseContact.ContactAccount.Site",
+        "CaseContact.ContactAccount.Subregion__c",
+        "CaseContact.ContactAccount.Support_Reqd_Region__pc",
+        "CaseContact.ContactAccount.Type",
+        "CaseContact.Department",
+        "CaseContact.FirstNameLocal",
+        "CaseContact.Id",
+        "CaseContact.LastNameLocal",
+        "CaseContact.LeadSource",
+        "CaseContact.Name",
+        "CaseContact.RecordTypeId",
+        "CaseContact.Title",
+        "CaseNumber",
+        "CaseOwner.Name",
+        "ClosedDate",
+        "cloud_product__c",
+        "Cloud__c",
+        "ContactId",
+        "CreatedById",
+        "CreatedDate",
+        "Delivery_Language__c",
+        "FunctionalArea__c",
+        "General_Application_Area__c",
+        "Id",
+        "IsEscalated",
+        "Language",
+        "Language__c",
+        "LOB__c",
+        "Low_CSAT_Action__c",
+        "Low_CSAT_Root_Cause__c",
+        "Low_CSAT_Detail__c",
+        "Low_CSAT__c",
+        "Origin",
+        "OwnerId",
+        "Priority",
+        "Reason",
+        "RecordTypeId",
+        "Skill_Group__c",
+        "Status",
+        "Subject",
+        "Support_Affiliation__c",
+        "Support_Case_Owner_Delivery_Segmentation__c",
+        "Support_Case_Owner_Group__c",
+        "Support_Case_Owner_Skill_Group__c",
+        "Support_Case_Owner_Subgroup__c",
+        "Support_Level__c",
+        "CaseOwner.UserManager.Name"
+      ],
+      "right": "CaseContact",
+      "relationship": "SurveyCase",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "register_Survey": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Survey_Results_extended",
+      "alias": "Survey_Results_extended",
+      "source": "cleanup_Survey_before_register"
+    }
+  },
+  "AccountParent": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Account",
+      "left_key": [
+        "ParentId"
+      ],
+      "right_select": [
+        "Industry",
+        "Name",
+        "NameLocal",
+        "NumberOfEmployees",
+        "PersonDepartment",
+        "PersonTitle",
+        "RecordTypeId",
+        "Region__c",
+        "Site"
+      ],
+      "right": "Account",
+      "relationship": "AccountParent",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "ContactAccount": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Contact",
+      "left_key": [
+        "AccountId"
+      ],
+      "right_select": [
+        "Industry",
+        "Name",
+        "NameLocal",
+        "NumberOfEmployees",
+        "PersonDepartment",
+        "PersonTitle",
+        "RecordTypeId",
+        "Region__c",
+        "Site",
+        "Subregion__c",
+        "Support_Reqd_Region__pc",
+        "Type"
+      ],
+      "right": "AccountParent",
+      "relationship": "ContactAccount",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "SurveyContact": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "SurveyAccount",
+      "left_key": [
+        "Contact__c"
+      ],
+      "right_select": [
+        "ContactAccount.Industry",
+        "ContactAccount.Name",
+        "ContactAccount.NameLocal",
+        "ContactAccount.NumberOfEmployees",
+        "ContactAccount.PersonDepartment",
+        "ContactAccount.PersonTitle",
+        "ContactAccount.RecordTypeId",
+        "ContactAccount.Region__c",
+        "ContactAccount.Site",
+        "ContactAccount.Subregion__c",
+        "ContactAccount.Support_Reqd_Region__pc",
+        "ContactAccount.Type",
+        "Department",
+        "FirstNameLocal",
+        "LastNameLocal",
+        "LeadSource",
+        "Name",
+        "RecordTypeId",
+        "Title",
+        "Id"
+      ],
+      "right": "ContactAccount",
+      "relationship": "SurveyContact",
+      "operation": "LookupSingleValue"
+    }
+  }
+}

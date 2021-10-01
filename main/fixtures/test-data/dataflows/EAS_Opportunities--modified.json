@@ -1,0 +1,2272 @@
+{
+  "Extract_PricebookEntry": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "fullRefreshToken": "8-9-2016",
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Product2Id"
+        }
+      ],
+      "object": "PricebookEntry"
+    }
+  },
+  "ComputeFields_OpptyProductPTBJoinKey": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Join_OpportunityProductPricebookEntryProductOpportunity",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "AccountProductFamily",
+          "saqlExpression": "'Opportunity.AccountId' + \"_\" + 'Product.Family'",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Extract_Opportunity": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "fullRefreshToken": "8-9-2016",
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "StageName"
+        },
+        {
+          "name": "LeadSource"
+        },
+        {
+          "name": "IsWon"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "IsClosed"
+        },
+        {
+          "name": "ForecastCategory"
+        },
+        {
+          "name": "ForecastCategoryName"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CloseDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "LastModifiedDate",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "AmountConverted__c"
+        },
+        {
+          "name": "Amount"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "Segment__c"
+        },
+        {
+          "name": "Salesforce_Exec_Sponsor__c"
+        },
+        {
+          "name": "Dead_Reason__c"
+        },
+        {
+          "name": "PrimaryCompetitor__c"
+        },
+        {
+          "name": "X30_Day_Extension__c"
+        },
+        {
+          "name": "Next_Steps__c"
+        },
+        {
+          "name": "Manager_Notes__c"
+        },
+        {
+          "name": "sfbase__PriorAnnualContractValue__c"
+        },
+        {
+          "name": "Manager_Forecast_Judgement__c"
+        },
+        {
+          "name": "LastActivityDate"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "Stage_2_Flag__c",
+          "isYearEndFiscalYear": true
+        },
+        {
+          "name": "Contract_End_Date__c"
+        },
+        {
+          "name": "sfbase__Contract_EndDate__c"
+        },
+        {
+          "name": "Lead_Sales_Partner_Role__c"
+        },
+        {
+          "name": "Lead_Sales_Partner_new__c"
+        },
+        {
+          "name": "Implementation_Partner_new__c"
+        },
+        {
+          "name": "Reseller_Partner_Type__c"
+        },
+        {
+          "name": "Reseller_Partner__c"
+        },
+        {
+          "name": "SE_Involved__c"
+        },
+        {
+          "name": "SE_Attached__c"
+        },
+        {
+          "name": "Original_Opportunity_Owner_Role__c"
+        },
+        {
+          "name": "Opportunity_Source__c"
+        },
+        {
+          "name": "Deal_Sponsor__c"
+        }
+      ],
+      "complexFilterConditions": "CloseDate > 2016-01-01",
+      "object": "Opportunity"
+    }
+  },
+  "joinSecPred2": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "PRED_VAL"
+      ],
+      "left": "joinSecurityPredicate",
+      "left_key": [
+        "Account.BillingCountry"
+      ],
+      "right_select": [
+        "PRED_KEY"
+      ],
+      "right": "country_pred",
+      "relationship": "sec2",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_AccountDWH": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ID"
+      ],
+      "left": "ComputeFields_Account",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "CSM_ID_PATH",
+        "GLOBAL_CO_NM",
+        "SFDC_TEAM_USR_ID",
+        "CURR_ACC_AOV",
+        "USR_ROLE_NM"
+      ],
+      "right": "Extract_aw_account",
+      "relationship": "Account",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_Product": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "fullRefreshToken": "8-9-2016",
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "ProductCode"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Family"
+        },
+        {
+          "name": "sfbase__SKU__c"
+        },
+        {
+          "name": "L1_Business_Line__c"
+        },
+        {
+          "name": "L2_Product_Line__c"
+        },
+        {
+          "name": "L3_Product_Family__c"
+        },
+        {
+          "name": "L4_Product_Offering__c"
+        }
+      ],
+      "object": "Product2"
+    }
+  },
+  "Extract_User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "fullRefreshToken": "6-6-2017",
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Username"
+        },
+        {
+          "name": "EmployeeNumber"
+        },
+        {
+          "name": "ManagerId"
+        },
+        {
+          "name": "Mgmt_Chain_Level_06__c"
+        },
+        {
+          "name": "Mgmt_Chain_Level_07__c"
+        },
+        {
+          "name": "FullPhotoUrl"
+        },
+        {
+          "name": "SmallPhotoUrl"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "Slice_duplicate_unique": {
+    "action": "sliceDataset",
+    "parameters": {
+      "mode": "drop",
+      "source": "Filter_Duplicate",
+      "fields": [
+        {
+          "name": "IsDuplicate"
+        },
+        {
+          "name": "uniqueID"
+        }
+      ]
+    }
+  },
+  "Join_OpportunityOwner_OpportunityTeam": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "sfbase__Opportunity__c"
+      ],
+      "left": "Join_OpportunityOwner",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "sfbase__User__c",
+        "User.USR_NM",
+        "User.NameUsername",
+        "User.MgrNameUsername",
+        "User.FORCST_USR_ID_PATH",
+        "User.FORCST_USR_NM_PATH",
+        "User.FORCST_MGR_USR_ID",
+        "User.FORCST_MGR_USR_NM",
+        "User.MGT_USR_ID_PATH",
+        "User.MGT_USR_NM_PATH",
+        "User.MGR_USR_ID",
+        "User.MGR_USR_NM"
+      ],
+      "right": "Join_OpportunityTeamOwner",
+      "relationship": "OpportunityTeam",
+      "operation": "LookupMultiValue"
+    }
+  },
+  "CK_Extract_CountryCodes": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "CountryCodes"
+    }
+  },
+  "Filter_Duplicate": {
+    "action": "filter",
+    "parameters": {
+      "filter": "IsDuplicate:EQ:True",
+      "source": "Compute_duplicate"
+    }
+  },
+  "Extract_RecordType": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "fullRefreshToken": "8-9-2016",
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "RecordType"
+    }
+  },
+  "Augement_EBC_AccountOwnerRole": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_EBC_Meeting",
+      "left_key": [
+        "Account__c"
+      ],
+      "right_select": [
+        "OwnerId",
+        "Account_Owner_Role__c",
+        "Name"
+      ],
+      "right": "sfdcDigest_Account",
+      "relationship": "Account",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_aw_account": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "aw_account"
+    }
+  },
+  "Join_OpportunityProductPricebookEntry": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_OpportunityLineItem",
+      "left_key": [
+        "PricebookEntryId"
+      ],
+      "right_select": [
+        "Product2Id"
+      ],
+      "right": "Extract_PricebookEntry",
+      "relationship": "Pricebook"
+    }
+  },
+  "Register_OpportunityProducts": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "Oppty Products",
+      "alias": "WaveAE_2_OpportunityProducts",
+      "source": "ComputeFields_OpptyProduct"
+    }
+  },
+  "CK_Register_Marc_UserManager": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "Big Deals User Manager",
+      "alias": "Marc_UserManager",
+      "source": "ComputeFields_User"
+    }
+  },
+  "sfdcDigest_User_Dataflow": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "FirstName"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "Register_UserManager": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "User Manager",
+      "alias": "WaveAE_2_UserManager",
+      "source": "ComputeFields_User"
+    }
+  },
+  "Extract_EBC_Meeting": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Account__c"
+        },
+        {
+          "name": "Account_Owner__c"
+        },
+        {
+          "name": "Assistance_Type__c"
+        },
+        {
+          "name": "Briefing_Type__c"
+        },
+        {
+          "name": "Building_Location__c"
+        },
+        {
+          "name": "Child_Campaign__c"
+        },
+        {
+          "name": "Company_Name_Display__c"
+        },
+        {
+          "name": "Company__c"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "Create_Campaign__c"
+        },
+        {
+          "name": "Customer_Attendees__c"
+        },
+        {
+          "name": "Customer_Attendee_List__c"
+        },
+        {
+          "name": "Customer_Executives__c"
+        },
+        {
+          "name": "Customer_Goals__c"
+        },
+        {
+          "name": "Days_to_EBC_Meeting__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "First_Date_End_Time__c"
+        },
+        {
+          "name": "First_Date_Start_Time__c"
+        },
+        {
+          "name": "Estimated_Attendee_Count__c"
+        },
+        {
+          "name": "Initial_Vision_for_Agenda__c"
+        },
+        {
+          "name": "IsDeleted"
+        },
+        {
+          "name": "IsLocked"
+        },
+        {
+          "name": "Key_Highlights__c"
+        },
+        {
+          "name": "LastActivityDate"
+        },
+        {
+          "name": "LastModifiedById"
+        },
+        {
+          "name": "LastModifiedDate"
+        },
+        {
+          "name": "LastReferencedDate"
+        },
+        {
+          "name": "LastViewedDate"
+        },
+        {
+          "name": "Logo_Image__c"
+        },
+        {
+          "name": "MayEdit"
+        },
+        {
+          "name": "Meeting_Display_Name__c"
+        },
+        {
+          "name": "Meeting_End_Date__c"
+        },
+        {
+          "name": "Meeting_Location__c"
+        },
+        {
+          "name": "Meeting_Overview__c"
+        },
+        {
+          "name": "Meeting_Room__c"
+        },
+        {
+          "name": "Meeting_Start_Date__c"
+        },
+        {
+          "name": "Meeting_Tier_Reason__c"
+        },
+        {
+          "name": "Meeting_Tier__c"
+        },
+        {
+          "name": "Meeting_Timezone__c"
+        },
+        {
+          "name": "Meeting_Type_Pill__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "of_Days__c"
+        },
+        {
+          "name": "Opportunity_1_Amount__c"
+        },
+        {
+          "name": "Opportunity_1_Closed_Amount__c"
+        },
+        {
+          "name": "Opportunity_2_Amount__c"
+        },
+        {
+          "name": "Opportunity_2_Closed_Amount__c"
+        },
+        {
+          "name": "Opportunity_3_Amount__c"
+        },
+        {
+          "name": "X3rd_Opportunity__c"
+        },
+        {
+          "name": "X2nd_Opportunity__c"
+        },
+        {
+          "name": "Total_Opportunity_Closed_Amount__c"
+        },
+        {
+          "name": "Total_Opportunity_Amount__c"
+        },
+        {
+          "name": "Top_30__c"
+        },
+        {
+          "name": "Third_Date__c"
+        },
+        {
+          "name": "Third_Date_Start_Time__c"
+        },
+        {
+          "name": "Third_Date_End_Time__c"
+        },
+        {
+          "name": "SystemModstamp"
+        },
+        {
+          "name": "Strategist_Notes__c"
+        },
+        {
+          "name": "SFDC_AVP_RVP__c"
+        },
+        {
+          "name": "Status__c"
+        },
+        {
+          "name": "Second_Date__c"
+        },
+        {
+          "name": "Second_Date_Start_Time__c"
+        },
+        {
+          "name": "Second_Date_End_Time__c"
+        },
+        {
+          "name": "Salesforce_Speakers__c"
+        },
+        {
+          "name": "Salesforce_Goals__c"
+        },
+        {
+          "name": "Salesforce_Executives__c"
+        },
+        {
+          "name": "Salesforce_Executives_Amount__c"
+        },
+        {
+          "name": "Requested_Meeting_Topics__c"
+        },
+        {
+          "name": "Requested_By__c"
+        },
+        {
+          "name": "Requested_By_Name__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Primary_EBC_Focus__c"
+        },
+        {
+          "name": "Parent_EBC__c"
+        },
+        {
+          "name": "Parent_Campaign__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Opportunity__c"
+        },
+        {
+          "name": "Opportunity_3_Closed_Amount__c"
+        },
+        {
+          "name": "Meeting_Date_AVP_Approved__c"
+        }
+      ],
+      "object": "EBC_Meeting__c"
+    }
+  },
+  "sfdcDigest_DSR": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Opportunity__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Oppty_Owner_Role__c"
+        },
+        {
+          "name": "Owner_Role_Name__c"
+        },
+        {
+          "name": "Account_Owner_Role__c"
+        },
+        {
+          "name": "Opportunity_Owner__c"
+        },
+        {
+          "name": "Stage__c"
+        },
+        {
+          "name": "Oppty_Stage__c"
+        },
+        {
+          "name": "Oppty_Close_Date__c"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "Oppty_Amount__c"
+        },
+        {
+          "name": "Start_Date__c"
+        },
+        {
+          "name": "Status__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Days_to_EBC_Meeting__c"
+        },
+        {
+          "name": "Ignite_Request_Type__c"
+        },
+        {
+          "name": "Explain_the_prospects_Cloud_2_Vision__c"
+        }
+      ],
+      "object": "Deal_Support_Request__c"
+    }
+  },
+  "ComputeFields_Account": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Join_Account_Company",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "multiValueSeparator": ",",
+          "name": "Dataset_Access",
+          "saqlExpression": "\"View All,View All Bookings\"",
+          "type": "Text",
+          "isMultiValue": true
+        }
+      ]
+    }
+  },
+  "Extract_OpportunityTeam": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "fullRefreshToken": "8-9-2016",
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "sfbase__Opportunity__c"
+        },
+        {
+          "name": "sfbase__CompValidationRole__c"
+        },
+        {
+          "name": "sfbase__Source__c"
+        },
+        {
+          "name": "sfbase__SplitPercent__c"
+        },
+        {
+          "name": "sfbase__User__c"
+        },
+        {
+          "name": "sfbase__TeamRole__c"
+        },
+        {
+          "name": "Est_Split_Amount__c"
+        },
+        {
+          "name": "Opportunity_Split_Value__c"
+        },
+        {
+          "name": "TeamRoleLookup__c"
+        }
+      ],
+      "complexFilterConditions": "CreatedDate > 2016-01-01T00:00:00.000Z AND sfbase__EndDate__c = null",
+      "object": "sfbase__OpportunityTeam__c"
+    }
+  },
+  "sfdcDigest_DataflowInstance": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "DataflowVersionId"
+        },
+        {
+          "name": "DataflowStatus"
+        },
+        {
+          "name": "EndTime"
+        },
+        {
+          "name": "Message"
+        },
+        {
+          "name": "ExecutionStartTime"
+        },
+        {
+          "name": "StartTime"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "LastModifiedById"
+        }
+      ],
+      "object": "DataflowInstance"
+    }
+  },
+  "Register_UserRole": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "User Role",
+      "alias": "WaveAE_2_UserRole",
+      "source": "ComputeFields_User"
+    }
+  },
+  "Filter_opportunityCloseDate": {
+    "action": "filter",
+    "parameters": {
+      "filter": "CloseDate_Year:R:2017",
+      "source": "Extract_Opportunity"
+    }
+  },
+  "ComputeFields_PTB": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Extract_PTB",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "multiValueSeparator": ",",
+          "name": "Dataset_Access",
+          "saqlExpression": "\"View All,View All Bookings\"",
+          "type": "Text",
+          "isMultiValue": true
+        },
+        {
+          "name": "AccountProductFamily",
+          "saqlExpression": "Account_ID_18 + \"_\" + Product_Family",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Compute_Oppty_Owner_role_Id": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "joinSecPred2",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "Owner_USR_ROLE_NM",
+          "saqlExpression": "case when starts_with('Owner.USR_ROLE_NM',\"MC -\") then \"MC\" \nwhen starts_with('Owner.USR_ROLE_NM',\"CC -\") \nthen \"CC\" \nwhen starts_with('Owner.USR_ROLE_NM',\"MS -\") \nthen \"MS\" \nelse \"Core\" \nend ",
+          "label": "Oppty Owner Role - Cloud",
+          "type": "Text"
+        },
+        {
+          "name": "SEC_PRED_USER_ID_PATH_DS_1",
+          "saqlExpression": "case \nwhen (!('StageName' matches \"Dead\") and !('StageName' matches \"01\") and ('ForecastCategoryName' != \"Omitted\") ) and ('StageName' matches \"Close\" or 'ForecastCategoryName' == \"Closed\") \n\nthen \"ACV:\"+'sec.PRED_KEY'\n\nwhen (!('StageName' matches \"Dead\") and !('StageName' matches \"01\") and ('ForecastCategoryName' != \"Omitted\") and ('ForecastCategoryName' != \"Closed\") and !('StageName' matches \"Close\")) \n\nthen \"OP:\"+'sec.PRED_KEY' \n\nwhen !('StageName' matches \"01\") and !('StageName' matches \"Dead- Dup\") and !('StageName' matches \"Dead - Dup\") and (Stage_2_Flag__c is not null) \n\nthen \"PG:\"+'sec.PRED_KEY'\n\nelse \"Null\"\n\nend",
+          "label": "SEC_PRED_USER_ID_PATH_DS_1",
+          "type": "Text"
+        },
+        {
+          "name": "SEC_PRED_USER_ID_PATH_DS_2",
+          "saqlExpression": "case \nwhen (!(StageName matches \"Dead\") and !(StageName matches \"01\") and (ForecastCategoryName != \"Omitted\") ) and (StageName matches \"Close\" or ForecastCategoryName == \"Closed\") \n\nthen \"ACV:\"+'sec2.PRED_KEY' \n\nwhen (!(StageName matches \"Dead\") and !(StageName matches \"01\") and (ForecastCategoryName != \"Omitted\") and (ForecastCategoryName != \"Closed\") and !(StageName matches \"Close\")) \n\nthen \"OP:\"+'sec2.PRED_KEY' \n\nwhen !('StageName' matches \"01\") and !('StageName' matches \"Dead- Dup\") and !('StageName' matches \"Dead - Dup\") and (Stage_2_Flag__c is not null) \n\nthen \"PG:\"+'sec2.PRED_KEY'\n\nelse \"Null\"\n\nend",
+          "label": "SEC_PRED_USER_ID_PATH_DS_2",
+          "type": "Text"
+        },
+        {
+          "type": "Text",
+          "name": "SEC_PRED_USER_ID_PATH_DS_3",
+          "label": "SEC_PRED_USER_ID_PATH_DS_3",
+          "saqlExpression": "'sec.PRED_KEY'+\"-\"+'sec2.PRED_KEY'"
+        },
+        {
+          "type": "Text",
+          "name": "SEC_PRED_USER_ID_PATH_DS_4",
+          "label": "SEC_PRED_USER_ID_PATH_DS_4",
+          "saqlExpression": "'sec2.PRED_KEY'+\"-\"+'sec.PRED_KEY'"
+        }
+      ]
+    }
+  },
+  "Augment_DSR_RecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_DSR_Opportunity",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcdigest_RecordType",
+      "relationship": "RecordType",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "securityPredicates": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "WRK_SALES_SEC_PRED_KEYS"
+    }
+  },
+  "Extract_UserDirectHierarchy": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "UserDirectHierarchy"
+    }
+  },
+  "sfdcdigest_RecordType": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "RecordType"
+    }
+  },
+  "Extract_OpportunityLineItem": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "fullRefreshToken": "8-9-2016",
+      "fields": [
+        {
+          "name": "OpportunityId"
+        },
+        {
+          "name": "ProductCode"
+        },
+        {
+          "name": "ListPrice"
+        },
+        {
+          "name": "Quantity"
+        },
+        {
+          "name": "Adjusted_Total_price__c"
+        },
+        {
+          "name": "PricebookEntryId"
+        }
+      ],
+      "complexFilterConditions": "CreatedDate > 2016-01-01T00:00:00.000Z",
+      "object": "OpportunityLineItem"
+    }
+  },
+  "Transform_3_DataflowStatus": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Augment_3",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "DataflowStatus_textBucket",
+          "saqlExpression": "case when 'DataflowStatus' == \"Success\" then \"Success\" when 'DataflowStatus' == \"Warnings\" then \"Success\" when 'DataflowStatus' == \"Failed\" then \"Failed\" when 'DataflowStatus' == \"Cancelled\" then \"Failed\" else \"Other\" end",
+          "label": "Job Status textBucket",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "ComputeFields_OpptyProduct": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Join_OpportunityProduct_PTB",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "multiValueSeparator": ",",
+          "name": "Dataset_Access",
+          "saqlExpression": "\"View All,View All Bookings\"",
+          "type": "Text",
+          "isMultiValue": true
+        }
+      ]
+    }
+  },
+  "Register_EBC_Meeting": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "EAS_EBC_Meeting",
+      "alias": "EAS_EBC_Meeting",
+      "source": "Filter_KSC_Region"
+    }
+  },
+  "CK_Register_Marc_Opportunity": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "Big Deals Opportunity",
+      "alias": "Marc_BigDeals_Opportunity",
+      "source": "Augment_Opportunit_User_Deal_Sponsor_Name"
+    }
+  },
+  "Join_OpportunityTeamOwner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "USR_ID"
+      ],
+      "left": "ComputeFields_OpportunityTeam",
+      "left_key": [
+        "sfbase__User__c"
+      ],
+      "right_select": [
+        "MGT_USR_NM_PATH",
+        "FORCST_MGR_USR_ID",
+        "FORCST_USR_ID_PATH",
+        "USR_ROLE_NM",
+        "MGR_USR_ID",
+        "MGR_USR_ROLE_ID",
+        "MGT_USR_ID_PATH",
+        "FORCST_PRXY_USR_NM_PATH",
+        "FORCST_PRXY_USR_ID_PATH",
+        "SE_ROLE_NM_PATH",
+        "FORCST_USR_NM_PATH",
+        "MACRO_SEG_NM",
+        "FORCST_MGR_USR_NM",
+        "FORCST_USR_ROLE_ID_PATH",
+        "MGR_USR_ROLE_NM",
+        "SE_ROLE_ID_PATH",
+        "USR_NM",
+        "USR_ROLE_ID",
+        "FORCST_USR_ROLE_NM_PATH",
+        "MGR_USR_NM",
+        "PARENTHETICAL_USR_FLG",
+        "NameUsername",
+        "MgrNameUsername",
+        "User.Name"
+      ],
+      "right": "ComputeFields_User",
+      "relationship": "User",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Update_UserDirectHierarchy": {
+    "action": "update",
+    "parameters": {
+      "right_key": [
+        "USR_ID"
+      ],
+      "left": "Extract_UserDirectHierarchy",
+      "left_key": [
+        "USR_ID"
+      ],
+      "update_columns": {
+        "FORCST_ENABLED_FLG": "FORCST_ENABLED_FLG",
+        "FORCST_USR_FLG": "FORCST_USR_FLG"
+      },
+      "right": "Extract_New_UserDirectHierarchy"
+    }
+  },
+  "Augment_EBC_Parent_EBC": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augement_EBC_AccountOwnerRole",
+      "left_key": [
+        "Parent_EBC__c"
+      ],
+      "right_select": [
+        "Name",
+        "OwnerId"
+      ],
+      "right": "Extract_EBC_Meeting",
+      "relationship": "ParentEBC",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Register_Opportunity": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "Opportunities",
+      "alias": "WaveAE_2_Opportunity",
+      "source": "Compute_Oppty_Owner_role_Id"
+    }
+  },
+  "Filter_KSC_Region": {
+    "action": "filter",
+    "parameters": {
+      "source": "Compute_KSC_Region",
+      "saqlFilter": "'KSC_Region' != \"Others\""
+    }
+  },
+  "Edgemart_DataflowInstanceInfo": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "DataflowInstanceInfo"
+    }
+  },
+  "ComputeFields_OpportunityTeam": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Extract_OpportunityTeam",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "multiValueSeparator": ",",
+          "name": "Dataset_Access",
+          "saqlExpression": "\"View All,View All Bookings\"",
+          "type": "Text",
+          "isMultiValue": true
+        }
+      ]
+    }
+  },
+  "Compute_KSC_Region": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Augement_Parent_Owner_User",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "saqlExpression": "case when 'Account.Account_Owner_Role__c' matches \"AMER - C - KSC - KEY - EAST\" then \"Key East\" when 'Account.Account_Owner_Role__c' matches \"AMER - C - KSC - KEY - WEST\" then \" Key West\" when 'Account.Account_Owner_Role__c' matches \"AMER - C - KSC - SEL\" then \"Key SEL\" when 'Account.Account_Owner_Role__c' matches \"AMER - C - KSC - CAN\" then \"Key CAN\" else \"Others\" end",
+          "name": "KSC_Region",
+          "label": "KSC Region",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Join_OpportunityProductPricebookEntryProduct": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_OpportunityProductPricebookEntry",
+      "left_key": [
+        "Pricebook.Product2Id"
+      ],
+      "right_select": [
+        "ProductCode",
+        "Name",
+        "Family",
+        "sfbase__SKU__c",
+        "L1_Business_Line__c",
+        "L2_Product_Line__c",
+        "L3_Product_Family__c",
+        "L4_Product_Offering__c"
+      ],
+      "right": "Extract_Product",
+      "relationship": "Product"
+    }
+  },
+  "Augment_Opportunit_User_Deal_Sponsor_Name": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "CK_Augment_Opportunity_CountryCodes",
+      "left_key": [
+        "Deal_Sponsor__c"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "Deal_Sponsor",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "region_pred": {
+    "action": "filter",
+    "parameters": {
+      "source": "securityPredicates",
+      "saqlFilter": "'PRED_TYPE' == \"REGION\""
+    }
+  },
+  "country_pred": {
+    "action": "filter",
+    "parameters": {
+      "source": "securityPredicates",
+      "saqlFilter": "'PRED_TYPE' == \"COUNTRY\""
+    }
+  },
+  "joinSecurityPredicate": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "PRED_VAL"
+      ],
+      "left": "Join_OpportunityOwner_Product",
+      "left_key": [
+        "Account.Region__c"
+      ],
+      "right_select": [
+        "PRED_KEY"
+      ],
+      "right": "region_pred",
+      "relationship": "sec",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "sfdcDigest_User": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Role_ID__c"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "CK_Register_Marc_UserRole": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "Big Deals User Role",
+      "alias": "Marc_UserRole",
+      "source": "ComputeFields_User"
+    }
+  },
+  "Join_AccountOwner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "USR_ID"
+      ],
+      "left": "Join_AccountDWH",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "MGT_USR_NM_PATH",
+        "FORCST_MGR_USR_ID",
+        "FORCST_USR_ID_PATH",
+        "USR_ROLE_NM",
+        "MGR_USR_ID",
+        "MGR_USR_ROLE_ID",
+        "MGT_USR_ID_PATH",
+        "FORCST_PRXY_USR_NM_PATH",
+        "FORCST_PRXY_USR_ID_PATH",
+        "SE_ROLE_NM_PATH",
+        "FORCST_USR_NM_PATH",
+        "MACRO_SEG_NM",
+        "FORCST_MGR_USR_NM",
+        "FORCST_USR_ROLE_ID_PATH",
+        "MGR_USR_ROLE_NM",
+        "SE_ROLE_ID_PATH",
+        "USR_NM",
+        "USR_ROLE_ID",
+        "FORCST_USR_ROLE_NM_PATH",
+        "MGR_USR_NM",
+        "PARENTHETICAL_USR_FLG",
+        "NameUsername",
+        "MgrNameUsername",
+        "User.Name"
+      ],
+      "right": "ComputeFields_User",
+      "relationship": "Owner",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Compute_duplicate": {
+    "action": "computeRelative",
+    "parameters": {
+      "partitionBy": [
+        "uniqueID"
+      ],
+      "orderBy": [
+        {
+          "name": "Id",
+          "direction": "asc"
+        }
+      ],
+      "source": "Compute_uniqueID",
+      "computedFields": [
+        {
+          "expression": {
+            "default": "True",
+            "saqlExpression": "case when previous(uniqueID) is null then \"True\"\nelse \"False\"\nend",
+            "type": "Text"
+          },
+          "name": "IsDuplicate",
+          "description": "Filter field to Duplicated records",
+          "label": "IsDuplicate"
+        }
+      ]
+    }
+  },
+  "sfdcDigest_Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Account_Owner_Role__c"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "ComputeFields_Opportunity": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Filter_opportunityCloseDate",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "multiValueSeparator": ",",
+          "name": "Dataset_Access",
+          "saqlExpression": "\"View All,View All Bookings\"",
+          "type": "Text",
+          "isMultiValue": true
+        },
+        {
+          "name": "CreatedDate_FY_Qr",
+          "saqlExpression": "\"FY\"+'CreatedDate_Year_Fiscal'+\" Q\"+'CreatedDate_Quarter_Fiscal'",
+          "label": "CreatedDate_FY_Qr",
+          "type": "Text"
+        },
+        {
+          "name": "CloseDate_FY_Qr",
+          "saqlExpression": "\"FY\"+'CloseDate_Year_Fiscal'+\" Q\"+'CloseDate_Quarter_Fiscal'",
+          "label": "CloseDate_FY_Qr",
+          "type": "Text"
+        },
+        {
+          "name": "IsGTEStage2",
+          "saqlExpression": "case when !('StageName' matches \"00\") and !('StageName' matches \"01\") then \"true\" else \"false\" end",
+          "type": "Text"
+        },
+        {
+          "name": "DealSize",
+          "saqlExpression": "case when Amount <= 10000 then \"1_>10K\" when Amount > 10000 and Amount <= 100000 then \"2_10K-100K\" when Amount > 100000 and Amount <= 500000 then \"3_100K-500K\" when Amount > 500000 and Amount <= 1000000 then \"4_500K-1M\" else \"5_>1M\" end",
+          "label": "Deal Size",
+          "type": "Text"
+        },
+        {
+          "name": "DealBand",
+          "saqlExpression": "case when Amount < 10000 then \"1.Under_10K\" when Amount > 10000 and Amount <= 25000 then \"2. 10-25K\" when Amount > 25000 and Amount <= 100000 then \"3. 25K-100K\" when Amount > 100000 and Amount <= 500000 then \"4. 100K-500K\" else \"5. >500K\" end",
+          "label": "Deal Band",
+          "type": "Text"
+        },
+        {
+          "name": "Filter_Type",
+          "saqlExpression": " case when 'Type' matches \"Out Clause\" then \"Out Clause\" when 'Type' matches \"Price Increase\" then \"Price Increase\" when'Type' matches \"Off-Cycle\" then \"Off-Cycle\" else \"On-Cycle\" end",
+          "type": "Text"
+        },
+        {
+          "name": "Stage2_Flag_Set",
+          "saqlExpression": "case when 'Stage_2_Flag__c' is null then \"false\" else \"true\" end",
+          "type": "Text"
+        },
+        {
+          "precision": 8,
+          "name": "DaysSinceLastActivity",
+          "saqlExpression": "case when LastActivityDate is null then daysBetween(toDate('LastModifiedDate_Year' + 'LastModifiedDate_Month' + 'LastModifiedDate_Day', \"yyyyMMdd\"), now()) when LastModifiedDate > LastActivityDate then daysBetween(toDate('LastModifiedDate_Year' + 'LastModifiedDate_Month' + 'LastModifiedDate_Day', \"yyyyMMdd\"), now()) else daysBetween(toDate('LastActivityDate_Year' + 'LastActivityDate_Month' + 'LastActivityDate_Day', \"yyyyMMdd\"), now()) end",
+          "scale": 0,
+          "label": "Days Since Last Activity",
+          "type": "Numeric"
+        }
+      ]
+    }
+  },
+  "Select_fields": {
+    "action": "sliceDataset",
+    "parameters": {
+      "mode": "select",
+      "source": "Transform_4_DataflowType",
+      "fields": [
+        {
+          "name": "EndTime"
+        },
+        {
+          "name": "Message"
+        },
+        {
+          "name": "ExecutionStartTime"
+        },
+        {
+          "name": "DataflowStatus"
+        },
+        {
+          "name": "DataflowStatus_textBucket"
+        },
+        {
+          "name": "StartTime"
+        },
+        {
+          "name": "DataflowVersionId"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "LastModifiedById"
+        },
+        {
+          "name": "Dataflo.DataflowId"
+        },
+        {
+          "name": "Dataflo.Id"
+        },
+        {
+          "name": "Datafl1.MasterLabel"
+        },
+        {
+          "name": "Datafl1.DeveloperName"
+        },
+        {
+          "name": "Datafl1.LastModifiedById"
+        },
+        {
+          "name": "Datafl1.CreatedDate"
+        },
+        {
+          "name": "Datafl1.State"
+        },
+        {
+          "name": "Datafl1.DataflowType"
+        },
+        {
+          "name": "Datafl1_DataflowType_textBucket"
+        },
+        {
+          "name": "Datafl1.CreatedById"
+        },
+        {
+          "name": "Datafl1.Description"
+        },
+        {
+          "name": "Datafl1.IsDeleted"
+        },
+        {
+          "name": "Datafl1.LastModifiedDate"
+        },
+        {
+          "name": "Datafl1.Id"
+        },
+        {
+          "name": "User.FirstName"
+        },
+        {
+          "name": "User.Name"
+        },
+        {
+          "name": "User.Id"
+        }
+      ]
+    }
+  },
+  "Join_UserDWH_Manager": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_UserDWH",
+      "left_key": [
+        "MGR_USR_ID"
+      ],
+      "right_select": [
+        "Username",
+        "EmployeeNumber"
+      ],
+      "right": "Extract_User",
+      "relationship": "Manager"
+    }
+  },
+  "sfdcDigest_Dataflow": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "DataflowType"
+        },
+        {
+          "name": "MasterLabel"
+        },
+        {
+          "name": "DeveloperName"
+        },
+        {
+          "name": "LastModifiedById"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "State"
+        },
+        {
+          "name": "Description"
+        },
+        {
+          "name": "IsDeleted"
+        },
+        {
+          "name": "LastModifiedDate"
+        }
+      ],
+      "object": "Dataflow"
+    }
+  },
+  "Augment_2": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_1",
+      "left_key": [
+        "Dataflo.DataflowId"
+      ],
+      "right_select": [
+        "Id",
+        "CreatedById",
+        "DataflowType",
+        "MasterLabel",
+        "DeveloperName",
+        "LastModifiedById",
+        "CreatedDate",
+        "State",
+        "Description",
+        "IsDeleted",
+        "LastModifiedDate"
+      ],
+      "right": "sfdcDigest_Dataflow",
+      "relationship": "Datafl1",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Augment_3": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_2",
+      "left_key": [
+        "Datafl1.CreatedById"
+      ],
+      "right_select": [
+        "Id",
+        "FirstName",
+        "Name"
+      ],
+      "right": "sfdcDigest_User_Dataflow",
+      "relationship": "User",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Augment_1": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "sfdcDigest_DataflowInstance",
+      "left_key": [
+        "DataflowVersionId"
+      ],
+      "right_select": [
+        "Id",
+        "DataflowId"
+      ],
+      "right": "sfdcDigest_DataflowVersion",
+      "relationship": "Dataflo",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_OpportunityProduct_PTB": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "AccountProductFamily"
+      ],
+      "left": "ComputeFields_OpptyProductPTBJoinKey",
+      "left_key": [
+        "AccountProductFamily"
+      ],
+      "right_select": [
+        "PTB_Score"
+      ],
+      "right": "ComputeFields_PTB",
+      "relationship": "PTB"
+    }
+  },
+  "Register_Account": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "Account",
+      "alias": "WaveAE_2_Account",
+      "source": "Join_AccountOwner"
+    }
+  },
+  "Join_OpportunityOwner": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "USR_ID"
+      ],
+      "left": "Join_OpportunityAccount",
+      "left_key": [
+        "OwnerId"
+      ],
+      "right_select": [
+        "MGT_USR_NM_PATH",
+        "FORCST_MGR_USR_ID",
+        "FORCST_USR_ID_PATH",
+        "USR_ROLE_NM",
+        "MGR_USR_ID",
+        "MGR_USR_ROLE_ID",
+        "MGT_USR_ID_PATH",
+        "FORCST_PRXY_USR_NM_PATH",
+        "FORCST_PRXY_USR_ID_PATH",
+        "SE_ROLE_NM_PATH",
+        "FORCST_USR_NM_PATH",
+        "MACRO_SEG_NM",
+        "FORCST_MGR_USR_NM",
+        "FORCST_USR_ROLE_ID_PATH",
+        "MGR_USR_ROLE_NM",
+        "SE_ROLE_ID_PATH",
+        "USR_NM",
+        "USR_ROLE_ID",
+        "FORCST_USR_ROLE_NM_PATH",
+        "MGR_USR_NM",
+        "PARENTHETICAL_USR_FLG",
+        "User.Mgmt_Chain_Level_06__c",
+        "User.Mgmt_Chain_Level_07__c",
+        "User.FullPhotoUrl",
+        "User.SmallPhotoUrl",
+        "NameUsername",
+        "MgrNameUsername",
+        "User.Name"
+      ],
+      "right": "ComputeFields_User",
+      "relationship": "Owner",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_OpportunityProductPricebookEntryProductOpportunity": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_OpportunityProductPricebookEntryProduct",
+      "left_key": [
+        "OpportunityId"
+      ],
+      "right_select": [
+        "AccountId",
+        "OwnerId",
+        "Name",
+        "StageName",
+        "IsWon",
+        "Type",
+        "IsClosed",
+        "ForecastCategory",
+        "ForecastCategoryName",
+        "CreatedDate",
+        "CloseDate",
+        "PrimaryCompetitor__c",
+        "X30_Day_Extension__c",
+        "Next_Steps__c",
+        "Manager_Notes__c",
+        "sfbase__PriorAnnualContractValue__c",
+        "Manager_Forecast_Judgement__c",
+        "CreatedDate_FY_Qr",
+        "CloseDate_FY_Qr",
+        "Filter_Type",
+        "Contract_End_Date__c",
+        "sfbase__Contract_EndDate__c",
+        "RecordType.Name",
+        "Account.Name",
+        "Account.Combo_Company__c",
+        "Account.OwnerId",
+        "Account.Industry",
+        "Account.BillingCountry",
+        "Account.BillingState",
+        "Account.Region__c",
+        "Account.Company__c",
+        "Account.Company__c.Sector__c",
+        "Account.Company__c.Id",
+        "Account.Company__c.Name",
+        "Account.Account.CSM_ID_PATH",
+        "Account.Account.GLOBAL_CO_NM",
+        "Account.Account.SFDC_TEAM_USR_ID",
+        "Account.Owner.SE_ROLE_ID_PATH",
+        "Account.Owner.SE_ROLE_NM_PATH",
+        "Account.Owner.FORCST_MGR_USR_ID",
+        "Account.Owner.FORCST_USR_ID_PATH",
+        "Account.Owner.USR_ROLE_NM",
+        "Account.Owner.MGR_USR_ID",
+        "Account.Owner.MGT_USR_ID_PATH",
+        "Account.Owner.USR_NM",
+        "Account.Owner.MGR_USR_NM",
+        "Account.Owner.NameUsername",
+        "Owner.MGT_USR_NM_PATH",
+        "Owner.FORCST_MGR_USR_ID",
+        "Owner.FORCST_USR_ID_PATH",
+        "Owner.USR_ROLE_NM",
+        "Owner.MGR_USR_ID",
+        "Owner.MGR_USR_ROLE_ID",
+        "Owner.MGT_USR_ID_PATH",
+        "Owner.MACRO_SEG_NM",
+        "Owner.FORCST_MGR_USR_NM",
+        "Owner.MGR_USR_ROLE_NM",
+        "Owner.USR_NM",
+        "Owner.MGR_USR_NM",
+        "Owner.PARENTHETICAL_USR_FLG",
+        "Owner.User.Mgmt_Chain_Level_07__c",
+        "Owner.NameUsername",
+        "OpportunityTeam.sfbase__User__c",
+        "OpportunityTeam.User.MGT_USR_NM_PATH",
+        "OpportunityTeam.User.FORCST_MGR_USR_ID",
+        "OpportunityTeam.User.FORCST_USR_ID_PATH",
+        "OpportunityTeam.User.MGR_USR_ID",
+        "OpportunityTeam.User.MGT_USR_ID_PATH",
+        "OpportunityTeam.User.USR_NM",
+        "OpportunityTeam.User.MGR_USR_NM",
+        "OpportunityTeam.User.NameUsername",
+        "OpportunityTeam.User.MgrNameUsername",
+        "Owner.User.Mgmt_Chain_Level_06__c",
+        "Owner.User.Name",
+        "SE_Involved__c",
+        "SE_Attached__c",
+        "Original_Opportunity_Owner_Role__c",
+        "Opportunity_Source__c",
+        "Deal_Sponsor__c"
+      ],
+      "right": "Join_OpportunityOwner_OpportunityTeam",
+      "relationship": "Opportunity",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Join_UserDWH": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Update_UserDirectHierarchy",
+      "left_key": [
+        "USR_ID"
+      ],
+      "right_select": [
+        "Username",
+        "EmployeeNumber",
+        "Mgmt_Chain_Level_06__c",
+        "Mgmt_Chain_Level_07__c",
+        "FullPhotoUrl",
+        "SmallPhotoUrl",
+        "Name"
+      ],
+      "right": "Extract_User",
+      "relationship": "User",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Register_DataflowInstanceInfo": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "DataflowInstanceInfo",
+      "alias": "DataflowInstanceInfo",
+      "source": "Slice_duplicate_unique"
+    }
+  },
+  "Join_OpportunityAccount": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Join_OpportunityRecordType",
+      "left_key": [
+        "AccountId"
+      ],
+      "right_select": [
+        "Name",
+        "Combo_Company__c",
+        "OwnerId",
+        "AccountSource",
+        "Type",
+        "Industry",
+        "BillingCountry",
+        "BillingState",
+        "Region__c",
+        "Company__c",
+        "Company__c.Sector__c",
+        "Company__c.Id",
+        "Account.CSM_ID_PATH",
+        "Account.GLOBAL_CO_NM",
+        "Account.SFDC_TEAM_USR_ID",
+        "Owner.SE_ROLE_ID_PATH",
+        "Owner.SE_ROLE_NM_PATH",
+        "Owner.MGT_USR_NM_PATH",
+        "Owner.FORCST_MGR_USR_ID",
+        "Owner.FORCST_USR_ID_PATH",
+        "Owner.USR_ROLE_NM",
+        "Owner.MGR_USR_ID",
+        "Owner.MGR_USR_ROLE_ID",
+        "Owner.MGT_USR_ID_PATH",
+        "Owner.MACRO_SEG_NM",
+        "Owner.FORCST_MGR_USR_NM",
+        "Owner.MGR_USR_ROLE_NM",
+        "Owner.USR_NM",
+        "Owner.MGR_USR_NM",
+        "Owner.PARENTHETICAL_USR_FLG",
+        "Owner.NameUsername",
+        "Company__c.Name"
+      ],
+      "right": "Join_AccountOwner",
+      "relationship": "Account",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Compute_uniqueID": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Append_new_old",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "uniqueID",
+          "saqlExpression": "Id + \"-\" + StartTime + \"-\" + EndTime + \"-\" + 'Datafl1.MasterLabel'",
+          "label": "uniqueID",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "ComputeFields_User": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Join_UserDWH_Manager",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "NameUsername",
+          "saqlExpression": "USR_NM + \" (\" + 'User.Username' + \")\"",
+          "label": "Name",
+          "type": "Text"
+        },
+        {
+          "name": "MgrNameUsername",
+          "saqlExpression": "MGR_USR_NM + \" (\" + 'Manager.Username' + \")\"",
+          "label": "Name",
+          "type": "Text"
+        },
+        {
+          "multiValueSeparator": ",",
+          "name": "Dataset_Access",
+          "saqlExpression": "\"View All,View All Bookings\"",
+          "type": "Text",
+          "isMultiValue": true
+        }
+      ]
+    }
+  },
+  "Join_OpportunityRecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ComputeFields_Opportunity",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "Extract_RecordType",
+      "relationship": "RecordType"
+    }
+  },
+  "Transform_4_DataflowType": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Transform_3_DataflowStatus",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "Datafl1_DataflowType_textBucket",
+          "saqlExpression": "case when 'Datafl1.DataflowType' == \"Connector\" then \"Replications\" when 'Datafl1.DataflowType' == \"User\" then \"Dataflows\" when 'Datafl1.DataflowType' == \"Prepared\" then \"Recipes\" when 'Datafl1.DataflowType' == \"System\" then \"External Uploads\" else 'Datafl1.DataflowType' end",
+          "label": "Dataflow Type textBucket",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Extract_VTO_SuccessGraduate": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "VTO"
+    }
+  },
+  "Register_VTO_SuccessGraduate": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Foundation Volunteering Dataset",
+      "alias": "VTO_SuccessGraduate",
+      "source": "Extract_VTO_SuccessGraduate"
+    }
+  },
+  "Filter_DSR_KSC_Region": {
+    "action": "filter",
+    "parameters": {
+      "source": "Compute_DSR_KSC_Region",
+      "saqlFilter": "'KSC_Region' != \"Others\""
+    }
+  },
+  "Join_Account_Company": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Extract_Account",
+      "left_key": [
+        "Company__c"
+      ],
+      "right_select": [
+        "Id",
+        "Name",
+        "Sector__c"
+      ],
+      "right": "Extract_Company",
+      "relationship": "Company__c",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Register_UserManager_rodoni": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "name": "User Manager_rodoni",
+      "alias": "WaveAE_2_UserManager_rodoni",
+      "source": "ComputeFields_User"
+    }
+  },
+  "Augment_DSR_Opportunity_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_DSR_RecordType",
+      "left_key": [
+        "Opportunity.AccountId"
+      ],
+      "right_select": [
+        "Account_Owner_Role__c",
+        "Name"
+      ],
+      "right": "sfdcDigest_Account",
+      "relationship": "Acc",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_Company": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Sector__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "Company__c"
+    }
+  },
+  "Augment_DSR_Opportunity": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "sfdcDigest_DSR",
+      "left_key": [
+        "Opportunity__c"
+      ],
+      "right_select": [
+        "Id",
+        "CloseDate",
+        "CreatedDate",
+        "Amount",
+        "AmountConverted__c",
+        "StageName",
+        "OwnerId",
+        "AccountId",
+        "Name"
+      ],
+      "right": "sfdcDigest_Opportunity",
+      "relationship": "Opportunity",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Extract_Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "SFDCtoken": "SFDCtoken",
+      "fullRefreshToken": "8-9-2016",
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Combo_Company__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "AccountSource"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "Industry"
+        },
+        {
+          "name": "BillingCountry"
+        },
+        {
+          "name": "BillingState"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "CreatedDate"
+        },
+        {
+          "fiscalMonthOffset": 1,
+          "name": "LastModifiedDate"
+        },
+        {
+          "name": "Company__c"
+        },
+        {
+          "name": "Rating"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "Augement_Parent_Owner_User": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_EBC_Parent_EBC",
+      "left_key": [
+        "ParentEBC.OwnerId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdcDigest_User",
+      "relationship": "Parent_Owner",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Compute_DSR_KSC_Region": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Augment_DSR_Opportunity_Account",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "KSC_Region",
+          "saqlExpression": "case when 'Oppty_Owner_Role__c' matches \"AMER - C - KSC - KEY - EAST\" then \"Key East\" when 'Oppty_Owner_Role__c' matches \"AMER - C - KSC - KEY - WEST\" then \" Key West\" when 'Oppty_Owner_Role__c' matches \"AMER - C - KSC - SEL\" then \"Key SEL\" when 'Oppty_Owner_Role__c' matches \"AMER - C - KSC - CAN\" then \"Key CAN\" else \"Others\" end",
+          "label": "KSC Region",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "sfdcDigest_DataflowVersion": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "DataflowId"
+        }
+      ],
+      "object": "DataflowVersion"
+    }
+  },
+  "Append_new_old": {
+    "action": "append",
+    "parameters": {
+      "enableDisjointedSchemaMerge": false,
+      "sources": [
+        "Select_fields",
+        "Edgemart_DataflowInstanceInfo"
+      ]
+    }
+  },
+  "Extract_PTB": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "PTB_By_Org62_Product_Family"
+    }
+  },
+  "sfdcDigest_Opportunity": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "CloseDate"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "Amount"
+        },
+        {
+          "name": "AmountConverted__c"
+        },
+        {
+          "name": "StageName"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "Opportunity"
+    }
+  },
+  "Register_EAS_DSR": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "EAS_DSR",
+      "alias": "EAS_DSR",
+      "source": "Filter_DSR_KSC_Region"
+    }
+  },
+  "Join_OpportunityOwner_Product": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "OpportunityId"
+      ],
+      "left": "Join_OpportunityOwner_OpportunityTeam",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Product.Family",
+        "Product.Name",
+        "Opportunity.SE_Involved__c",
+        "Opportunity.SE_Attached__c",
+        "Opportunity.Original_Opportunity_Owner_Role__c",
+        "Opportunity.Opportunity_Source__c",
+        "Opportunity.Deal_Sponsor__c"
+      ],
+      "right": "ComputeFields_OpptyProduct",
+      "relationship": "Product",
+      "operation": "LookupMultiValue"
+    }
+  },
+  "Extract_New_UserDirectHierarchy": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "Change_in_userdirecthierarchy"
+    }
+  },
+  "CK_Augment_Opportunity_CountryCodes": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Alpha2Code"
+      ],
+      "left": "Join_OpportunityOwner_Product",
+      "left_key": [
+        "Account.BillingCountry"
+      ],
+      "right_select": [
+        "Alpha3Code",
+        "CountryName"
+      ],
+      "right": "CK_Extract_CountryCodes",
+      "relationship": "Country"
+    }
+  }
+}

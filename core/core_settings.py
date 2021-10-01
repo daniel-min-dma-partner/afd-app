@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'django_apscheduler',
     'django_extensions',
     'jsoneditor',
-    'libs.interactor.interactor',
     'mathfilters',
     'rest_framework',
     'tinymce',
@@ -59,8 +58,6 @@ INSTALLED_APPS = [
     # Created apps
     # 'chat',
     'libs',
-    'libs.diff2htmlcompare',
-    'libs.tcrm_automation',
     'main',
 ]
 

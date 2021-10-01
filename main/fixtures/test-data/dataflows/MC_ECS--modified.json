@@ -1,0 +1,239 @@
+{
+  "Digest_MC_ECS_nova": {
+    "action": "digest",
+    "parameters": {
+      "connectionName": "MC_ECS_nova",
+      "fields": [
+        {
+          "name": "eid"
+        },
+        {
+          "name": "metric_date"
+        },
+        {
+          "name": "mid"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "value"
+        }
+      ],
+      "object": "data"
+    }
+  },
+  "Append_MC_ECS": {
+    "action": "append",
+    "parameters": {
+      "enableDisjointedSchemaMerge": false,
+      "sources": [
+        "Digest_MC_ECS_nova",
+        "Digest_MC_ECS_tau"
+      ]
+    }
+  },
+  "Digest_Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "Industry"
+        },
+        {
+          "name": "Combo_Sector__c"
+        },
+        {
+          "name": "Segment__c"
+        },
+        {
+          "name": "SFDC_Sector__c"
+        },
+        {
+          "name": "Support_LoB__c"
+        },
+        {
+          "name": "Global_Company__c"
+        },
+        {
+          "name": "Sub_Sector__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Subregion__c"
+        },
+        {
+          "name": "BillingState"
+        },
+        {
+          "name": "BillingCountry"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "Digest_MC_ECS_tau": {
+    "action": "digest",
+    "parameters": {
+      "connectionName": "MC_ECS_tau",
+      "fields": [
+        {
+          "name": "eid"
+        },
+        {
+          "name": "metric_date"
+        },
+        {
+          "name": "mid"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "value"
+        }
+      ],
+      "object": "data"
+    }
+  },
+  "Compute_Tenant2": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Digest_Tenant",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "saqlExpression": "case when sfbase__AccountId__c is not null then sfbase__AccountId__c else AccountId end",
+          "name": "AccountIdKey",
+          "label": "AccountIdKey",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "Augment_MC_ECS_Tenant": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "ExternalId"
+      ],
+      "left": "Append_MC_ECS",
+      "left_key": [
+        "eid"
+      ],
+      "right_select": [
+        "AccountId",
+        "AccountIdKey",
+        "CloudServiceProviderId",
+        "ExternalId",
+        "HasEntitlements",
+        "Id",
+        "Name",
+        "ServiceProviderKey"
+      ],
+      "right": "Filter_Tenant2",
+      "relationship": "Tenant",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Register_MC_ECS_Account": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC ECS Account",
+      "alias": "MC_ECS_Account",
+      "source": "Augment_MC_ECS_Tenant_Account"
+    }
+  },
+  "Filter_Tenant2": {
+    "action": "filter",
+    "parameters": {
+      "source": "Compute_Tenant2",
+      "saqlFilter": "ServiceProviderKey == \"exacttarget\""
+    }
+  },
+  "Augment_MC_ECS_Tenant_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "Augment_MC_ECS_Tenant",
+      "left_key": [
+        "Tenant.AccountIdKey"
+      ],
+      "right_select": [
+        "BillingCountry",
+        "BillingState",
+        "Combo_Sector__c",
+        "Global_Company__c",
+        "Id",
+        "Industry",
+        "Name",
+        "Region__c",
+        "Segment__c",
+        "SFDC_Sector__c",
+        "Subregion__c",
+        "Sub_Sector__c",
+        "Support_LoB__c",
+        "Type"
+      ],
+      "right": "Digest_Account",
+      "relationship": "Account",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Digest_Tenant": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "CloudServiceProviderId"
+        },
+        {
+          "name": "ExternalId"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "SystemModstamp"
+        },
+        {
+          "name": "HasEntitlements"
+        },
+        {
+          "name": "ServiceProviderKey"
+        },
+        {
+          "name": "sfbase__AccountId__c"
+        }
+      ],
+      "object": "Tenant"
+    }
+  },
+  "Register_MC_ECS": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "MC_ECS",
+      "alias": "MC_ECS",
+      "source": "Append_MC_ECS"
+    }
+  }
+}

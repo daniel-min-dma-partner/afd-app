@@ -1,0 +1,1726 @@
+{
+  "sfdcDigest_CampaignMember": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "ContactId"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "CampaignId"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "HasResponded"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Status"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "CompanyOrAccount"
+        },
+        {
+          "name": "Type"
+        }
+      ],
+      "complexFilterConditions": "LastModifiedDate >= 2016-11-06T00:00:00.000Z",
+      "object": "CampaignMember"
+    }
+  },
+  "augment_Campaign": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "sfdcDigest_CampaignMember",
+      "left_key": [
+        "CampaignId"
+      ],
+      "right_select": [
+        "AmountWonOpportunities",
+        "CampaignID18__c",
+        "Campaign_Objective__c",
+        "Campaign_Source_Type__c",
+        "EndDate",
+        "Event_Program__c",
+        "Event_Type__c",
+        "IsActive",
+        "Name",
+        "NumberOfContacts",
+        "NumberOfLeads",
+        "NumberOfOpportunities",
+        "NumberOfResponses",
+        "NumberOfWonOpportunities",
+        "Parent_Event_Program__c",
+        "Parent_Master_Cmpn__c",
+        "Parent_Program__c",
+        "Parent_Record_Type__c",
+        "Parent_Tactic__c",
+        "Product__c",
+        "Region__c",
+        "Sector__c",
+        "StartDate",
+        "Status",
+        "Type",
+        "Venue_Name__c",
+        "Venue_State_Province__c",
+        "X3_word_summary__c",
+        "Id",
+        "Description",
+        "Display_Text_Description__c",
+        "AmountAllOpportunities"
+      ],
+      "right": "sfdcDigest_Campaign",
+      "relationship": "CampaignId",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "augment_Opportunity_1": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_OrderItem_Order_1",
+      "left_key": [
+        "OrderId.sfbase__Opportunity__c"
+      ],
+      "right_select": [
+        "AccountId",
+        "Name",
+        "Sub_Type__c",
+        "Type",
+        "sfbase__ACV__c",
+        "Amount",
+        "AmountConverted__c",
+        "Amount_Won__c",
+        "CloseDate",
+        "StageName"
+      ],
+      "right": "sfdcDigest_Opportunity_1",
+      "relationship": "OrderId.sfbase__Opportunity__c"
+    }
+  },
+  "CE_AddKeyTo_Security_Orbit_Incident_Data": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "EM_Security_Orbit_Incident_Data",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "defaultValue": "1",
+          "precision": 10,
+          "name": "LeftKey",
+          "saqlExpression": "\"1\"",
+          "label": "LeftKey",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "AugmentRecordName": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "sfdcDigest_Account_0",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdc_RecordType",
+      "relationship": "RecordTypeID",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "sfdcDigest_User_1": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "ContactId"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Title"
+        },
+        {
+          "name": "CSG_Region__c"
+        },
+        {
+          "name": "EmployeeNumber"
+        },
+        {
+          "name": "IsActive"
+        },
+        {
+          "name": "ManagerId"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "sf62user__Employee_Payroll_ID__c"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "FilterRecordnameSecurityComplianceSupport": {
+    "action": "filter",
+    "parameters": {
+      "source": "filter_DSR_by_active_accounts",
+      "saqlFilter": "'RecordTypeId.Name' == \"Security/Compliance Support\""
+    }
+  },
+  "EM_Workday_User_Dataset": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "Workday_User_Dataset"
+    }
+  },
+  "augment_Deal_Support_Request__c_Account_0": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "sfdcDigest_Deal_Support_Request__c_0",
+      "left_key": [
+        "Account__c"
+      ],
+      "right_select": [
+        "AccountNumber",
+        "Company__pc",
+        "Core_Edition__c",
+        "CSG_Coverage__c",
+        "CSG_Key_Contact__c",
+        "CSG_Portfolio__c",
+        "CSG_Region__c",
+        "CSG_Subregion__c",
+        "edw_num_licenses__c",
+        "Global_Company__c",
+        "Id",
+        "Industry",
+        "Instance__c",
+        "Name",
+        "NameLocal",
+        "NumberOfEmployees",
+        "Organization_ID_DW_Case_Sensitive__c",
+        "Organization_ID_DW__c",
+        "Org_Status_DW__c",
+        "RecordTypeId",
+        "RecordTypeID.Name",
+        "Region__c",
+        "Segment__c",
+        "SFDC_Sector__c",
+        "Company__c",
+        "OwnerId",
+        "AOV_Band__c",
+        "Current_Account_AOV__c",
+        "Global_Parent_AOV_USD__c"
+      ],
+      "right": "AugmentRecordName",
+      "relationship": "Account__c",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Aug_User_Incident": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "RightKey"
+      ],
+      "left": "CE_AddKeyTo_Security_Orbit_Incident_Data",
+      "left_key": [
+        "LeftKey"
+      ],
+      "right_select": [
+        "email"
+      ],
+      "right": "CE_AddKeyTo_Workday_User_Dataset",
+      "relationship": "Key",
+      "operation": "LookupMultiValue"
+    }
+  },
+  "Edgemart_Workday": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "Workday"
+    }
+  },
+  "augment_OrderItem_Order_1": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "sfdcDigest_OrderItem_1",
+      "left_key": [
+        "OrderId"
+      ],
+      "right_select": [
+        "sfbase__Opportunity__c",
+        "Name",
+        "ContractId",
+        "EffectiveDate",
+        "OwnerId",
+        "RecordTypeId",
+        "Status"
+      ],
+      "right": "sfdcDigest_Order_1",
+      "relationship": "OrderId",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "augment_Account": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_CampaignMember_Contact",
+      "left_key": [
+        "ContactId.AccountId"
+      ],
+      "right_select": [
+        "Industry",
+        "Site",
+        "Name",
+        "SoldDate__c",
+        "Core_Edition__c",
+        "Organization_ID_DW__c",
+        "Organization_ID_DW_Case_Sensitive__c",
+        "Org_Status_DW__c",
+        "CSG_Coverage__c",
+        "CSG_Region__c",
+        "CSG_Portfolio__c",
+        "CSG_Subregion__c",
+        "Segment__c",
+        "Instance__c",
+        "SFDC_Sector__c",
+        "Sub_Sector__c",
+        "edw_num_licenses__c",
+        "NameLocal",
+        "Employee_Number__pc",
+        "Customer_Status__c",
+        "Type",
+        "Region__c",
+        "Company__pc",
+        "AccountNumber",
+        "AOV_Band__c",
+        "Global_Company__c",
+        "Global_Company__pc",
+        "ParentId",
+        "Company__c",
+        "Global_Parent_AOV_USD__c",
+        "Current_Account_AOV__c",
+        "RecordTypeId"
+      ],
+      "right": "sfdcDigest_Account",
+      "relationship": "ContactId.AccountId"
+    }
+  },
+  "sfdcOpportunity4": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "RecordTypeId"
+        }
+      ],
+      "object": "Opportunity"
+    }
+  },
+  "augment_CampaignMember_Contact": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "FilterCampaignStartDate",
+      "left_key": [
+        "ContactId"
+      ],
+      "right_select": [
+        "AccountId",
+        "Title"
+      ],
+      "right": "sfdcDigest_Contact",
+      "relationship": "ContactId",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Filter_Campaign_Name": {
+    "action": "filter",
+    "parameters": {
+      "source": "augment_Campaign",
+      "saqlFilter": "'CampaignId.Name' matches \"Security\" &&\n'CampaignId.Name' matches  \"CISO\""
+    }
+  },
+  "EM_Security_Orbit_Incident_Data": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "Securtity_Orbit_Incident_Data"
+    }
+  },
+  "register_OrderProducts_1": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Security_Opportunity",
+      "alias": "Security_Opportunity",
+      "source": "filter_orderproduct_by_active_or_expired_orders"
+    }
+  },
+  "sfdcDigest_Order_1": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "defaultValue": "NA",
+          "name": "sfbase__Opportunity__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Name"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "ContractId"
+        },
+        {
+          "name": "EffectiveDate"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "OwnerId"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Status"
+        }
+      ],
+      "object": "Order"
+    }
+  },
+  "sfdcDigest_Deal_Support_Request__c_0": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Account__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Account_Executive__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "What_kind_of_meeting_is_this__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Meeting_Location__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Attendees__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Customer_Names_Titles__c"
+        },
+        {
+          "name": "Meeting_Date__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Request_Type__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "OwnerId"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "DSR_Region__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Account_Type__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Status__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Product_Type__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Name"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Meeting_Status__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Opportunity_Owner__c"
+        },
+        {
+          "name": "Request_Type_Detail__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Additional_Details__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Oppty_Account__c"
+        },
+        {
+          "name": "Oppty_Close_Date__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Oppty_Record_Type__c"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Completed_Date__c"
+        },
+        {
+          "name": "Hours_spent__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Related_DSR__c"
+        },
+        {
+          "name": "No_Of_Licenses__c"
+        },
+        {
+          "name": "Customer_Attendees__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Company__c"
+        },
+        {
+          "name": "Contract_Status__c"
+        },
+        {
+          "name": "Accepted_Date__c"
+        },
+        {
+          "name": "Oppty_Amount__c"
+        },
+        {
+          "name": "Opportunity__c"
+        },
+        {
+          "name": "Deal_Support_Request_Owner__c"
+        },
+        {
+          "name": "Oppty_Owner_Role__c"
+        },
+        {
+          "name": "Type_of_Request2__c"
+        },
+        {
+          "name": "Type_of_Request__c"
+        },
+        {
+          "name": "Requested_Visit_Date__c"
+        },
+        {
+          "name": "Approved_Date__c"
+        }
+      ],
+      "object": "Deal_Support_Request__c"
+    }
+  },
+  "compute_securitycust_interaction": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "FilterRecordnameSecurityComplianceSupport",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "precision": 128,
+          "name": "securitycust_interaction",
+          "saqlExpression": "case when 'Request_Type_Detail__c' in [\"Executive Meeting\", \"SME Session\", \"Roundtable\"] then \"yes\" else \"no\" end",
+          "label": "securitycust_interaction",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "sfdcDigest_Red_Account__c_2": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "defaultValue": "NA",
+          "name": "Key_Risk_Category__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "AE__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "AE_Manager__c"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Number_of_Red_Accounts__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Red_Trending__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Escalation_Category__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Symptoms__c"
+        },
+        {
+          "name": "Stage__c"
+        },
+        {
+          "name": "Escalation_Reason__c"
+        },
+        {
+          "name": "EVP_Escalation__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Executive_Escalation_Type__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Risk_Detail__c"
+        },
+        {
+          "name": "Action_Plan_Status__c"
+        },
+        {
+          "name": "ACV_at_Risk__c"
+        },
+        {
+          "name": "Original_AOV_at_Risk__c"
+        },
+        {
+          "name": "Red_Start_Date__c"
+        },
+        {
+          "name": "Red_End_Date__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Reason_for_Closure__c"
+        },
+        {
+          "name": "MCRoot_Cause__c"
+        },
+        {
+          "name": "Customers_Impacted__c"
+        },
+        {
+          "name": "of_Days_Open__c"
+        },
+        {
+          "name": "Days_Red__c"
+        },
+        {
+          "name": "Days_Until_Renewal__c"
+        },
+        {
+          "name": "Total_Days_Yellow__c"
+        },
+        {
+          "name": "Days_in_Current_Status__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Region__c"
+        },
+        {
+          "name": "Support_Level__c"
+        },
+        {
+          "name": "Organization_ID__c"
+        },
+        {
+          "name": "Current_Licenses__c"
+        },
+        {
+          "name": "CSG_Portfolio__c"
+        },
+        {
+          "name": "Parent_Account__c"
+        },
+        {
+          "name": "Instance__c"
+        },
+        {
+          "name": "MC_Red_Account_Region__c"
+        },
+        {
+          "name": "Segment__c"
+        },
+        {
+          "name": "Current_Red_Start_Date__c"
+        },
+        {
+          "name": "Red_Account__c"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Renewals_Opportunity__c"
+        },
+        {
+          "name": "AOV_Band__c"
+        },
+        {
+          "name": "AOV_Lost__c"
+        },
+        {
+          "name": "AOV_Saved__c"
+        },
+        {
+          "name": "Total_Account_AOV__c"
+        },
+        {
+          "name": "AOV_Growth_Potential__c"
+        },
+        {
+          "name": "Additional_Risk_Detail__c"
+        }
+      ],
+      "object": "Red_Account__c"
+    }
+  },
+  "sfdcDigest_Opportunity_1": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "Sub_Type__c"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "sfbase__ACV__c"
+        },
+        {
+          "name": "Amount"
+        },
+        {
+          "name": "AmountConverted__c"
+        },
+        {
+          "name": "Amount_Won__c"
+        },
+        {
+          "name": "CloseDate"
+        },
+        {
+          "name": "StageName"
+        }
+      ],
+      "object": "Opportunity"
+    }
+  },
+  "sfdcDigest_OrderItem_1": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "defaultValue": "NA",
+          "name": "OrderId"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Product2Id"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "OrderItemNumber"
+        },
+        {
+          "name": "TotalPrice"
+        },
+        {
+          "name": "sfbase__DailyValue__c"
+        },
+        {
+          "name": "sfbill__TotalBilled__c"
+        }
+      ],
+      "object": "OrderItem"
+    }
+  },
+  "filter_DSR_by_active_accounts": {
+    "action": "filter",
+    "parameters": {
+      "source": "augmentOpptyDSR",
+      "saqlFilter": "'Account__c.Org_Status_DW__c' == \"ACTIVE\""
+    }
+  },
+  "Register_IncidentUserAugment": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Security_Orbit_Incident_Data_with_Email",
+      "alias": "Security_Orbit_Incident_Data_with_Email",
+      "source": "Aug_User_Incident"
+    }
+  },
+  "Contract": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "StartDate"
+        },
+        {
+          "name": "EndDate"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Status"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "Contract_End_Date_update__c"
+        }
+      ],
+      "object": "Contract"
+    }
+  },
+  "sfdcDigest_Campaign": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "defaultValue": null,
+          "name": "StartDate"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "IsActive"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Name"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "X3_word_summary__c"
+        },
+        {
+          "name": "CampaignID18__c"
+        },
+        {
+          "defaultValue": null,
+          "name": "EndDate"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Status"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Region__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Product__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Parent_Master_Cmpn__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Campaign_Objective__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Parent_Program__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Parent_Event_Program__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Parent_Tactic__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Sector__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Event_Type__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Venue_Name__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Venue_State_Province__c"
+        },
+        {
+          "name": "NumberOfResponses"
+        },
+        {
+          "name": "NumberOfLeads"
+        },
+        {
+          "name": "NumberOfContacts"
+        },
+        {
+          "name": "NumberOfOpportunities"
+        },
+        {
+          "name": "NumberOfWonOpportunities"
+        },
+        {
+          "name": "AmountWonOpportunities"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Event_Program__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Campaign_Source_Type__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Parent_Record_Type__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Type"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Id"
+        },
+        {
+          "name": "Description"
+        },
+        {
+          "name": "Display_Text_Description__c"
+        },
+        {
+          "name": "AmountAllOpportunities"
+        }
+      ],
+      "object": "Campaign"
+    }
+  },
+  "augment_DSR_RecordType": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Deal_Support_Request__c_Account_0",
+      "left_key": [
+        "RecordTypeId"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "sfdc_RecordType",
+      "relationship": "RecordTypeId",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "register_CampaignMembersandCampaigns": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Security_CISO_Engagements",
+      "alias": "Security_CISO_Engagements",
+      "source": "augment_Account"
+    }
+  },
+  "sfdcDigest_Account": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "defaultValue": "NA",
+          "name": "Industry"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Site"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Name"
+        },
+        {
+          "defaultValue": null,
+          "name": "SoldDate__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Core_Edition__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Organization_ID_DW__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Organization_ID_DW_Case_Sensitive__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Org_Status_DW__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "CSG_Coverage__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "CSG_Region__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "CSG_Portfolio__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "CSG_Subregion__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Segment__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Instance__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "SFDC_Sector__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Sub_Sector__c"
+        },
+        {
+          "defaultValue": null,
+          "name": "edw_num_licenses__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "NameLocal"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Employee_Number__pc"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Customer_Status__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Type"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Region__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Id"
+        },
+        {
+          "name": "Company__pc"
+        },
+        {
+          "name": "AccountNumber"
+        },
+        {
+          "name": "AOV_Band__c"
+        },
+        {
+          "name": "Global_Company__c"
+        },
+        {
+          "name": "Global_Company__pc"
+        },
+        {
+          "name": "ParentId"
+        },
+        {
+          "name": "Company__c"
+        },
+        {
+          "name": "Global_Parent_AOV_USD__c"
+        },
+        {
+          "name": "Current_Account_AOV__c"
+        },
+        {
+          "name": "RecordTypeId"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "CE_AddKeyTo_Workday_User_Dataset": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "EM_Workday_User_Dataset",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "defaultValue": "1",
+          "precision": 10,
+          "name": "RightKey",
+          "saqlExpression": "\"1\"",
+          "label": "RightKey",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "sfdcDigest_Contact": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "AccountId"
+        },
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Title"
+        }
+      ],
+      "object": "Contact"
+    }
+  },
+  "sfdc_RecordType": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "RecordType"
+    }
+  },
+  "Augment_ManagementChain": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Employee_ID__c"
+      ],
+      "left": "augment_Product2_1",
+      "left_key": [
+        "OrderId.sfbase__Opportunity__c.AccountId.OwnerId.EmployeeNumber"
+      ],
+      "right_select": [
+        "Management_Chain_Level_04__c",
+        "Management_Chain_Level_10__c",
+        "Propercase_Employee_Name",
+        "Management_Chain_Level_01__c",
+        "Management_Chain_Level_09__c",
+        "Employee_ID__c",
+        "Id",
+        "Management_Chain_Level_06__c",
+        "Company__c",
+        "OwnerId",
+        "RecordTypeId",
+        "Management_Chain_Level_03__c",
+        "FirstName",
+        "Employee_Type__c",
+        "Is_Manager__c",
+        "AccountId",
+        "Management_Chain_Level_08__c",
+        "Name",
+        "Management_Chain_Level_05__c",
+        "Is_Active__c",
+        "LastName",
+        "Job_Title__c",
+        "Management_Chain_Level_02__c",
+        "Title",
+        "Management_Chain_Level_07__c",
+        "ReportsToId",
+        "Degrees_of_Separation_from_Marc__c",
+        "Security_Management_chain_level_04",
+        "Security_Management_chain_level_05"
+      ],
+      "right": "Edgemart_Workday",
+      "relationship": "OwnerID.Managementchain",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "Compute_3rdLevelManager": {
+    "action": "computeExpression",
+    "parameters": {
+      "source": "Augment_ManagementChain",
+      "mergeWithSource": true,
+      "computedFields": [
+        {
+          "name": "SVP_RVP",
+          "saqlExpression": "case when 'OwnerID.Managementchain.Degrees_of_Separation_from_Marc__c' == 1 then 'OwnerID.Managementchain.Management_Chain_Level_02__c' when 'OwnerID.Managementchain.Degrees_of_Separation_from_Marc__c' == 2 then 'OwnerID.Managementchain.Management_Chain_Level_02__c' when 'OwnerID.Managementchain.Degrees_of_Separation_from_Marc__c' == 3 then 'OwnerID.Managementchain.Management_Chain_Level_02__c' when 'OwnerID.Managementchain.Degrees_of_Separation_from_Marc__c' == 4 then 'OwnerID.Managementchain.Management_Chain_Level_02__c' when 'OwnerID.Managementchain.Degrees_of_Separation_from_Marc__c' == 5 then 'OwnerID.Managementchain.Management_Chain_Level_03__c' when 'OwnerID.Managementchain.Degrees_of_Separation_from_Marc__c' == 6 then 'OwnerID.Managementchain.Management_Chain_Level_04__c' when 'OwnerID.Managementchain.Degrees_of_Separation_from_Marc__c' == 7 then 'OwnerID.Managementchain.Management_Chain_Level_05__c' when 'OwnerID.Managementchain.Degrees_of_Separation_from_Marc__c' == 8 then 'OwnerID.Managementchain.Management_Chain_Level_06__c' when 'OwnerID.Managementchain.Degrees_of_Separation_from_Marc__c' == 9 then 'OwnerID.Managementchain.Management_Chain_Level_07__c' when 'OwnerID.Managementchain.Degrees_of_Separation_from_Marc__c' == 10 then 'OwnerID.Managementchain.Management_Chain_Level_08__c' end",
+          "label": "SVP_RVP",
+          "type": "Text"
+        }
+      ]
+    }
+  },
+  "sfdcDigest_Account_0": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Industry"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "CSG_Coverage__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "CSG_Key_Contact__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "CSG_Region__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "CSG_Subregion__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "CSG_Portfolio__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Name"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Core_Edition__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Organization_ID_DW_Case_Sensitive__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Organization_ID_DW__c"
+        },
+        {
+          "name": "Org_Status_DW__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Segment__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Instance__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "SFDC_Sector__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Global_Company__c"
+        },
+        {
+          "name": "edw_num_licenses__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "NameLocal"
+        },
+        {
+          "name": "NumberOfEmployees"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "AccountNumber"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Region__c"
+        },
+        {
+          "name": "Company__pc"
+        },
+        {
+          "name": "RecordTypeId"
+        },
+        {
+          "name": "Company__c"
+        },
+        {
+          "name": "OwnerId"
+        },
+        {
+          "name": "AOV_Band__c"
+        },
+        {
+          "name": "Current_Account_AOV__c"
+        },
+        {
+          "name": "Global_Parent_AOV_USD__c"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "augment_Product2_1": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "AugmentContract",
+      "left_key": [
+        "Product2Id"
+      ],
+      "right_select": [
+        "L2_Product_Line__c",
+        "L1_Business_Line__c",
+        "L3_Product_Family__c",
+        "L4_Product_Offering__c",
+        "Apttus_Config2__EffectiveDate__c",
+        "Description",
+        "Name",
+        "Id"
+      ],
+      "right": "sfdcDigest_Product2_1",
+      "relationship": "Product2Id",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "sfdcDigest_Account_1": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "defaultValue": "NA",
+          "name": "OwnerId"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Id"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "AccountNumber"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Account_CSG_Coverage__pc"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Account_Customer_Status__pc"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Company__pc"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Core_Edition__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "CSG_Region__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "CSG_Portfolio__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "CSG_Subregion__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "CurrencyIsoCode"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Customer_Status__c"
+        },
+        {
+          "name": "edw_num_licenses__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Employee_Number__pc"
+        },
+        {
+          "name": "Employee_Number_Secondary__pc"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "FirstName"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Global_Company__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Industry"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Instance__c"
+        },
+        {
+          "name": "LastName"
+        },
+        {
+          "name": "MasterRecordId"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "NameLocal"
+        },
+        {
+          "name": "Organization_ID_DW_Case_Sensitive__c"
+        },
+        {
+          "name": "Organization_ID_DW__c"
+        },
+        {
+          "name": "Org_Status_DW__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "ParentId"
+        },
+        {
+          "name": "Region__c"
+        },
+        {
+          "name": "Segment__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "SFDC_Sector__c"
+        },
+        {
+          "name": "SoldDate__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Sub_Sector__c"
+        },
+        {
+          "name": "Company__c"
+        },
+        {
+          "name": "HT_Company__pc"
+        },
+        {
+          "name": "AOV_Band__c"
+        },
+        {
+          "name": "Current_Account_AOV__c"
+        },
+        {
+          "name": "Global_Parent_AOV_USD__c"
+        },
+        {
+          "name": "RecordTypeId"
+        }
+      ],
+      "object": "Account"
+    }
+  },
+  "filter_orderproducts_by_active_accounts": {
+    "action": "filter",
+    "parameters": {
+      "source": "Compute_3rdLevelManager",
+      "saqlFilter": "'OrderId.sfbase__Opportunity__c.AccountId.Org_Status_DW__c' == \"ACTIVE\""
+    }
+  },
+  "augment_Account_1": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Opportunity_1",
+      "left_key": [
+        "OrderId.sfbase__Opportunity__c.AccountId"
+      ],
+      "right_select": [
+        "OwnerId",
+        "AccountNumber",
+        "Account_CSG_Coverage__pc",
+        "Account_Customer_Status__pc",
+        "Company__pc",
+        "Core_Edition__c",
+        "CSG_Region__c",
+        "CSG_Portfolio__c",
+        "CSG_Subregion__c",
+        "CurrencyIsoCode",
+        "Customer_Status__c",
+        "edw_num_licenses__c",
+        "Employee_Number__pc",
+        "Employee_Number_Secondary__pc",
+        "FirstName",
+        "Global_Company__c",
+        "Industry",
+        "Instance__c",
+        "LastName",
+        "MasterRecordId",
+        "Name",
+        "NameLocal",
+        "Organization_ID_DW_Case_Sensitive__c",
+        "Organization_ID_DW__c",
+        "Org_Status_DW__c",
+        "ParentId",
+        "Region__c",
+        "Segment__c",
+        "SFDC_Sector__c",
+        "SoldDate__c",
+        "Sub_Sector__c",
+        "Company__c",
+        "HT_Company__pc",
+        "AOV_Band__c",
+        "Current_Account_AOV__c",
+        "Global_Parent_AOV_USD__c",
+        "RecordTypeId"
+      ],
+      "right": "sfdcDigest_Account_1",
+      "relationship": "OrderId.sfbase__Opportunity__c.AccountId"
+    }
+  },
+  "augment_User_1": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_Account_1",
+      "left_key": [
+        "OrderId.sfbase__Opportunity__c.AccountId.OwnerId"
+      ],
+      "right_select": [
+        "ContactId",
+        "Name",
+        "Title",
+        "CSG_Region__c",
+        "EmployeeNumber",
+        "IsActive",
+        "ManagerId",
+        "Id",
+        "sf62user__Employee_Payroll_ID__c"
+      ],
+      "right": "sfdcDigest_User_1",
+      "relationship": "OrderId.sfbase__Opportunity__c.AccountId.OwnerId",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "AugmentContract": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_User_1",
+      "left_key": [
+        "OrderId.ContractId"
+      ],
+      "right_select": [
+        "Contract_End_Date_update__c",
+        "EndDate",
+        "Id",
+        "OwnerId",
+        "StartDate",
+        "Status"
+      ],
+      "right": "Contract",
+      "relationship": "ContractId",
+      "operation": "LookupSingleValue"
+    }
+  },
+  "filter_orderproduct_by_active_or_expired_orders": {
+    "action": "filter",
+    "parameters": {
+      "source": "filter_orderproducts_by_active_accounts",
+      "saqlFilter": "'OrderId.Status' in [\"Activated\", \"Expired\"]"
+    }
+  },
+  "FilterCampaignStartDate": {
+    "action": "filter",
+    "parameters": {
+      "source": "Filter_Campaign_Name",
+      "saqlFilter": "'CampaignId.StartDate' >= \"2017-11-06\""
+    }
+  },
+  "register_ObjectRed_Accounts_2": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Security_Red_Accounts",
+      "alias": "Security_Red_Accounts",
+      "source": "sfdcDigest_Red_Account__c_2"
+    }
+  },
+  "sfdcDigest_Product2_1": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "defaultValue": "NA",
+          "name": "Id"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "L2_Product_Line__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "L1_Business_Line__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "L3_Product_Family__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "L4_Product_Offering__c"
+        },
+        {
+          "name": "Apttus_Config2__EffectiveDate__c"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Description"
+        },
+        {
+          "defaultValue": "NA",
+          "name": "Name"
+        }
+      ],
+      "object": "Product2"
+    }
+  },
+  "register_DealSupportRequest": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Security_DSR",
+      "alias": "Security_DSR",
+      "source": "compute_securitycust_interaction"
+    }
+  },
+  "augmentOpptyDSR": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "augment_DSR_RecordType",
+      "left_key": [
+        "Opportunity__c"
+      ],
+      "right_select": [
+        "Id",
+        "Name",
+        "RecordTypeId"
+      ],
+      "right": "sfdcOpportunity4",
+      "relationship": "opportunity__c",
+      "operation": "LookupSingleValue"
+    }
+  }
+}

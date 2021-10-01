@@ -27,9 +27,7 @@ from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEn
     DeprecateFieldsForm, SecpredToSaqlForm, ProfileForm, ReleaseForm, ParameterForm
 from main.interactors.jobs_interactor import JobsInteractor
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser
-from .interactors.deprecate_fields_interactor import FieldDeprecatorInteractor
 from .interactors.list_dataflow_interactor import DataflowListInteractor
-from .interactors.notification_interactor import SetNotificationInteractor
 from .interactors.response_interactor import ZipFileResponseInteractor, JsonFileResponseInteractor
 from .interactors.sfdc_connection_interactor import OAuthLoginInteractor, SfdcConnectWithConnectedApp
 from .interactors.slack_targetlist_interactor import SlackTarListInteractor
@@ -431,7 +429,7 @@ class DownloadDataflowView(generic.FormView):
                     str(_n_of_dataflows) + ' dataflows'
                 _data = {"dataflows": dataflows, "model": env, "user": request.user,
                          'job-message': f"Download {_context_aware_msg} from <strong>{env.name}</strong>"}
-                ctx = JobsInteractor.call(data=_data, function="_download_dataflow", scheduler=sched)
+                ctx = JobsInteractor.call(data=_data, function="download_dataflow", scheduler=sched)
                 messages.success(request, mark_safe(f"Downloadig dataflow{'s' if len(dataflows) > 0 else ''} from "
                                           f"<code>{env.name}</code> started. Check the notifications later."))
 
@@ -473,7 +471,7 @@ class UploadDataflowView(PermissionRequiredMixin, generic.FormView):
                 _data = {'env': env, 'remote_df_name': remote_df_name, 'user': request.user, 'filemodel': filemodel,
                          'job-message': f"Upload <code><strong>{remote_df_name}</strong></code> dataflow to"
                                         f" <code><strong>{env.name}</strong></code>"}
-                ctx = JobsInteractor.call(data=_data, function="_upload_dataflow", scheduler=sched)
+                ctx = JobsInteractor.call(data=_data, function="upload_dataflow", scheduler=sched)
             else:
                 messages.error(request, form.errors.as_data)
         except Exception as e:
@@ -589,16 +587,16 @@ class DeprecateFieldsView(generic.FormView):
                     filemodel.save()
                     df_files.append(filemodel)
 
-                # Calls interactor
-                ctx = FieldDeprecatorInteractor.call(df_files=df_files, objects=self.objects, fields=self.fields,
-                                                     user=request.user, name=form.cleaned_data['name'],
-                                                     org=form.cleaned_data['org'],
-                                                     case_url=form.cleaned_data['case_url'])
+                # Calls job
+                job_msg = f"Run deprecation <strong>'{form.cleaned_data['name']}'</strong>"
+                data = {'df_files': df_files, 'objects': self.objects, 'fields': self.fields, 'user': request.user,
+                        'name': form.cleaned_data['name'], 'org': form.cleaned_data['org'],
+                        'case_url': form.cleaned_data['case_url'], 'job-message': job_msg}
+                ctx = JobsInteractor.call(data=data, function="deprecate_fields_from", scheduler=sched)
 
                 message = f"Deprecation <code><strong>{form.cleaned_data['name']}</strong></code> for " \
-                          f"<code>{form.cleaned_data['org']}</code> finished. " \
-                          f"Check the latest notifications for more details."
-                flash_type = messages.INFO
+                          f"<code>{form.cleaned_data['org']}</code> has been queued."
+                flash_type = messages.SUCCESS
 
                 # Returns a normal response or file-download response
                 if form.cleaned_data.get('save_metadata'):
@@ -612,7 +610,7 @@ class DeprecateFieldsView(generic.FormView):
 
                     _return = response_ctx.response
                 else:
-                    _return = redirect('main:view-deprecations')
+                    _return = redirect('main:job-list')
             else:
                 message = "Submitted form contains error. Please review it."
                 flash_type = messages.ERROR
@@ -621,22 +619,6 @@ class DeprecateFieldsView(generic.FormView):
             message = mark_safe(str(e))
             flash_type = messages.ERROR
             _return = redirect("main:deprecate-fields")
-        finally:
-            for fm in df_files:
-                fm.delete()
-
-            if ctx and ctx.not_deprecated_dfs:
-                ctx.not_deprecated_dfs.sort()
-                msg = f"The following dataflow(s) ({len(ctx.not_deprecated_dfs)}) didn't suffer any deprecation:<br/>" \
-                      f"<code>{'</code><br/><code>'.join(ctx.not_deprecated_dfs)}</code>."
-                _ = SetNotificationInteractor.call(data={"user": request.user,
-                                                         "message": msg,
-                                                         "status": 1,
-                                                         "link": "__self__",
-                                                         "type": "info"})
-
-                if _.exception:
-                    raise _.exception
 
         messages.add_message(request, flash_type, mark_safe(message))
         return _return
