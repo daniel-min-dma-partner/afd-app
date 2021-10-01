@@ -609,4 +609,5 @@ class SpecialPermissions(models.Model):
 
         permissions = [
             ('special_permission_upload_dataflows', 'Can upload dataflows'),
+            ('special_permission_delete_all_deprecation', 'Can delete all deprecations at once'),
         ]
