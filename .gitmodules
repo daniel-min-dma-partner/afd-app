@@ -1,15 +1,15 @@
 [submodule "libs/tcrm_automation"]
 	path = libs/tcrm_automation
-	url = https://HeanGee:810002148gitlab114@gitlab.com/HeanGee/tcrm_automation.git
+	url = https://gitlab.com/HeanGee/tcrm_automation.git
 [submodule "libs/interactor"]
 	path = libs/interactor
 	url = https://github.com/Bluewine/interactor.git
 [submodule "libs/diff2htmlcompare"]
 	path = libs/diff2htmlcompare
-	url = https://HeanGee:810002148gitlab114@gitlab.com/HeanGee/diff2htmlcompare.git
+	url = https://gitlab.com/HeanGee/diff2htmlcompare.git
 [submodule "libs/jdd"]
 	path = libs/jdd
-	url = https://Hyungki:810002148github114@github.com/Hyungki/jdd.git
+	url = https://github.com/Hyungki/jdd.git
 [submodule "libs/jquery-timeago"]
 	path = libs/jquery-timeago
 	url = https://github.com/rmm5t/jquery-timeago.git

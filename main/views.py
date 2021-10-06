@@ -1138,6 +1138,7 @@ def dataflow_download_deprecated(request, pk=None):
     return response
 
 
+@permission_required("main.special_permission_delete_all_deprecation", raise_exception=True)
 def deprecation_delete_all(request):
     user = request.user
     deprecations = DataflowDeprecation.objects.filter(user=user)
