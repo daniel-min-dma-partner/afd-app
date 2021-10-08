@@ -54,16 +54,12 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
-                {#                Page Heading#}
+                <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">{% block page-header %}Dashboard{% endblock page-header %}</h1>
                     {#                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">#}
                     {#                        <i class="fas fa-download fa-sm text-white-50"></i> Generate Report#}
                     {#                    </a>#}
-
-                    <!-- Flash Message -->
-                    {% include 'sb-base/body-components/_flash-component.html' %}
-                    <!-- End Flash Message -->
                 </div>
 
                 {% if heroku_app_env != 'production' %}
@@ -82,6 +78,13 @@
                     {% include 'sb-base/body-components/_page-content.html' %}
                 {% endblock page-content %}
                 <!-- End Page Content -->
+
+
+                <!-- Flash Message -->
+                <div class="toast-container">
+                    {% include 'sb-base/body-components/_flash-component.html' %}
+                </div>
+                <!-- End Flash Message -->
 
             </div>
             <!-- /.container-fluid -->
