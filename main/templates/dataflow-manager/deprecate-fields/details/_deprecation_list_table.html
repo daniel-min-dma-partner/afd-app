@@ -19,7 +19,10 @@
         <tbody>
         {% for object in list %}
             <tr>
-                <td style="word-wrap: break-word;max-width: 220px;width: 200px;">{{ object.created_at|date:'Y-m-d H:i' }}</td>
+                <td data-order="{{ object.created_at|date:'Y-m-d H:i' }}"
+                    style="word-wrap: break-word;max-width: 220px;width: 200px;">
+                    {{ object.created_at }} <!--|date:'M. d, Y - H:i' }} -->
+                </td>
                 <td>
                     <a data-toggle="collapse" href="#collapseExample_{{ object.pk }}" role="button"
                        aria-expanded="false" aria-controls="collapseExample_{{ object.pk }}"
