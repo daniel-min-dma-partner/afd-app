@@ -71,7 +71,7 @@ class DeprecationTestCase(TestCase):
                 json_modified, collection = perform_deprecation(
                     df=dataflow, fieldlist=field_md,
                     node_list=node_list, df_name=basename,
-                    log_file=log_file
+                    log_file=log_file, original_df=copy.deepcopy(dataflow)
                 )
                 json_modified = delete_fields_of_deleted_node(json_modified)
 
