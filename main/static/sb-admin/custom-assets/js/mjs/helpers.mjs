@@ -37,7 +37,7 @@ const popup_notification = (title = "Default Title", content = "Default Content"
 
     // Html template for Notifications
     let toast_template = "<div aria-live=\"polite\" aria-atomic=\"true\" class=\"my-toast\">\n" +
-        "    <div class=\"toast-container position-absolute top-0 end-0 p-3\">\n" +
+        "    <div class=\"toast-container position-fixed top-0 end-0 p-3\">\n" +
         "        <div class=\"toast\" role=\"alert\" aria-live=\"assertive\" aria-atomic=\"true\"" + (autohide === false ? ' data-autohide="false"' : "") + (delay === null ? "" : ' data-delay=' + delay) + ">\n" +
         "            <div class=\"toast-header bg-" + type + "\">\n" +
         "                <strong class=\"me-auto\">" + title + "</strong>\n" +
@@ -53,7 +53,7 @@ const popup_notification = (title = "Default Title", content = "Default Content"
         "</div>";
 
     // Test inserting forcefully toast
-    $('body').find('.container-fluid').prepend(toast_template);
+    $('body').find('.toast-container').prepend(toast_template);
 
     // Build toast
     build_toast();
