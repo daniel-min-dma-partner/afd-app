@@ -12,7 +12,8 @@ class Command(BaseCommand):
         self.stdout.write("\n")
 
         days = (datetime.utcnow()-timedelta(days=2)).astimezone()
-        queries = [Job.objects.filter(started_at__lt=days), Notifications.objects.filter(created_at__lt=days)]
+        queries = [Job.objects.filter(started_at__lt=days).exclude(status__in=['created', 'started', 'progress']),
+                   Notifications.objects.filter(created_at__lt=days, status__gte=3)]
 
         msg = f"Datetime {str(days)}"
         self.stdout.write(self.style.WARNING(msg))
