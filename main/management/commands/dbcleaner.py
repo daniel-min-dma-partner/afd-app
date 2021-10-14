@@ -27,8 +27,8 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS("=" * len(msg)))
 
                 for model in query.all():
-                    model.delete()
                     self.stdout.write(f"\t - {class_name} #{model.pk} {self.style.WARNING(model.message)} deleted.")
+                    model.delete()
             else:
                 self.stdout.write(self.style.SUCCESS(f"No {query.all().model.__name__} has been found."))
 
