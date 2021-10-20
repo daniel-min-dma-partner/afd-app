@@ -26,7 +26,8 @@ from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEn
     SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm, \
     DeprecateFieldsForm, SecpredToSaqlForm, ProfileForm, ReleaseForm, ParameterForm
 from main.interactors.jobs_interactor import JobsInteractor
-from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser
+from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser, \
+    RegisterLocatorInteractor
 from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.response_interactor import ZipFileResponseInteractor, JsonFileResponseInteractor
 from .interactors.sfdc_connection_interactor import OAuthLoginInteractor, SfdcConnectWithConnectedApp
@@ -1007,6 +1008,41 @@ class DigestNodeGeneratorView(generic.TemplateView):
             }
         }
         return context
+
+
+class RegisterLocalizerView(generic.FormView):
+    template_name = 'dataflow-manager/edit/register-localizer-form.html'
+    form_class = forms.RegisterNodeForm
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        status = 200
+        error_msg = ""
+        registers = []
+
+        if form.is_valid():
+            dataflow_file = request.FILES.get('dataflow')
+            node = form.cleaned_data['node']
+
+            if not dataflow_file or not node:
+                status = 500
+                error_msg = "No dataflow specified." if not dataflow_file else "Missing node name."
+            else:
+                dataflow = str_to_json(byte_to_str(dataflow_file.read()))
+                ctx = RegisterLocatorInteractor.call(dataflow=dataflow, node=node)
+                registers = ctx.registers
+
+                if not registers:
+                    status = 500
+                    error_msg = f"<code>{node}</code> is not a valid name inside of the given dataflow."
+
+        else:
+            status = 500
+            error_msg = form.errors.as_data
+
+        if request.is_ajax():
+            return JsonResponse({"error": error_msg} if status == 500 else {"registers": registers}, status=status)
+        return render(request, self.template_name, {'form': form})
 
 
 def download_removed_field_list(request, deprecation_detail_pk=None):

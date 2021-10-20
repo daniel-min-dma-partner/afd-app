@@ -28,6 +28,13 @@ const build_toast = () => {
     });
 };
 
+const toast_remove = (toast_div = null) => {
+    let toastdiv = toast_div || $('div.my-toast');
+    if (toastdiv.length !== 0) {
+        toastdiv.remove();
+    }
+};
+
 const popup_notification = (title = "Default Title", content = "Default Content", type = "success", autohide = false, delay = null) => {
     // Deletes DOM element if exists
     let toastdiv = $('div.my-toast');
@@ -145,5 +152,5 @@ const jsonEditor = (container, json_field, mainMenuBar = true, modes = ['code', 
 
 export {
     build_toast, popup_notification, show_error_and_popup, submit_with_screencover, show_screenplay,
-    alert_if_required_missing, jsonEditor
+    alert_if_required_missing, jsonEditor, toast_remove
 };
