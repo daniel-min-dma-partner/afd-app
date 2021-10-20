@@ -37,7 +37,9 @@
 
                             <div class="form-group col-6">
                                 <label for="id-node">Node name</label>
-                                <input type="text" class="form-control" id="id-node" name="node">
+                                <select id="id-node" class="js-example-basic-single" name="node"
+                                        style="width:100%;" multiple>
+                                </select>
                             </div>
                         </div>
 
@@ -48,13 +50,6 @@
                                 <textarea name="registers" id="id_registers" hidden>{}</textarea>
                             </div>
                         </div>
-
-                        <button class="btn btn-success btn-icon-split float-right locate-register">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-check"></i>
-                            </span>
-                            <span class="text">Locate</span>
-                        </button>
                     </form>
                 </div>
             </div>
@@ -63,5 +58,8 @@
 {% endblock page-content %}
 
 {% block extra-scripts %}
+    <script>
+        let list_node_url = "{% url 'main:list-node-from-df' %}";
+    </script>
     <script src="{% static 'site/js/register-localizer.js' %}" type="module"></script>
 {% endblock extra-scripts %}

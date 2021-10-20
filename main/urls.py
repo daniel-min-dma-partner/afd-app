@@ -67,6 +67,7 @@ urlpatterns = [
         re_path(r'^download-removed-field-list/(?P<deprecation_detail_pk>\d+)/$', main.download_removed_field_list, name='download-removed-field-list'),
         re_path(r'generate-digest-node', main.DigestNodeGeneratorView.as_view(), name='digest-generator'),
         re_path(r'locate-register-node', main.RegisterLocalizerView.as_view(), name='register-localizer'),
+        re_path(r'list-node-from-df', main.list_nodes_from_df, name='list-node-from-df'),
     ])),
 
     re_path(r'^profile/', include([

@@ -69,10 +69,7 @@ class TreeExtractorInteractor(Interactor):
 class RegisterLocatorInteractor(Interactor):
     def run(self):
         dataflow = self.context.dataflow
-        nodename = self.context.node
+        nodenames = self.context.nodes
 
-        if nodename not in dataflow.keys():
-            self.context.registers = []
-        else:
-            node = dataflow[nodename]
-            self.context.registers = get_registers(nodes=[(nodename, node)], df=dataflow)
+        nodes = [(nodename, dataflow[nodename]) for nodename in nodenames]
+        self.context.registers = get_registers(nodes=nodes, df=dataflow)
