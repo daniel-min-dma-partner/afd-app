@@ -369,3 +369,8 @@ class ParameterForm(forms.ModelForm):
 class DataflowEditForm(forms.Form):
     dataflow = JSONEditor()
     filename = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
+
+
+class RegisterNodeForm(forms.Form):
+    dataflow = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
+    node = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)

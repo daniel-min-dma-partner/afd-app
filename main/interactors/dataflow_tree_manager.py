@@ -3,6 +3,7 @@ from pathlib import Path
 
 from core.settings import BASE_DIR
 from libs.interactor.interactor import Interactor
+from libs.tcrm_automation.libs.deprecation_libs import get_registers
 from libs.tcrm_automation.tree_extractor import tree_extractor
 from libs.tcrm_automation.tree_remover import tree_remover
 from libs.utils import current_datetime
@@ -64,3 +65,11 @@ class TreeExtractorInteractor(Interactor):
         tree_extractor(dataflow=dataflow, registers=registers, output_dir=output, output_filename=filename)
         self.context.output = f"{output}/{filename}"
 
+
+class RegisterLocatorInteractor(Interactor):
+    def run(self):
+        dataflow = self.context.dataflow
+        nodenames = self.context.nodes
+
+        nodes = [(nodename, dataflow[nodename]) for nodename in nodenames]
+        self.context.registers = get_registers(nodes=nodes, df=dataflow)

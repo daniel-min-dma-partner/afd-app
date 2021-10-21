@@ -33,6 +33,7 @@
     {% url 'main:view-deprecations' as url_view_dp %}
     {% url 'main:upload-dataflow' as url_up_df %}
     {% url 'main:extract-update-dataflow' as url_mng_df %}
+    {% url 'main:register-localizer' as url_reg_loc %}
     <a class="nav-link{% if 'dataflow-manager' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse"
        data-target="#collapse2"
        aria-expanded="{% if 'dataflow-manager' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapse2">
@@ -47,16 +48,22 @@
                 fields</a>
             <a class="collapse-item{% if cur_url == url_view_dp %} active{% endif %}" href="{{ url_view_dp }}">View
                 deprecations</a>
-            <h6 class="collapse-header">Modification:</h6>
+
+            <h6 class="collapse-header">Transformation:</h6>
             <a class="collapse-item{% if cur_url == url_edit_df %} active{% endif %}"
                href="#"  data-toggle="modal" data-target="#file-selector-md">Edit</a>
-            <a class="collapse-item{% if cur_url == url_comp_df %} active{% endif %}"
-               href="{{ url_comp_df }}">Compare</a>
             <a class="collapse-item{% if cur_url == url_mng_df %} active{% endif %}" href="{{ url_mng_df }}">Extract |
                 Update</a>
+
+            <h6 class="collapse-header">Visualization:</h6>
+            <a class="collapse-item{% if cur_url == url_comp_df %} active{% endif %}"
+               href="{{ url_comp_df }}">Compare</a>
+            <a class="collapse-item{% if cur_url == url_reg_loc %} active{% endif %}"
+               href="{{ url_reg_loc }}">Locate <code><strong>sfdcRegister</strong></code></a>
             <a class="collapse-item{% if cur_url == url_digen_df %} active{% endif %}" href="{{ url_digen_df }}">
                 <code><strong>sfdcDigest</strong></code> Generator
             </a>
+
             <h6 class="collapse-header">Remote Connection:</h6>
             <a class="collapse-item{% if cur_url == url_down_df %} active{% endif %}"
                href="{{ url_down_df }}">Download</a>
