@@ -48,9 +48,6 @@
         "BillingCountry",
         "BillingState",
         "MarketSegment__c",
-        "MC_Social_AOV_Band",
-        "MC_EMW_AOV_Band",
-        "MC_Services_AOV_Band",
         "Company.Id",
         "Company.AOV_Band__c",
         "Company.Name"
@@ -87,9 +84,6 @@
         "Account.BillingCountry",
         "Account.BillingState",
         "Account.MarketSegment__c",
-        "Account.MC_Social_AOV_Band",
-        "Account.MC_EMW_AOV_Band",
-        "Account.MC_Services_AOV_Band",
         "Account.Company.Id",
         "Account.Company.AOV_Band__c",
         "Account.Company.Name"
@@ -210,9 +204,6 @@
         "BillingCountry",
         "BillingState",
         "MarketSegment__c",
-        "MC_Social_AOV_Band",
-        "MC_EMW_AOV_Band",
-        "MC_Services_AOV_Band",
         "Company.Id",
         "Company.AOV_Band__c",
         "Company.Name"
@@ -254,9 +245,6 @@
         "Account.BillingCountry",
         "Account.BillingState",
         "Account.MarketSegment__c",
-        "Account.MC_Social_AOV_Band",
-        "Account.MC_EMW_AOV_Band",
-        "Account.MC_Services_AOV_Band",
         "Account.Company.Id",
         "Account.Company.AOV_Band__c",
         "Account.Company.Name"
@@ -298,9 +286,6 @@
         "Account.BillingCountry",
         "Account.BillingState",
         "Account.MarketSegment__c",
-        "Account.MC_Social_AOV_Band",
-        "Account.MC_EMW_AOV_Band",
-        "Account.MC_Services_AOV_Band",
         "Account.Company.Id",
         "Account.Company.AOV_Band__c",
         "Account.Company.Name"
@@ -342,9 +327,6 @@
         "Account.BillingCountry",
         "Account.BillingState",
         "Account.MarketSegment__c",
-        "Account.MC_Social_AOV_Band",
-        "Account.MC_EMW_AOV_Band",
-        "Account.MC_Services_AOV_Band",
         "Account.Company.Id",
         "Account.Company.AOV_Band__c",
         "Account.Company.Name"
@@ -381,9 +363,6 @@
         "Account.BillingCountry",
         "Account.BillingState",
         "Account.MarketSegment__c",
-        "Account.MC_Social_AOV_Band",
-        "Account.MC_EMW_AOV_Band",
-        "Account.MC_Services_AOV_Band",
         "Account.Company.Id",
         "Account.Company.AOV_Band__c",
         "Account.Company.Name"
@@ -560,9 +539,6 @@
         "Account.BillingCountry",
         "Account.BillingState",
         "Account.MarketSegment__c",
-        "Account.MC_Social_AOV_Band",
-        "Account.MC_EMW_AOV_Band",
-        "Account.MC_Services_AOV_Band",
         "Account.Company.Id",
         "Account.Company.AOV_Band__c",
         "Account.Company.Name"
@@ -826,9 +802,6 @@
         "Account.BillingCountry",
         "Account.BillingState",
         "Account.MarketSegment__c",
-        "Account.MC_Social_AOV_Band",
-        "Account.MC_EMW_AOV_Band",
-        "Account.MC_Services_AOV_Band",
         "Account.Company.Id",
         "Account.Company.AOV_Band__c",
         "Account.Company.Name"
@@ -1188,9 +1161,6 @@
         "BillingCountry",
         "BillingState",
         "MarketSegment__c",
-        "MC_Social_AOV_Band",
-        "MC_EMW_AOV_Band",
-        "MC_Services_AOV_Band",
         "Company.Id",
         "Company.AOV_Band__c",
         "Company.Name"
@@ -1532,9 +1502,6 @@
         "BillingCountry",
         "BillingState",
         "MarketSegment__c",
-        "MC_Social_AOV_Band",
-        "MC_EMW_AOV_Band",
-        "MC_Services_AOV_Band",
         "Company.Id",
         "Company.AOV_Band__c",
         "Company.Name"
@@ -1696,9 +1663,6 @@
         "Account.BillingCountry",
         "Account.BillingState",
         "Account.MarketSegment__c",
-        "Account.MC_Social_AOV_Band",
-        "Account.MC_EMW_AOV_Band",
-        "Account.MC_Services_AOV_Band",
         "Account.Company.Id",
         "Account.Company.AOV_Band__c",
         "Account.Company.Name"
@@ -1998,9 +1962,6 @@
         "Account.BillingCountry",
         "Account.BillingState",
         "Account.MarketSegment__c",
-        "Account.MC_Social_AOV_Band",
-        "Account.MC_EMW_AOV_Band",
-        "Account.MC_Services_AOV_Band",
         "Account.Company.Id",
         "Account.Company.AOV_Band__c",
         "Account.Company.Name"
@@ -2078,9 +2039,6 @@
         "Account.BillingCountry",
         "Account.BillingState",
         "Account.MarketSegment__c",
-        "Account.MC_Social_AOV_Band",
-        "Account.MC_EMW_AOV_Band",
-        "Account.MC_Services_AOV_Band",
         "Account.Company.AOV_Band__c",
         "Account.Company.Id",
         "Account.Company.Name"
@@ -2213,9 +2171,6 @@
         "Account.BillingCountry",
         "Account.BillingState",
         "Account.MarketSegment__c",
-        "Account.MC_Social_AOV_Band",
-        "Account.MC_EMW_AOV_Band",
-        "Account.MC_Services_AOV_Band",
         "Account.Company.AOV_Band__c",
         "Account.Company.Id",
         "Account.Company.Name"
@@ -2258,9 +2213,6 @@
         "Account.BillingCountry",
         "Account.BillingState",
         "Account.MarketSegment__c",
-        "Account.MC_Social_AOV_Band",
-        "Account.MC_EMW_AOV_Band",
-        "Account.MC_Services_AOV_Band",
         "Account.Company.Id",
         "Account.Company.AOV_Band__c",
         "Account.Company.Name"
@@ -2304,9 +2256,6 @@
         "BillingCountry",
         "BillingState",
         "MarketSegment__c",
-        "MC_Social_AOV_Band",
-        "MC_EMW_AOV_Band",
-        "MC_Services_AOV_Band",
         "Company.Id",
         "Company.AOV_Band__c",
         "Company.Name"
@@ -2338,10 +2287,7 @@
         "Subregion__c",
         "BillingCountry",
         "BillingState",
-        "MarketSegment__c",
-        "MC_Social_AOV_Band",
-        "MC_EMW_AOV_Band",
-        "MC_Services_AOV_Band"
+        "MarketSegment__c"
       ],
       "right": "Augment_Company_Account",
       "relationship": "Schedule.Entitlement.Account"
@@ -2431,9 +2377,6 @@
         "Account.BillingCountry",
         "Account.BillingState",
         "Account.MarketSegment__c",
-        "Account.MC_Social_AOV_Band",
-        "Account.MC_EMW_AOV_Band",
-        "Account.MC_Services_AOV_Band",
         "Account.Company.Id",
         "Account.Company.AOV_Band__c",
         "Account.Company.Name"
@@ -2512,9 +2455,6 @@
         "Account.BillingCountry",
         "Account.BillingState",
         "Account.MarketSegment__c",
-        "Account.MC_Social_AOV_Band",
-        "Account.MC_EMW_AOV_Band",
-        "Account.MC_Services_AOV_Band",
         "Account.Company.Id",
         "Account.Company.AOV_Band__c",
         "Account.Company.Name"
@@ -2557,9 +2497,6 @@
         "Account.BillingCountry",
         "Account.BillingState",
         "Account.MarketSegment__c",
-        "Account.MC_Social_AOV_Band",
-        "Account.MC_EMW_AOV_Band",
-        "Account.MC_Services_AOV_Band",
         "Account.Company.Id",
         "Account.Company.AOV_Band__c",
         "Account.Company.Name"
@@ -2601,9 +2538,6 @@
         "Account.BillingCountry",
         "Account.BillingState",
         "Account.MarketSegment__c",
-        "Account.MC_Social_AOV_Band",
-        "Account.MC_EMW_AOV_Band",
-        "Account.MC_Services_AOV_Band",
         "Account.Company.Id",
         "Account.Company.AOV_Band__c",
         "Account.Company.Name"
@@ -2652,9 +2586,6 @@
         "Account.BillingCountry",
         "Account.BillingState",
         "Account.MarketSegment__c",
-        "Account.MC_Social_AOV_Band",
-        "Account.MC_EMW_AOV_Band",
-        "Account.MC_Services_AOV_Band",
         "Account.Company.Id",
         "Account.Company.AOV_Band__c",
         "Account.Company.Name"
@@ -2770,9 +2701,6 @@
         "Tenant.Account.BillingState",
         "Tenant.Account.BillingCountry",
         "Tenant.Account.MarketSegment__c",
-        "Tenant.Account.MC_Social_AOV_Band",
-        "Tenant.Account.MC_EMW_AOV_Band",
-        "Tenant.Account.MC_Services_AOV_Band",
         "Tenant.Account.Company.Id",
         "Tenant.Account.Company.AOV_Band__c",
         "Tenant.Account.Company.Name"
