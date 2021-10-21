@@ -35,7 +35,7 @@ from .interactors.slack_targetlist_interactor import SlackTarListInteractor
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.wdf_manager_interactor import *
 from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, \
-    DeprecationDetails, UploadNotifications, Profile, Job, Release, Parameter
+    DeprecationDetails, UploadNotifications, Profile, Job, Release, Parameter, DataflowUploadHistory
 
 sched.start()
 
@@ -661,10 +661,16 @@ class CompareDeprecationView(generic.TemplateView):
         context = super(self.__class__, self).get_context_data(**kwargs)
 
         try:
-            deprecation_model: DeprecationDetails = get_object_or_404(DeprecationDetails, pk=kwargs['pk'])
+            condition = 'upload' in kwargs.keys() and kwargs['upload'] == 'true'
+            klass = DataflowUploadHistory if condition else DeprecationDetails
+            model = get_object_or_404(klass, pk=kwargs['pk'])
 
-            left_script = json.dumps(deprecation_model.original_dataflow, indent=2)
-            right_script = json.dumps(deprecation_model.deprecated_dataflow, indent=2)
+            left_script = json.dumps(model.original_dataflow, indent=2)
+            right_script = json.dumps(
+                model.uploaded_dataflow if 'upload' in kwargs.keys() else
+                model.deprecated_dataflow,
+                indent=2
+            )
         except Exception as e:
             left_script = str(e)
             right_script = "<< Not Found >>"
@@ -1040,6 +1046,16 @@ class RegisterLocalizerView(generic.FormView):
         return render(request, self.template_name, {'form': form})
 
 
+class UploadHistoryView(generic.TemplateView):
+    template_name = 'dataflow-manager/upload/list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        query = DataflowUploadHistory.objects.filter(user=self.request.user).order_by('-created_at')
+        context['list'] = query.all()
+        return context
+
+
 def list_nodes_from_df(request):
     error_msg = ""
     nodes = []
@@ -1224,25 +1240,28 @@ def handler403(request, exception=None):
 
 
 @csrf_exempt
-def compare_deprecation(request, pk=None):
-    payload = None
+def compare_deprecation(request, pk=None, upload=None):
     error = "Code not executed"
-    status = 400
     try:
         if request.method == 'GET' and pk is not None:
-            error = None
-            status = 200
+            condition = upload and upload == 'true'
+            klass = DataflowUploadHistory if condition else DeprecationDetails
+            print(condition)
 
-            deprecation_model: DeprecationDetails = get_object_or_404(DeprecationDetails, pk=pk)
+            model = get_object_or_404(klass, pk=pk)
 
             filemodel = FileModel()
             filemodel.user = request.user
             filemodel.file.save('Original.json',
-                                ContentFile(json.dumps(deprecation_model.original_dataflow, indent=2)))
+                                ContentFile(json.dumps(model.original_dataflow, indent=2)))
             second_fm = FileModel()
             second_fm.user = request.user
             second_fm.file.save('Deprecated.json',
-                                ContentFile(json.dumps(deprecation_model.deprecated_dataflow, indent=2)))
+                                ContentFile(json.dumps(
+                                    model.uploaded_dataflow if condition
+                                    else model.deprecated_dataflow,
+                                    indent=2
+                                )))
 
             show_in_browser(filemodel.file.path, second_fm.file.path)
 
@@ -1254,9 +1273,7 @@ def compare_deprecation(request, pk=None):
             return render(request, 'json_diff_output.html')
 
     except Exception as e:
-        payload = None
         error = mark_safe(str(e))
-        status = 401
 
     messages.error(request, error)
     return redirect('main:view-deprecations')

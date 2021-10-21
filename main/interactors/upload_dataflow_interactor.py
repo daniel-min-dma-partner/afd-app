@@ -1,4 +1,5 @@
 import collections
+import html
 import json
 import os
 import shutil
@@ -8,9 +9,11 @@ import requests
 from core.settings import BASE_DIR
 from libs.amt_helpers import move_retrieve_to_deploy, WDF_FILE
 from libs.interactor.interactor import Interactor
+from libs.utils import job_stage
 from main.interactors.download_dataflow_interactor import DownloadDataflowInteractor as DownDf
 from main.interactors.list_dataflow_interactor import DataflowListInteractor
 from main.interactors.wdf_manager_interactor import JsonToWdfConverterInteractor as JsonToWdf
+from main.models import DataflowUploadHistory
 
 
 class UploadDataflowInteractor(Interactor):
@@ -69,10 +72,12 @@ class UploadDataflowInteractorNoAnt(Interactor):
         model = self.context.env
         filemodel = self.context.filemodel
         remote_df_name = self.context.remote_df_name
+        original_dataflow = {}
 
         message_collection = [
             ("connection-check", f"Checking status of <code>{model.name}</code> connection."),
             ("list-dataflows", "Listing dataflows."),
+            ("backup", "Making a backup of the dataflow."),
             ("uri", "Creating target resource URL."),
             ("start-request", "Request Initiated."),
             ("response-received", "Response received."),
@@ -87,64 +92,82 @@ class UploadDataflowInteractorNoAnt(Interactor):
             job.set_progress(save=True)
 
             # Check connection status
-            job.jobstage_set.filter(
-                pk=_job_stages_ids[list(messages.keys()).index('connection-check')]).first().set_progress(save=True)
-            if not model.instance_url:
-                raise ConnectionError(f"The instance <code>{model.name}</code> is not logged in. Please login first.")
-            job.jobstage_set.filter(
-                pk=_job_stages_ids[list(messages.keys()).index('connection-check')]).first().set_successful(save=True)
+            with job_stage(job=job, pk=_job_stages_ids[list(messages.keys()).index('connection-check')]):
+                if not model.instance_url:
+                    raise ConnectionError(f"The instance <code>{model.name}</code> is not logged in. Please login first.")
 
             # Lists remote dataflows for checking purpose
-            job.jobstage_set.filter(
-                pk=_job_stages_ids[list(messages.keys()).index('list-dataflows')]).first().set_progress(save=True)
-            down_all_ctx = DataflowListInteractor.call(model=model, search=None,
-                                                       refresh_cache='true',
-                                                       user=user)
-            if down_all_ctx.error:
-                raise Exception(down_all_ctx.error)
-            job.jobstage_set.filter(
-                pk=_job_stages_ids[list(messages.keys()).index('list-dataflows')]).first().set_successful(save=True)
+            with job_stage(job=job, pk=_job_stages_ids[list(messages.keys()).index('list-dataflows')]):
+                down_all_ctx = DataflowListInteractor.call(model=model, search=None,
+                                                           refresh_cache='true',
+                                                           user=user)
+                if down_all_ctx.error:
+                    raise Exception(down_all_ctx.error)
+
+            # Capturing backup dataflow
+            with job_stage(job=job, pk=_job_stages_ids[list(messages.keys()).index('backup')]):
+                resource = '/services/data/v51.0/wave/dataflows/'
+                url = model.instance_url + resource + down_all_ctx.df_ids_api[remote_df_name]
+                url = url.strip()
+                header = {'Authorization': "Bearer " + model.oauth_access_token, 'Content-Type': 'application/json'}
+                response = requests.get(url, headers=header)
+
+                if response.status_code == 200:
+                    response = response.text
+                    replaces = [
+                        ('&quot;', '\\"'),
+                        ('&#92;', '\\\\'),
+                    ]
+                    for (a, b) in replaces:
+                        response = response.replace(a, b)
+                    response = html.unescape(response)
+                    response = json.loads(response)
+                    original_dataflow = response['definition']
+                else:
+                    raise ConnectionError(response.text)
 
             # Creates resource URI
-            job.jobstage_set.filter(pk=_job_stages_ids[list(messages.keys()).index('uri')]).first().set_progress(
-                save=True)
-            resource = '/services/data/v51.0/wave/dataflows/'
-            url = model.instance_url + resource + down_all_ctx.df_ids_api[remote_df_name]
-            url = url.strip()
-            header = {'Authorization': "Bearer " + model.oauth_access_token, 'Content-Type': 'application/json'}
-            with open(filemodel.file.path, 'r') as f:
-                data = {
-                    "definition": json.load(fp=f),
-                    "historyLabel": "TCRM - Automation Web Upload"
-                }
-            job.jobstage_set.filter(pk=_job_stages_ids[list(messages.keys()).index('uri')]).first().set_successful(
-                save=True)
+            with job_stage(job=job, pk=_job_stages_ids[list(messages.keys()).index('uri')]):
+                resource = '/services/data/v51.0/wave/dataflows/'
+                url = model.instance_url + resource + down_all_ctx.df_ids_api[remote_df_name]
+                url = url.strip()
+                header = {'Authorization': "Bearer " + model.oauth_access_token, 'Content-Type': 'application/json'}
+                with open(filemodel.file.path, 'r') as f:
+                    definition = json.load(fp=f)
+                    uploading_dataflow = definition
+                    data = {
+                        "definition": definition,
+                        "historyLabel": "TCRM - Automation Web Upload"
+                    }
 
             # Initiates upload request
-            job.jobstage_set.filter(
-                pk=_job_stages_ids[list(messages.keys()).index('start-request')]).first().set_progress(save=True)
-            response = requests.patch(url, json=data, headers=header)
-            job.jobstage_set.filter(
-                pk=_job_stages_ids[list(messages.keys()).index('start-request')]).first().set_successful(save=True)
+            with job_stage(job=job, pk=_job_stages_ids[list(messages.keys()).index('start-request')]):
+                response = requests.patch(url, json=data, headers=header)
 
             # Checks returned response status
-            job.jobstage_set.filter(
-                pk=_job_stages_ids[list(messages.keys()).index('response-received')]).first().set_progress(save=True)
-            if response.status_code == 200:
-                response = response.json()
-                if 'historiesUrl' not in response.keys():
-                    raise ConnectionError(response)
-            else:
-                raise ConnectionError(response.text)
-            job.jobstage_set.filter(
-                pk=_job_stages_ids[list(messages.keys()).index('response-received')]).first().set_successful(save=True)
+            with job_stage(job=job, pk=_job_stages_ids[list(messages.keys()).index('response-received')]):
+                if response.status_code == 200:
+                    response = response.json()
+                    if 'historiesUrl' not in response.keys():
+                        raise ConnectionError(response)
+                else:
+                    raise ConnectionError(response.text)
 
             # Finishes the job
             job.set_successful(save=True)
+
+            # Save upload history
+            DataflowUploadHistory.register_upload(original=original_dataflow, uploaded=uploading_dataflow, user=user,
+                                                  dataflow_name=remote_df_name, salesforce_env=model)
         except Exception as e:
             _exc = e
-            job.jobstage_set.filter(status='progress').order_by('-pk').first().set_failed(save=True, msg=str(e))
-            job.set_failed(save=True, msg=str(e))
+            _stage = job.jobstage_set.filter(status='progress').order_by('-pk').first()
+            stage_name = _stage.message
+            failure_msg = f"Stage <code>{stage_name}</code> failed: {str(e)}"
+            _stage.set_failed(save=True, msg=failure_msg)
+
+            failure_msg = f"<code>{job.message}</code> failed: {str(e)}"
+            job.set_failed(save=True, msg=failure_msg)
         finally:
             self.context.exception = _exc
             filemodel.delete()
