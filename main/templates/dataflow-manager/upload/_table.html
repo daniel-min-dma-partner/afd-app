@@ -5,7 +5,7 @@
             <th>Datetime</th>
             <th>Dataflow Name</th>
             <th>Salesforce Environment</th>
-            <th>Action</th>
+            <th class="text-center">Action</th>
         </tr>
         </thead>
 
@@ -14,7 +14,7 @@
             <th>Datetime</th>
             <th>Dataflow Name</th>
             <th>Salesforce Environment</th>
-            <th>Action</th>
+            <th class="text-center">Action</th>
         </tr>
         </tfoot>
 
@@ -31,7 +31,7 @@
                 <td>
                     {{ object.get_salesforce_env_name|safe }}
                 </td>
-                <td class="text-center">
+                <td class="text-center" style="word-wrap: break-word;max-width: 110px;width: 100px;">
                     <a href="{% url 'main:compare-deprecation' pk=object.pk upload='true' %}"
                        rel="tooltip" class="btn btn-info btn-circle btn-sm"
                        title="Show with 'JDD'" target="_blank">
@@ -41,6 +41,11 @@
                        rel="tooltip" class="btn btn-info btn-circle btn-sm btn-show-diff"
                        title="Show with 'Diff2HtmlCompare'" target="_blank">
                         <i class="fas fa-eye"></i>
+                    </a>
+                    <a href="{% url 'main:download-upload-backup' pk=object.pk %}"
+                       rel="tooltip" class="btn btn-success btn-circle btn-sm"
+                       title="Show with 'Diff2HtmlCompare'" target="_blank">
+                        <i class="fas fa-download"></i>
                     </a>
                 </td>
             </tr>

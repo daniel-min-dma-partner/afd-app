@@ -29,7 +29,8 @@ from main.interactors.jobs_interactor import JobsInteractor
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser, \
     RegisterLocatorInteractor
 from .interactors.list_dataflow_interactor import DataflowListInteractor
-from .interactors.response_interactor import ZipFileResponseInteractor, JsonFileResponseInteractor
+from .interactors.response_interactor import ZipFileResponseInteractor, JsonFileResponseInteractor, \
+    UploadedDataflowToZipResponse
 from .interactors.sfdc_connection_interactor import OAuthLoginInteractor, SfdcConnectWithConnectedApp
 from .interactors.slack_targetlist_interactor import SlackTarListInteractor
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
@@ -1054,6 +1055,13 @@ class UploadHistoryView(generic.TemplateView):
         query = DataflowUploadHistory.objects.filter(user=self.request.user).order_by('-created_at')
         context['list'] = query.all()
         return context
+
+
+class DownloadUploadBackupView(View):
+    def get(self, request, *args, **kwargs):
+        model: DataflowUploadHistory = get_object_or_404(DataflowUploadHistory, pk=kwargs['pk'])
+        context = UploadedDataflowToZipResponse.call(model=model)
+        return context.response
 
 
 def list_nodes_from_df(request):
