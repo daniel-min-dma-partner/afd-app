@@ -26,15 +26,17 @@ from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEn
     SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm, \
     DeprecateFieldsForm, SecpredToSaqlForm, ProfileForm, ReleaseForm, ParameterForm
 from main.interactors.jobs_interactor import JobsInteractor
-from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser
+from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser, \
+    RegisterLocatorInteractor
 from .interactors.list_dataflow_interactor import DataflowListInteractor
-from .interactors.response_interactor import ZipFileResponseInteractor, JsonFileResponseInteractor
+from .interactors.response_interactor import ZipFileResponseInteractor, JsonFileResponseInteractor, \
+    UploadedDataflowToZipResponse
 from .interactors.sfdc_connection_interactor import OAuthLoginInteractor, SfdcConnectWithConnectedApp
 from .interactors.slack_targetlist_interactor import SlackTarListInteractor
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.wdf_manager_interactor import *
 from .models import SalesforceEnvironment as SfdcEnv, FileModel, Notifications, DataflowDeprecation, \
-    DeprecationDetails, UploadNotifications, Profile, Job, Release, Parameter
+    DeprecationDetails, UploadNotifications, Profile, Job, Release, Parameter, DataflowUploadHistory
 
 sched.start()
 
@@ -660,10 +662,16 @@ class CompareDeprecationView(generic.TemplateView):
         context = super(self.__class__, self).get_context_data(**kwargs)
 
         try:
-            deprecation_model: DeprecationDetails = get_object_or_404(DeprecationDetails, pk=kwargs['pk'])
+            condition = 'upload' in kwargs.keys() and kwargs['upload'] == 'true'
+            klass = DataflowUploadHistory if condition else DeprecationDetails
+            model = get_object_or_404(klass, pk=kwargs['pk'])
 
-            left_script = json.dumps(deprecation_model.original_dataflow, indent=2)
-            right_script = json.dumps(deprecation_model.deprecated_dataflow, indent=2)
+            left_script = json.dumps(model.original_dataflow, indent=2)
+            right_script = json.dumps(
+                model.uploaded_dataflow if 'upload' in kwargs.keys() else
+                model.deprecated_dataflow,
+                indent=2
+            )
         except Exception as e:
             left_script = str(e)
             right_script = "<< Not Found >>"
@@ -1009,6 +1017,80 @@ class DigestNodeGeneratorView(generic.TemplateView):
         return context
 
 
+class RegisterLocalizerView(generic.FormView):
+    template_name = 'dataflow-manager/edit/register-localizer-form.html'
+    form_class = forms.RegisterNodeForm
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        status = 200
+        error_msg = ""
+        registers = []
+
+        if form.is_valid():
+            dataflow_file = request.FILES.get('dataflow')
+            nodes = dict(request.POST)['node'] if 'node' in request.POST.keys() else []
+
+            if not dataflow_file or not nodes:
+                status = 500
+                error_msg = "No dataflow specified." if not dataflow_file else "Missing node name."
+            else:
+                dataflow = str_to_json(byte_to_str(dataflow_file.read()))
+                ctx = RegisterLocatorInteractor.call(dataflow=dataflow, nodes=nodes)
+                registers = ctx.registers
+        else:
+            status = 500
+            error_msg = form.errors.as_data
+
+        if request.is_ajax():
+            return JsonResponse({"error": error_msg} if status == 500 else {"registers": registers}, status=status)
+        return render(request, self.template_name, {'form': form})
+
+
+class UploadHistoryView(generic.TemplateView):
+    template_name = 'dataflow-manager/upload/list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        query = DataflowUploadHistory.objects.filter(user=self.request.user).order_by('-created_at')
+        context['list'] = query.all()
+        return context
+
+
+class DownloadUploadBackupView(View):
+    def get(self, request, *args, **kwargs):
+        model: DataflowUploadHistory = get_object_or_404(DataflowUploadHistory, pk=kwargs['pk'])
+        context = UploadedDataflowToZipResponse.call(model=model)
+        return context.response
+
+
+def list_nodes_from_df(request):
+    error_msg = ""
+    nodes = []
+    status = 200
+
+    try:
+        form_class = forms.RegisterNodeForm
+        form = form_class(request.POST)
+
+        if form.is_valid():
+            dataflow_file = request.FILES.get('dataflow')
+
+            if dataflow_file:
+                dataflow = str_to_json(byte_to_str(dataflow_file.read()))
+                nodes = [key for key in dataflow.keys()]
+        else:
+            status = 500
+            error_msg = form.errors.as_data
+    except Exception as e:
+        status = 500
+        print(e)
+        error_msg = mark_safe(e)
+
+    print(error_msg)
+    return JsonResponse({"error": error_msg} if status == 500 else {"nodes": nodes}, status=status)
+
+
 def download_removed_field_list(request, deprecation_detail_pk=None):
     deprecation = get_object_or_404(DeprecationDetails, pk=deprecation_detail_pk)
 
@@ -1108,7 +1190,6 @@ def dataflow_download_deprecated(request, pk=None):
     try:
         deprecation_detail = get_object_or_404(DeprecationDetails, pk=pk)
         filename = deprecation_detail.file_name
-        print(deprecation_detail.status, ', ', DeprecationDetails.SUCCESS, ', ', deprecation_detail.status == DeprecationDetails.SUCCESS)
         if deprecation_detail.status != DeprecationDetails.SUCCESS:
             json_str = json.dumps(deprecation_detail.deprecated_dataflow, indent=2)
             response = HttpResponse(json_str,
@@ -1167,25 +1248,28 @@ def handler403(request, exception=None):
 
 
 @csrf_exempt
-def compare_deprecation(request, pk=None):
-    payload = None
+def compare_deprecation(request, pk=None, upload=None):
     error = "Code not executed"
-    status = 400
     try:
         if request.method == 'GET' and pk is not None:
-            error = None
-            status = 200
+            condition = upload and upload == 'true'
+            klass = DataflowUploadHistory if condition else DeprecationDetails
+            print(condition)
 
-            deprecation_model: DeprecationDetails = get_object_or_404(DeprecationDetails, pk=pk)
+            model = get_object_or_404(klass, pk=pk)
 
             filemodel = FileModel()
             filemodel.user = request.user
             filemodel.file.save('Original.json',
-                                ContentFile(json.dumps(deprecation_model.original_dataflow, indent=2)))
+                                ContentFile(json.dumps(model.original_dataflow, indent=2)))
             second_fm = FileModel()
             second_fm.user = request.user
             second_fm.file.save('Deprecated.json',
-                                ContentFile(json.dumps(deprecation_model.deprecated_dataflow, indent=2)))
+                                ContentFile(json.dumps(
+                                    model.uploaded_dataflow if condition
+                                    else model.deprecated_dataflow,
+                                    indent=2
+                                )))
 
             show_in_browser(filemodel.file.path, second_fm.file.path)
 
@@ -1197,9 +1281,7 @@ def compare_deprecation(request, pk=None):
             return render(request, 'json_diff_output.html')
 
     except Exception as e:
-        payload = None
         error = mark_safe(str(e))
-        status = 401
 
     messages.error(request, error)
     return redirect('main:view-deprecations')
