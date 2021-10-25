@@ -1,0 +1,40 @@
+{% extends 'sb-base/base.html' %}
+
+{% load static %}
+{% load main_extras %}
+
+{% block title %}Manage Dataflows{% endblock title %}
+{% block page-header %}Tableau CRM Dataflows / Remote Connection{% endblock page-header %}
+
+{% block header-scripts %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.5.5/jsoneditor.css" rel="stylesheet"
+          type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.5.5/jsoneditor.js"></script>
+
+    <!-- Custom styles for this page -->
+    <link href="{% static 'sb-admin/assets/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+{% endblock header-scripts %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Upload History</h6>
+                </div>
+
+                <div class="card-body">
+
+                    {% include 'dataflow-manager/upload/_table.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock page-content %}
+
+{% block extra-scripts %}
+    <!-- Page level plugins -->
+    <script src="{% static 'sb-admin/assets/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'sb-admin/assets/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'site/js/list-upload-history.js' %}" type="module"></script>
+{% endblock extra-scripts %}

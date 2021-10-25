@@ -611,3 +611,21 @@ class SpecialPermissions(models.Model):
             ('special_permission_upload_dataflows', 'Can upload dataflows'),
             ('special_permission_delete_all_deprecation', 'Can delete all deprecations at once'),
         ]
+
+
+class DataflowUploadHistory(models.Model):
+    original_dataflow = CompressedJSONField()
+    uploaded_dataflow = CompressedJSONField()
+    dataflow_name = models.CharField(max_length=128, null=False, blank=False)
+    salesforce_env = models.ForeignKey(SalesforceEnvironment, models.SET_NULL, blank=True, null=True)
+    user = models.ForeignKey(User, models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, blank=False, null=False)
+
+    @classmethod
+    def register_upload(cls, original: dict, uploaded: dict, user: User, dataflow_name: str,
+                        salesforce_env: SalesforceEnvironment):
+        cls.objects.create(original_dataflow=original, uploaded_dataflow=uploaded, user=user,
+                           salesforce_env=salesforce_env, dataflow_name=dataflow_name)
+
+    def get_salesforce_env_name(self):
+        return "<code>&lt;deleted&gt;</code>" if not self.salesforce_env else self.salesforce_env.name

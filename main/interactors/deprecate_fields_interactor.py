@@ -40,12 +40,13 @@ class FieldDeprecatorInteractor(Interactor):
 
         job = self.context.job
         df_file_models = self.context.df_files
+        deprecating_df_name = ""
+        name = self.context.name
 
         try:
             objects = self.context.objects
             fields = self.context.fields
             user = self.context.user
-            name = self.context.name
             org = self.context.org
             case_url = self.context.case_url
 
@@ -93,6 +94,7 @@ class FieldDeprecatorInteractor(Interactor):
             for df_file in df_file_models:
                 with open(df_file.file.path, 'r') as f:
                     df_name = os.path.basename(df_file.file.name)
+                    deprecating_df_name = df_name
 
                     with job_stage(job=job, pk=_job_stages_ids[list(messages.keys()).index(f'df-{df_name}')]):
                         today_dir = df_file.file.path.replace(df_name, "")
@@ -158,8 +160,12 @@ class FieldDeprecatorInteractor(Interactor):
             job.set_successful(save=True)
         except Exception as e:
             _exc = e
-            job.jobstage_set.filter(status='progress').order_by('-pk').first().set_failed(save=True, msg=str(e))
-            job.set_failed(save=True, msg=str(e))
+
+            failure_msg = f"<code>{deprecating_df_name} failed:</code> {str(e)}"
+            job.jobstage_set.filter(status='progress').order_by('-pk').first().set_failed(save=True, msg=failure_msg)
+
+            failure_msg = f"Deprecation <code>{name}</code> failed on <code>{deprecating_df_name}</code>: {str(e)}"
+            job.set_failed(save=True, msg=failure_msg)
         finally:
             for fm in df_file_models:
                 fm.delete()
