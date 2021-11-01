@@ -13,35 +13,50 @@ $(document).ready(function () {
         let template = JSON.parse(JSON.stringify(digest_template)),
             user_typed = fields.val(),
             user_dataset = dataset.val(),
-            field_list = null,
-            current_fields = null,
-            current_dataset = null,
-            current_ds_alias = null;
+            field_lists,
+            current_dataset,
+            current_ds_alias,
+            objects, _object,
+            fieldlist;
 
-        field_list = $.map(user_typed.split('\n'), function( val, i ) {
-            return $.map(val.split(','), function (_val, _i) {
-                return {"name": $.trim(_val)};
+        field_lists = user_typed.split('--').filter(item => !['', undefined, null, false, []].includes(item)).map(function (fieldlist, i) {
+            return fieldlist.split('\n').filter(item => !['', undefined, null, false].includes(item)).map(function (field, i) {
+                return {"name": $.trim(field)};
             });
-        })
-            .filter(item => !['', undefined, null, false].includes(item.name))
-            .sort(function(a, b){
-                return a.name.localeCompare(b.name);
-            });
+        }).filter(item => !['', undefined, null, false, []].includes(item));
 
+        objects = object.val().split(',').filter(item => !['', undefined, null, false].includes(item)).map(function (dataset, i) {
+            return dataset.trim();
+        });
 
-        current_fields = template['Digest-Node-Name'].parameters.fields;
-        current_dataset = template['Register-Dataset'].parameters.name;
-        current_ds_alias = template['Register-Dataset'].parameters.alias;
+        for (let i = 0; i < objects.length; i++) {
+            if (i < field_lists.length) {
 
+                fieldlist = field_lists[i];
 
-        template['Digest-Node-Name'].parameters.fields = field_list.length ? field_list : current_fields;
-        template['Digest-Node-Name'].parameters.object = object.val() || "Account";
-        template['Register-Dataset'].parameters.name = user_dataset.replace(/ +/g, ' ') || current_dataset;
-        template['Register-Dataset'].parameters.alias = user_dataset.replace(/ +/g, '_') || current_ds_alias;
+                if (fieldlist.length) {
+                    current_dataset = template['Register-Dataset'].parameters.name;
+                    current_ds_alias = template['Register-Dataset'].parameters.alias;
+                    _object = objects[i];
+
+                    template[_object] = JSON.parse(JSON.stringify(template['Digest-Node-Name']));
+                    template[_object].parameters.fields = field_lists[i];
+                    template[_object].parameters.object = _object;
+                    template['Register-Dataset'].parameters.name = user_dataset.replace(/ +/g, ' ') || current_dataset;
+                    template['Register-Dataset'].parameters.alias = user_dataset.replace(/ +/g, '_') || current_ds_alias;
+                }
+            }
+        }
+
+        if (Object.keys(template).length > 2) {
+            delete template['Digest-Node-Name'];
+            template['Register-Dataset'].parameters.source = "<< specify here the last node >>";
+        }
+
         editor.set(template);
     }
 
-    fields.on('keyup change', function() {
+    fields.on('keyup change', function () {
         update_editor(fields, object);
     });
 
