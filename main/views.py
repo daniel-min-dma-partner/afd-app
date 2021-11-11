@@ -1047,8 +1047,9 @@ class RegisterLocalizerView(generic.FormView):
         return render(request, self.template_name, {'form': form})
 
 
-class UploadHistoryView(generic.TemplateView):
+class UploadHistoryView(PermissionRequiredMixin, generic.TemplateView):
     template_name = 'dataflow-manager/upload/list.html'
+    permission_required = ['main.special_permission_upload_dataflows']
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)

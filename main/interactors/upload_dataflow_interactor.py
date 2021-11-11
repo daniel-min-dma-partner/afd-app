@@ -137,7 +137,7 @@ class UploadDataflowInteractorNoAnt(Interactor):
                     uploading_dataflow = definition
                     data = {
                         "definition": definition,
-                        "historyLabel": "TCRM - Automation Web Upload"
+                        "historyLabel": f"{user.first_name + (' ' + user.last_name) if user.last_name else ''} through TCRM - Automation Web Upload"
                     }
 
             # Initiates upload request
