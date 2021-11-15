@@ -3,31 +3,33 @@
 
 
 <div class="collapse" id="guideline-box">
-    {% with zize=profile_guidelines|length %}
+    {% with zize=guidelines|length %}
         {% with mod_quad=zize|mod:4 %}
             {% with residual_pos=zize|sub:mod_quad %}
-                {% for guideline in profile_guidelines %}
+                {% for guideline in guidelines %}
 
                     {% if forloop.counter|mod:4 == 1 %}
                         <div class="row">
                     {% endif %}
 
-                    <div class="col-xl-{% if forloop.counter > residual_pos %}{{ 12|div:mod_quad|floatformat }}{% else %}3{% endif %} col-md-6 mb-4">
-                        <div class="card border-bottom-{{ guideline.color }} shadow h-100 py-2 bg-translucent-{{ guideline.color }}">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-{{ guideline.color }} text-uppercase mb-1">
-                                            {{ guideline.title }}
-                                        </div>
-                                        <div class="h9 mb-0 font-weight-normal text-gray-500">
-                                            {{ guideline.text|safe }}
-                                        </div>
+                <div class="col-xl-
+                        {% if forloop.counter > residual_pos %}{{ 12|div:mod_quad|floatformat }}{% else %}3{% endif %} col-md-6 mb-4">
+                    <div class="card border-bottom-{{ guideline.color }} shadow h-100 py-2 bg-translucent-{{ guideline.color }}">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="font-weight-bold text-{{ guideline.color }} text-uppercase mb-1">
+                                        {{ guideline.title }}
                                     </div>
-                                    <div class="col-auto">
-                                        <i class="fas {% if guideline.icon %}{{ guideline.icon }}{% else %}fa-lightbulb{% endif %} fa-b fa-2x text-gray-300"></i>
+                                    <div class="h9 mb-0 font-weight-normal text-gray-500">
+                                        {{ guideline.text|safe }}
                                     </div>
                                 </div>
+                                <div class="col-auto">
+                                    <i class="fas
+                                            {% if guideline.icon %}{{ guideline.icon }}{% else %}fa-lightbulb{% endif %} fa-b fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
                             </div>
                         </div>
                     </div>
