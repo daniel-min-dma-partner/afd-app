@@ -14,6 +14,7 @@ class Command(BaseCommand):
         days = (datetime.utcnow()-timedelta(days=2)).astimezone()
         queries = [Job.objects.filter(started_at__lt=days).exclude(status__in=['created', 'started', 'progress']),
                    Notifications.objects.filter(created_at__lt=days, status__gte=3)]
+        max_char = 64
 
         msg = f"Datetime {str(days)}"
         self.stdout.write(self.style.WARNING(msg))
@@ -27,7 +28,8 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS("=" * len(msg)))
 
                 for model in query.all():
-                    self.stdout.write(f"\t - {class_name} #{model.pk} {self.style.WARNING(model.message)} deleted.")
+                    message = model.message if len(model.message) <= max_char else f"{model.message[:max_char]}..."
+                    self.stdout.write(f"\t - {class_name} #{model.pk} {self.style.WARNING(message)} deleted.")
                     model.delete()
             else:
                 self.stdout.write(self.style.SUCCESS(f"No {query.all().model.__name__} has been found."))
