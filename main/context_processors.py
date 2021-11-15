@@ -3,7 +3,6 @@ import json
 import os
 
 from django.urls import reverse
-from django.utils.safestring import mark_safe
 
 from main.models import Notifications, UploadNotifications as UpNotifs, Parameter
 
@@ -28,8 +27,10 @@ def show_notifications(request):
         'currentYear': datetime.datetime.now().strftime("%Y")
     }
 
-    # Listing all guidelines for Profile
     if request.user.is_authenticated:
+        current_url = request.path
+
+        # Listing all guidelines for Profile
         if parameters.exists():
             p: Parameter = parameters.first()
 
@@ -38,14 +39,32 @@ def show_notifications(request):
             profile_edit_url = profile_edit_url.split('/')[:-2]
             profile_edit_url = profile_edit_url + ['']
             profile_edit_url = '/'.join(profile_edit_url)
-            current_url = request.path
 
             if current_url == profile_create_url or profile_edit_url in current_url:
                 key = 'profile-guidelines'
                 param = json.loads(p.parameter)
                 profile_guideline = param[key] if key in param.keys() else []
 
-                default_context['profile_guidelines'] = profile_guideline
+                default_context['guidelines'] = profile_guideline
+
+        # Guidelines for sfdcDigest node generator
+        digest_url = reverse("main:digest-generator")
+        if current_url == digest_url:
+            guidelines = [
+                {
+                    "icon": "fa-lightbulb",
+                    "text": "<strong>#1. </strong>You can specify multiple salesforce objects separated by a comma "
+                            "(<code><strong>,</strong></code>).<br/><br/>"
+                            "<strong>#2. </strong>To group fields by objects (in the order specified at "
+                            "<code>SF Object API Name</code>, use a new line with <code><strong>--</strong></code> double "
+                            "hyphen. For example: "
+                            "<br/><code>Field A<br/>Field B<br/><strong>--</strong><br/>Field C<br/>Field D</code>",
+                    "color": "success",
+                    "title": "Tips"
+                }
+            ]
+            default_context['guidelines'] = default_context['guidelines'] + guidelines \
+                if 'guidelines' in default_context.keys() else guidelines
 
     # Flag to show alert banner for Stage env.
     heroku_app_env = os.environ.get('HEROKU_APP_ENV', "non-production")
