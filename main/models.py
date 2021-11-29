@@ -277,6 +277,11 @@ class DataflowDeprecation(models.Model):
 
         return details
 
+    def details(self, only_deprecated=True):
+        query = DeprecationDetails.objects.filter(deprecation_id=self.pk)
+        query = query.filter(status=DeprecationDetails.SUCCESS) if only_deprecated else query
+        return query.all() if query.exists() else []
+
 
 class DeprecationDetails(models.Model):
     _STATUS_CHOICES = (

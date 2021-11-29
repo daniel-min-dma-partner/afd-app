@@ -28,6 +28,7 @@ from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEn
 from main.interactors.jobs_interactor import JobsInteractor
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser, \
     RegisterLocatorInteractor
+from .interactors.deprecate_fields_interactor import FieldDeprecationExcelInteractor
 from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.response_interactor import ZipFileResponseInteractor, JsonFileResponseInteractor, \
     UploadedDataflowToZipResponse
@@ -1063,6 +1064,22 @@ class DownloadUploadBackupView(View):
         model: DataflowUploadHistory = get_object_or_404(DataflowUploadHistory, pk=kwargs['pk'])
         context = UploadedDataflowToZipResponse.call(model=model)
         return context.response
+
+
+class DeprecationCheckerboardExcelDownloadView(View):
+    def get(self, request, *args, **kwargs):
+        model: DataflowDeprecation = get_object_or_404(DataflowDeprecation, pk=kwargs['pk'])
+        details: DeprecationDetails = model.details()
+
+        ctx = FieldDeprecationExcelInteractor.call(models=details)
+        csv = ctx.csv
+
+        response = HttpResponse(
+            content_type='text/csv',
+            headers={'Content-Disposition': f'attachment; filename="{model.name} Checkerboard.csv'},
+        )
+        response.write(csv)
+        return response
 
 
 def list_nodes_from_df(request):
