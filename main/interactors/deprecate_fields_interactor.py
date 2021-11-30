@@ -2,7 +2,12 @@ import collections
 import copy
 import json
 import os.path
+from copy import deepcopy
 from pathlib import Path
+from typing import List
+
+import pandas as pd
+from django.conf import settings
 
 from libs.interactor.interactor import Interactor
 from libs.tcrm_automation.libs.deprecation_libs import delete_fields_of_deleted_node, perform_deprecation
@@ -130,7 +135,8 @@ class FieldDeprecatorInteractor(Interactor):
                                 deprecation_detail.deprecation = deprecation_model
                                 deprecation_detail.save()
 
-                                node_list = get_nodes_by_action(df=dataflow, action=['sfdcDigest', 'digest', 'edgemart'])
+                                node_list = get_nodes_by_action(df=dataflow,
+                                                                action=['sfdcDigest', 'digest', 'edgemart'])
                                 json_modified, collection = perform_deprecation(
                                     df=dataflow, fieldlist=field_md,
                                     node_list=node_list, df_name=df_name,
@@ -173,3 +179,74 @@ class FieldDeprecatorInteractor(Interactor):
         self.context.exception = _exc
         self.context.deprecation_models = deprecation_models
         self.context.not_deprecated_dfs = not_deprecated_dfs
+
+
+class FieldDeprecationExcelInteractor_bk(Interactor):
+    """ Flatten and transform a JSON into CSV.
+    Source: https://stackoverflow.com/questions/41180960/convert-nested-json-to-csv-file-in-python
+    """
+
+    def run(self):
+        json_data = self.context.json_data
+        df = self.json_to_dataframe(json_data)
+        self.context.csv = df.to_csv(index=False)
+
+    @classmethod
+    def cross_join(cls, left, right):
+        new_rows = [] if right else left
+        for left_row in left:
+            for right_row in right:
+                temp_row = deepcopy(left_row)
+                for key, value in right_row.items():
+                    temp_row[key] = value
+                new_rows.append(deepcopy(temp_row))
+        return new_rows
+
+    def flatten_list(self, data):
+        for elem in data:
+            if isinstance(elem, list):
+                yield from self.flatten_list(elem)
+            else:
+                yield elem
+
+    def json_to_dataframe(self, data_in):
+        def flatten_json(data, prev_heading=''):
+            if isinstance(data, dict):
+                rows = [{}]
+                for key, value in data.items():
+                    rows = self.__class__.cross_join(rows, flatten_json(value, prev_heading + '.' + key))
+            elif isinstance(data, list):
+                rows = []
+                for i in range(len(data)):
+                    [rows.append(elem) for elem in self.flatten_list(flatten_json(data[i], prev_heading))]
+            else:
+                rows = [{prev_heading[1:]: data}]
+            return rows
+
+        return pd.DataFrame(flatten_json(data_in))
+
+
+class FieldDeprecationExcelInteractor(Interactor):
+    def run(self):
+        self.context.exception = None
+
+        try:
+            user = self.context.user
+            models: List[DeprecationDetails] = self.context.models
+            data = [
+                [_model.file_name.replace('.json', ''), register['dataset-alias'],
+                 f"{object_name}: {', '.join(register[object_name])}", "", ""]
+                for _model in models for _, register in _model.registers.items() for object_name in register.keys() if
+                object_name not in ['dataset-name', 'dataset-alias']
+            ]
+            dataframe = pd.DataFrame(data,
+                                     columns=["Dataflow", "Dataset", "Object/Fields", "Owner", "Confirmation"]).groupby(
+                ['Dataflow', 'Dataset']).agg(lambda x: '\n'.join(x))
+            path = os.path.join(settings.MEDIA_ROOT, f"excelfiles/{user.username}")
+            if not os.path.isdir(path):
+                os.makedirs(path)
+            filepath = os.path.join(path, 'excelfile.xlsx')
+            dataframe.to_excel(filepath)
+            self.context.filepath = filepath
+        except Exception as e:
+            self.context.exception = e

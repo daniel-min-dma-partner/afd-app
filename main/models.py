@@ -254,7 +254,7 @@ class Notifications(models.Model):
         return 3
 
 
-class DataflowDeprecation(models.Model):
+class   DataflowDeprecation(models.Model):
     name = models.CharField(max_length=1024, help_text='', null=False, blank=False)
     salesforce_org = models.CharField(max_length=1024, help_text='', null=False, blank=False)
     sobjects = models.TextField(default="<< sfdc objs api >>")
@@ -276,6 +276,11 @@ class DataflowDeprecation(models.Model):
         details = self.deprecationdetails_set.order_by('file_name').all()
 
         return details
+
+    def details(self, only_deprecated=True):
+        query = DeprecationDetails.objects.filter(deprecation_id=self.pk)
+        query = query.filter(status=DeprecationDetails.SUCCESS) if only_deprecated else query
+        return query.all() if query.exists() else []
 
 
 class DeprecationDetails(models.Model):
