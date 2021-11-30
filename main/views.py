@@ -1080,7 +1080,7 @@ class DeprecationCheckerboardExcelDownloadView(View):
                     content_type='mimetype/submimetype',
                     headers={'Content-Disposition': f'attachment; filename="{model.name} Checkerboard.xlsx'},
                 )
-            # os.remove(filepath)
+            shutil.rmtree('/'.join(filepath.split('/')[:-1]))
             return response
         else:
             messages.error(request, str(ctx.exception))
