@@ -1070,9 +1070,19 @@ class DeprecationCheckerboardExcelDownloadView(View):
     def get(self, request, *args, **kwargs):
         model: DataflowDeprecation = get_object_or_404(DataflowDeprecation, pk=kwargs['pk'])
         details: DeprecationDetails = model.details()
+        msg = None
+        msg_type = messages.SUCCESS
+
+        if not details:
+            msg = "There are no modified dataflows by this deprecation."
+            msg_type = messages.INFO
 
         ctx = FieldDeprecationExcelInteractor.call(model=model, models=details, user=request.user)
-        if not ctx.exception:
+        if ctx.exception:
+            msg = str(ctx.exception)
+            msg_type = messages.ERROR
+
+        if not msg:
             filepath = ctx.filepath
             with open(filepath, "rb") as file:
                 response = HttpResponse(
@@ -1083,7 +1093,7 @@ class DeprecationCheckerboardExcelDownloadView(View):
             shutil.rmtree('/'.join(filepath.split('/')[:-1]))
             return response
         else:
-            messages.error(request, str(ctx.exception))
+            messages.add_message(request, msg, msg_type)
             return redirect("main:view-deprecations")
 
 
