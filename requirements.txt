@@ -55,6 +55,7 @@ msgpack==1.0.2
 multidict==5.1.0
 newrelic==6.6.0.162
 numpy==1.19.5
+openpyxl==3.0.9
 packaging==20.8
 pandas==1.2.0
 pbr==5.5.1

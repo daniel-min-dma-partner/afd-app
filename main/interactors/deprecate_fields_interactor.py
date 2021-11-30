@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import List
 
 import pandas as pd
+from django.conf import settings
 
 from libs.interactor.interactor import Interactor
 from libs.tcrm_automation.libs.deprecation_libs import delete_fields_of_deleted_node, perform_deprecation
@@ -134,7 +135,8 @@ class FieldDeprecatorInteractor(Interactor):
                                 deprecation_detail.deprecation = deprecation_model
                                 deprecation_detail.save()
 
-                                node_list = get_nodes_by_action(df=dataflow, action=['sfdcDigest', 'digest', 'edgemart'])
+                                node_list = get_nodes_by_action(df=dataflow,
+                                                                action=['sfdcDigest', 'digest', 'edgemart'])
                                 json_modified, collection = perform_deprecation(
                                     df=dataflow, fieldlist=field_md,
                                     node_list=node_list, df_name=df_name,
@@ -183,6 +185,7 @@ class FieldDeprecationExcelInteractor_bk(Interactor):
     """ Flatten and transform a JSON into CSV.
     Source: https://stackoverflow.com/questions/41180960/convert-nested-json-to-csv-file-in-python
     """
+
     def run(self):
         json_data = self.context.json_data
         df = self.json_to_dataframe(json_data)
@@ -225,9 +228,25 @@ class FieldDeprecationExcelInteractor_bk(Interactor):
 
 class FieldDeprecationExcelInteractor(Interactor):
     def run(self):
-        models: List[DeprecationDetails] = self.context.models
-        data = pd.DataFrame([
-            [model.file_name.replace('.json', ''), register['dataset-alias'], "", ""]
-            for model in models for _, register in model.registers.items()
-        ], columns=["Dataflow", "Dataset", "Owner", "Confirmation"])
-        self.context.csv = data.to_csv(index=False)
+        self.context.exception = None
+
+        try:
+            user = self.context.user
+            models: List[DeprecationDetails] = self.context.models
+            data = [
+                [_model.file_name.replace('.json', ''), register['dataset-alias'],
+                 f"{object_name}: {', '.join(register[object_name])}", "", ""]
+                for _model in models for _, register in _model.registers.items() for object_name in register.keys() if
+                object_name not in ['dataset-name', 'dataset-alias']
+            ]
+            dataframe = pd.DataFrame(data,
+                                     columns=["Dataflow", "Dataset", "Object/Fields", "Owner", "Confirmation"]).groupby(
+                ['Dataflow', 'Dataset']).agg(lambda x: '\n'.join(x))
+            path = os.path.join(settings.MEDIA_ROOT, f"excelfiles/{user.username}")
+            if not os.path.isdir(path):
+                os.makedirs(path)
+            filepath = os.path.join(path, 'excelfile.xlsx')
+            dataframe.to_excel(filepath)
+            self.context.filepath = filepath
+        except Exception as e:
+            self.context.exception = e

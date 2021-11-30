@@ -1071,15 +1071,20 @@ class DeprecationCheckerboardExcelDownloadView(View):
         model: DataflowDeprecation = get_object_or_404(DataflowDeprecation, pk=kwargs['pk'])
         details: DeprecationDetails = model.details()
 
-        ctx = FieldDeprecationExcelInteractor.call(models=details)
-        csv = ctx.csv
-
-        response = HttpResponse(
-            content_type='text/csv',
-            headers={'Content-Disposition': f'attachment; filename="{model.name} Checkerboard.csv'},
-        )
-        response.write(csv)
-        return response
+        ctx = FieldDeprecationExcelInteractor.call(model=model, models=details, user=request.user)
+        if not ctx.exception:
+            filepath = ctx.filepath
+            with open(filepath, "rb") as file:
+                response = HttpResponse(
+                    file.read(),
+                    content_type='mimetype/submimetype',
+                    headers={'Content-Disposition': f'attachment; filename="{model.name} Checkerboard.xlsx'},
+                )
+            # os.remove(filepath)
+            return response
+        else:
+            messages.error(request, str(ctx.exception))
+            return redirect("main:view-deprecations")
 
 
 def list_nodes_from_df(request):
