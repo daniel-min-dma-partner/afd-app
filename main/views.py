@@ -220,6 +220,7 @@ class SlackIntegrationView(generic.FormView):
 
         if form.is_valid():
             slack_targets = request.POST.getlist('slack_target')
+            target_names = []
             _values = {
                 "case-number": form.cleaned_data['case_number'],
                 "case-url": form.cleaned_data['case_url'],
@@ -236,10 +237,9 @@ class SlackIntegrationView(generic.FormView):
                 _values['submitter'] = f"{request.user.first_name} {request.user.last_name}"
 
             ctx = SlackMessagePushInteractor.call(values=_values)
+
             _payload = js.dumps(ctx.payload)
-
             _header = {'Content-Type': "application/json"}
-
             for slack_target in slack_targets:
                 _url = SlackMsgPusherForm.get_slack_webhook(key=slack_target)
                 _target_name = SlackMsgPusherForm.get_slack_target_name(key=slack_target)
@@ -248,14 +248,18 @@ class SlackIntegrationView(generic.FormView):
                 if response.status_code != 200:
                     messages.error(request, response.text)
                     return redirect("main:slack")
-                else:
-                    case_number = form.cleaned_data['case_number']
-                    push_msg_link = f"<a href='{form.cleaned_data['case_url']}' target='_blank'>" \
-                                    f"<strong>Case #{case_number}</strong></a>"
-                    message = f"Your approval request for the {push_msg_link} " \
-                              f"has been <strong><code>successfully</code></strong> delivered " \
-                              f"to <strong>{_target_name}</strong>."
-                    messages.success(request, mark_safe(message))
+
+                target_names.append(_target_name)
+
+            target_names.sort()
+            case_number = form.cleaned_data['case_number']
+            push_msg_link = f"<a href='{form.cleaned_data['case_url']}' target='_blank'>" \
+                            f"<strong>Case #{case_number}</strong></a>"
+            message = f"Your approval request for the {push_msg_link} " \
+                      f"has been <strong><code>successfully</code></strong> delivered " \
+                      f"to the following user{'s' if len(slack_targets) > 1 else ''}:<br/><br/>" \
+                      f"<ul><strong><li>{'</li><li>'.join(target_names)}</li></strong></ul>"
+            messages.success(request, mark_safe(message))
             return redirect("main:slack")
         else:
             return self.form_invalid(form)
