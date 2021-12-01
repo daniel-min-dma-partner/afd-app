@@ -7,7 +7,7 @@
             <div class="card-body bg-translucent-primary">
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <h5 class="title float-left">List of processed dataflows</h5>
+                        <h5 class="title float-left">Dataflows</h5>
                         <p class="float-right">
                             {{ list|deprecation_stats|safe }}
                         </p>
@@ -56,7 +56,7 @@
 
                     <div class="form-group col-md-4">
                         <a href="{% url 'main:deprecation-checkerboard-excel' pk=deprecation.pk %}"
-                           class="btn btn-success float-right reset-filter ml-2" title="Confirmation Checkerboard in Excel"
+                           class="btn btn-success float-right btn-circle ml-2" title="Get Confirmation Checkerboard in Excel"
                            target="_blank">
                             <i class="fas fa-file-excel"></i>
                         </a>
@@ -65,13 +65,13 @@
                                 data-pk="{{ object.pk }}"
                                 data-name="{{ object.name }}" hidden>
                         </button>
-                        <button class="btn btn-primary float-right ml-2 download-selected-clicker"
+                        <button class="btn btn-primary btn-circle float-right ml-2 download-selected-clicker"
                                 data-pk="{{ object.pk }}" title="Download displayed dataflows"
                                 data-name="{{ object.name }}">
                             <i class="fas fa-download"></i>
                         </button>
 
-                        <button class="btn btn-info float-right reset-filter ml-2" title="Reset Filter">
+                        <button class="btn btn-info float-right reset-filter btn-circle ml-2" title="Reset Filter">
                             <i class="fas fa-undo"></i>
                         </button>
                     </div>
@@ -105,7 +105,7 @@
                                 </td>
                                 <td class="status-cell text-center">{{ object.get_status_badge|safe }}</td>
                                 <td>{{ object.message|safe }}</td>
-                                <td class="text-center">
+                                <td class="text-center" style="width: 100px;">
                                     {% if object|is_deprecated %}
                                         <a href="{% url 'main:compare-deprecation' pk=object.pk %}"
                                            rel="tooltip" class="btn btn-info btn-circle btn-sm"

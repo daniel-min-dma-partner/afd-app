@@ -106,7 +106,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
 
                 # My custom context processors
-                'main.context_processors.show_notifications',
+                'main.context_processors.custom_context_data',
             ],
         },
     },

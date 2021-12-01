@@ -82,5 +82,5 @@
     <script>
         let digest_template = {{ default_value|safe }};
     </script>
-    <script src="{% static 'site/js/digest-generator.js' %}" type="module"></script>
+    <script src="{% static 'site/js/digest-generator.js' %}?v={{ version }}" type="module"></script>
 {% endblock extra-scripts %}
