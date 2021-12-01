@@ -7,10 +7,7 @@ from django.urls import reverse
 from main.models import Notifications, UploadNotifications as UpNotifs, Parameter
 
 
-def show_notifications(request):
-    # Get parameter queryset from db
-    parameters = Parameter.objects
-
+def custom_context_data(request):
     # Listing all notifications
     lst = Notifications.objects.filter(user_id=request.user.pk).order_by('status', '-created_at')
     up_notifs = UpNotifs.objects.filter(user_id=request.user.pk).order_by('status', '-created_at')
@@ -26,6 +23,9 @@ def show_notifications(request):
         'upload_notifications': up_notifs.all(),
         'currentYear': datetime.datetime.now().strftime("%Y")
     }
+
+    # Get parameter queryset from db
+    parameters = Parameter.objects
 
     if request.user.is_authenticated:
         current_url = request.path
@@ -77,7 +77,9 @@ def show_notifications(request):
 
         if 'site-name' in param.keys():
             site_name = param['site-name']
-
     default_context['site_name'] = site_name
+
+    # Version of the product
+    default_context['version'] = "1.8.0"
 
     return default_context
