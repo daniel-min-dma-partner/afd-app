@@ -219,6 +219,7 @@ class SlackIntegrationView(generic.FormView):
         form_customer_initial = SlackCustomerConversationForm(request.POST)
 
         if form.is_valid():
+            slack_target_key = form.cleaned_data.get('slack_target')
             _values = {
                 "case-number": form.cleaned_data['case_number'],
                 "case-url": form.cleaned_data['case_url'],
@@ -238,14 +239,21 @@ class SlackIntegrationView(generic.FormView):
             _payload = js.dumps(ctx.payload)
 
             _header = {'Content-Type': "application/json"}
-            _url = SlackMsgPusherForm.get_slack_webhook(key=form.cleaned_data.get('slack_target'))
+            _url = SlackMsgPusherForm.get_slack_webhook(key=slack_target_key)
+            _target_name = SlackMsgPusherForm.get_slack_target_name(key=slack_target_key)
             response = requests.post(url=_url, data=_payload, headers=_header, json=True)
 
             if response.status_code != 200:
                 messages.error(request, response.text)
                 return self.form_invalid(form)
             else:
-                messages.info(request, f"Response status: {response.status_code}")
+                case_number = form.cleaned_data['case_number']
+                push_msg_link = f"<a href='{form.cleaned_data['case_url']}' target='_blank'>" \
+                                f"<strong>Case #{case_number}</strong></a>"
+                message = f"Your approval request for the {push_msg_link} " \
+                          f"has been <strong><code>successfully</code></strong> delivered " \
+                          f"to <strong>{_target_name}</strong>."
+                messages.success(request, mark_safe(message))
                 return redirect("main:slack")
         elif form_customer_initial.is_valid():
             messages.success(request, "Form 2 Works.")
