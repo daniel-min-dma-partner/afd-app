@@ -61,5 +61,5 @@
     <script>
         let list_node_url = "{% url 'main:list-node-from-df' %}";
     </script>
-    <script src="{% static 'site/js/register-localizer.js' %}" type="module"></script>
+    <script src="{% static 'site/js/register-localizer.js' %}?v={{ version }}" type="module"></script>
 {% endblock extra-scripts %}

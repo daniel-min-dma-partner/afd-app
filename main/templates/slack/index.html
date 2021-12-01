@@ -30,5 +30,5 @@
 
     const targetlist_url = "{% url 'main:slack-targets' %}";
 </script>
-<script src="{% static 'site/js/slack_msg_pusher.js' %}" type="module"></script>
+<script src="{% static 'site/js/slack_msg_pusher.js' %}?v={{ version }}" type="module"></script>
 {% endblock extra-scripts %}
