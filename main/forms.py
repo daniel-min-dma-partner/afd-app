@@ -160,7 +160,7 @@ class SlackMsgPusherForm(forms.Form):
         required=False
     )
 
-    slack_target = forms.CharField(required=True)
+    # slack_target = forms.CharField(required=True)
 
     @classmethod
     def slack_target_choices(cls):
