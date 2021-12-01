@@ -101,5 +101,5 @@
     <script>
         let type_list_url = "{% url 'main:profile-get-type-list' %}";
     </script>
-    <script src="{% static 'site/js/profile.js' %}" type="module"></script>
+    <script src="{% static 'site/js/profile.js' %}?v={{ version }}" type="module"></script>
 {% endblock extra-scripts %}

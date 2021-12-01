@@ -181,7 +181,7 @@ $(".delete-all").on('click', function (evt) {
 //     $('div.details-divider').empty();
 // });
 //
-$('tr[id^="object_fields_"]').on('shown.bs.collapse', function () {
+$('div[id^="object_fields_"]').on('shown.bs.collapse', function () {
     let this_ = $(this),
         pk = this_.data('pk'),
         detail_div = $(`#collapseExample_${pk}`),
@@ -195,7 +195,7 @@ $('tr[id^="object_fields_"]').on('shown.bs.collapse', function () {
     }
 });
 
-$('tr[id^="collapseExample_"]').on('shown.bs.collapse', function () {
+$('div[id^="collapseExample_"]').on('shown.bs.collapse', function () {
     let this_ = $(this),
         pk = this_.data('pk'),
         of_div = $(`#object_fields_${pk}`),

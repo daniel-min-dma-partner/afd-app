@@ -69,6 +69,6 @@
     <script>
         let delete_url = "{% url 'main:profile-delete' pk='0000' %}";
     </script>
-    <script src="{% static 'site/js/profile.js' %}" type="module"></script>
+    <script src="{% static 'site/js/profile.js' %}?v={{ version }}" type="module"></script>
 {% endblock extra-scripts %}
 

@@ -160,7 +160,7 @@ class SlackMsgPusherForm(forms.Form):
         required=False
     )
 
-    slack_target = forms.CharField(required=True)
+    # slack_target = forms.CharField(required=True)
 
     @classmethod
     def slack_target_choices(cls):
@@ -185,6 +185,14 @@ class SlackMsgPusherForm(forms.Form):
             raise KeyError(f"'{key}' is not a valid Slack target.")
 
         return SLACK_WEBHOOK_LINKS[key]['url']
+
+    @classmethod
+    def get_slack_target_name(cls, key):
+        SLACK_WEBHOOK_LINKS = cls.slack_webhook_links()
+        if key not in SLACK_WEBHOOK_LINKS.keys():
+            raise KeyError(f"'{key}' is not a valid Slack target.")
+
+        return SLACK_WEBHOOK_LINKS[key]['name']
 
 
 class SlackCustomerConversationForm(forms.Form):
