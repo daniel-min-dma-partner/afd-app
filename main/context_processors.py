@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 
+from django.conf import settings
 from django.urls import reverse
 
 from main.models import Notifications, UploadNotifications as UpNotifs, Parameter
@@ -80,6 +81,6 @@ def custom_context_data(request):
     default_context['site_name'] = site_name
 
     # Version of the product
-    default_context['version'] = "1.8.0"
+    default_context['version'] = settings.APP_VERSION_NUMBER
 
     return default_context
