@@ -213,8 +213,12 @@ TINYMCE_DEFAULT_CONFIG = {
                "bullist numlist outdent indent | removeformat | help",
 }
 
-
 # Json Editor
 JSON_EDITOR_CSS = "https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.5.5/jsoneditor.css"
 JSON_EDITOR_JS = "https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.5.5/jsoneditor.js"
 JSON_EDITOR_INIT_JS = "django-jsoneditor/jsoneditor-init.js"
+
+# Version
+version_file_path = os.path.join(BASE_DIR, 'version.txt')
+with open(version_file_path) as v_file:
+    APP_VERSION_NUMBER = v_file.read()

@@ -92,11 +92,10 @@ const submit_with_screencover = (submit_button, modal = null, confirm_msg = "Pro
     }
 };
 
-const show_screenplay = (perc = 100, msg = "") => {
-    document.getElementById("myNav").style.width = `${perc}%`;
+const show_screenplay = (perc = 100, msg = "", ajax=false) => {
+    document.getElementById("myNav" + (ajax ? '-overlay-ajax' : '')).style.width = `${perc}%`;
     $('.progress-description').html(msg);
 };
-
 
 const alert_if_required_missing = () => {
     let required_fields_completed = true;
