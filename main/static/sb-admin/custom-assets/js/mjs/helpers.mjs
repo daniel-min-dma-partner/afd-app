@@ -97,6 +97,10 @@ const show_screenplay = (perc = 100, msg = "") => {
     $('.progress-description').html(msg);
 };
 
+const show_screenplay_ajax = (perc = 100, msg = "") => {
+    document.getElementById("myNav-overlay-ajax").style.width = `${perc}%`;
+    $('.progress-description').html(msg);
+};
 
 const alert_if_required_missing = () => {
     let required_fields_completed = true;
@@ -152,5 +156,5 @@ const jsonEditor = (container, json_field, mainMenuBar = true, modes = ['code', 
 
 export {
     build_toast, popup_notification, show_error_and_popup, submit_with_screencover, show_screenplay,
-    alert_if_required_missing, jsonEditor, toast_remove
+    alert_if_required_missing, jsonEditor, toast_remove, show_screenplay_ajax
 };
