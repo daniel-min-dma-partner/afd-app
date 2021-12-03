@@ -1,4 +1,4 @@
-import {popup_notification, show_screenplay_ajax} from "../../sb-admin/custom-assets/js/mjs/helpers.mjs";
+import {popup_notification, show_screenplay} from "../../sb-admin/custom-assets/js/mjs/helpers.mjs";
 
 $(document).ready(function (evt) {
     let dataTable = $("#dataTable").DataTable({
@@ -79,7 +79,7 @@ $(document).ready(function (evt) {
     });
 
     // Removes screen cover after loading jqueries.
-    show_screenplay_ajax(0, "");
+    show_screenplay(0, "", true);
 });
 
 $('.btn-remove-deprec').on('click', function () {

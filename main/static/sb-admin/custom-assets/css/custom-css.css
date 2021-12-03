@@ -173,7 +173,7 @@ textarea {
     color: #f1f1f1;
 }
 
-.overlay .close-screenplay, .overlay-ajax .close-screenplay {
+.overlay .close-screenplay {
     position: absolute;
     top: 20px;
     right: 45px;
@@ -185,7 +185,7 @@ textarea {
         font-size: 20px
     }
 
-    .overlay .close-screenplay, .overlay-ajax .close-screenplay {
+    .overlay .close-screenplay {
         font-size: 40px;
         top: 15px;
         right: 35px;

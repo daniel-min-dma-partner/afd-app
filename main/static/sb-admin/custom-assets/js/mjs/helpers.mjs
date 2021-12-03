@@ -92,13 +92,8 @@ const submit_with_screencover = (submit_button, modal = null, confirm_msg = "Pro
     }
 };
 
-const show_screenplay = (perc = 100, msg = "") => {
-    document.getElementById("myNav").style.width = `${perc}%`;
-    $('.progress-description').html(msg);
-};
-
-const show_screenplay_ajax = (perc = 100, msg = "") => {
-    document.getElementById("myNav-overlay-ajax").style.width = `${perc}%`;
+const show_screenplay = (perc = 100, msg = "", ajax=false) => {
+    document.getElementById("myNav" + (ajax ? '-overlay-ajax' : '')).style.width = `${perc}%`;
     $('.progress-description').html(msg);
 };
 
@@ -156,5 +151,5 @@ const jsonEditor = (container, json_field, mainMenuBar = true, modes = ['code', 
 
 export {
     build_toast, popup_notification, show_error_and_popup, submit_with_screencover, show_screenplay,
-    alert_if_required_missing, jsonEditor, toast_remove, show_screenplay_ajax
+    alert_if_required_missing, jsonEditor, toast_remove
 };
