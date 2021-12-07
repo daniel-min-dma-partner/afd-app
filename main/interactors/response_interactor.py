@@ -81,8 +81,11 @@ class UploadedDataflowToZipResponse(Interactor):
         original_path = settings.MEDIA_ROOT + '/original.json'
         uploaded_path = settings.MEDIA_ROOT + '/uploaded.json'
 
-        json.dump(model.original_dataflow, open(original_path, 'w'), indent=2)
-        json.dump(model.uploaded_dataflow, open(uploaded_path, 'w'), indent=2)
+        if not os.path.isdir(settings.MEDIA_ROOT):
+            os.makedirs(settings.MEDIA_ROOT)
+
+        json.dump(model.original_dataflow, open(original_path, 'w+'), indent=2)
+        json.dump(model.uploaded_dataflow, open(uploaded_path, 'w+'), indent=2)
 
         show_in_browser(original_path, uploaded_path)
         html_filepath = f'{settings.BASE_DIR}/main/templates/json_diff_output.html'
