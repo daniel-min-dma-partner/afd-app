@@ -1073,7 +1073,7 @@ class UploadHistoryView(PermissionRequiredMixin, generic.TemplateView):
 class DownloadUploadBackupView(View):
     def get(self, request, *args, **kwargs):
         model: DataflowUploadHistory = get_object_or_404(DataflowUploadHistory, pk=kwargs['pk'])
-        context = UploadedDataflowToZipResponse.call(model=model)
+        context = UploadedDataflowToZipResponse.call(model=model, user=request.user)
         return context.response
 
 

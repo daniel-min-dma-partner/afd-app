@@ -1,5 +1,6 @@
 import json
 import os
+import shutil
 import zipfile
 
 from django.conf import settings
@@ -74,15 +75,19 @@ class JsonFileResponseInteractor(Interactor):
 class UploadedDataflowToZipResponse(Interactor):
     def run(self):
         model: DataflowUploadHistory = self.context.model
+        user = self.context.user
 
         original_df = json.dumps(model.original_dataflow, indent=2)
         uploaded_df = json.dumps(model.uploaded_dataflow, indent=2)
 
-        original_path = settings.MEDIA_ROOT + '/original.json'
-        uploaded_path = settings.MEDIA_ROOT + '/uploaded.json'
+        path = settings.MEDIA_ROOT + f"/uploaded-dataflow-to-zip/"
+        usr_path = path + user.username
 
-        if not os.path.isdir(settings.MEDIA_ROOT):
-            os.makedirs(settings.MEDIA_ROOT)
+        original_path = usr_path + '/original.json'
+        uploaded_path = usr_path + '/uploaded.json'
+
+        if not os.path.isdir(usr_path):
+            os.makedirs(usr_path)
 
         json.dump(model.original_dataflow, open(original_path, 'w+'), indent=2)
         json.dump(model.uploaded_dataflow, open(uploaded_path, 'w+'), indent=2)
@@ -95,8 +100,7 @@ class UploadedDataflowToZipResponse(Interactor):
         with open(html_filepath, 'r') as f:
             html = f.read().encode('utf-8')
         os.remove(html_filepath)
-        os.remove(original_path)
-        os.remove(uploaded_path)
+        shutil.rmtree(path)
 
         response = HttpResponse(content_type='application/zip')
         zf = zipfile.ZipFile(response, 'w')
