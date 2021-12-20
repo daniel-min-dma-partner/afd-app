@@ -161,7 +161,7 @@ class DataflowListInteractor(Interactor):
         }
 
         for dataflow in dataflows:
-            _item = {"id": dataflow['name'], "text": dataflow['label']}
+            _item = {"id": dataflow['name'], "text": f"{dataflow['label']} ({dataflow['name']})"}
             select2_items['results'].append(_item)
             ids[dataflow['name']] = dataflow['id']
 
