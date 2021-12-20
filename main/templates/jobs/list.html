@@ -43,8 +43,8 @@
                                     <a class="job-collapse-trigger" data-toggle="collapse"
                                        href="#collapseJob_{{ job.pk }}" role="button"
                                        aria-expanded="false" aria-controls="collapseJob_{{ job.pk }}"
-                                       data-jobid="{{ job.pk }}">
-                                        {{ job.message|safe }}
+                                       data-jobid="{{ job.pk }}" title="{{ job.message|striptags }}">
+                                        {{ job.message|truncate|safe }}
                                     </a>
                                 </td>
                                 <td class="text-center align-middle">
