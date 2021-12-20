@@ -31,6 +31,7 @@ class SetNotificationInteractor(Interactor):
                 notification.link = link.replace("{{pk}}", str(notification.pk))
                 notification.envname = data['envname']
                 notification.zipfile_path = data['zipfile_path']
+                # TODO: Attaches the file as byte field, instead of saving it's path.
                 notification.save()
         except Exception as e:
             exception = e

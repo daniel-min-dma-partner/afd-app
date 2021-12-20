@@ -29,6 +29,7 @@ from main.interactors.jobs_interactor import JobsInteractor
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser, \
     RegisterLocatorInteractor
 from .interactors.deprecate_fields_interactor import FieldDeprecationExcelInteractor
+from .interactors.interactors import *
 from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.response_interactor import ZipFileResponseInteractor, JsonFileResponseInteractor, \
     UploadedDataflowToZipResponse
@@ -1108,6 +1109,32 @@ class DeprecationCheckerboardExcelDownloadView(View):
             return redirect("main:view-deprecations")
 
 
+class DataflowListDatasetsView(generic.FormView):
+    template_name = 'dataflow-manager/edit/dataset-list.html'  # When GET, render the template.
+    form_class = forms.RegisterNodeForm  # Just reusing the form
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        status = 200
+        error_msg = ""
+        datasets = []
+
+        if form.is_valid():
+            dataflow_file = request.FILES.get('dataflow')
+
+            if dataflow_file:
+                dataflow = str_to_json(byte_to_str(dataflow_file.read()))
+                ctx = DataflowDatasetListingInteractor.call(dataflow_definition=dataflow)
+                datasets = ctx.dataset_list
+        else:
+            status = 500
+            error_msg = form.errors.as_data
+
+        if request.is_ajax():
+            return JsonResponse({"error": error_msg} if status == 500 else {"datasets": datasets}, status=status)
+        return render(request, self.template_name, {'form': form})
+
+
 def list_nodes_from_df(request):
     error_msg = ""
     nodes = []
@@ -1491,9 +1518,11 @@ def download_df_zip_view(request, pk=None):
                 message = mark_safe(ctx.exception)
             else:
                 notif.delete()
+                os.remove(zipfile_path)
                 return ctx.response
     else:
-        message = "The .zip file doesn't exist anymore."
+        message = "This in an expired notification."
+        thype = messages.WARNING
 
     messages.add_message(request, thype, message)
     return redirect('main:home')
