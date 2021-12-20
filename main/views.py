@@ -1491,9 +1491,11 @@ def download_df_zip_view(request, pk=None):
                 message = mark_safe(ctx.exception)
             else:
                 notif.delete()
+                os.remove(zipfile_path)
                 return ctx.response
     else:
-        message = "The .zip file doesn't exist anymore."
+        message = "This in an expired notification."
+        thype = messages.WARNING
 
     messages.add_message(request, thype, message)
     return redirect('main:home')
