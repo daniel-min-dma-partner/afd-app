@@ -1083,7 +1083,6 @@ class ExtractNodeByActionView(generic.FormView):
                 raise Exception("No dataflow specified." if not dataflow_file else "Node type is required.")
 
             dataflow = str_to_json(byte_to_str(dataflow_file.read()))
-            print(dataflow, type(dataflow))
             ctx = DataflowInteractors.ExtractNodeByType.call(dataflow=dataflow, node_type=node_type)
             if ctx.exception:
                 raise ctx.exception
