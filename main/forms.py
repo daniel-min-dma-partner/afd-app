@@ -10,6 +10,7 @@ from django.utils.safestring import mark_safe
 from jsoneditor.forms import JSONEditor
 from tinymce.widgets import TinyMCE
 
+from libs.tcrm_automation.libs.json_libs import VALID_NODE_ACTIONS
 from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel as DFCompModel, Profile, Release, \
     Parameter
 
@@ -382,3 +383,9 @@ class DataflowEditForm(forms.Form):
 class RegisterNodeForm(forms.Form):
     dataflow = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
     node = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
+
+
+class ExtractNodeByActionForm(forms.Form):
+    _ACTIONS = ((action, action) for action in VALID_NODE_ACTIONS + [""])  # The last array is for the placeholder.
+    dataflow = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
+    type = forms.ChoiceField(choices=_ACTIONS, widget=forms.Select(attrs={'required': True}))
