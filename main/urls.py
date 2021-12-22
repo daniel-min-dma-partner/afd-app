@@ -47,6 +47,7 @@ urlpatterns = [
     re_path(r'^dataflow-manager/', include([
         re_path(r'^edit/$', main.DataflowEditorView.as_view(), name='edit-dataflow'),
         re_path(r'^extract-update/$', main.TreeRemover.as_view(), name='extract-update-dataflow'),
+        re_path(r'^extract-by-action/$', main.ExtractNodeByActionView.as_view(), name='extract-by-action'),
         re_path(r'^compare/$', main.CompareDataflows.as_view(), name='compare-dataflows'),
         re_path(r'^deprecate-fields/', include([
             re_path(r'^$', main.DeprecateFieldsView.as_view(), name='deprecate-fields'),
