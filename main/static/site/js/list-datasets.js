@@ -1,11 +1,13 @@
-import {jsonEditor, toast_remove} from '../../sb-admin/custom-assets/js/mjs/helpers.mjs';
+import {jsonEditor, popup_notification, toast_remove} from '../../sb-admin/custom-assets/js/mjs/helpers.mjs';
 
 $(document).ready(function (evt) {
     let editor = jsonEditor($('#json-holder')[0], $('#id_datasets'));
+    let clipbtn = $('a.copy-to-clip');
 
     function update_editor(data = {}) {
         let template = JSON.parse(JSON.stringify(data));
         editor.set(template);
+        clipbtn.attr('hidden', !template.length);
     }
 
     function get_datasets() {
@@ -42,12 +44,7 @@ $(document).ready(function (evt) {
 
             error: function (response) {
                 update_editor({});
-
-                // if (![null, undefined, false].includes(response.responseJSON)) {
-                //     if ('error' in response.responseJSON) {
-                //         popup_notification("Warning", response.responseJSON.error, 'warning');
-                //     }
-                // }
+                clipbtn.attr('hidden', true);
             },
 
             success: function (response) {
@@ -58,7 +55,15 @@ $(document).ready(function (evt) {
         });
     }
 
+    // Dataflow file selector change
     $("input:file").change(function () {
         get_datasets();
+    });
+
+    // Clipboard Button
+    clipbtn.on('click', function (evt) {
+        evt.preventDefault();
+        navigator.clipboard.writeText(JSON.stringify(editor.get()));
+        popup_notification('Copy to Clipboard', "Copied successfully", 'success', true, 1000);
     });
 });
