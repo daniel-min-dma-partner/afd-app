@@ -107,3 +107,10 @@ def get_status_badge(status: str):
 @register.filter
 def json_safe(js: dict):
     return json.dumps(js, indent=2)
+
+
+@register.filter
+def truncate(value: str, length: int = 64):
+    initial_length = len(value)
+    value = value[:length]
+    return value + ("..." if len(value) != initial_length else "")

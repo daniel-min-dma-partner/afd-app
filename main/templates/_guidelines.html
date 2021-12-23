@@ -19,14 +19,15 @@
                                 <div class="col mr-2">
                                     <div class="font-weight-bold text-{{ guideline.color }} text-uppercase mb-1">
                                         {{ guideline.title }}
+                                        <br/>
+                                        <br/>
                                     </div>
                                     <div class="h9 mb-0 font-weight-normal text-gray-500">
                                         {{ guideline.text|safe }}
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas
-                                            {% if guideline.icon %}{{ guideline.icon }}{% else %}fa-lightbulb{% endif %} fa-b fa-2x text-gray-300"></i>
+                                    <i class="fas {% if guideline.icon %}{{ guideline.icon }}{% else %}fa-lightbulb{% endif %} fa-b fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                             </div>

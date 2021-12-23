@@ -47,6 +47,7 @@ urlpatterns = [
     re_path(r'^dataflow-manager/', include([
         re_path(r'^edit/$', main.DataflowEditorView.as_view(), name='edit-dataflow'),
         re_path(r'^extract-update/$', main.TreeRemover.as_view(), name='extract-update-dataflow'),
+        re_path(r'^extract-by-action/$', main.ExtractNodeByActionView.as_view(), name='extract-by-action'),
         re_path(r'^compare/$', main.CompareDataflows.as_view(), name='compare-dataflows'),
         re_path(r'^deprecate-fields/', include([
             re_path(r'^$', main.DeprecateFieldsView.as_view(), name='deprecate-fields'),
@@ -77,6 +78,7 @@ urlpatterns = [
                 name='download-upload-backup'),
         re_path(r'^generate-digest-node/$', main.DigestNodeGeneratorView.as_view(), name='digest-generator'),
         re_path(r'^list-node-from-df/$', main.list_nodes_from_df, name='list-node-from-df'),
+        re_path(r'^list-datasets/$', main.DataflowListDatasetsView.as_view(), name='list-datasets'),
         re_path(r'^locate-register-node/$', main.RegisterLocalizerView.as_view(), name='register-localizer'),
         re_path(r'^select-df-file/$', main.DataflowFileSelectorView.as_view(), name='df-file-selector'),
         re_path(r'^upload/$', main.UploadDataflowView.as_view(), name='upload-dataflow'),

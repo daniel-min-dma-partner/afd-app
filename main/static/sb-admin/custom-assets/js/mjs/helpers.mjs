@@ -137,7 +137,6 @@ const jsonEditor = (container, json_field, mainMenuBar = true, modes = ['code', 
             try {
                 let json = editor.get();
                 json_field[0].value = $.trim(JSON.stringify(json));
-                console.log(json_field[0].value);
             } catch (error) {
                 return false;
             }

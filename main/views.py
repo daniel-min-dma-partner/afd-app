@@ -1,8 +1,8 @@
 import datetime
 import json as js
+import os.path
 
 import requests
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as do_login, logout as do_logout
 from django.contrib.auth.decorators import permission_required
@@ -29,6 +29,7 @@ from main.interactors.jobs_interactor import JobsInteractor
 from .interactors.dataflow_tree_manager import TreeExtractorInteractor, TreeRemoverInteractor, show_in_browser, \
     RegisterLocatorInteractor
 from .interactors.deprecate_fields_interactor import FieldDeprecationExcelInteractor
+from .interactors.interactors import *
 from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.response_interactor import ZipFileResponseInteractor, JsonFileResponseInteractor, \
     UploadedDataflowToZipResponse
@@ -1059,6 +1060,58 @@ class RegisterLocalizerView(generic.FormView):
         return render(request, self.template_name, {'form': form})
 
 
+class ExtractNodeByActionView(generic.FormView):
+    template_name = 'dataflow-manager/edit/extract-node-by-type-form.html'
+    form_class = forms.ExtractNodeByActionForm
+
+    def post(self, request, *args, **kwargs):
+        print("POST")
+        form = self.form_class(request.POST)
+        status = 200
+        error_msg = ""
+        registers = []
+
+        if not form.is_valid():
+            messages.error(request, mark_safe(ViewInteractors.FormErrorAsMessage.call(form=form).message))
+            return self.form_invalid(form)
+
+        try:
+            dataflow_file = request.FILES.get('dataflow')
+            node_type = request.POST.get('type') if 'type' in request.POST.keys() else None
+
+            if not dataflow_file or not node_type:
+                raise Exception("No dataflow specified." if not dataflow_file else "Node type is required.")
+
+            dataflow = str_to_json(byte_to_str(dataflow_file.read()))
+            ctx = DataflowInteractors.ExtractNodeByType.call(dataflow=dataflow, node_type=node_type)
+            if ctx.exception:
+                raise ctx.exception
+            nodes = ctx.nodes
+
+            ctx = FileSystemInteractors.TemporaryFolderCreator.call(directory_name='nodes-by-action')
+            if ctx.exception:
+                raise ctx.exception
+            path = ctx.path
+            filename = f"{node_type} from {dataflow_file.name}.json"
+            filepath = os.path.join(path, filename)
+
+            with open(filepath, "w+") as file:
+                json.dump(nodes, file, indent=2)
+
+            ctx = JsonFileResponseInteractor.call(filepath=filepath)
+
+            if not ctx.exception:
+                return ctx.response
+
+            raise ctx.exception
+        except Exception as e:
+            error_msg = str(e)
+            status = 500
+            messages.error(request, mark_safe(error_msg))
+
+        return render(request, self.template_name, {'form': form})
+
+
 class UploadHistoryView(PermissionRequiredMixin, generic.TemplateView):
     template_name = 'dataflow-manager/upload/list.html'
     permission_required = ['main.special_permission_upload_dataflows']
@@ -1106,6 +1159,32 @@ class DeprecationCheckerboardExcelDownloadView(View):
         else:
             messages.add_message(request, msg, msg_type)
             return redirect("main:view-deprecations")
+
+
+class DataflowListDatasetsView(generic.FormView):
+    template_name = 'dataflow-manager/edit/dataset-list.html'  # When GET, render the template.
+    form_class = forms.RegisterNodeForm  # Just reusing the form
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        status = 200
+        error_msg = ""
+        datasets = []
+
+        if form.is_valid():
+            dataflow_file = request.FILES.get('dataflow')
+
+            if dataflow_file:
+                dataflow = str_to_json(byte_to_str(dataflow_file.read()))
+                ctx = DataflowDatasetListingInteractor.call(dataflow_definition=dataflow)
+                datasets = ctx.dataset_list
+        else:
+            status = 500
+            error_msg = form.errors.as_data
+
+        if request.is_ajax():
+            return JsonResponse({"error": error_msg} if status == 500 else {"datasets": datasets}, status=status)
+        return render(request, self.template_name, {'form': form})
 
 
 def list_nodes_from_df(request):
@@ -1491,9 +1570,11 @@ def download_df_zip_view(request, pk=None):
                 message = mark_safe(ctx.exception)
             else:
                 notif.delete()
+                os.remove(zipfile_path)
                 return ctx.response
     else:
-        message = "The .zip file doesn't exist anymore."
+        message = "This in an expired notification."
+        thype = messages.WARNING
 
     messages.add_message(request, thype, message)
     return redirect('main:home')

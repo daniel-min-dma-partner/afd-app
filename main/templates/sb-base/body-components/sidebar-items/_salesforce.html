@@ -27,13 +27,15 @@
 <li class="nav-item">
     {% url 'main:download-dataflow' as url_down_df %}
     {% url 'main:compare-dataflows' as url_comp_df %}
-    {% url 'main:edit-dataflow' as url_edit_df %}
     {% url 'main:digest-generator' as url_digen_df %}
     {% url 'main:deprecate-fields' as url_depr_df %}
-    {% url 'main:view-deprecations' as url_view_dp %}
-    {% url 'main:upload-dataflow' as url_up_df %}
+    {% url 'main:edit-dataflow' as url_edit_df %}
+    {% url 'main:extract-by-action' as url_extract_node %}
     {% url 'main:extract-update-dataflow' as url_mng_df %}
+    {% url 'main:list-datasets' as url_list_datasets %}
     {% url 'main:register-localizer' as url_reg_loc %}
+    {% url 'main:upload-dataflow' as url_up_df %}
+    {% url 'main:view-deprecations' as url_view_dp %}
     {% url 'main:view-upload-history' as url_upl_hist %}
     <a class="nav-link{% if 'dataflow-manager' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse"
        data-target="#collapse2"
@@ -59,8 +61,15 @@
             <h6 class="collapse-header">Visualization:</h6>
             <a class="collapse-item{% if cur_url == url_comp_df %} active{% endif %}"
                href="{{ url_comp_df }}">Compare</a>
+            <a class="collapse-item{% if cur_url == url_list_datasets %} active{% endif %}"
+               href="{{ url_list_datasets }}">List datasets</a>
             <a class="collapse-item{% if cur_url == url_reg_loc %} active{% endif %}"
                href="{{ url_reg_loc }}">Locate <code><strong>sfdcRegister</strong></code></a>
+
+            <h6 class="collapse-header">Generation:</h6>
+            <a class="collapse-item{% if cur_url == url_extract_node %} active{% endif %}" href="{{ url_extract_node }}">
+                Node Extractor
+            </a>
             <a class="collapse-item{% if cur_url == url_digen_df %} active{% endif %}" href="{{ url_digen_df }}">
                 <code><strong>sfdcDigest</strong></code> Generator
             </a>

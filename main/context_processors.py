@@ -67,6 +67,30 @@ def custom_context_data(request):
             default_context['guidelines'] = default_context['guidelines'] + guidelines \
                 if 'guidelines' in default_context.keys() else guidelines
 
+        # Guidelines for node extractor
+        extract_url = reverse("main:extract-by-action")
+        if current_url == extract_url:
+            guidelines = [
+                {
+                    "icon": "fa-question",
+                    "text": "You can use this extractor to generate a partial dataflow with only digest nodes and test "
+                            "it quickly in org62. For example, extract only the <code>sfdcDigest</code> nodes from a "
+                            "dataflow and run it in <strong><code>Wave Operation Support</code></strong> dataflow in "
+                            "org62 and check for the correct field access.",
+                    "color": "primary",
+                    "title": "When to use it?"
+                },
+                {
+                    "icon": "fa-lightbulb",
+                    "text": "<ol><li>Select a dataflow.</li><li>Select a node action type. Ex: <code>sfdcDigest</code>."
+                            "</li><li>Hit the button <strong><code>Get</code></strong>.</li></ol>",
+                    "color": "success",
+                    "title": "How to use"
+                }
+            ]
+            default_context['guidelines'] = default_context['guidelines'] + guidelines \
+                if 'guidelines' in default_context.keys() else guidelines
+
     # Flag to show alert banner for Stage env.
     heroku_app_env = os.environ.get('HEROKU_APP_ENV', "non-production")
     default_context['heroku_app_env'] = heroku_app_env.lower()
