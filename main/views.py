@@ -644,9 +644,18 @@ class ViewDeprecatedFieldsView(generic.ListView):
     context_object_name = 'list'
     template_name = 'dataflow-manager/deprecate-fields/list2.html'
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ViewDeprecatedFieldsView, self).get_context_data(**kwargs)
+        context['days'] = self.request.GET.get('days', '')
+        return context
+
     def get_queryset(self):
-        days = (datetime.utcnow() - timedelta(days=4)).astimezone()
-        lst = DataflowDeprecation.objects.filter(user=self.request.user, created_at__lt=days).order_by('-created_at')
+        days = self.request.GET.get('days', '30') if 'days' in self.request.GET.keys() else '30'
+        days = days if days else '30'
+        today = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+        sql_days = (today - timedelta(days=int(days))).astimezone()
+
+        lst = DataflowDeprecation.objects.filter(user=self.request.user, created_at__gt=sql_days).order_by('-created_at')
         return lst
 
 

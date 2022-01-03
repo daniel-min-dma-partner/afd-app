@@ -80,6 +80,8 @@ $(document).ready(function (evt) {
 
     // Removes screen cover after loading jqueries.
     show_screenplay(0, "", true);
+
+    $('#days').focus();
 });
 
 $('.btn-remove-deprec').on('click', function () {
@@ -225,4 +227,14 @@ $('.to-clip').click(function (evt) {
     navigator.clipboard.writeText(for_clipboard.join('\n'));
     kind = kind === "registers" ? "datasets" : kind;
     popup_notification('To Clipboard', `List of <code>${kind}</code> copied successfully to clipboard.`, 'success', true, 1600);
+});
+
+$('#days').on('change', function (evt) {
+    $('form#list-filter').submit();
+}).on('keypress', function (evt) {
+    let key = evt.which;
+    if (key === 13) {
+        evt.preventDefault();
+        $('form#list-filter').submit();
+    }
 });
