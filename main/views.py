@@ -1,6 +1,7 @@
 import datetime
 import json as js
 import os.path
+from datetime import datetime, timedelta
 
 import requests
 from django.contrib import messages
@@ -644,7 +645,8 @@ class ViewDeprecatedFieldsView(generic.ListView):
     template_name = 'dataflow-manager/deprecate-fields/list2.html'
 
     def get_queryset(self):
-        lst = DataflowDeprecation.objects.filter(user=self.request.user).order_by('-created_at')
+        days = (datetime.utcnow() - timedelta(days=4)).astimezone()
+        lst = DataflowDeprecation.objects.filter(user=self.request.user, created_at__lt=days).order_by('-created_at')
         return lst
 
 
