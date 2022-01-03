@@ -223,4 +223,6 @@ $('.to-clip').click(function (evt) {
         });
     for_clipboard.sort();
     navigator.clipboard.writeText(for_clipboard.join('\n'));
+    kind = kind === "registers" ? "datasets" : kind;
+    popup_notification('To Clipboard', `List of <code>${kind}</code> copied successfully to clipboard.`, 'success', true, 1600);
 });
