@@ -211,30 +211,6 @@ $('a.h5').click(function (evt) {
     $(`a.removed-fields-${pk}`)[0].click();
 });
 
-// $(".clip-datasets").click(function (evt) {
-//     let pk = $(this).data('pk'),
-//         editor = $(`textarea#registers-${pk}`),
-//         json_object = JSON.parse(editor.val()),
-//         datasets = $.map(json_object, function(value) {
-//             return value['dataset-alias'];
-//         });
-//     datasets.sort();
-//     navigator.clipboard.writeText(datasets.join('\n'));
-// });
-//
-// $(".clip-removed-fields").click(function (evt) {
-//     let pk = $(this).data('pk'),
-//         editor = $(`textarea#removedfields-${pk}`),
-//         json_object = JSON.parse(editor.val()),
-//         obj_fields = $.map(json_object, function(fields, object_name) {
-//             return $.map(fields, function (field) {
-//                 return `${object_name}.${field}`;
-//             });
-//         });
-//     obj_fields.sort();
-//     navigator.clipboard.writeText(obj_fields.join('\n'));
-// });
-
 $('.to-clip').click(function (evt) {
     let pk = $(this).data('pk'),
         kind = $(this).data('kind'),  // removedfields | registers
