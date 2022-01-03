@@ -83,8 +83,9 @@ $(document).ready(function (evt) {
 });
 
 $('.btn-remove-deprec').on('click', function () {
-    $('#delete-confirmation-md .modal-body').find('input[id="id-field"]').val($(this).data('id')).trigger('change');
-    $('#delete-confirmation-md .modal-body').find('input[id="name-field"]').val($(this).data('model-name')).trigger('change');
+    let modal_body = $('#delete-confirmation-md .modal-body');
+    modal_body.find('input[id="id-field"]').val($(this).data('id')).trigger('change');
+    modal_body.find('input[id="name-field"]').val($(this).data('model-name')).trigger('change');
 });
 
 $('#delete-confirmation-md').on('shown.bs.modal', function (e) {
@@ -102,11 +103,8 @@ $('button.reset-filter').on('click', function () {
 $('button.download-selected-clicker').on('click', function (evt) {
     let pk = $(this).data('pk'),
         only_dep = $(`#deprecation-filter-${pk}`)[0].checked,
-        errors = $(`#deprecation-only-errors-${pk}`)[0].checked,
-        no_changes = $(`#deprecation-no-changes-${pk}`)[0].checked,
-        filename = only_dep ? 'Only Deprecated' : (errors ? "With Errors" : "No Deprecated");
+        errors = $(`#deprecation-only-errors-${pk}`)[0].checked;
 
-    // submit_with_screencover($(`button.download-selected-${pk}`), null, "Do you want to download it?", `Downloading ${filename}. It can take up to 30 seconds. Please wait.`);
     $(`button.download-selected-${pk}`).click();
 });
 
@@ -179,11 +177,7 @@ $(".delete-all").on('click', function (evt) {
         });
     }
 });
-//
-// $('div.collapse').on('hide.bs.collapse', function (evt) {
-//     $('div.details-divider').empty();
-// });
-//
+
 $('div[id^="object_fields_"]').on('shown.bs.collapse', function () {
     let this_ = $(this),
         pk = this_.data('pk'),
@@ -215,4 +209,42 @@ $('div[id^="collapseExample_"]').on('shown.bs.collapse', function () {
 $('a.h5').click(function (evt) {
     let pk = $(this).data('pk');
     $(`a.removed-fields-${pk}`)[0].click();
+});
+
+// $(".clip-datasets").click(function (evt) {
+//     let pk = $(this).data('pk'),
+//         editor = $(`textarea#registers-${pk}`),
+//         json_object = JSON.parse(editor.val()),
+//         datasets = $.map(json_object, function(value) {
+//             return value['dataset-alias'];
+//         });
+//     datasets.sort();
+//     navigator.clipboard.writeText(datasets.join('\n'));
+// });
+//
+// $(".clip-removed-fields").click(function (evt) {
+//     let pk = $(this).data('pk'),
+//         editor = $(`textarea#removedfields-${pk}`),
+//         json_object = JSON.parse(editor.val()),
+//         obj_fields = $.map(json_object, function(fields, object_name) {
+//             return $.map(fields, function (field) {
+//                 return `${object_name}.${field}`;
+//             });
+//         });
+//     obj_fields.sort();
+//     navigator.clipboard.writeText(obj_fields.join('\n'));
+// });
+
+$('.to-clip').click(function (evt) {
+    let pk = $(this).data('pk'),
+        kind = $(this).data('kind'),  // removedfields | registers
+        editor = $(`textarea#${kind}-${pk}`),
+        json_object = JSON.parse(editor.val()),
+        for_clipboard = $.map(json_object, function(value, key) {
+            return kind === 'registers' ? value['dataset-alias'] : $.map(value, function (field) {
+                return `${key}.${field}`;
+            });
+        });
+    for_clipboard.sort();
+    navigator.clipboard.writeText(for_clipboard.join('\n'));
 });
