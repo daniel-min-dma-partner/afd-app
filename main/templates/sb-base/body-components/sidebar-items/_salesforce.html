@@ -33,6 +33,7 @@
     {% url 'main:extract-by-action' as url_extract_node %}
     {% url 'main:extract-update-dataflow' as url_mng_df %}
     {% url 'main:list-datasets' as url_list_datasets %}
+    {% url 'main:merge-deprecator' as url_merge_dp%}
     {% url 'main:register-localizer' as url_reg_loc %}
     {% url 'main:upload-dataflow' as url_up_df %}
     {% url 'main:view-deprecations' as url_view_dp %}
@@ -57,6 +58,8 @@
                href="#"  data-toggle="modal" data-target="#file-selector-md">Edit</a>
             <a class="collapse-item{% if cur_url == url_mng_df %} active{% endif %}" href="{{ url_mng_df }}">Extract |
                 Update</a>
+            <a class="collapse-item{% if cur_url == url_merge_dp %} active{% endif %}" href="{{ url_merge_dp }}">Merge
+                Deprecator</a>
 
             <h6 class="collapse-header">Visualization:</h6>
             <a class="collapse-item{% if cur_url == url_comp_df %} active{% endif %}"

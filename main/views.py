@@ -1,4 +1,5 @@
 import datetime
+import io
 import json as js
 import os.path
 
@@ -1195,6 +1196,49 @@ class DataflowListDatasetsView(generic.FormView):
         if request.is_ajax():
             return JsonResponse({"error": error_msg} if status == 500 else {"datasets": datasets}, status=status)
         return render(request, self.template_name, {'form': form})
+
+
+class MergeDeprecatorView(generic.FormView):
+    template_name = 'dataflow-manager/edit/deprecator-merge-form.html'  # When GET, render the template.
+    form_class = forms.DeprecatorMergeForm  # Just reusing the form
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        try:
+            if form.is_valid():
+                files = request.FILES.getlist('files')
+
+                if len(files) < 2:
+                    raise Exception("You need to select at least 2 files.")
+
+                merged = {}
+                for file in request.FILES.getlist('files'):
+                    definition = json.load(file)
+                    definition = {key: fields.split(',') for key, fields in definition.items()}
+
+                    if not merged:
+                        merged = copy.deepcopy(definition)
+                        continue
+
+                    ctx = JsonInteractors.DeprecationMetaFileMerger.call(json_a=merged, json_b=definition)
+                    if ctx.exception:
+                        raise ctx.exception
+
+                    merged = ctx.merged
+                merged = {key: ','.join(fields) for key, fields in merged.items()}
+
+                response = HttpResponse(io.StringIO(json.dumps(merged)),
+                                        content_type='application/json',
+                                        headers={
+                                            'Content-Disposition': f"attachment; filename=Merged Deprecator.json"
+                                        })
+                return response
+
+            return self.form_invalid(form)
+        except Exception as e:
+            messages.error(request, mark_safe(str(e)))
+            return redirect("main:merge-deprecator")
 
 
 def list_nodes_from_df(request):

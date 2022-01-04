@@ -80,6 +80,7 @@ urlpatterns = [
         re_path(r'^list-node-from-df/$', main.list_nodes_from_df, name='list-node-from-df'),
         re_path(r'^list-datasets/$', main.DataflowListDatasetsView.as_view(), name='list-datasets'),
         re_path(r'^locate-register-node/$', main.RegisterLocalizerView.as_view(), name='register-localizer'),
+        re_path(r'^merge-deprecator/$', main.MergeDeprecatorView.as_view(), name='merge-deprecator'),
         re_path(r'^select-df-file/$', main.DataflowFileSelectorView.as_view(), name='df-file-selector'),
         re_path(r'^upload/$', main.UploadDataflowView.as_view(), name='upload-dataflow'),
         re_path(r'^upload/view$', main.UploadHistoryView.as_view(), name='view-upload-history'),
