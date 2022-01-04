@@ -1,7 +1,6 @@
 import datetime
 import json as js
 import os.path
-from datetime import datetime, timedelta
 
 import requests
 from django.contrib import messages
@@ -652,8 +651,8 @@ class ViewDeprecatedFieldsView(generic.ListView):
     def get_queryset(self):
         days = self.request.GET.get('days', '30') if 'days' in self.request.GET.keys() else '30'
         days = days if days else '30'
-        today = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
-        sql_days = (today - timedelta(days=int(days))).astimezone()
+        today = datetime.datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+        sql_days = (today - datetime.timedelta(days=int(days))).astimezone()
 
         lst = DataflowDeprecation.objects.filter(user=self.request.user, created_at__gt=sql_days).order_by('-created_at')
         return lst
