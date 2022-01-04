@@ -1,4 +1,5 @@
 import datetime
+import io
 import json as js
 import os.path
 
@@ -443,7 +444,7 @@ class DownloadDataflowView(generic.FormView):
                 _context_aware_msg = f"<strong>{dataflows[0]}</strong> dataflow" if _n_of_dataflows == 1 else \
                     str(_n_of_dataflows) + ' dataflows'
                 _data = {"dataflows": dataflows, "model": env, "user": request.user,
-                         'job-message': f"Download {_context_aware_msg} from <strong>{env.name}</strong>"}
+                         'job-message': f"Download {_context_aware_msg} from {env.name}"}
                 ctx = JobsInteractor.call(data=_data, function="download_dataflow", scheduler=sched)
                 messages.success(request, mark_safe(f"Downloadig dataflow{'s' if len(dataflows) > 0 else ''} from "
                                           f"<code>{env.name}</code> started. Check the notifications later."))
@@ -485,7 +486,7 @@ class UploadDataflowView(PermissionRequiredMixin, generic.FormView):
 
                 _data = {'env': env, 'remote_df_name': remote_df_name, 'user': request.user, 'filemodel': filemodel,
                          'job-message': f"Upload <code><strong>{remote_df_name}</strong></code> dataflow to"
-                                        f" <code><strong>{env.name}</strong></code>"}
+                                        f" {env.name}"}
                 ctx = JobsInteractor.call(data=_data, function="upload_dataflow", scheduler=sched)
             else:
                 messages.error(request, form.errors.as_data)
@@ -643,8 +644,18 @@ class ViewDeprecatedFieldsView(generic.ListView):
     context_object_name = 'list'
     template_name = 'dataflow-manager/deprecate-fields/list2.html'
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ViewDeprecatedFieldsView, self).get_context_data(**kwargs)
+        context['days'] = self.request.GET.get('days', '')
+        return context
+
     def get_queryset(self):
-        lst = DataflowDeprecation.objects.filter(user=self.request.user).order_by('-created_at')
+        days = self.request.GET.get('days', '30') if 'days' in self.request.GET.keys() else '30'
+        days = days if days else '30'
+        today = datetime.datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+        sql_days = (today - datetime.timedelta(days=int(days))).astimezone()
+
+        lst = DataflowDeprecation.objects.filter(user=self.request.user, created_at__gt=sql_days).order_by('-created_at')
         return lst
 
 
@@ -1185,6 +1196,49 @@ class DataflowListDatasetsView(generic.FormView):
         if request.is_ajax():
             return JsonResponse({"error": error_msg} if status == 500 else {"datasets": datasets}, status=status)
         return render(request, self.template_name, {'form': form})
+
+
+class MergeDeprecatorView(generic.FormView):
+    template_name = 'dataflow-manager/edit/deprecator-merge-form.html'  # When GET, render the template.
+    form_class = forms.DeprecatorMergeForm  # Just reusing the form
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        try:
+            if form.is_valid():
+                files = request.FILES.getlist('files')
+
+                if len(files) < 2:
+                    raise Exception("You need to select at least 2 files.")
+
+                merged = {}
+                for file in request.FILES.getlist('files'):
+                    definition = json.load(file)
+                    definition = {key: fields.split(',') for key, fields in definition.items()}
+
+                    if not merged:
+                        merged = copy.deepcopy(definition)
+                        continue
+
+                    ctx = JsonInteractors.DeprecationMetaFileMerger.call(json_a=merged, json_b=definition)
+                    if ctx.exception:
+                        raise ctx.exception
+
+                    merged = ctx.merged
+                merged = {key: ','.join(fields) for key, fields in merged.items()}
+
+                response = HttpResponse(io.StringIO(json.dumps(merged)),
+                                        content_type='application/json',
+                                        headers={
+                                            'Content-Disposition': f"attachment; filename=Merged Deprecator.json"
+                                        })
+                return response
+
+            return self.form_invalid(form)
+        except Exception as e:
+            messages.error(request, mark_safe(str(e)))
+            return redirect("main:merge-deprecator")
 
 
 def list_nodes_from_df(request):

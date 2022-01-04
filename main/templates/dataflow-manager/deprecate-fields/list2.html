@@ -43,7 +43,22 @@
 
                 <div class="card-body">
 
-                    {% include 'dataflow-manager/deprecate-fields/details/_deprecation_list_table.html' %}
+                    <form id="list-filter" method="get" action="{% url 'main:view-deprecations' %}">
+                        <div class="form-row">
+                            <div class="form-group col-2">
+                                <label for="days">Days</label>
+                                <input type="text" id="days" name="days" class="form-control form-control-sm"
+                                    value="{{ days }}">
+                            </div>
+
+                        </div>
+
+{#                        {% include '_submit-button.html' with button_text='Filter' %}#}
+
+                        <hr/>
+
+                        {% include 'dataflow-manager/deprecate-fields/details/_deprecation_list_table.html' %}
+                    </form>
                 </div>
             </div>
         </div>

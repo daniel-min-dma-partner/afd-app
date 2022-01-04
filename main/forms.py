@@ -389,3 +389,7 @@ class ExtractNodeByActionForm(forms.Form):
     _ACTIONS = ((action, action) for action in VALID_NODE_ACTIONS + [""])  # The last array is for the placeholder.
     dataflow = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
     type = forms.ChoiceField(choices=_ACTIONS, widget=forms.Select(attrs={'required': True}))
+
+
+class DeprecatorMergeForm(forms.Form):
+    files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)

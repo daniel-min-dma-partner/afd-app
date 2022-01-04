@@ -1,0 +1,57 @@
+{% extends 'sb-base/base.html' %}
+
+{% load static %}
+
+{% block title %}Merge Deprecators{% endblock title %}
+{% block page-header %}Tableau CRM Dataflows / Transformation{% endblock page-header %}
+
+{% block header-scripts %}
+{% endblock header-scripts %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xl-7 col-lg-7">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Merge Deprecators</h6>
+                    {% include '_guideline_box.html' %}
+                </div>
+
+                <div class="card-body">
+                    {% include '_guidelines.html' %}
+
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger">
+                                {{ error|safe }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+
+                    <form method="POST" action="{% url 'main:merge-deprecator' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                <label for="id_{{ form.files.name }}" class="form-label required">Select at least one
+                                    Dataflow</label>
+                                <input class="form-control" type="file" name="{{ form.files.name }}"
+                                       id="id_{{ form.files.name }}" required multiple>
+
+                                <br/>
+
+                                {% include '_submit-button.html' with float_right=1 button_text='Merge & Download' %}
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock page-content %}
+
+{% block extra-scripts %}
+    {#    <script src="{% static 'site/js/dataflow-editor.js' %}?v={{ version }}" type="module"></script>#}
+{% endblock extra-scripts %}
