@@ -48,6 +48,9 @@ def custom_context_data(request):
 
                 default_context['guidelines'] = profile_guideline
 
+        # Collection of guidelines
+        guidelines = []
+
         # Guidelines for sfdcDigest node generator
         digest_url = reverse("main:digest-generator")
         if current_url == digest_url:
@@ -64,8 +67,6 @@ def custom_context_data(request):
                     "title": "Tips"
                 }
             ]
-            default_context['guidelines'] = default_context['guidelines'] + guidelines \
-                if 'guidelines' in default_context.keys() else guidelines
 
         # Guidelines for node extractor
         extract_url = reverse("main:extract-by-action")
@@ -73,10 +74,11 @@ def custom_context_data(request):
             guidelines = [
                 {
                     "icon": "fa-question",
-                    "text": "You can use this extractor to generate a partial dataflow with only digest nodes and test "
-                            "it quickly in org62. For example, extract only the <code>sfdcDigest</code> nodes from a "
-                            "dataflow and run it in <strong><code>Wave Operation Support</code></strong> dataflow in "
-                            "org62 and check for the correct field access.",
+                    "text": "Use this extractor to generate a partial dataflow with nodes of a certain type.<br/><br/>"
+                            "Useful when you desire to verify the FLS access status of a "
+                            "dataflow extracting only the <code>sfdcDigest</code> nodes and running it in "
+                            "<strong><code>Wave Operation Support</code></strong>, allowing you to check its "
+                            "correct field access.",
                     "color": "primary",
                     "title": "When to use it?"
                 },
@@ -88,6 +90,22 @@ def custom_context_data(request):
                     "title": "How to use"
                 }
             ]
+
+        # Guidelines for Deprecator merger
+        merger_url = reverse("main:merge-deprecator")
+        if current_url == merger_url:
+            guidelines = [
+                {
+                    "icon": "fa-lightbulb",
+                    "text": "Use this utility to merge one or more deprecator files (file with the list of"
+                            " fields/objects) into a single file.<br/>Useful when you desire to process multiple"
+                            " deprecation cases at once.",
+                    "color": "warning",
+                    "title": "When to use"
+                }
+            ]
+
+        if guidelines:
             default_context['guidelines'] = default_context['guidelines'] + guidelines \
                 if 'guidelines' in default_context.keys() else guidelines
 

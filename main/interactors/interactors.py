@@ -1,3 +1,4 @@
+import copy
 import json
 import os.path
 
@@ -64,5 +65,24 @@ class ViewInteractors:
                 plural = len(err_as_lst) > 1
                 title = f"The following error{'s' if plural else ''} ha{'s' if not plural else 've'} been found"
                 self.context.message = f"{title}:<br/><br/><ul><li>{'</li><li>'.join(err_as_lst)}</li></ul>"
+            except Exception as e:
+                self.context.exception = e
+
+
+class JsonInteractors:
+    class DeprecationMetaFileMerger(Interactor):
+        def run(self):
+            try:
+                a = self.context.json_a
+                b = self.context.json_b
+                c = copy.deepcopy(a)
+
+                for key, value in b.items():
+                    if key not in a.keys():
+                        c[key] = copy.deepcopy(b[key])
+                        continue
+                    c[key] = list(set(a[key] + b[key]))
+
+                self.context.merged = c
             except Exception as e:
                 self.context.exception = e
