@@ -443,7 +443,7 @@ class DownloadDataflowView(generic.FormView):
                 _context_aware_msg = f"<strong>{dataflows[0]}</strong> dataflow" if _n_of_dataflows == 1 else \
                     str(_n_of_dataflows) + ' dataflows'
                 _data = {"dataflows": dataflows, "model": env, "user": request.user,
-                         'job-message': f"Download {_context_aware_msg} from <strong>{env.name}</strong>"}
+                         'job-message': f"Download {_context_aware_msg} from {env.name}"}
                 ctx = JobsInteractor.call(data=_data, function="download_dataflow", scheduler=sched)
                 messages.success(request, mark_safe(f"Downloadig dataflow{'s' if len(dataflows) > 0 else ''} from "
                                           f"<code>{env.name}</code> started. Check the notifications later."))
@@ -485,7 +485,7 @@ class UploadDataflowView(PermissionRequiredMixin, generic.FormView):
 
                 _data = {'env': env, 'remote_df_name': remote_df_name, 'user': request.user, 'filemodel': filemodel,
                          'job-message': f"Upload <code><strong>{remote_df_name}</strong></code> dataflow to"
-                                        f" <code><strong>{env.name}</strong></code>"}
+                                        f" {env.name}"}
                 ctx = JobsInteractor.call(data=_data, function="upload_dataflow", scheduler=sched)
             else:
                 messages.error(request, form.errors.as_data)
