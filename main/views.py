@@ -2,6 +2,7 @@ import datetime
 import io
 import json as js
 import os.path
+import traceback
 
 import requests
 from django.contrib import messages
@@ -1111,7 +1112,7 @@ class ExtractNodeByActionView(generic.FormView):
                 raise ctx.exception
             return ctx.response
         except Exception as e:
-            error_msg = str(e)
+            error_msg = traceback.format_exc()
             messages.error(request, mark_safe(error_msg))
 
         return render(request, self.template_name, {'form': form})
