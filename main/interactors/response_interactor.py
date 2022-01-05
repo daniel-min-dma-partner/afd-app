@@ -14,7 +14,6 @@ from main.models import DataflowUploadHistory
 # Source: https://pybit.es/articles/django-zipfiles/
 class FileResponseInteractor(Interactor):
     def run(self):
-        _exception = None
 
         try:
             response = HttpResponse(content_type='application/zip')
@@ -26,34 +25,25 @@ class FileResponseInteractor(Interactor):
                     json_str = json.dumps(json.load(f), indent=2)
                     zf.writestr(file, json_str)
             response['Content-Disposition'] = f'attachment; filename={self.context.zipfile_name} dataflows.zip'
-        except Exception as e:
-            _exception = e
-            response = None
-        finally:
             self.context.response = response
-            self.context.exception = _exception
+        except Exception as e:
+            self.context.exception = e
 
 
 class ZipFileResponseInteractor(Interactor):
     def run(self):
-        _exception = None
 
         try:
             zipfile = open(self.context.zipfile_path, 'rb')
             response = HttpResponse(zipfile, content_type='application/zip')
             response['Content-Disposition'] = f'attachment; filename={self.context.envname} dataflows.zip'
-        except Exception as e:
-            _exception = e
-            response = None
-        finally:
             self.context.response = response
-            self.context.exception = _exception
+        except Exception as e:
+            self.context.exception = e
 
 
 class JsonFileResponseInteractor(Interactor):
     def run(self):
-        _exception = None
-
         try:
             filepath = self.context.filepath
             filename = os.path.basename(filepath)
@@ -64,12 +54,9 @@ class JsonFileResponseInteractor(Interactor):
                                         'Content-Disposition': f"attachment; filename={filename}"
                                                                f"{'.json' if filename[-5:] != '.json' else ''}"
                                     })
-        except Exception as e:
-            _exception = e
-            response = None
-        finally:
             self.context.response = response
-            self.context.exception = _exception
+        except Exception as e:
+            self.context.exception = e
 
 
 class UploadedDataflowToZipResponse(Interactor):

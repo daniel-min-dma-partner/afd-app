@@ -1078,9 +1078,6 @@ class ExtractNodeByActionView(generic.FormView):
     def post(self, request, *args, **kwargs):
         print("POST")
         form = self.form_class(request.POST)
-        status = 200
-        error_msg = ""
-        registers = []
 
         if not form.is_valid():
             messages.error(request, mark_safe(ViewInteractors.FormErrorAsMessage.call(form=form).message))
@@ -1110,14 +1107,11 @@ class ExtractNodeByActionView(generic.FormView):
                 json.dump(nodes, file, indent=2)
 
             ctx = JsonFileResponseInteractor.call(filepath=filepath)
-
-            if not ctx.exception:
-                return ctx.response
-
-            raise ctx.exception
+            if ctx.exception:
+                raise ctx.exception
+            return ctx.response
         except Exception as e:
             error_msg = str(e)
-            status = 500
             messages.error(request, mark_safe(error_msg))
 
         return render(request, self.template_name, {'form': form})
