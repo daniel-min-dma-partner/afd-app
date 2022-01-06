@@ -830,8 +830,18 @@ class JobListView(generic.ListView):
     template_name = 'jobs/list.html'
 
     def get_queryset(self):
-        queryset = Job.objects.filter(user_id=self.request.user.pk).order_by('-started_at', '-pk')
+        days = self.request.GET.get('days', '1') if 'days' in self.request.GET.keys() else '1'
+        today = datetime.datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+        sql_days = (today - datetime.timedelta(days=int(days))).astimezone()
+        queryset = Job.objects\
+            .filter(user_id=self.request.user.pk, started_at__gt=sql_days)\
+            .order_by('-started_at', '-pk')
         return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(JobListView, self).get_context_data(**kwargs)
+        context['days'] = self.request.GET.get('days', '')
+        return context
 
 
 class ReleaseCreateView(PermissionRequiredMixin, generic.FormView):
