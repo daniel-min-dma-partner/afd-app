@@ -284,5 +284,11 @@ textarea {
 
 .bg-footer-custom {
     background: rgb(211, 221, 250);
-    background: linear-gradient(113deg, rgba(211, 221, 250, 0.8197479675463936) 25%, rgba(209, 244, 249, 0.8393558106836485) 75%);
+    /*background: linear-gradient(113deg, rgba(211, 221, 250, 0.8197479675463936) 25%, rgba(209, 244, 249, 0.8393558106836485) 75%);*/
+    background: linear-gradient(113deg, rgba(211, 221, 250, 0.4) 25%, rgba(209, 244, 249, 0.4) 75%);
+}
+
+.card-header {
+    background: rgb(211, 221, 250);
+    background: radial-gradient(circle, rgba(211, 221, 250, 0.82) 25%, rgba(209, 244, 249, 0.84) 75%);
 }
