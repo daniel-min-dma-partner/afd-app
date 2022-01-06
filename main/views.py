@@ -831,6 +831,7 @@ class JobListView(generic.ListView):
 
     def get_queryset(self):
         days = self.request.GET.get('days', '1') if 'days' in self.request.GET.keys() else '1'
+        days = days if days else '1'
         today = datetime.datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
         sql_days = (today - datetime.timedelta(days=int(days))).astimezone()
         queryset = Job.objects\
