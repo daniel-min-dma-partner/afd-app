@@ -81,7 +81,7 @@ $(document).ready(function (evt) {
     // Removes screen cover after loading jqueries.
     show_screenplay(0, "", true);
 
-    $('#days').focus();
+    $('#days').focus().select();
 });
 
 $('.btn-remove-deprec').on('click', function () {
