@@ -123,7 +123,8 @@
     <!-- Custom -->
     <script>
         let delete_all_url = "{% url 'main:deprecation-delete-all' %}",
-            download_selected_dfs = "{% url 'main:download-selected-dfs' pk=0 only_dep='xxx' errors='yyy' none='zzz' %}";
+            download_selected_dfs = "{% url 'main:download-selected-dfs' pk=0 only_dep='xxx' errors='yyy' none='zzz' %}",
+            get_removed_fields_url = "{% url 'main:get-removed-fields' pk='00' %}";
         const filter_deprecation = (el) => {
             let table = el.parent().parent().parent().parent().parent().find('table.table'),
                 status_fields = table.find('input[type="hidden"].status'),
