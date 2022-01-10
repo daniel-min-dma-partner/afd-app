@@ -1,12 +1,14 @@
 import copy
 import json
 import os.path
+from typing import List
 
 from django.conf import settings
 
 from libs.interactor.interactor import Interactor
 from libs.tcrm_automation.libs.deprecation_libs import get_registers
 from libs.tcrm_automation.libs.json_libs import get_nodes_by_action
+from main.models import DataflowDeprecation, DeprecationDetails
 
 
 class DataflowDatasetListingInteractor(Interactor):
@@ -84,5 +86,30 @@ class JsonInteractors:
                     c[key] = list(set(a[key] + b[key]))
 
                 self.context.merged = c
+            except Exception as e:
+                self.context.exception = e
+
+
+class DeprecationInteractors:
+    class RemovedFieldsCollector(Interactor):
+        def run(self):
+            try:
+                model: DataflowDeprecation = self.context.deprecation_model
+                details: List[DeprecationDetails] = model.deprecationdetails_set.filter(
+                    status=DeprecationDetails.SUCCESS).all()
+                removed_fields_collection = {}
+                for detail in details:
+                    for object, fields in detail.removed_fields.items():
+                        if not object in removed_fields_collection.keys():
+                            removed_fields_collection[object] = []
+                        removed_fields_collection[object] = removed_fields_collection[object] + fields
+                removed_fields_collection = {key: list(set(fields)) for key, fields in
+                                             removed_fields_collection.items()}
+                removed_fields_flatten = [
+                    f"{object}.{field}"
+                    for object, fields in removed_fields_collection.items() for field in fields
+                ]
+                removed_fields_flatten.sort()
+                self.context.removed_fields = "\n".join(removed_fields_flatten)
             except Exception as e:
                 self.context.exception = e

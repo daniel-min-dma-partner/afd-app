@@ -1639,3 +1639,26 @@ def download_df_zip_view(request, pk=None):
     messages.add_message(request, thype, message)
     return redirect('main:home')
 
+
+def get_removed_fields_view(request, pk=None):
+    payload = None
+    error = "System Error: No code executed. Contact the site administrator."
+    status = 500
+    try:
+        if request.is_ajax() and request.method == 'GET':
+            deprecation_model = DataflowDeprecation.objects.get(pk=pk)
+            if not deprecation_model:
+                raise Exception("The deprecation record doesn't exist.")
+
+            ctx = DeprecationInteractors.RemovedFieldsCollector.call(deprecation_model=deprecation_model)
+            if ctx.exception:
+                raise ctx.exception
+
+            status = 200
+            payload = ctx.removed_fields
+    except Exception as e:
+        error = mark_safe(traceback.format_exc())
+        status = 400
+        payload = None
+
+    return JsonResponse({"payload": payload, "error": error}, status=status)
