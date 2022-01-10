@@ -1,0 +1,71 @@
+{% extends 'sb-base/base.html' %}
+
+{% load static %}
+{% load main_extras %}
+
+{% block title %}Generate Deprecator{% endblock title %}
+{% block page-header %}Tableau CRM Dataflows / Metadata File{% endblock page-header %}
+
+{% block header-scripts %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.5.5/jsoneditor.css" rel="stylesheet"
+          type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.5.5/jsoneditor.js"></script>
+{% endblock header-scripts %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xl-12 col-lg-7">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Generates <code>Deprecation Fields List</code>
+                        metadata file.</h6>
+                    {% include '_guideline_box.html' %}
+                </div>
+
+                <div class="card-body">
+                    {% include '_guidelines.html' %}
+
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <div class="form-row">
+                                <div class="form-group col-12">
+                                    <label for="id-fields">Fields (separated by new lines)</label>
+                                    <textarea id="id-fields" name="fields" class="form-control" rows="10"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-12">
+                                    <button class="btn btn-primary btn-icon-split float-right reset">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-undo"></i>
+                                        </span>
+                                        <span class="text">Reset</span>
+                                    </button>
+                                    <button class="btn btn-success btn-icon-split float-right mr-1 clipboard">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-clipboard-check"></i>
+                                        </span>
+                                        <span class="text">Copy to Clipboard</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="id-metadata">Generated Metadata file content</label>
+                            <div id="id-metadata-div" style="width: 100%; height: 600px;"></div>
+
+                            <textarea id="id-metadata" name="metadata" class="form-control" hidden>{}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock page-content %}
+
+{% block extra-scripts %}
+    <script src="{% static 'site/js/metadatafile-generator.js' %}?v={{ version }}" type="module"></script>
+{% endblock extra-scripts %}

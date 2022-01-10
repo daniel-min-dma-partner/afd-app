@@ -1205,7 +1205,7 @@ class DataflowListDatasetsView(generic.FormView):
 
 
 class MergeDeprecatorView(generic.FormView):
-    template_name = 'dataflow-manager/edit/deprecator-merge-form.html'  # When GET, render the template.
+    template_name = 'dataflow-manager/metadata-files/deprecator-merge-form.html'  # When GET, render the template.
     form_class = forms.DeprecatorMergeForm  # Just reusing the form
 
     def post(self, request, *args, **kwargs):
@@ -1245,6 +1245,10 @@ class MergeDeprecatorView(generic.FormView):
         except Exception as e:
             messages.error(request, mark_safe(str(e)))
             return redirect("main:merge-deprecator")
+
+
+class GenerateDeprecatorView(generic.TemplateView):
+    template_name = 'dataflow-manager/metadata-files/deprecation-metadata-generator-form.html'  # When GET, render the template.
 
 
 def list_nodes_from_df(request):

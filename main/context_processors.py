@@ -97,11 +97,35 @@ def custom_context_data(request):
             guidelines = [
                 {
                     "icon": "fa-lightbulb",
-                    "text": "Use this utility to merge one or more deprecator files (file with the list of"
+                    "text": "Use this utility to merge two or more deprecator files (file with the list of"
                             " fields/objects) into a single file.<br/>Useful when you desire to process multiple"
                             " deprecation cases at once.",
                     "color": "warning",
                     "title": "When to use"
+                }
+            ]
+
+        # Guidelines for Deprecator Generator
+        metafile_generator_url = reverse("main:generate-deprecator")
+        if current_url == metafile_generator_url:
+            guidelines = [
+                {
+                    "icon": "fa-question",
+                    "text": "Use this utility to generate a structured metadata information from the list of fields to "
+                            "be deprecated. This information is used by the field deprecation process, providing it as "
+                            "an input through a <code>.json</code> file. Copy to clipboard, create a new "
+                            "<code>.json</code> file in your local machine to use later.",
+                    "color": "warning",
+                    "title": "When to use"
+                },
+                {
+                    "icon": "fa-lightbulb",
+                    "text": "Use the left side field labeled <code>Fields (separated by new lines)</code> "
+                            "to specify the list of fields separated by new lines, in the following format:<br/><br/>"
+                            "<code>Account.Name</code><br/>"
+                            "<code>Case.Product_Name__c</code><br/>",
+                    "color": "success",
+                    "title": "How to use"
                 }
             ]
 

@@ -32,6 +32,7 @@
     {% url 'main:edit-dataflow' as url_edit_df %}
     {% url 'main:extract-by-action' as url_extract_node %}
     {% url 'main:extract-update-dataflow' as url_mng_df %}
+    {% url 'main:generate-deprecator' as url_generate_meta %}
     {% url 'main:list-datasets' as url_list_datasets %}
     {% url 'main:merge-deprecator' as url_merge_dp%}
     {% url 'main:register-localizer' as url_reg_loc %}
@@ -47,20 +48,27 @@
     <div id="collapse2" class="collapse{% if 'dataflow-manager' in cur_url %} show{% endif %}"
          aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
+            <!-- Metadata files: All managements related to deprecation fields metadata file -->
+            <h6 class="collapse-header">Metadata File:</h6>
+            <a class="collapse-item{% if cur_url == url_generate_meta %} active{% endif %}" href="{{ url_generate_meta }}">Generate Deprecator</a>
+            <a class="collapse-item{% if cur_url == url_merge_dp %} active{% endif %}" href="{{ url_merge_dp }}">Merge
+                Deprecator</a>
+
+            <!-- Deprecation: Related to field deprecation process -->
             <h6 class="collapse-header">Deprecation:</h6>
             <a class="collapse-item{% if cur_url == url_depr_df %} active{% endif %}" href="{{ url_depr_df }}">Deprecate
                 fields</a>
             <a class="collapse-item{% if cur_url == url_view_dp %} active{% endif %}" href="{{ url_view_dp }}">View
                 deprecations</a>
 
+            <!-- Transformation: Related to any transformation operation applied to a specific dataflow -->
             <h6 class="collapse-header">Transformation:</h6>
             <a class="collapse-item{% if cur_url == url_edit_df %} active{% endif %}"
                href="#"  data-toggle="modal" data-target="#file-selector-md">Edit</a>
             <a class="collapse-item{% if cur_url == url_mng_df %} active{% endif %}" href="{{ url_mng_df }}">Extract |
                 Update</a>
-            <a class="collapse-item{% if cur_url == url_merge_dp %} active{% endif %}" href="{{ url_merge_dp }}">Merge
-                Deprecator</a>
 
+            <!-- Visualization: Related to operations which displays section of a given dataflow or extracts information about a dataflow -->
             <h6 class="collapse-header">Visualization:</h6>
             <a class="collapse-item{% if cur_url == url_comp_df %} active{% endif %}"
                href="{{ url_comp_df }}">Compare</a>
@@ -69,6 +77,7 @@
             <a class="collapse-item{% if cur_url == url_reg_loc %} active{% endif %}"
                href="{{ url_reg_loc }}">Locate <code><strong>sfdcRegister</strong></code></a>
 
+            <!-- Generation: Operations which creates necessary files useful for field deprecation process. -->
             <h6 class="collapse-header">Generation:</h6>
             <a class="collapse-item{% if cur_url == url_extract_node %} active{% endif %}" href="{{ url_extract_node }}">
                 Node Extractor
@@ -77,6 +86,7 @@
                 <code><strong>sfdcDigest</strong></code> Generator
             </a>
 
+            <!-- Remote Connection: Operations for connecting this app with Salesforce. -->
             <h6 class="collapse-header">Remote Connection:</h6>
             <a class="collapse-item{% if cur_url == url_down_df %} active{% endif %}"
                href="{{ url_down_df }}">Download</a>

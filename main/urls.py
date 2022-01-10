@@ -77,6 +77,7 @@ urlpatterns = [
         re_path(r'^download-zip/(?P<pk>\d+)$', main.download_df_zip_view, name='download-zip'),
         re_path(r'^download-upload-backup/(?P<pk>\d+)/$', main.DownloadUploadBackupView.as_view(),
                 name='download-upload-backup'),
+        re_path(r'^generate-deprecator/$', main.GenerateDeprecatorView.as_view(), name='generate-deprecator'),
         re_path(r'^generate-digest-node/$', main.DigestNodeGeneratorView.as_view(), name='digest-generator'),
         re_path(r'^list-node-from-df/$', main.list_nodes_from_df, name='list-node-from-df'),
         re_path(r'^list-datasets/$', main.DataflowListDatasetsView.as_view(), name='list-datasets'),
