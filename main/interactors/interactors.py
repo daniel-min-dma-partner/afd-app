@@ -40,6 +40,29 @@ class DataflowInteractors:
             except Exception as e:
                 self.context.exception = e
 
+    class DeprecatorGeneratorOne(Interactor):
+        def run(self):
+            try:
+                file = self.context.file
+                lines = [line.strip() for line in file.readlines()]
+                lines.sort()
+                objects = []
+                deprecator = {}
+                for line in lines:
+                    obj_fld = line.split('.')
+                    obj = obj_fld[0].strip()
+                    fld = obj_fld[1].strip()
+                    if obj not in objects:
+                        objects.append(obj)
+                        deprecator[obj] = []
+                    deprecator[obj].append(fld)
+                for _, fields in deprecator.items():
+                    fields.sort()
+                deprecator = {key: ','.join([field for field in fields]) for key, fields in deprecator.items()}
+                self.context.deprecator = deprecator
+            except Exception as e:
+                self.context.exception = e
+
 
 class FileSystemInteractors:
     class TemporaryFolderCreator(Interactor):
