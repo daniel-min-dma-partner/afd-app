@@ -129,8 +129,8 @@ class DeprecationInteractors:
                 removed_fields_collection = {key: list(set(fields)) for key, fields in
                                              removed_fields_collection.items()}
                 removed_fields_flatten = [
-                    f"{object}.{field}"
-                    for object, fields in removed_fields_collection.items() for field in fields
+                    f"{objct}.{field}"
+                    for objct, fields in removed_fields_collection.items() for field in fields
                 ]
                 removed_fields_flatten.sort()
                 self.context.removed_fields = "\n".join(removed_fields_flatten)
