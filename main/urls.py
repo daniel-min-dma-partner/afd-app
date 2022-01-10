@@ -62,6 +62,7 @@ urlpatterns = [
             re_path(r'^view/$', main.ViewDeprecatedFieldsView.as_view(), name='view-deprecations'),
             re_path(r'^view/details/(?P<pk>\d+)$', main.DeprecationDetailsView.as_view(),
                     name='view-deprecation-detail'),
+            re_path(f'^get-removed-fields/(?P<pk>\d+)/$', main.get_removed_fields_view, name='get-removed-fields'),
         ])),
         re_path(r'^deprecation-checkerboard-excel/(?P<pk>\d+)/$', main.DeprecationCheckerboardExcelDownloadView.as_view(),
                 name='deprecation-checkerboard-excel'),

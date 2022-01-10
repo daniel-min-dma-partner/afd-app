@@ -238,3 +238,25 @@ $('#days').on('change', function (evt) {
         $('form#list-filter').submit();
     }
 });
+
+$("button.copy-removed-fields").click(function (evt) {
+    let pk = $(this).data('pk'),
+        url = get_removed_fields_url.replace('00', pk);
+
+    $.ajax({
+        url: url,
+        data: {},
+        type: 'GET',
+        success: function (response) {
+            navigator.clipboard.writeText(response.payload);
+            popup_notification('Copy to clipboard',
+                "The <code>removed fields</code> copied successfully to clipboard",
+                'success', true, 2400);
+        },
+        error: function (response) {
+            console.log(response);
+            popup_notification('Copy to clipboard',
+                response.responseText, 'danger');
+        }
+    });
+});

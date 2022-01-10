@@ -66,6 +66,15 @@
                         title="List of fields to remove">
                         <i class="fas fa-list"></i>
                     </a>
+
+                    {% if object.details %}
+                        <button type="button"
+                           class="btn btn-info btn-circle btn-sm copy-removed-fields"
+                           data-pk="{{ object.pk }}"
+                           title="Gets removed fields">
+                            <i class="fas fa-clipboard"></i>
+                        </button>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
