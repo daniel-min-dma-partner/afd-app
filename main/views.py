@@ -1271,10 +1271,6 @@ class MergeDeprecatorView(generic.FormView):
             return redirect("main:merge-deprecator")
 
 
-class GenerateDeprecatorView(generic.TemplateView):
-    template_name = 'dataflow-manager/metadata-files/deprecation-metadata-generator-form.html'  # When GET, render the template.
-
-
 def list_nodes_from_df(request):
     error_msg = ""
     nodes = []

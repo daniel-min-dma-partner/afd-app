@@ -48,12 +48,6 @@
     <div id="collapse2" class="collapse{% if 'dataflow-manager' in cur_url %} show{% endif %}"
          aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-            <!-- Metadata files: All managements related to deprecation fields metadata file -->
-            <h6 class="collapse-header">Metadata File:</h6>
-            <a class="collapse-item{% if cur_url == url_generate_meta %} active{% endif %}" href="{{ url_generate_meta }}">Generate Deprecator</a>
-            <a class="collapse-item{% if cur_url == url_merge_dp %} active{% endif %}" href="{{ url_merge_dp }}">Merge
-                Deprecator</a>
-
             <!-- Deprecation: Related to field deprecation process -->
             <h6 class="collapse-header">Deprecation:</h6>
             <a class="collapse-item{% if cur_url == url_depr_df %} active{% endif %}" href="{{ url_depr_df }}">Deprecate
@@ -85,6 +79,11 @@
             <a class="collapse-item{% if cur_url == url_digen_df %} active{% endif %}" href="{{ url_digen_df }}">
                 <code><strong>sfdcDigest</strong></code> Generator
             </a>
+
+            <!-- Metadata files: All managements related to deprecation fields metadata file -->
+            <h6 class="collapse-header">Metadata File:</h6>
+            <a class="collapse-item{% if cur_url == url_merge_dp %} active{% endif %}" href="{{ url_merge_dp }}">Merge
+                Deprecator</a>
 
             <!-- Remote Connection: Operations for connecting this app with Salesforce. -->
             <h6 class="collapse-header">Remote Connection:</h6>

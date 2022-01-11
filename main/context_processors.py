@@ -105,30 +105,6 @@ def custom_context_data(request):
                 }
             ]
 
-        # Guidelines for Deprecator Generator
-        metafile_generator_url = reverse("main:generate-deprecator")
-        if current_url == metafile_generator_url:
-            guidelines = [
-                {
-                    "icon": "fa-question",
-                    "text": "Use this utility to generate a structured metadata information from the list of fields to "
-                            "be deprecated. This information is used by the field deprecation process, providing it as "
-                            "an input through a <code>.json</code> file. Copy to clipboard, create a new "
-                            "<code>.json</code> file in your local machine to use later.",
-                    "color": "warning",
-                    "title": "When to use"
-                },
-                {
-                    "icon": "fa-lightbulb",
-                    "text": "Use the left side field labeled <code>Fields (separated by new lines)</code> "
-                            "to specify the list of fields separated by new lines, in the following format:<br/><br/>"
-                            "<code>Account.Name</code><br/>"
-                            "<code>Case.Product_Name__c</code><br/>",
-                    "color": "success",
-                    "title": "How to use"
-                }
-            ]
-
         if guidelines:
             default_context['guidelines'] = default_context['guidelines'] + guidelines \
                 if 'guidelines' in default_context.keys() else guidelines
