@@ -48,14 +48,12 @@ class DataflowInteractors:
                 file = self.context.file
                 lines = [line.strip() for line in file.readlines()]
                 lines.sort()
-                objects = []
                 deprecator = {}
                 for line in lines:
                     obj_fld = line.split('.')
                     obj = obj_fld[0].strip()
                     fld = obj_fld[1].strip()
-                    if obj not in objects:
-                        objects.append(obj)
+                    if obj not in deprecator.keys():
                         deprecator[obj] = []
                     deprecator[obj].append(fld)
                 for _, fields in deprecator.items():

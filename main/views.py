@@ -581,13 +581,37 @@ class DeprecateFieldsView(generic.FormView):
 
                     filemodel.delete()
                 else:
-                    # Prepare fields: Each row corresponds to an Object.
-                    self.fields = [field.rstrip() for field in request.POST.get('fields').split('\n') if
-                                   field.rstrip() not in [None, ""]]
+                    if request.POST.get('sobjects'):
+                        # Prepare fields: Each row corresponds to an Object.
+                        self.fields = [field.rstrip() for field in request.POST.get('fields').split('\n') if
+                                       field.rstrip() not in [None, ""]]
 
-                    # Prepare objects: Each row must specify only one Object.
-                    self.objects = [obj.rstrip() for obj in request.POST.get('sobjects').split('\n') if
-                                    obj.rstrip() not in [None, ""]]
+                        # Prepare objects: Each row must specify only one Object.
+                        self.objects = [obj.rstrip() for obj in request.POST.get('sobjects').split('\n') if
+                                        obj.rstrip() not in [None, ""]]
+                    else:
+                        # object.field format input
+                        usr_input = [line.strip() for line in request.POST.get('fields').split('\n')]
+                        usr_input = [line for line in usr_input if line not in ['\n', ''] and len(line) > 0]
+                        usr_input.sort()
+                        print(usr_input)
+                        usr_input = [line.split('.') for line in usr_input]
+
+                        objects_fields = {}
+                        for combo in usr_input:
+                            obj_api_name = combo[0].strip()
+                            field_api_name = combo[1].strip()
+
+                            if obj_api_name not in objects_fields.keys():
+                                objects_fields[obj_api_name] = []
+                            objects_fields[obj_api_name].append(field_api_name)
+                        objects_fields = {obj: ','.join([field for field in fields]) for obj, fields in objects_fields.items()}
+
+                        self.objects = []
+                        self.fields = []
+                        for obj, fields in objects_fields.items():
+                            self.objects.append(obj)
+                            self.fields.append(fields)
 
                 # User indicated to save metadata into a file
                 if form.cleaned_data.get('save_metadata'):
@@ -633,7 +657,7 @@ class DeprecateFieldsView(generic.FormView):
                 flash_type = messages.ERROR
                 _return = render(request, 'dataflow-manager/deprecate-fields/form.html', {'form': form})
         except Exception as e:
-            message = mark_safe(str(e))
+            message = mark_safe(traceback.format_exc())
             flash_type = messages.ERROR
             _return = redirect("main:deprecate-fields")
 
