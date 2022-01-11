@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block title %}Merge Deprecators{% endblock title %}
-{% block page-header %}Tableau CRM Dataflows / Transformation{% endblock page-header %}
+{% block page-header %}Tableau CRM Dataflows / Metadata File{% endblock page-header %}
 
 {% block header-scripts %}
 {% endblock header-scripts %}
@@ -35,7 +35,7 @@
                         <div class="form-row">
                             <div class="form-group col-12">
                                 <label for="id_{{ form.files.name }}" class="form-label required">Select at least one
-                                    Dataflow</label>
+                                    file</label>
                                 <input class="form-control" type="file" name="{{ form.files.name }}"
                                        id="id_{{ form.files.name }}" required multiple>
 

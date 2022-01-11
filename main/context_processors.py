@@ -97,7 +97,7 @@ def custom_context_data(request):
             guidelines = [
                 {
                     "icon": "fa-lightbulb",
-                    "text": "Use this utility to merge one or more deprecator files (file with the list of"
+                    "text": "Use this utility to merge two or more deprecator files (file with the list of"
                             " fields/objects) into a single file.<br/>Useful when you desire to process multiple"
                             " deprecation cases at once.",
                     "color": "warning",
