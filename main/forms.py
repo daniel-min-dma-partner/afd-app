@@ -289,13 +289,13 @@ class DeprecateFieldsForm(forms.Form):
     fields = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
 
-    def clean_sobjects(self):
-        from_file = self.cleaned_data.get('from_file')
-        sobjects = self.cleaned_data.get('sobjects')
-
-        if not from_file and not sobjects:
-            raise ValidationError(
-                "<code><strong>Objects</strong></code> field can not be empty if <code>From File?</code> is un-checked.")
+    # def clean_sobjects(self):
+    #     from_file = self.cleaned_data.get('from_file')
+    #     sobjects = self.cleaned_data.get('sobjects')
+    #
+    #     if not from_file and not sobjects:
+    #         raise ValidationError(
+    #             "<code><strong>Objects</strong></code> field can not be empty if <code>From File?</code> is un-checked.")
 
     def clean_fields(self):
         from_file = self.cleaned_data.get('from_file')

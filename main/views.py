@@ -581,13 +581,37 @@ class DeprecateFieldsView(generic.FormView):
 
                     filemodel.delete()
                 else:
-                    # Prepare fields: Each row corresponds to an Object.
-                    self.fields = [field.rstrip() for field in request.POST.get('fields').split('\n') if
-                                   field.rstrip() not in [None, ""]]
+                    if request.POST.get('sobjects'):
+                        # Prepare fields: Each row corresponds to an Object.
+                        self.fields = [field.rstrip() for field in request.POST.get('fields').split('\n') if
+                                       field.rstrip() not in [None, ""]]
 
-                    # Prepare objects: Each row must specify only one Object.
-                    self.objects = [obj.rstrip() for obj in request.POST.get('sobjects').split('\n') if
-                                    obj.rstrip() not in [None, ""]]
+                        # Prepare objects: Each row must specify only one Object.
+                        self.objects = [obj.rstrip() for obj in request.POST.get('sobjects').split('\n') if
+                                        obj.rstrip() not in [None, ""]]
+                    else:
+                        # object.field format input
+                        usr_input = [line.strip() for line in request.POST.get('fields').split('\n')]
+                        usr_input = [line for line in usr_input if line not in ['\n', ''] and len(line) > 0]
+                        usr_input.sort()
+                        print(usr_input)
+                        usr_input = [line.split('.') for line in usr_input]
+
+                        objects_fields = {}
+                        for combo in usr_input:
+                            obj_api_name = combo[0].strip()
+                            field_api_name = combo[1].strip()
+
+                            if obj_api_name not in objects_fields.keys():
+                                objects_fields[obj_api_name] = []
+                            objects_fields[obj_api_name].append(field_api_name)
+                        objects_fields = {obj: ','.join([field for field in fields]) for obj, fields in objects_fields.items()}
+
+                        self.objects = []
+                        self.fields = []
+                        for obj, fields in objects_fields.items():
+                            self.objects.append(obj)
+                            self.fields.append(fields)
 
                 # User indicated to save metadata into a file
                 if form.cleaned_data.get('save_metadata'):
@@ -633,7 +657,7 @@ class DeprecateFieldsView(generic.FormView):
                 flash_type = messages.ERROR
                 _return = render(request, 'dataflow-manager/deprecate-fields/form.html', {'form': form})
         except Exception as e:
-            message = mark_safe(str(e))
+            message = mark_safe(traceback.format_exc())
             flash_type = messages.ERROR
             _return = redirect("main:deprecate-fields")
 
@@ -830,8 +854,19 @@ class JobListView(generic.ListView):
     template_name = 'jobs/list.html'
 
     def get_queryset(self):
-        queryset = Job.objects.filter(user_id=self.request.user.pk).order_by('-started_at', '-pk')
+        days = self.request.GET.get('days', '1') if 'days' in self.request.GET.keys() else '1'
+        days = days if days else '1'
+        today = datetime.datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+        sql_days = (today - datetime.timedelta(days=int(days))).astimezone()
+        queryset = Job.objects\
+            .filter(user_id=self.request.user.pk, started_at__gt=sql_days)\
+            .order_by('-started_at', '-pk')
         return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(JobListView, self).get_context_data(**kwargs)
+        context['days'] = self.request.GET.get('days', '')
+        return context
 
 
 class ReleaseCreateView(PermissionRequiredMixin, generic.FormView):
@@ -1194,7 +1229,7 @@ class DataflowListDatasetsView(generic.FormView):
 
 
 class MergeDeprecatorView(generic.FormView):
-    template_name = 'dataflow-manager/edit/deprecator-merge-form.html'  # When GET, render the template.
+    template_name = 'dataflow-manager/metadata-files/deprecator-merge-form.html'  # When GET, render the template.
     form_class = forms.DeprecatorMergeForm  # Just reusing the form
 
     def post(self, request, *args, **kwargs):
@@ -1628,3 +1663,26 @@ def download_df_zip_view(request, pk=None):
     messages.add_message(request, thype, message)
     return redirect('main:home')
 
+
+def get_removed_fields_view(request, pk=None):
+    payload = None
+    error = "System Error: No code executed. Contact the site administrator."
+    status = 500
+    try:
+        if request.is_ajax() and request.method == 'GET':
+            deprecation_model = DataflowDeprecation.objects.get(pk=pk)
+            if not deprecation_model:
+                raise Exception("The deprecation record doesn't exist.")
+
+            ctx = DeprecationInteractors.RemovedFieldsCollector.call(deprecation_model=deprecation_model)
+            if ctx.exception:
+                raise ctx.exception
+
+            status = 200
+            payload = ctx.removed_fields
+    except Exception as e:
+        error = mark_safe(traceback.format_exc())
+        status = 400
+        payload = None
+
+    return JsonResponse({"payload": payload, "error": error}, status=status)

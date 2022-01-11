@@ -31,30 +31,34 @@
             <div class="card">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Deprecation list</h6>
-                    {% if perms.main.special_permission_delete_all_deprecation %}
-                        <div class="form-row float-right">
-                            <button class="btn btn-danger btn-icon-split float-right mr-2 delete-all">
-                                <span class="icon text-white-50"><i class="fas fa-trash"></i></span>
-                                <span class="text">Delete all</span>
-                            </button>
-                        </div>
-                    {% endif %}
                 </div>
 
                 <div class="card-body">
-
-                    <form id="list-filter" method="get" action="{% url 'main:view-deprecations' %}">
-                        <div class="form-row">
-                            <div class="form-group col-2">
-                                <label for="days">Days</label>
-                                <input type="text" id="days" name="days" class="form-control form-control-sm"
-                                    value="{{ days }}">
-                            </div>
-
+                    <div class="form-row">
+                        <div class="form-group col-9">
+                            <!-- Filter form -->
+                            <form id="list-filter" method="get" action="{% url 'main:view-deprecations' %}">
+                                <div class="form-row">
+                                    <div class="form-group col-1">
+                                        <label for="days">Days</label>
+                                        <input type="text" id="days" name="days" class="form-control form-control-sm"
+                                               value="{{ days }}">
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                    </form>
 
-                    <hr/>
+                        <!-- 'Delete all' button -->
+                        {% if perms.main.special_permission_delete_all_deprecation %}
+                            <div class="form-group col-3 float-right">
+                                <br/>
+                                <button class="btn btn-danger btn-icon-split float-right mr-2 delete-all">
+                                    <span class="icon text-white-50"><i class="fas fa-trash"></i></span>
+                                    <span class="text">Delete all</span>
+                                </button>
+                            </div>
+                        {% endif %}
+                    </div>
 
                     {% include 'dataflow-manager/deprecate-fields/details/_deprecation_list_table.html' %}
                 </div>
@@ -119,7 +123,8 @@
     <!-- Custom -->
     <script>
         let delete_all_url = "{% url 'main:deprecation-delete-all' %}",
-            download_selected_dfs = "{% url 'main:download-selected-dfs' pk=0 only_dep='xxx' errors='yyy' none='zzz' %}";
+            download_selected_dfs = "{% url 'main:download-selected-dfs' pk=0 only_dep='xxx' errors='yyy' none='zzz' %}",
+            get_removed_fields_url = "{% url 'main:get-removed-fields' pk='00' %}";
         const filter_deprecation = (el) => {
             let table = el.parent().parent().parent().parent().parent().find('table.table'),
                 status_fields = table.find('input[type="hidden"].status'),

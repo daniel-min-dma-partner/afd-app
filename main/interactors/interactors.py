@@ -1,12 +1,14 @@
 import copy
 import json
 import os.path
+from typing import List
 
 from django.conf import settings
 
 from libs.interactor.interactor import Interactor
 from libs.tcrm_automation.libs.deprecation_libs import get_registers
 from libs.tcrm_automation.libs.json_libs import get_nodes_by_action
+from main.models import DataflowDeprecation, DeprecationDetails
 
 
 class DataflowDatasetListingInteractor(Interactor):
@@ -37,6 +39,27 @@ class DataflowInteractors:
                 nodes = get_nodes_by_action(df=dataflow_definition, action=node_type.strip())
                 nodes = {nodename: node for (nodename, node) in nodes}
                 self.context.nodes = nodes
+            except Exception as e:
+                self.context.exception = e
+
+    class DeprecatorGeneratorOne(Interactor):
+        def run(self):
+            try:
+                file = self.context.file
+                lines = [line.strip() for line in file.readlines()]
+                lines.sort()
+                deprecator = {}
+                for line in lines:
+                    obj_fld = line.split('.')
+                    obj = obj_fld[0].strip()
+                    fld = obj_fld[1].strip()
+                    if obj not in deprecator.keys():
+                        deprecator[obj] = []
+                    deprecator[obj].append(fld)
+                for _, fields in deprecator.items():
+                    fields.sort()
+                deprecator = {key: ','.join([field for field in fields]) for key, fields in deprecator.items()}
+                self.context.deprecator = deprecator
             except Exception as e:
                 self.context.exception = e
 
@@ -84,5 +107,30 @@ class JsonInteractors:
                     c[key] = list(set(a[key] + b[key]))
 
                 self.context.merged = c
+            except Exception as e:
+                self.context.exception = e
+
+
+class DeprecationInteractors:
+    class RemovedFieldsCollector(Interactor):
+        def run(self):
+            try:
+                model: DataflowDeprecation = self.context.deprecation_model
+                details: List[DeprecationDetails] = model.deprecationdetails_set.filter(
+                    status=DeprecationDetails.SUCCESS).all()
+                removed_fields_collection = {}
+                for detail in details:
+                    for object, fields in detail.removed_fields.items():
+                        if not object in removed_fields_collection.keys():
+                            removed_fields_collection[object] = []
+                        removed_fields_collection[object] = removed_fields_collection[object] + fields
+                removed_fields_collection = {key: list(set(fields)) for key, fields in
+                                             removed_fields_collection.items()}
+                removed_fields_flatten = [
+                    f"{objct}.{field}"
+                    for objct, fields in removed_fields_collection.items() for field in fields
+                ]
+                removed_fields_flatten.sort()
+                self.context.removed_fields = "\n".join(removed_fields_flatten)
             except Exception as e:
                 self.context.exception = e
