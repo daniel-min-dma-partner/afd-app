@@ -1,6 +1,9 @@
+import mimetypes
 import os
 
 import environ
+
+mimetypes.add_type("text/css", ".css", True)
 
 env = environ.Env()
 
