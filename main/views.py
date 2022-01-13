@@ -1500,8 +1500,10 @@ def ajax_copy_key_to_clipboard(request):
     status = 500
 
     try:
+        raise Exception("This capability has been flagged as <code>ACCESS CONTROL VIOLATION</code>. Will be removed soon.")
         if request.is_ajax() and request.method == "GET":
             env = get_object_or_404(SfdcEnv, pk=request.GET['pk'])
+            usr_input_field = request.GET['field'].strip()
             field = "client_{0}".format(request.GET['field'])
             payload = getattr(env, field)
             error = None
