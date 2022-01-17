@@ -18,6 +18,7 @@ $(document).ready(function (evt) {
 
     function get_registers() {
         disable_clipboard();
+        update_editor({"status": "Calculating. Please wait..."});
 
         let form = $('form#register-locator-form'),
             post_url = form.attr('action');
