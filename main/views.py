@@ -1090,14 +1090,39 @@ class RegisterLocalizerView(generic.FormView):
         if form.is_valid():
             dataflow_file = request.FILES.get('dataflow')
             nodes = dict(request.POST)['node'] if 'node' in request.POST.keys() else []
+            datasets = request.POST.get('datasets')
 
-            if not dataflow_file or not nodes:
+            if not dataflow_file or not (nodes or datasets):
                 status = 500
                 error_msg = "No dataflow specified." if not dataflow_file else "Missing node name."
             else:
                 dataflow = str_to_json(byte_to_str(dataflow_file.read()))
                 ctx = RegisterLocatorInteractor.call(dataflow=dataflow, nodes=nodes)
                 registers = ctx.registers
+
+                if not registers:
+                    ctx = DataflowInteractors.GetRegistersFromDatasetNameList.call(dataflow=dataflow, datasets=datasets)
+                    if ctx.exception:
+                        try:
+                            raise ctx.exception
+                        except Exception:
+                            status = 500
+                            error_msg = mark_safe(traceback.format_exc())
+                    else:
+                        registers = ctx.registers
+
+                if form.cleaned_data['complement']:
+                    ctx = DataflowInteractors.ComplementFromRegister.call(registers=registers, dataflow=dataflow)
+
+                    if ctx.exception:
+                        try:
+                            raise ctx.exception
+                        except Exception:
+                            status = 500
+                            error_msg = mark_safe(traceback.format_exc())
+                    else:
+                        registers = ctx.complement
+
         else:
             status = 500
             error_msg = form.errors.as_data
