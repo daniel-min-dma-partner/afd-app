@@ -5,7 +5,6 @@ import pytz
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
 from jsoneditor.forms import JSONEditor
 from tinymce.widgets import TinyMCE
@@ -21,20 +20,23 @@ class LoginForm(AuthenticationForm):
             attrs={'class': 'form-control',
                    'placeholder': ''}
         ),
-        label=mark_safe("Username"))
+        label=mark_safe("Username"),
+        validators=[xss_absent_validator])
 
     password = forms.CharField(
         label="Password",
         widget=forms.PasswordInput(attrs={
             'autocomplete': 'current-password',
             'class': 'form-control form-control-use',
-        }))
+        }),
+        validators=[xss_absent_validator])
 
 
 class RegisterUserForm(forms.ModelForm):
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput, initial='password', required=True)
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput, initial='password', required=True,
+                                validators=[xss_absent_validator])
     password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput, initial='password',
-                                required=True)
+                                required=True, validators=[xss_absent_validator])
 
     class Meta:
         model = User
@@ -102,11 +104,10 @@ class TreeRemoverForm(forms.Form):
     registers = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1,
                                                              'placeholder': "\"Register\" nodes"}),
                                 required=False,
-                                label=mark_safe(
-                                    "List of <strong>sfdcRegisters, registers, edgeMart</strong> nodes"), )
+                                label='Register nodes', validators=[xss_absent_validator])
     name = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Output dataflow name',
-                                      'value': 'UpdatedDataflow.json'}), required=False)
+                                      'value': 'UpdatedDataflow.json'}), required=False, validators=[xss_absent_validator])
 
     # For tree removers
     replacers = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False,
@@ -116,6 +117,11 @@ class TreeRemoverForm(forms.Form):
     extract = forms.BooleanField(required=False)
 
     def clean_extract(self):
+        if 'extract' not in self.cleaned_data.keys():
+            raise forms.ValidationError("Extract? field has validation error. Please check.")
+        if 'registers' not in self.cleaned_data.keys():
+            raise forms.ValidationError("\"Register nodes\" field has validation error. Please check it first.")
+
         _extract = self.cleaned_data['extract']
         _registers = self.cleaned_data['registers']
 
@@ -133,7 +139,7 @@ class SlackMsgPusherForm(forms.Form):
                    'placeholder': ''}
         ),
         label=mark_safe("Case Contact Name"),
-        required=False
+        required=False, validators=[xss_absent_validator]
     )
     case_number = forms.CharField(
         widget=forms.TextInput(
@@ -141,14 +147,14 @@ class SlackMsgPusherForm(forms.Form):
                    'placeholder': 'Output dataflow name'}
         ),
         label=mark_safe("Case Number"),
-        required=False
+        required=False, validators=[xss_absent_validator]
     )
     case_url = forms.URLField(label='SupportForce Case URL')
     case_description = forms.CharField(
         widget=forms.Textarea(
             attrs={'class': 'form-control', 'rows': 1, 'placeholder': 'Brief descriptiion of the customer request.'}
         ),
-        label=mark_safe("Case Description")
+        label=mark_safe("Case Description"), validators=[xss_absent_validator]
     )
     case_business_justification = forms.BooleanField(required=False, label=mark_safe("Has Business Justification?"))
     case_manager_approval = forms.BooleanField(required=False, label=mark_safe("Has Manager's Approval?"))
@@ -158,7 +164,7 @@ class SlackMsgPusherForm(forms.Form):
                    'placeholder': ''}
         ),
         label=mark_safe("Case Contact Manager"),
-        required=False
+        required=False, validators=[xss_absent_validator]
     )
 
     # slack_target = forms.CharField(required=True)
@@ -202,7 +208,7 @@ class SlackCustomerConversationForm(forms.Form):
             attrs={'class': 'form-control',
                    'placeholder': ''}
         ),
-        label=mark_safe("Channel ID")
+        label=mark_safe("Channel ID"), validators=[xss_absent_validator]
     )
     case_number_slack_customer = forms.CharField(
         widget=forms.TextInput(
@@ -210,7 +216,7 @@ class SlackCustomerConversationForm(forms.Form):
                    'placeholder': ''}
         ),
         label=mark_safe("Case Number"),
-        required=False
+        required=False, validators=[xss_absent_validator]
     )
     case_url_slack_customer = forms.URLField(label='SupportForce Case URL', required=False)
     _MSG_TPLT_SECTIONS = {
@@ -237,7 +243,7 @@ class DataflowDownloadForm(forms.Form):
 
 
 class DataflowUploadForm(forms.ModelForm):
-    dataflow_selector = forms.CharField(required=False)
+    dataflow_selector = forms.CharField(required=False, validators=[xss_absent_validator])
     env_selector = forms.IntegerField(required=False)
 
     class Meta:
@@ -262,7 +268,7 @@ class CompareDataflowForm(forms.ModelForm):
     )
     field1 = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
     field2 = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
-    method = forms.ChoiceField(choices=_METHOD_CHOICE, widget=forms.RadioSelect(), required=True)
+    method = forms.ChoiceField(choices=_METHOD_CHOICE, widget=forms.RadioSelect(), required=True, validators=[xss_absent_validator])
 
     class Meta:
         model = DFCompModel
@@ -277,17 +283,17 @@ class CompareDataflowForm(forms.ModelForm):
 
 
 class DeprecateFieldsForm(forms.Form):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
-    org = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True, validators=[xss_absent_validator])
+    org = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True, validators=[xss_absent_validator])
     files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
     case_url = forms.URLField(label='SupportForce Case URL', required=False)
     file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
     from_file = forms.BooleanField(required=False)
     save_metadata = forms.BooleanField(required=False)
     sobjects = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
+        widget=forms.TextInput(attrs={'class': 'form-control'}), required=False, validators=[xss_absent_validator])
     fields = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
+        widget=forms.TextInput(attrs={'class': 'form-control'}), required=False, validators=[xss_absent_validator])
 
     # def clean_sobjects(self):
     #     from_file = self.cleaned_data.get('from_file')
@@ -308,12 +314,12 @@ class DeprecateFieldsForm(forms.Form):
 
 class SecpredToSaqlForm(forms.Form):
     dataset = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True,
-                              label="Dataflow API Name")
+                              label="Dataflow API Name", validators=[xss_absent_validator])
     secpred = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': ""}),
-                              required=False, label="Security Predicate")
+                              required=False, label="Security Predicate", validators=[xss_absent_validator])
     saql = forms.CharField(
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 10, 'placeholder': "", "readonly": True}),
-        required=False, label="Generated SAQL")
+        required=False, label="Generated SAQL", validators=[xss_absent_validator])
 
 
 class ProfileForm(forms.ModelForm):
@@ -345,8 +351,8 @@ class ProfileForm(forms.ModelForm):
 
 
 class ReleaseForm(forms.ModelForm):
-    title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
-    description = forms.CharField(widget=TinyMCE(attrs={'cols': 200, 'rows': 30}))
+    title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True, validators=[xss_absent_validator])
+    description = forms.CharField(widget=TinyMCE(attrs={'cols': 200, 'rows': 30}), validators=[xss_absent_validator])
 
     class Meta:
         model = Release
@@ -377,12 +383,12 @@ class ParameterForm(forms.ModelForm):
 
 class DataflowEditForm(forms.Form):
     dataflow = JSONEditor()
-    filename = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
+    filename = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False, validators=[xss_absent_validator])
 
 
 class RegisterNodeForm(forms.Form):
     dataflow = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
-    node = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
+    node = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False, validators=[xss_absent_validator])
 
 
 class ExtractNodeByActionForm(forms.Form):

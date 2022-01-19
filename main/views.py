@@ -196,8 +196,7 @@ class TreeRemover(generic.FormView):
             messages.add_message(request, thype, message)
             return self.form_valid(form)
         else:
-            messages.error(request,
-                           mark_safe("<br/>".join(str(value[0]) for _, value in form.errors.as_data().items())))
+            messages.error(request, mark_safe((ViewInteractors.FormErrorAsMessage.call(form=form)).message))
             return self.form_invalid(form)
 
 
@@ -219,7 +218,7 @@ class SlackIntegrationView(generic.FormView):
 
     def post(self, request, *args, **kwargs):
         form = SlackMsgPusherForm(request.POST)
-        form_customer_initial = SlackCustomerConversationForm(request.POST)
+        print('is valid?', form.is_valid())
 
         if form.is_valid():
             slack_targets = request.POST.getlist('slack_target')
@@ -265,6 +264,11 @@ class SlackIntegrationView(generic.FormView):
             messages.success(request, mark_safe(message))
             return redirect("main:slack")
         else:
+            ctx = ViewInteractors.FormErrorAsMessage.call(form=form)
+            if ctx.exception:
+                messages.error(request, ctx.exception)
+            else:
+                messages.error(request, mark_safe(ctx.message))
             return self.form_invalid(form)
 
 
@@ -277,7 +281,7 @@ class SfdcEnvListView(generic.ListView):
         return obj
 
 
-class SfdcEnvUpdateView(generic.TemplateView):
+class SfdcEnvUpdateView(generic.FormView):
     form_class = SfdcEnvEditForm
     template_name = 'sfdc/env/edit.html'
 
@@ -300,9 +304,8 @@ class SfdcEnvUpdateView(generic.TemplateView):
             messages.success(request, mark_safe(f"Connection <code>{sfdc_env.name}</code> modified succesfully."))
             return redirect('main:sfdc-env-list')
         else:
-            messages.error(request, f'form invalid: {form.errors.as_data}')
-
-        return render(request, self.template_name, {'form': form})
+            messages.error(request, mark_safe((ViewInteractors.FormErrorAsMessage.call(form=form)).message))
+            return self.form_invalid(form)
 
 
 class SfdcEnvCreateView(generic.FormView):
@@ -653,13 +656,13 @@ class DeprecateFieldsView(generic.FormView):
                 else:
                     _return = redirect('main:job-list')
             else:
-                message = "Submitted form contains error. Please review it."
+                message = ViewInteractors.FormErrorAsMessage.call(form=form).message
                 flash_type = messages.ERROR
                 _return = render(request, 'dataflow-manager/deprecate-fields/form.html', {'form': form})
         except Exception as e:
             message = mark_safe(traceback.format_exc())
             flash_type = messages.ERROR
-            _return = redirect("main:deprecate-fields")
+            _return = self.form_invalid(form)
 
         messages.add_message(request, flash_type, mark_safe(message))
         return _return
@@ -676,6 +679,12 @@ class ViewDeprecatedFieldsView(generic.ListView):
 
     def get_queryset(self):
         days = self.request.GET.get('days', '30') if 'days' in self.request.GET.keys() else '30'
+        try:
+            from main.validators.form_validators import xss_absent_validator
+            xss_absent_validator(days)
+        except Exception as e:
+            messages.error(self.request, mark_safe(f"Field <code><strong>Days</strong></code> has validation error: {str(e)}"))
+            days = None
         days = days if days else '30'
         today = datetime.datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
         sql_days = (today - datetime.timedelta(days=int(days))).astimezone()

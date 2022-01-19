@@ -120,19 +120,19 @@ class SalesforceEnvironment(models.Model):
 
     _HEADER = {'Authorization': "Bearer {{access_token}}", 'Content-Type': "application/json"}
 
-    client_key = models.CharField(max_length=128, help_text='', null=False, blank=False, default='')
-    client_secret = models.CharField(max_length=128, help_text='', null=False, blank=False, default='')
-    client_username = models.CharField(max_length=128, help_text='', null=False, blank=True, default='')
-    client_password = models.CharField(max_length=128, help_text='', null=False, blank=False, default='')
+    client_key = models.CharField(max_length=128, help_text='', null=False, blank=False, default='', validators=[xss_absent_validator])
+    client_secret = models.CharField(max_length=128, help_text='', null=False, blank=False, default='', validators=[xss_absent_validator])
+    client_username = models.CharField(max_length=128, help_text='', null=False, blank=True, default='', validators=[xss_absent_validator])
+    client_password = models.CharField(max_length=128, help_text='', null=False, blank=False, default='', validators=[xss_absent_validator])
     environment = models.CharField(max_length=28, help_text='', null=False, blank=False, choices=_ENVIRONMENT_CHOICE,
                                    default='https://test.salesforce.com')
-    name = models.CharField(max_length=128, help_text='', null=False, blank=False, default='')
+    name = models.CharField(max_length=128, help_text='', null=False, blank=False, default='', validators=[xss_absent_validator])
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    instance_url = models.CharField(max_length=256, help_text='', default='', null=True, blank=True)
+    instance_url = models.CharField(max_length=256, help_text='', default='', null=True, blank=True, validators=[xss_absent_validator])
     oauth_flow_stage = models.IntegerField(default=0, blank=True, null=True)
-    oauth_authorization_code = models.CharField(max_length=256, help_text='', default='', null=True, blank=True)
-    oauth_access_token = models.CharField(max_length=256, help_text='', default='', null=True, blank=True)
+    oauth_authorization_code = models.CharField(max_length=256, help_text='', default='', null=True, blank=True, validators=[xss_absent_validator])
+    oauth_access_token = models.CharField(max_length=256, help_text='', default='', null=True, blank=True, validators=[xss_absent_validator])
     oauth_access_token_created_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:

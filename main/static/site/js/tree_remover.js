@@ -2,7 +2,7 @@ $(document).ready(function(evt) {
     extract_chkbx_evtmgr($('#id_extract').get(0));
 
     $('#id_extract').change(function() {
-        extract_chkbx_evtmgr($(this).get(0))
+        extract_chkbx_evtmgr($(this).get(0));
     });
 });
 
