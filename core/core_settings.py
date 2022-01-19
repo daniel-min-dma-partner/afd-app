@@ -115,6 +115,8 @@ TEMPLATES = [
     },
 ]
 
+SESSION_COOKIE_HTTPONLY = True
+
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(" ")
 DEBUG = int(os.environ.get("DEBUG", default=1))
 SECRET_KEY = env.str('SECRET_KEY', default='django-insecure-wi5%3e1_fpxq+fm8sowdg0^(0vz*qv0oryh3ww+adav$+v$e4%')
