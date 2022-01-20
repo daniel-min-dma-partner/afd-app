@@ -1,5 +1,6 @@
 import json
 import os.path
+import re
 from typing import List
 from typing import Union
 
@@ -114,3 +115,14 @@ def truncate(value: str, length: int = 64):
     initial_length = len(value)
     value = value[:length]
     return value + ("..." if len(value) != initial_length else "")
+
+
+@register.filter
+def ban_xss(value: str):
+    if value:
+        script_tag_1_p = fr'<script.*?>'
+        script_tag_2_p = fr'</script>'
+        value = re.sub(script_tag_1_p, '<code><strong>', value)
+        value = re.sub(script_tag_2_p, '</strong></code>', value)
+
+    return value
