@@ -73,8 +73,8 @@ class Profile(models.Model):
         {"id": 'str', 'text': "String"},
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    key = models.CharField(max_length=128, help_text='', null=False, blank=False)
-    value = models.CharField(max_length=128, help_text='', null=False, blank=False)
+    key = models.CharField(max_length=128, help_text='', null=False, blank=False, validators=[xss_absent_validator])
+    value = models.CharField(max_length=128, help_text='', null=False, blank=False, validators=[xss_absent_validator])
     type = models.CharField(max_length=4, help_text='', null=False, blank=False, choices=_TYPE_CHOICE, default='str')
 
     class Meta:
