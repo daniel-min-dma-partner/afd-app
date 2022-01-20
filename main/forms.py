@@ -12,6 +12,7 @@ from tinymce.widgets import TinyMCE
 from libs.tcrm_automation.libs.json_libs import VALID_NODE_ACTIONS
 from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel as DFCompModel, Profile, Release, \
     Parameter
+from main.validators.common_validators import xss_absent_validator
 
 
 class LoginForm(AuthenticationForm):

@@ -12,6 +12,7 @@ from jsoneditor.fields.django_jsonfield import JSONField
 from tinymce.models import HTMLField
 
 from core.settings import MEDIA_ROOT
+from main.validators.model_validators import xss_absent_validator
 from .modelfields import CompressedJSONField
 
 
