@@ -70,6 +70,7 @@ class UploadDataflowInteractorNoAnt(Interactor):
         job = self.context.job  # Receive Job object
         user = self.context.user
         model = self.context.env
+        comment = self.context.comment
         filemodel = self.context.filemodel
         remote_df_name = self.context.remote_df_name
         original_dataflow = {}
@@ -137,7 +138,7 @@ class UploadDataflowInteractorNoAnt(Interactor):
                     uploading_dataflow = definition
                     data = {
                         "definition": definition,
-                        "historyLabel": f"{user.first_name + (' ' + user.last_name) if user.last_name else ''} through TCRM - Automation Web Upload"
+                        "historyLabel": f"{user.first_name + (' ' + user.last_name) if user.last_name else ''} through TCRM - Automation Web Upload: {comment}"
                     }
 
             # Initiates upload request

@@ -239,6 +239,13 @@ class DataflowDownloadForm(forms.Form):
 class DataflowUploadForm(forms.ModelForm):
     dataflow_selector = forms.CharField(required=False)
     env_selector = forms.IntegerField(required=False)
+    comment = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control',
+                   'placeholder': 'Leave a comment'}
+        ),
+        label="Comment",
+        required=True)
 
     class Meta:
         model = FileModel

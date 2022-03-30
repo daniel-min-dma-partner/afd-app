@@ -233,7 +233,7 @@ class SlackIntegrationView(generic.FormView):
                 "case-manager-name": form.cleaned_data['case_manager_name'],
                 "case-contact": form.cleaned_data['case_contact'],
                 "submitter": request.user.first_name + " " + request.user.last_name
-                             if len(request.user.first_name+request.user.last_name) else ""
+                if len(request.user.first_name + request.user.last_name) else ""
             }
 
             if request.user.is_authenticated and request.user.first_name:
@@ -326,7 +326,8 @@ class SfdcEnvCreateView(generic.FormView):
                 sfdc_env.user = request.user
                 sfdc_env.save()
 
-                messages.success(request, mark_safe(f"New <code>{sfdc_env.name}</code> connection created successfully."))
+                messages.success(request,
+                                 mark_safe(f"New <code>{sfdc_env.name}</code> connection created successfully."))
                 return redirect("main:sfdc-env-list")
             except Exception as e:
                 messages.error(request, e)
@@ -448,7 +449,7 @@ class DownloadDataflowView(generic.FormView):
                          'job-message': f"Download {_context_aware_msg} from {env.name}"}
                 ctx = JobsInteractor.call(data=_data, function="download_dataflow", scheduler=sched)
                 messages.success(request, mark_safe(f"Downloadig dataflow{'s' if len(dataflows) > 0 else ''} from "
-                                          f"<code>{env.name}</code> started. Check the notifications later."))
+                                                    f"<code>{env.name}</code> started. Check the notifications later."))
 
                 return redirect("main:job-list")
             except Exception as e:
@@ -485,12 +486,18 @@ class UploadDataflowView(PermissionRequiredMixin, generic.FormView):
                 if not remote_df_name:
                     raise KeyError("Missing required field <code>Remote dataflow name</code>.")
 
-                _data = {'env': env, 'remote_df_name': remote_df_name, 'user': request.user, 'filemodel': filemodel,
-                         'job-message': f"Upload <code><strong>{remote_df_name}</strong></code> dataflow to"
-                                        f" {env.name}"}
+                _data = {
+                    'env': env,
+                    'remote_df_name': remote_df_name,
+                    'user': request.user,
+                    'filemodel': filemodel,
+                    'job-message': f"Upload <code><strong>{remote_df_name}</strong></code> dataflow to {env.name}",
+                    'comment': form.cleaned_data['comment']
+                }
                 ctx = JobsInteractor.call(data=_data, function="upload_dataflow", scheduler=sched)
             else:
                 messages.error(request, form.errors.as_data)
+                return self.form_invalid(form)
         except Exception as e:
             messages.error(request, mark_safe(e))
 
@@ -605,7 +612,8 @@ class DeprecateFieldsView(generic.FormView):
                             if obj_api_name not in objects_fields.keys():
                                 objects_fields[obj_api_name] = []
                             objects_fields[obj_api_name].append(field_api_name)
-                        objects_fields = {obj: ','.join([field for field in fields]) for obj, fields in objects_fields.items()}
+                        objects_fields = {obj: ','.join([field for field in fields]) for obj, fields in
+                                          objects_fields.items()}
 
                         self.objects = []
                         self.fields = []
@@ -680,7 +688,8 @@ class ViewDeprecatedFieldsView(generic.ListView):
         today = datetime.datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
         sql_days = (today - datetime.timedelta(days=int(days))).astimezone()
 
-        lst = DataflowDeprecation.objects.filter(user=self.request.user, created_at__gt=sql_days).order_by('-created_at')
+        lst = DataflowDeprecation.objects.filter(user=self.request.user, created_at__gt=sql_days).order_by(
+            '-created_at')
         return lst
 
 
@@ -858,8 +867,8 @@ class JobListView(generic.ListView):
         days = days if days else '1'
         today = datetime.datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
         sql_days = (today - datetime.timedelta(days=int(days))).astimezone()
-        queryset = Job.objects\
-            .filter(user_id=self.request.user.pk, started_at__gt=sql_days)\
+        queryset = Job.objects \
+            .filter(user_id=self.request.user.pk, started_at__gt=sql_days) \
             .order_by('-started_at', '-pk')
         return queryset
 
@@ -1381,7 +1390,8 @@ def profile_get_type_list(request):
         search = request.GET.get('search')
 
         if search:
-            payload['results'] = [item for item in payload['results'] if search.strip().lower() in item['text'].strip().lower()]
+            payload['results'] = [item for item in payload['results'] if
+                                  search.strip().lower() in item['text'].strip().lower()]
 
         status = 200
         error = None
