@@ -1,6 +1,7 @@
 import copy
 import json
 import os.path
+import traceback
 from typing import List
 
 from django.conf import settings
@@ -62,6 +63,34 @@ class DataflowInteractors:
                 self.context.deprecator = deprecator
             except Exception as e:
                 self.context.exception = e
+
+    class CommonDatasetLocator(Interactor):
+        def run(self):
+            try:
+                dataflows = self.context.dataflows
+                filenames = self.context.filenames
+                dataset_name = self.context.dataset_name
+
+                detected_dataflows = []
+                for i in range(len(dataflows)):
+                    df = dataflows[i]
+                    filename = filenames[i]
+
+                    digest_nodes = get_nodes_by_action(df=df,
+                                                       action=['sfdcDigest', 'digest', 'edgemart'])
+                    register_nodes = list(get_registers(nodes=digest_nodes, df=df).keys())
+                    register_nodes = list(filter(
+                        lambda nn: dataset_name in [df[nn]['parameters']['name'], df[nn]['parameters']['alias']],
+                        register_nodes
+                    ))
+
+                    print(len(register_nodes))
+                    if len(register_nodes):
+                        detected_dataflows.append(filename.replace('.json', ''))
+
+                self.context.detected_dataflows = detected_dataflows
+            except Exception as e:
+                self.context.exception = traceback.format_exc()
 
 
 class FileSystemInteractors:

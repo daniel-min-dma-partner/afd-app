@@ -1,5 +1,6 @@
 import datetime
 import io
+import json
 import json as js
 import os.path
 import traceback
@@ -12,6 +13,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.files.base import ContentFile
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
 from django.views import View, generic
 from django.views.decorators.csrf import csrf_exempt
@@ -1278,6 +1280,37 @@ class MergeDeprecatorView(generic.FormView):
         except Exception as e:
             messages.error(request, mark_safe(str(e)))
             return redirect("main:merge-deprecator")
+
+
+class LocateCommonDataset(generic.FormView):
+    template_name = "dataflow-manager/inspect/form.html"
+    form_class = forms.LocateCommonDatasetForm
+    success_url = reverse_lazy("main:locate-common-dataset")
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            dataflows = []
+            filenames = []
+            dataset_name = form.cleaned_data['dataset_name']
+
+            for file in request.FILES.getlist('dataflows'):
+                dataflows.append(json.load(file))
+                filenames.append(file.name)
+
+            ctx = DataflowInteractors.CommonDatasetLocator.call(dataflows=dataflows, filenames=filenames,
+                                                                dataset_name=dataset_name)
+
+            if ctx.exception:
+                messages.error(request, mark_safe(ctx.exception))
+                return self.form_invalid(form)
+            else:
+                messages.success(request, mark_safe('<br/>'.join(ctx.detected_dataflows)))
+                return self.form_valid(form)
 
 
 def list_nodes_from_df(request):

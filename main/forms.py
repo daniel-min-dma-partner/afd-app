@@ -400,3 +400,21 @@ class ExtractNodeByActionForm(forms.Form):
 
 class DeprecatorMergeForm(forms.Form):
     files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+
+
+class LocateCommonDatasetForm(forms.Form):
+    dataflows = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control', 'multiple': True}),
+                                required=False,
+                                label="Dataflows")
+    dataset_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True,
+                                   label="Dataset Name")
+    detected = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}), required=False,
+                               label="Detected Dataflows", disabled=True)
+
+    def clean_dataset_name(self):
+        dataset_name = self.cleaned_data.get('dataset_name').strip()
+        if not dataset_name:
+            self.fields['dataset_name'].widget.attrs['class'] = f'form-control is-invalid'
+            raise ValidationError("Please provide a dataset name")
+
+        return dataset_name

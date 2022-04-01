@@ -39,6 +39,7 @@
     {% url 'main:upload-dataflow' as url_up_df %}
     {% url 'main:view-deprecations' as url_view_dp %}
     {% url 'main:view-upload-history' as url_upl_hist %}
+    {% url 'main:locate-common-dataset' as url_locate_ds %}
     <a class="nav-link{% if 'dataflow-manager' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse"
        data-target="#collapse2"
        aria-expanded="{% if 'dataflow-manager' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapse2">
@@ -70,10 +71,13 @@
                href="{{ url_list_datasets }}">List datasets</a>
             <a class="collapse-item{% if cur_url == url_reg_loc %} active{% endif %}"
                href="{{ url_reg_loc }}">Locate <code><strong>sfdcRegister</strong></code></a>
+            <a class="collapse-item{% if cur_url == url_locate_ds %} active{% endif %}"
+               href="{{ url_locate_ds }}">Locate Common Dataset</a>
 
             <!-- Generation: Operations which creates necessary files useful for field deprecation process. -->
             <h6 class="collapse-header">Generation:</h6>
-            <a class="collapse-item{% if cur_url == url_extract_node %} active{% endif %}" href="{{ url_extract_node }}">
+            <a class="collapse-item{% if cur_url == url_extract_node %} active{% endif %}"
+               href="{{ url_extract_node }}">
                 Node Extractor
             </a>
             <a class="collapse-item{% if cur_url == url_digen_df %} active{% endif %}" href="{{ url_digen_df }}">

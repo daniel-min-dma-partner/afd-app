@@ -1,0 +1,17 @@
+{% extends 'sb-base/base.html' %}
+
+{% load static %}
+
+{% block title %}Locate common Dataset{% endblock title %}
+{% block page-header %}Tableau CRM Dataflows / Visualization{% endblock page-header %}
+
+
+{% block header-scripts %}
+{% endblock header-scripts %}
+
+{% block page-content %}
+    {% url 'main:locate-common-dataset' as post_url %}
+    {% with fileupload='enctype="multipart/form-data"' title='Locate common dataset' %}
+        {% include '_card-form.html' with action=post_url title=title fileupload=fileupload %}
+    {% endwith %}
+{% endblock %}
