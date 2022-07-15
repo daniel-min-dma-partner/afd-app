@@ -8,7 +8,7 @@ from django.conf import settings
 
 from libs.interactor.interactor import Interactor
 from libs.tcrm_automation.libs.deprecation_libs import get_registers
-from libs.tcrm_automation.libs.json_libs import get_nodes_by_action
+from libs.tcrm_automation.libs.json_libs import get_nodes_by_action, node_is
 from main.models import DataflowDeprecation, DeprecationDetails
 
 
@@ -61,6 +61,49 @@ class DataflowInteractors:
                     fields.sort()
                 deprecator = {key: ','.join([field for field in fields]) for key, fields in deprecator.items()}
                 self.context.deprecator = deprecator
+            except Exception as e:
+                self.context.exception = e
+
+    class ComplementFromRegister(Interactor):
+        def run(self):
+            try:
+                registers = self.context.registers
+                dataflow = self.context.dataflow
+
+                _copy_df = copy.deepcopy(dataflow)
+                for register_name in registers.keys():
+                    del _copy_df[register_name]
+                dataflow = copy.deepcopy(_copy_df)
+
+                while True:
+                    deleted = False
+                    names = _copy_df.keys()  # names: node names or 1st-lvl keys in the df definition
+                    for name in names:
+                        if 'deleted' not in _copy_df[name].keys() and \
+                                not node_is(action=['digest', 'sfdcDigest', 'sfdcRegister'], node=_copy_df[name]):
+                            df_as_string = json.dumps(dataflow)
+                            if df_as_string.count(f"\"{name}\"") == 1:
+                                del dataflow[name]
+                                _copy_df[name]['deleted'] = 1
+                                deleted = True
+                    if not deleted:
+                        break
+
+                self.context.complement = dataflow
+            except Exception as e:
+                self.context.exception = e
+
+    class GetRegistersFromDatasetNameList(Interactor):
+        def run(self):
+            try:
+                dataflow = self.context.dataflow
+                datasets = self.context.datasets
+                registers = {
+                    nodename: {'dataset-name': node['parameters']['name'], 'dataset-alias': node['parameters']['alias']}
+                    for nodename, node in dataflow.items()
+                    if node_is(action='sfdcRegister', node=node) and node['parameters']['alias'] in datasets
+                }
+                self.context.registers = registers
             except Exception as e:
                 self.context.exception = e
 

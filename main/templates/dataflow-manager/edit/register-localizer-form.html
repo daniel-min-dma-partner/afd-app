@@ -27,27 +27,58 @@
                         {% csrf_token %}
 
                         <div class="form-row">
-                            <div class="form-group col-6">
+                            <div class="form-group col-12">
                                 <label for="id_{{ form.dataflow.name }}" class="form-label">
                                     Select a Dataflow
                                 </label>
                                 <input class="form-control" type="file" name="{{ form.dataflow.name }}"
                                        id="id_{{ form.dataflow.name }}">
                             </div>
-
-                            <div class="form-group col-6">
-                                <label for="id-node">Node name</label>
-                                <select id="id-node" class="js-example-basic-single" name="node"
-                                        style="width:100%;" multiple>
-                                </select>
-                            </div>
                         </div>
 
                         <div class="form-row">
-                            <div class="form-group col-12">
-                                <div id="json-holder" style="width: 100%; height: 500px;"></div>
+                            <div class="form-group col-4">
+                                <div class="form-row">
+                                    <div class="form-group col-12">
+                                        <label for="id-node">Select a node</label>
+                                        <select id="id-node" class="js-example-basic-single" name="node"
+                                                style="width:100%;" multiple>
+                                        </select>
+                                    </div>
 
-                                <textarea name="registers" id="id_registers" hidden>{}</textarea>
+                                    <div class="form-group col-12">
+                                        <label for="id-datasets">List dataset names</label>
+                                        <textarea name="datasets" id="id-datasets" cols="30" rows="10"></textarea>
+                                    </div>
+
+                                    <div class="form-group col-12 ml-1">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox"
+                                                   id="id-complement"
+                                                   name="complement">
+                                            <label for="id-complement">Complement?</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-8">
+                                <div class="form-row">
+                                    <div class="form-group col-12">
+                                        <label for="json-holder">Output</label>
+                                        <div id="json-holder" style="width: 100%; height: 500px;"></div>
+                                        <textarea name="registers" id="id_registers" hidden>{}</textarea>
+                                    </div>
+
+                                    <div class="form-group col-12">
+                                        <button class="btn btn-success btn-icon-split float-right mr-1 clipboard">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-clipboard-check"></i>
+                                            </span>
+                                            <span class="text">Copy to Clipboard</span>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </form>

@@ -390,6 +390,8 @@ class DataflowEditForm(forms.Form):
 class RegisterNodeForm(forms.Form):
     dataflow = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
     node = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
+    complement = forms.BooleanField(required=False)
+    datasets = forms.CharField(required=False)
 
 
 class ExtractNodeByActionForm(forms.Form):
