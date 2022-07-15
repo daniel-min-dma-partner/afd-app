@@ -23,6 +23,10 @@ class SFDCAuthenticateUserInteractor(Interactor):
         exception = None
 
         try:
+            print(env_model.is_logged_out(), mode)
+            if env_model.is_logged_out() and mode == 'logout':
+                raise Exception(f"<code>{env_model.name}</code> is already logged out.")
+
             resource = '/services/oauth2/authorize' if mode == 'login' else '/services/oauth2/revoke'
 
             url = env_model.environment + resource

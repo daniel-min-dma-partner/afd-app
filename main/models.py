@@ -186,6 +186,9 @@ class SalesforceEnvironment(models.Model):
         inv_map = {key: value for (key, value) in self._ENVIRONMENT_CHOICE}
         return inv_map[self.environment]
 
+    def is_logged_out(self):
+        return self.oauth_flow_stage == self._OAUTH_FLOW_STAGES[self.STATUS_LOGOUT]
+
 
 class Notifications(models.Model):
     _STATUS_CHOICE = (
