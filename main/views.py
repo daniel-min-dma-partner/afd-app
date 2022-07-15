@@ -275,7 +275,8 @@ class SfdcEnvListView(generic.ListView):
     template_name = 'sfdc/env/index.html'
 
     def get_queryset(self):
-        obj = SfdcEnv.objects.filter(user_id=self.request.user.pk)
+        obj = SfdcEnv.objects.filter(user_id=self.request.user.pk).order_by('oauth_access_token_created_date',
+                                                                            '-created_at', 'name')
         return obj
 
 

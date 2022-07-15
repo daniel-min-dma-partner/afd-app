@@ -23,7 +23,7 @@ class SFDCAuthenticateUserInteractor(Interactor):
         exception = None
 
         try:
-            print(env_model.is_logged_out(), mode)
+            # Attempt to logout an already-logged-out env
             if env_model.is_logged_out() and mode == 'logout':
                 raise Exception(f"<code>{env_model.name}</code> is already logged out.")
 
@@ -40,15 +40,16 @@ class SFDCAuthenticateUserInteractor(Interactor):
                 "token": env_model.oauth_access_token
             }
 
-            url_parse = parse.urlparse(url)
-            query = url_parse.query
-            url_dict = dict(parse.parse_qsl(query))
-            url_dict.update(parms)
-            url_new_query = parse.urlencode(url_dict)
-            url_parse = url_parse._replace(query=url_new_query)
-            new_url = parse.urlunparse(url_parse)
+            # url_parse = parse.urlparse(url)
+            # query = url_parse.query
+            # url_dict = dict(parse.parse_qsl(query))
+            # url_dict.update(parms)
+            # url_new_query = parse.urlencode(url_dict)
+            # url_parse = url_parse._replace(query=url_new_query)
+            # new_url = parse.urlunparse(url_parse)
 
-            response = requests.post(new_url) if mode == 'login' else requests.get(new_url)
+            http_action = requests.post if mode == 'login' else requests.get
+            response = http_action(url, params=parms)
 
             if mode == 'login' and response.status_code == 200:
                 self.context.authorization_response = response

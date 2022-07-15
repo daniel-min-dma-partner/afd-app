@@ -2,9 +2,10 @@
     <thead>
     <tr>
         <th>Name</th>
-        <th>Instance</th>
         <th>Oauth Flow Status</th>
-        <th>Access Token Created Date</th>
+        <th>Created At</th>
+        <th>Access Token Received Date</th>
+        <th>Instance</th>
         <th class="text-center d-none">Copy to Clipboard</th>
         <th class="text-right">Actions</th>
     </tr>
@@ -13,11 +14,13 @@
     {% for env in env_list %}
         <tr>
             <td>{{ env.name }}<input type="hidden" value="{{ env.pk }}"></td>
-            <td style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:16px;">
-                <a href="{{ env.instance_url }}" target="_blank">{{ env.instance_url }}</a>
-            </td>
             <td>{{ env.get_oauth_flow_stage_string }}</td>
-            <td>{{ env.oauth_access_token_created_date }}</td>
+            <td>{{ env.created_at }}</td>
+            <td>{{ env.oauth_access_token_created_date|default_if_none:"" }}</td>
+            <td style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:16px;">
+                <a href="{{ env.instance_url }}" target="_blank"
+                   title="{{ env.instance_url }}">{{ env.instance_url }}</a>
+            </td>
             <td class="text-center d-none">
                 <a href="#" id="id_key_{{ env.pk }}" class="btn btn-info btn-icon-split btn-sm btn-show-diff">
                 <span class="icon text-white-50">

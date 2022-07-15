@@ -134,6 +134,7 @@ class SalesforceEnvironment(models.Model):
     oauth_authorization_code = models.CharField(max_length=256, help_text='', default='', null=True, blank=True)
     oauth_access_token = models.CharField(max_length=256, help_text='', default='', null=True, blank=True)
     oauth_access_token_created_date = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
     class Meta:
         constraints = [
