@@ -16,22 +16,22 @@ def clear_session(session):
             del session[key]
 
 
-class OAuthLoginInteractor(Interactor):
+class SFDCAuthenticateUserInteractor(Interactor):
     def run(self):
         env_model: Env = self.context.model
         mode = self.context.mode
         exception = None
 
         try:
-            resource = '/services/oauth2/token' if mode == 'login' else '/services/oauth2/revoke'
+            resource = '/services/oauth2/authorize' if mode == 'login' else '/services/oauth2/revoke'
 
             url = env_model.environment + resource
             parms = {
-                "grant_type": "password",
+                "response_type": "code",
                 "client_id": env_model.client_key,
-                "client_secret": env_model.client_secret,
-                "username": env_model.client_username,
-                "password": env_model.client_password
+                "redirect_uri": "http://localhost:8000/sfdc/connected-app/oauth2/callback",
+                "scope": "wave_api",
+                "state": f":{env_model.user_id}.:{env_model.pk}"
             } if mode == 'login' else {
                 "token": env_model.oauth_access_token
             }
@@ -47,13 +47,10 @@ class OAuthLoginInteractor(Interactor):
             response = requests.post(new_url) if mode == 'login' else requests.get(new_url)
 
             if mode == 'login' and response.status_code == 200:
-                response = response.json()
-                env_model.instance_url = response['instance_url']
-                env_model.set_oauth_access_token(token=response['access_token'])
-                env_model.set_oauth_flow_stage(Env.STATUS_ACCESS_TOKEN_RECEIVE)
-                # header = {'Authorization': "Bearer " + env_model.oauth_access_token, 'Content-Type': "application/json"}
+                self.context.authorization_response = response
             elif mode == 'logout' and response.status_code == 200:
                 env_model.flush_oauth_data()
+                self.context.response = None
             else:
                 raise ConnectionError(f"Response status: <code>{response.status_code}</code>: {response.text}")
         except Exception as e:
@@ -64,14 +61,15 @@ class OAuthLoginInteractor(Interactor):
             self.context.exception = exception
 
 
-class SfdcConnectWithConnectedApp(Interactor):
+class SFDCGetAccessTokenInteractor(Interactor):
     """
     Checks the status of the connection with SF Connected App.
 
     """
 
     def run(self):
-        _message = ""
+        _message = "Access Token Request Process not executed. Contact the administrator."
+        response_status_code = 500
         env_obj = self.context.env_object
 
         try:
@@ -103,7 +101,7 @@ class SfdcConnectWithConnectedApp(Interactor):
                 del self.context.env_object
                 self.context.env_object = env_obj
 
-                _message = f"Authentication Succeeded using '{env_obj.name}' Environment."
+                _message = f"<code>LOGIN</code> performed successfully"
         except Exception as e:
             _message = str(e)
 

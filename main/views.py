@@ -37,7 +37,7 @@ from .interactors.interactors import *
 from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.response_interactor import ZipFileResponseInteractor, JsonFileResponseInteractor, \
     UploadedDataflowToZipResponse
-from .interactors.sfdc_connection_interactor import OAuthLoginInteractor, SfdcConnectWithConnectedApp
+from .interactors.sfdc_connection_interactor import SFDCAuthenticateUserInteractor, SFDCGetAccessTokenInteractor
 from .interactors.slack_targetlist_interactor import SlackTarListInteractor
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.wdf_manager_interactor import *
@@ -355,6 +355,7 @@ class SfdcConnectView(View):
         action = kwargs['action']
         pk = kwargs['pk']
         uri = None
+
         if action == "login":
             uri = '/services/oauth2/authorize'
         elif action == 'logout':
@@ -365,13 +366,15 @@ class SfdcConnectView(View):
         else:
             try:
                 env = SfdcEnv.objects.get(user=request.user, pk=pk)
-                ctx = OAuthLoginInteractor.call(model=env, mode=action)
+                ctx = SFDCAuthenticateUserInteractor.call(model=env, mode=action)
 
                 if ctx.exception:
                     raise ctx.exception
                 else:
-                    messages.success(request, mark_safe(f"<code>{action.upper()}</code> performed successfully."))
+                    if action == 'login':
+                        return HttpResponse(ctx.authorization_response)
 
+                    messages.success(request, mark_safe(f"<code>{action.upper()}</code> performed successfully."))
             except Exception as e:
                 messages.warning(request, mark_safe(e))
 
@@ -385,19 +388,21 @@ class SfdcConnectedAppOauth2Callback(APIView):
         """
         Return a list of all users.
         """
+
         callback_state = request.GET.get('state')
         user_id = callback_state.split('.')[0].split(':')[1]
         env_id = callback_state.split('.')[1].split(':')[1]
-        env = SfdcEnv.objects.get(user_id=user_id, pk=env_id,
-                                  oauth_flow_stage=SfdcEnv.oauth_flow_stages()["AUTHORIZATION_CODE_REQUEST"])
+        env = SfdcEnv.objects.get(user_id=user_id, pk=env_id)
 
         if 'code' in request.GET:
+            # Save the received Authorization-Code
             env.set_oauth_flow_stage(stage="AUTHORIZATION_CODE_RECEIVE")
             env.set_oauth_authorization_code(code=request.GET.get('code'))
             env.save()
             env.refresh_from_db()
 
-            ctx = SfdcConnectWithConnectedApp.call(env_object=env)
+            # Request Access-Token
+            ctx = SFDCGetAccessTokenInteractor.call(env_object=env)
             response_status = ctx.response_status
 
             if response_status != 200:
@@ -405,11 +410,14 @@ class SfdcConnectedAppOauth2Callback(APIView):
                 env.flush_oauth_data()
                 env.save()
             else:
-                messages.success(request, ctx.message)
+                messages.success(request, mark_safe(ctx.message))
 
-            return redirect("main:sfdc-env-list")
+        elif 'error' in request.GET and request.GET['error'] == "access_denied":
+            env.flush_oauth_data()
+            env.save()
+            messages.warning(request, request.GET['error_description'])
 
-        return Response("'code' not received.")
+        return redirect("main:sfdc-env-list")
 
 
 class DownloadDataflowView(generic.FormView):
