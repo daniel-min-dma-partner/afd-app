@@ -1341,8 +1341,7 @@ class LocateCommonDataset(generic.FormView):
                 messages.success(request, mark_safe('<br/>'.join(ctx.detected_dataflows)))
                 context = {
                     'form': form,
-                    'detected': '\n'.join(ctx.detected_dataflows),
-                    'dataset_name': dataset_name
+                    'detected': '\n'.join(ctx.detected_dataflows)
                 }
                 return render(request, self.template_name, context)
         else:
