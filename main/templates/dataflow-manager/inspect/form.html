@@ -11,7 +11,55 @@
 
 {% block page-content %}
     {% url 'main:locate-common-dataset' as post_url %}
-    {% with fileupload='enctype="multipart/form-data"' title='Locate common dataset' %}
-        {% include '_card-form.html' with action=post_url title=title fileupload=fileupload %}
-    {% endwith %}
+    <div class="row">
+        <div class="col-xl-12 col-lg-7">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Dataflow Fields deprecation form</h6>
+                </div>
+
+                <div class="card-body">
+                    <form method="POST" action="{% url 'main:locate-common-dataset' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <div class="mb-3">
+                                    {{ form.dataflows.label_tag }}
+                                    {{ form.dataflows }}
+                                    {% if form.dataflows.errors %}
+                                        <div class="text-danger">
+                                            {% for error in form.dataflows.errors %}
+                                                {{ error }}<br/>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                {{ form.dataset_name.label_tag }}
+                                {{ form.dataset_name }}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-7">
+                                <div class="mb-3">
+                                    {{ form.detected.label_tag }}
+                                    <textarea class="form-control" name="detected" id="id_detected" rows="3"
+                                              disabled>{{ detected|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% include '_submit-button.html' %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

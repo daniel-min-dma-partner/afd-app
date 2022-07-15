@@ -1288,17 +1288,21 @@ class LocateCommonDataset(generic.FormView):
     success_url = reverse_lazy("main:locate-common-dataset")
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class(initial=self.initial)
+        form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
+        files = request.FILES.getlist('dataflows')
+        if not len(files):
+            form.add_error('dataflows', "The field is required")
+
         if form.is_valid():
             dataflows = []
             filenames = []
             dataset_name = form.cleaned_data['dataset_name']
 
-            for file in request.FILES.getlist('dataflows'):
+            for file in files:
                 dataflows.append(json.load(file))
                 filenames.append(file.name)
 
@@ -1310,7 +1314,15 @@ class LocateCommonDataset(generic.FormView):
                 return self.form_invalid(form)
             else:
                 messages.success(request, mark_safe('<br/>'.join(ctx.detected_dataflows)))
-                return self.form_valid(form)
+                context = {
+                    'form': form,
+                    'detected': '\n'.join(ctx.detected_dataflows),
+                    'dataset_name': dataset_name
+                }
+                return render(request, self.template_name, context)
+        else:
+            messages.error(request, 'Check the errors')
+            return self.form_invalid(form)
 
 
 def list_nodes_from_df(request):

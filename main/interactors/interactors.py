@@ -84,7 +84,6 @@ class DataflowInteractors:
                         register_nodes
                     ))
 
-                    print(len(register_nodes))
                     if len(register_nodes):
                         detected_dataflows.append(filename.replace('.json', ''))
 

@@ -408,7 +408,7 @@ class LocateCommonDatasetForm(forms.Form):
                                 label="Dataflows")
     dataset_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True,
                                    label="Dataset Name")
-    detected = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}), required=False,
+    detected = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}), required=False,
                                label="Detected Dataflows", disabled=True)
 
     def clean_dataset_name(self):
