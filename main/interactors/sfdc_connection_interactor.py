@@ -88,7 +88,7 @@ class SFDCGetAccessTokenInteractor(Interactor):
                   f"code={env_obj.oauth_authorization_code}&" \
                   f"redirect_uri=https://localhost:8080/sfdc/connected-app/oauth2/callback&" \
                   f"client_secret={env_obj.client_secret}"
-            response = requests.post(url)
+            response = requests.post(url, headers=env_obj.get_header())
             response_status_code = response.status_code
 
             if response.text:
