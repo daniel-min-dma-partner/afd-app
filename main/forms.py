@@ -103,14 +103,22 @@ class SfdcEnvCreateForm(forms.ModelForm):
         ]
 
     def clean_custom_domain(self):
-        return self.cleaned_data['custom_domain'].strip()
+        if self.data.get('custom_domain'):
+            return self.data.get('custom_domain').strip()
+        return ''
 
     def clean_environment(self):
-        return self.data.get('custom_domain') if self.data.get('custom_domain') \
-            else self.cleaned_data['environment']
+        if self.clean_custom_domain():
+            return self.clean_custom_domain()
+
+        return self.cleaned_data['environment'].strip()
 
     def clean_name(self):
         return ''.join(e for e in self.cleaned_data['name'].strip() if e not in self._FORBIDDEN_SYMBOLS) \
+            .replace(' ', "_")
+
+    def clean_client_username(self):
+        return ''.join(e for e in self.cleaned_data['client_username'].strip() if e not in self._FORBIDDEN_SYMBOLS) \
             .replace(' ', "_")
 
     def save(self, commit=True):
