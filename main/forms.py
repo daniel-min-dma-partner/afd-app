@@ -118,8 +118,7 @@ class SfdcEnvCreateForm(forms.ModelForm):
             .replace(' ', "_")
 
     def clean_client_username(self):
-        return ''.join(e for e in self.cleaned_data['client_username'].strip() if e not in self._FORBIDDEN_SYMBOLS) \
-            .replace(' ', "_")
+        return self.cleaned_data['client_username'].strip()
 
     def save(self, commit=True):
         sfdc_env = super(SfdcEnvCreateForm, self).save(commit=False)
