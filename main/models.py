@@ -102,6 +102,7 @@ class SalesforceEnvironment(models.Model):
     _ENVIRONMENT_CHOICE = (
         ('https://test.salesforce.com', 'Sandbox'),
         ('https://login.salesforce.com', 'Production'),
+        ('https://example.com', 'Custom Domain')
     )
 
     STATUS_LOGOUT = "LOGOUT"
@@ -124,7 +125,7 @@ class SalesforceEnvironment(models.Model):
     client_secret = models.CharField(max_length=128, help_text='', null=False, blank=False, default='')
     client_username = models.CharField(max_length=128, help_text='', null=False, blank=True, default='')
     client_password = models.CharField(max_length=128, help_text='', null=False, blank=False, default='')
-    environment = models.CharField(max_length=28, help_text='', null=False, blank=False, choices=_ENVIRONMENT_CHOICE,
+    environment = models.CharField(max_length=128, help_text='', null=False, blank=False,
                                    default='https://test.salesforce.com')
     name = models.CharField(max_length=128, help_text='', null=False, blank=False, default='')
     user = models.ForeignKey(User, on_delete=models.CASCADE)

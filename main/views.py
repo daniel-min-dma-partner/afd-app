@@ -26,7 +26,7 @@ from core.settings import sched
 from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
 from main import forms
-from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
+from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, SfdcEnvCreateForm, \
     SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm, \
     DeprecateFieldsForm, SecpredToSaqlForm, ProfileForm, ReleaseForm, ParameterForm
 from main.interactors.jobs_interactor import JobsInteractor
@@ -286,6 +286,7 @@ class SfdcEnvUpdateView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
+        context['environment_choice'] = SfdcEnv.environment_choice()
         context['form'] = self.form_class(self.request.POST or None, instance=self.get_object())
         context['pk'] = self.kwargs['pk']
         return context
@@ -309,7 +310,7 @@ class SfdcEnvUpdateView(generic.TemplateView):
 
 
 class SfdcEnvCreateView(generic.FormView):
-    form_class = SfdcEnvEditForm
+    form_class = SfdcEnvCreateForm
     module = 'register'
     template_name = 'sfdc/env/create.html'
 
@@ -1653,15 +1654,21 @@ def ajax_list_dataflows(request):
 
 
 def ajax_list_envs(request):
+    error = None
+    status = None
+    payload = None
+    env = SfdcEnv.objects.filter(user=request.user.pk,
+                                 oauth_flow_stage=SfdcEnv.oauth_flow_stages()[SfdcEnv.STATUS_ACCESS_TOKEN_RECEIVE])
+
     try:
-        if SfdcEnv.objects.filter(user=request.user.pk).exists():
+        if env.exists():
             payload = {
                 "results": [
                     {
                         "id": model.pk,
                         "text": model.name
                     }
-                    for model in SfdcEnv.objects.filter(user=request.user.pk).all()
+                    for model in env.all()
                 ]
             }
 
@@ -1671,7 +1678,6 @@ def ajax_list_envs(request):
                 payload['results'] = (item for item in payload['results'] if search in item['text'])
 
             status = 200
-            error = None
         else:
             error = "No 'Environment' has been found."
             status = 400

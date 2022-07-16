@@ -2,6 +2,13 @@ import os
 
 import environ
 
+ADMINS = (
+    ('admin', 'dpark8752@gmail.com')
+)
+ADMIN_USERNAME = 'admin'
+ADMIN_EMAIL = 'dpark8752@gmail.com'
+ADMIN_INITIAL_PASSWORD = 'admin'
+
 env = environ.Env()
 
 AUTH_PASSWORD_VALIDATORS = [

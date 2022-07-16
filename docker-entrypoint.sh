@@ -9,8 +9,8 @@ while ! python3 manage.py migrate --no-input 2>&1; do
 done
 
 # Wait for few minute and run db fixture load
-while ! python3 manage.py loaddata /home/app/web/main/fixtures/initial-data-2.json  2>&1; do
-   echo "Fixture is in progress status"
+while ! python3 manage.py initadmin  2>&1; do
+   echo "Admin Creation is in progress status"
    sleep 3
 done
 
@@ -22,7 +22,7 @@ done
 
 # Wait for few minute and run db fixture load
 while ! python3 manage.py collectstatic --no-input --clear  2>&1; do
-   echo "Fixture is in progress status"
+   echo "Static Files Collection is in progress status"
    sleep 3
 done
 

@@ -69,30 +69,61 @@ class RegisterUserForm(forms.ModelForm):
         return user
 
 
-class SfdcEnvEditForm(forms.ModelForm):
+class SfdcEnvCreateForm(forms.ModelForm):
     _FORBIDDEN_SYMBOLS = ['-', '+', '*', '$', '&']
+
+    custom_domain = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Custom Domain...'}), required=False)
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Environment Name...'}), required=True)
+    environment = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Instance URL...'}), required=True)
+    client_key = forms.CharField(label='Client Key', widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+                                 initial='password',
+                                 required=True)
+    client_secret = forms.CharField(label='Client Secret', widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+                                    initial='password',
+                                    required=True)
+    client_password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+                                      initial='password',
+                                      required=True)
+    client_username = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username...'}), required=True)
+
+    edit = forms.BooleanField(required=False, label=mark_safe("Edit?"))
 
     class Meta:
         model = SalesforceEnvironment
         exclude = {'user'}
+        fields = [
+            'client_key', 'client_secret', 'client_username', 'client_password', 'environment', 'name'
+        ]
         REQUIRED_FIELDS = [
             'client_key', 'client_secret', 'client_username', 'client_password', 'environment', 'name'
         ]
+
+    def clean_custom_domain(self):
+        return self.cleaned_data['custom_domain'].strip()
+
+    def clean_environment(self):
+        return self.data.get('custom_domain') if self.data.get('custom_domain') \
+            else self.cleaned_data['environment']
 
     def clean_name(self):
         return ''.join(e for e in self.cleaned_data['name'].strip() if e not in self._FORBIDDEN_SYMBOLS) \
             .replace(' ', "_")
 
     def save(self, commit=True):
-        sfdc_env = super(SfdcEnvEditForm, self).save(commit=False)
+        sfdc_env = super(SfdcEnvCreateForm, self).save(commit=False)
         if commit:
             sfdc_env.save()
         return sfdc_env
 
 
-# SfdcEnvEditFormset = modelformset_factory(SalesforceEnvironment,
-#                                           fields=('client_key', 'client_secret', 'client_username',
-#                                                   'client_password', 'environment', 'name'), exclude=('user',))
+class SfdcEnvEditForm(SfdcEnvCreateForm):
+    environment = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Instance URL...'}),
+        required=True)
 
 
 class TreeRemoverForm(forms.Form):

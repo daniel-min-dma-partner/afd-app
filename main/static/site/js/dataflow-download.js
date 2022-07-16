@@ -49,14 +49,12 @@ $(document).ready(function(evt) {
             type: 'GET',
             dataType: "json",
             data: function (params) {
-                var query = {
+                // Query parameters will be ?search=[term]&type=public
+                return {
                     search: params.term,
                     q: $('#id_env_selector').val(),
                     rc: $('#id_refresh')[0].checked,
-                }
-
-                // Query parameters will be ?search=[term]&type=public
-                return query;
+                };
             },
             processResults: function (response) {
                 // Transforms the top-level key of the response object from 'items' to 'results'
