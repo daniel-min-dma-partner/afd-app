@@ -12,6 +12,7 @@ from jsoneditor.fields.django_jsonfield import JSONField
 from tinymce.models import HTMLField
 
 from core.settings import MEDIA_ROOT
+from main.validators.model_validators import xss_absent_validator
 from .modelfields import CompressedJSONField
 
 
@@ -72,8 +73,8 @@ class Profile(models.Model):
         {"id": 'str', 'text': "String"},
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    key = models.CharField(max_length=128, help_text='', null=False, blank=False)
-    value = models.CharField(max_length=128, help_text='', null=False, blank=False)
+    key = models.CharField(max_length=128, help_text='', null=False, blank=False, validators=[xss_absent_validator])
+    value = models.CharField(max_length=128, help_text='', null=False, blank=False, validators=[xss_absent_validator])
     type = models.CharField(max_length=4, help_text='', null=False, blank=False, choices=_TYPE_CHOICE, default='str')
 
     class Meta:
@@ -121,19 +122,19 @@ class SalesforceEnvironment(models.Model):
 
     _HEADER = {'Authorization': "Bearer {{access_token}}", 'Content-Type': "application/json"}
 
-    client_key = models.CharField(max_length=128, help_text='', null=False, blank=False, default='')
-    client_secret = models.CharField(max_length=128, help_text='', null=False, blank=False, default='')
-    client_username = models.CharField(max_length=128, help_text='', null=False, blank=True, default='')
-    client_password = models.CharField(max_length=128, help_text='', null=False, blank=False, default='')
-    environment = models.CharField(max_length=128, help_text='', null=False, blank=False,
+    client_key = models.CharField(max_length=128, help_text='', null=False, blank=False, default='', validators=[xss_absent_validator])
+    client_secret = models.CharField(max_length=128, help_text='', null=False, blank=False, default='', validators=[xss_absent_validator])
+    client_username = models.CharField(max_length=128, help_text='', null=False, blank=True, default='', validators=[xss_absent_validator])
+    client_password = models.CharField(max_length=128, help_text='', null=False, blank=False, default='', validators=[xss_absent_validator])
+    environment = models.CharField(max_length=128, help_text='', null=False, blank=False, validators=[xss_absent_validator],
                                    default='https://test.salesforce.com')
-    name = models.CharField(max_length=128, help_text='', null=False, blank=False, default='')
+    name = models.CharField(max_length=128, help_text='', null=False, blank=False, default='', validators=[xss_absent_validator])
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    instance_url = models.CharField(max_length=256, help_text='', default='', null=True, blank=True)
+    instance_url = models.CharField(max_length=256, help_text='', default='', null=True, blank=True, validators=[xss_absent_validator])
     oauth_flow_stage = models.IntegerField(default=0, blank=True, null=True)
-    oauth_authorization_code = models.CharField(max_length=256, help_text='', default='', null=True, blank=True)
-    oauth_access_token = models.CharField(max_length=256, help_text='', default='', null=True, blank=True)
+    oauth_authorization_code = models.CharField(max_length=256, help_text='', default='', null=True, blank=True, validators=[xss_absent_validator])
+    oauth_access_token = models.CharField(max_length=256, help_text='', default='', null=True, blank=True, validators=[xss_absent_validator])
     oauth_access_token_created_date = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 

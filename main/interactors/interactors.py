@@ -154,7 +154,9 @@ class ViewInteractors:
             try:
                 form = self.context.form
                 err_as_json = json.loads(form.errors.as_json())
-                err_as_lst = ['Field ' + field + ': ' + message['message'] for field, msgs in err_as_json.items()
+                labels = {field.name: field.label for field in form}
+                err_as_lst = ['Field <strong><code>' + labels[field] + '</code></strong>: ' +
+                              message['message'] for field, msgs in err_as_json.items()
                               for message in msgs]
                 plural = len(err_as_lst) > 1
                 title = f"The following error{'s' if plural else ''} ha{'s' if not plural else 've'} been found"

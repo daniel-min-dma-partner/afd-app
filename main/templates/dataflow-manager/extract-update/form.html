@@ -39,7 +39,7 @@
                                     <label for="id_{{ form.replacers.name }}" class="form-label">Select the modifiers
                                         dataflows</label>
                                     <input class="form-control" type="file" name="{{ form.replacers.name }}"
-                                           id="id_{{ form.replacers.name }}" multiple>
+                                           id="id_{{ form.replacers.name }}" multiple {% if form.extract.value %}readonly{% endif %}>
                                 </div>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                                     <label for="id_{{ form.registers.name }}" class="form-label">'Register'
                                         nodes</label>
                                     <textarea class="form-control" name="{{ form.registers.name }}"
-                                              id="id_{{ form.registers.name }}"></textarea>
+                                              id="id_{{ form.registers.name }}">{{ form.registers.value }}</textarea>
                                 </div>
                             </div>
 
@@ -73,7 +73,8 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox"
                                                id="id_{{ form.extract.name }}"
-                                                name="{{ form.extract.name }}">
+                                                name="{{ form.extract.name }}"
+                                                {% if form.extract.value %}checked{% endif %}>
                                         <label class="form-check-label" for="id_{{ form.extract.name }}">
                                             Extract?
                                         </label>

@@ -57,7 +57,7 @@
                                        href="#collapseJob_{{ job.pk }}" role="button"
                                        aria-expanded="false" aria-controls="collapseJob_{{ job.pk }}"
                                        data-jobid="{{ job.pk }}" title="{{ job.message|striptags }}">
-                                        {{ job.message|truncate|safe }}
+                                        {{ job.message|truncate|ban_xss|safe }}
                                     </a>
                                 </td>
                                 <td class="text-center align-middle">

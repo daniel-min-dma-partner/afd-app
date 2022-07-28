@@ -104,7 +104,7 @@
                                     {% endif %}
                                 </td>
                                 <td class="status-cell text-center">{{ object.get_status_badge|safe }}</td>
-                                <td>{{ object.message|safe }}</td>
+                                <td>{{ object.message|ban_xss|safe }}</td>
                                 <td class="text-center" style="width: 100px;">
                                     {% if object|is_deprecated %}
                                         <a href="{% url 'main:compare-deprecation' pk=object.pk %}"

@@ -15,14 +15,6 @@
                 </div>
 
                 <div class="card-body">
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <div class="alert alert-danger">
-                                {{ error|safe }}
-                            </div>
-                        {% endfor %}
-                    {% endfor %}
-
                     <form method="POST" action="{% url 'main:deprecate-fields' %}" enctype="multipart/form-data">
                         {% csrf_token %}
 
@@ -30,19 +22,19 @@
                             <div class="form-group col-md-3">
                                 <div class="mb-3">
                                     <label for="id_name" class="form-label required">Name</label>
-                                    <input type="text" class="form-control" name="name" id="id_name" required>
+                                    <input type="text" class="form-control" name="name" id="id_name" required value="{{ form.name.value }}">
                                 </div>
                             </div>
                             <div class="form-group col-md-2">
                                 <div class="mb-3">
                                     <label for="id_org" class="form-label required">Org</label>
-                                    <input type="text" class="form-control" name="org" id="id_org">
+                                    <input type="text" class="form-control" name="org" id="id_org" value="{{ form.org.value }}">
                                 </div>
                             </div>
                             <div class="form-group col-md-7">
                                 <div class="mb-3">
                                     <label for="id_case_url" class="form-label">Case URL</label>
-                                    <input type="url" class="form-control" name="case_url" id="id_case_url">
+                                    <input type="url" class="form-control" name="case_url" id="id_case_url" value="{{ form.case_url.value }}">
                                 </div>
                             </div>
                         </div>
@@ -64,12 +56,12 @@
                                     <label for="id_{{ form.file.name }}" class="form-label">Get objects and fields from
                                         a file</label>
                                     <input class="form-control" type="file" name="{{ form.file.name }}"
-                                           id="id_{{ form.file.name }}" disabled>
+                                           id="id_{{ form.file.name }}" {% if not form.from_file.value %}disabled{% endif %}>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox"
                                            id="id_{{ form.from_file.name }}"
-                                           name="{{ form.from_file.name }}">
+                                           name="{{ form.from_file.name }}" {% if form.from_file.value %}checked{% endif %}>
                                     <label class="form-check-label" for="id_{{ form.from_file.name }}">
                                         From File?
                                     </label>
@@ -81,7 +73,7 @@
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label for="id_sobjects" class="form-label required">Objects</label>
-                                    <textarea class="form-control" name="sobjects" id="id_sobjects" rows="3"></textarea>
+                                    <textarea class="form-control" name="sobjects" id="id_sobjects" rows="3" {% if form.from_file.value %}disabled{% endif %}>{{ form.sobjects.value }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +82,7 @@
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label for="id_fields" class="form-label required">Fields</label>
-                                    <textarea class="form-control" name="fields" id="id_fields" rows="6"></textarea>
+                                    <textarea class="form-control" name="fields" id="id_fields" rows="6" {% if form.from_file.value %}disabled{% endif %}>{{ form.fields.value }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -100,7 +92,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox"
                                            id="id_{{ form.save_metadata.name }}"
-                                           name="{{ form.save_metadata.name }}">
+                                           name="{{ form.save_metadata.name }}" {% if form.save_metadata.value %}checked{% endif %}>
                                     <label class="form-check-label" for="id_{{ form.save_metadata.name }}">
                                         Save information about objects and fields into a file?
                                     </label>

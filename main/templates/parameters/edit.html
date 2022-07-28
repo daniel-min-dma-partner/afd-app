@@ -7,9 +7,8 @@
 {% block page-header %}Edit Parameter{% endblock page-header %}
 
 {% block header-scripts %}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.5.5/jsoneditor.css" rel="stylesheet"
-          type="text/css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.5.5/jsoneditor.js"></script>
+    <link href="{% static 'site/css/jsoneditor.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'site/js/jsoneditor.js' %}"></script>
 {% endblock header-scripts %}
 
 
@@ -80,5 +79,5 @@
             enableTransform = true,
             expandAll = false;
     </script>
-    <script src="{% static 'site/js/parameter.js' %}" type="module"></script>
+    <script src="{% static 'site/js/parameter.js' %}?v={{ version }}" type="module"></script>
 {% endblock extra-scripts %}

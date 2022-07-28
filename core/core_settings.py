@@ -1,6 +1,9 @@
+import mimetypes
 import os
 
 import environ
+
+mimetypes.add_type("text/css", ".css", True)
 
 ADMINS = (
     ('admin', 'dpark8752@gmail.com')
@@ -118,6 +121,8 @@ TEMPLATES = [
         },
     },
 ]
+
+SESSION_COOKIE_HTTPONLY = True
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(" ")
 DEBUG = int(os.environ.get("DEBUG", default=1))

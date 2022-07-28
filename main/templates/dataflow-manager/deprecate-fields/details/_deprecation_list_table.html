@@ -30,7 +30,7 @@
                     <a data-toggle="collapse" href="#collapseExample_{{ object.pk }}" role="button"
                        aria-expanded="false" aria-controls="collapseExample_{{ object.pk }}"
                        class="name-{{ object.pk }}" title="{{ object.name }}">
-                        {{ object.name|truncate:50 }} for {{ object.salesforce_org }}
+                        {{ object.name|truncate:50|ban_xss }} for {{ object.salesforce_org|ban_xss }}
                     </a>
 
                     <div class="collapse detail" id="collapseExample_{{ object.pk }}"

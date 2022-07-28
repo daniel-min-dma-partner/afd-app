@@ -36,7 +36,6 @@ def show_in_browser(original, compared):
         f"cd ${cur_dir_tmp}",
         f"unset {cur_dir_tmp}"
     ]
-    print("Here we gooo")
     os.system(" && ".join(_cmd_queue))
 
 
