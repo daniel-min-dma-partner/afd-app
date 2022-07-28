@@ -292,3 +292,12 @@ textarea {
     background: rgb(211, 221, 250);
     background: radial-gradient(circle, rgba(211, 221, 250, 0.82) 25%, rgba(209, 244, 249, 0.84) 75%);
 }
+
+.flex {
+    display: flex;
+}
+
+.flex-child-right {
+    margin-left: auto;
+    order: 2;
+}

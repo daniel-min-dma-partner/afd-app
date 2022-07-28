@@ -1,5 +1,6 @@
 import datetime
 import io
+import json
 import json as js
 import os.path
 import traceback
@@ -12,6 +13,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.files.base import ContentFile
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
 from django.views import View, generic
 from django.views.decorators.csrf import csrf_exempt
@@ -24,7 +26,7 @@ from core.settings import sched
 from libs.utils import byte_to_str, str_to_json
 from libs.utils import next_url
 from main import forms
-from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, \
+from main.forms import DataflowDownloadForm, LoginForm, RegisterUserForm, SfdcEnvEditForm, SfdcEnvCreateForm, \
     SlackCustomerConversationForm, SlackMsgPusherForm, TreeRemoverForm, User, DataflowUploadForm, CompareDataflowForm, \
     DeprecateFieldsForm, SecpredToSaqlForm, ProfileForm, ReleaseForm, ParameterForm
 from main.interactors.jobs_interactor import JobsInteractor
@@ -35,7 +37,7 @@ from .interactors.interactors import *
 from .interactors.list_dataflow_interactor import DataflowListInteractor
 from .interactors.response_interactor import ZipFileResponseInteractor, JsonFileResponseInteractor, \
     UploadedDataflowToZipResponse
-from .interactors.sfdc_connection_interactor import OAuthLoginInteractor, SfdcConnectWithConnectedApp
+from .interactors.sfdc_connection_interactor import SFDCAuthenticateUserInteractor, SFDCGetAccessTokenInteractor
 from .interactors.slack_targetlist_interactor import SlackTarListInteractor
 from .interactors.slack_webhook_interactor import SlackMessagePushInteractor
 from .interactors.wdf_manager_interactor import *
@@ -232,7 +234,7 @@ class SlackIntegrationView(generic.FormView):
                 "case-manager-name": form.cleaned_data['case_manager_name'],
                 "case-contact": form.cleaned_data['case_contact'],
                 "submitter": request.user.first_name + " " + request.user.last_name
-                             if len(request.user.first_name+request.user.last_name) else ""
+                if len(request.user.first_name + request.user.last_name) else ""
             }
 
             if request.user.is_authenticated and request.user.first_name:
@@ -277,7 +279,8 @@ class SfdcEnvListView(generic.ListView):
     template_name = 'sfdc/env/index.html'
 
     def get_queryset(self):
-        obj = SfdcEnv.objects.filter(user_id=self.request.user.pk)
+        obj = SfdcEnv.objects.filter(user_id=self.request.user.pk).order_by('oauth_access_token_created_date',
+                                                                            '-created_at', 'name')
         return obj
 
 
@@ -287,6 +290,7 @@ class SfdcEnvUpdateView(generic.FormView):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
+        context['environment_choice'] = SfdcEnv.environment_choice()
         context['form'] = self.form_class(self.request.POST or None, instance=self.get_object())
         context['pk'] = self.kwargs['pk']
         return context
@@ -309,7 +313,7 @@ class SfdcEnvUpdateView(generic.FormView):
 
 
 class SfdcEnvCreateView(generic.FormView):
-    form_class = SfdcEnvEditForm
+    form_class = SfdcEnvCreateForm
     module = 'register'
     template_name = 'sfdc/env/create.html'
 
@@ -329,7 +333,8 @@ class SfdcEnvCreateView(generic.FormView):
                 sfdc_env.user = request.user
                 sfdc_env.save()
 
-                messages.success(request, mark_safe(f"New <code>{sfdc_env.name}</code> connection created successfully."))
+                messages.success(request,
+                                 mark_safe(f"New <code>{sfdc_env.name}</code> connection created successfully."))
                 return redirect("main:sfdc-env-list")
             except Exception as e:
                 messages.error(request, e)
@@ -355,6 +360,7 @@ class SfdcConnectView(View):
         action = kwargs['action']
         pk = kwargs['pk']
         uri = None
+
         if action == "login":
             uri = '/services/oauth2/authorize'
         elif action == 'logout':
@@ -365,13 +371,15 @@ class SfdcConnectView(View):
         else:
             try:
                 env = SfdcEnv.objects.get(user=request.user, pk=pk)
-                ctx = OAuthLoginInteractor.call(model=env, mode=action)
+                ctx = SFDCAuthenticateUserInteractor.call(model=env, mode=action)
 
                 if ctx.exception:
                     raise ctx.exception
                 else:
-                    messages.success(request, mark_safe(f"<code>{action.upper()}</code> performed successfully."))
+                    if action == 'login':
+                        return HttpResponse(ctx.authorization_response)
 
+                    messages.success(request, mark_safe(f"<code>{action.upper()}</code> performed successfully."))
             except Exception as e:
                 messages.warning(request, mark_safe(e))
 
@@ -385,19 +393,21 @@ class SfdcConnectedAppOauth2Callback(APIView):
         """
         Return a list of all users.
         """
+
         callback_state = request.GET.get('state')
         user_id = callback_state.split('.')[0].split(':')[1]
         env_id = callback_state.split('.')[1].split(':')[1]
-        env = SfdcEnv.objects.get(user_id=user_id, pk=env_id,
-                                  oauth_flow_stage=SfdcEnv.oauth_flow_stages()["AUTHORIZATION_CODE_REQUEST"])
+        env = SfdcEnv.objects.get(user_id=user_id, pk=env_id)
 
         if 'code' in request.GET:
+            # Save the received Authorization-Code
             env.set_oauth_flow_stage(stage="AUTHORIZATION_CODE_RECEIVE")
             env.set_oauth_authorization_code(code=request.GET.get('code'))
             env.save()
             env.refresh_from_db()
 
-            ctx = SfdcConnectWithConnectedApp.call(env_object=env)
+            # Request Access-Token
+            ctx = SFDCGetAccessTokenInteractor.call(env_object=env)
             response_status = ctx.response_status
 
             if response_status != 200:
@@ -405,11 +415,14 @@ class SfdcConnectedAppOauth2Callback(APIView):
                 env.flush_oauth_data()
                 env.save()
             else:
-                messages.success(request, ctx.message)
+                messages.success(request, mark_safe(ctx.message))
 
-            return redirect("main:sfdc-env-list")
+        elif 'error' in request.GET and request.GET['error'] == "access_denied":
+            env.flush_oauth_data()
+            env.save()
+            messages.warning(request, request.GET['error_description'])
 
-        return Response("'code' not received.")
+        return redirect("main:sfdc-env-list")
 
 
 class DownloadDataflowView(generic.FormView):
@@ -451,7 +464,7 @@ class DownloadDataflowView(generic.FormView):
                          'job-message': f"Download {_context_aware_msg} from {env.name}"}
                 ctx = JobsInteractor.call(data=_data, function="download_dataflow", scheduler=sched)
                 messages.success(request, mark_safe(f"Downloadig dataflow{'s' if len(dataflows) > 0 else ''} from "
-                                          f"<code>{env.name}</code> started. Check the notifications later."))
+                                                    f"<code>{env.name}</code> started. Check the notifications later."))
 
                 return redirect("main:job-list")
             except Exception as e:
@@ -488,12 +501,18 @@ class UploadDataflowView(PermissionRequiredMixin, generic.FormView):
                 if not remote_df_name:
                     raise KeyError("Missing required field <code>Remote dataflow name</code>.")
 
-                _data = {'env': env, 'remote_df_name': remote_df_name, 'user': request.user, 'filemodel': filemodel,
-                         'job-message': f"Upload <code><strong>{remote_df_name}</strong></code> dataflow to"
-                                        f" {env.name}"}
+                _data = {
+                    'env': env,
+                    'remote_df_name': remote_df_name,
+                    'user': request.user,
+                    'filemodel': filemodel,
+                    'job-message': f"Upload <code><strong>{remote_df_name}</strong></code> dataflow to {env.name}",
+                    'comment': form.cleaned_data['comment']
+                }
                 ctx = JobsInteractor.call(data=_data, function="upload_dataflow", scheduler=sched)
             else:
                 messages.error(request, form.errors.as_data)
+                return self.form_invalid(form)
         except Exception as e:
             messages.error(request, mark_safe(e))
 
@@ -608,7 +627,8 @@ class DeprecateFieldsView(generic.FormView):
                             if obj_api_name not in objects_fields.keys():
                                 objects_fields[obj_api_name] = []
                             objects_fields[obj_api_name].append(field_api_name)
-                        objects_fields = {obj: ','.join([field for field in fields]) for obj, fields in objects_fields.items()}
+                        objects_fields = {obj: ','.join([field for field in fields]) for obj, fields in
+                                          objects_fields.items()}
 
                         self.objects = []
                         self.fields = []
@@ -689,7 +709,8 @@ class ViewDeprecatedFieldsView(generic.ListView):
         today = datetime.datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
         sql_days = (today - datetime.timedelta(days=int(days))).astimezone()
 
-        lst = DataflowDeprecation.objects.filter(user=self.request.user, created_at__gt=sql_days).order_by('-created_at')
+        lst = DataflowDeprecation.objects.filter(user=self.request.user, created_at__gt=sql_days).order_by(
+            '-created_at')
         return lst
 
 
@@ -867,8 +888,8 @@ class JobListView(generic.ListView):
         days = days if days else '1'
         today = datetime.datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
         sql_days = (today - datetime.timedelta(days=int(days))).astimezone()
-        queryset = Job.objects\
-            .filter(user_id=self.request.user.pk, started_at__gt=sql_days)\
+        queryset = Job.objects \
+            .filter(user_id=self.request.user.pk, started_at__gt=sql_days) \
             .order_by('-started_at', '-pk')
         return queryset
 
@@ -1099,14 +1120,39 @@ class RegisterLocalizerView(generic.FormView):
         if form.is_valid():
             dataflow_file = request.FILES.get('dataflow')
             nodes = dict(request.POST)['node'] if 'node' in request.POST.keys() else []
+            datasets = request.POST.get('datasets')
 
-            if not dataflow_file or not nodes:
+            if not dataflow_file or not (nodes or datasets):
                 status = 500
                 error_msg = "No dataflow specified." if not dataflow_file else "Missing node name."
             else:
                 dataflow = str_to_json(byte_to_str(dataflow_file.read()))
                 ctx = RegisterLocatorInteractor.call(dataflow=dataflow, nodes=nodes)
                 registers = ctx.registers
+
+                if not registers:
+                    ctx = DataflowInteractors.GetRegistersFromDatasetNameList.call(dataflow=dataflow, datasets=datasets)
+                    if ctx.exception:
+                        try:
+                            raise ctx.exception
+                        except Exception:
+                            status = 500
+                            error_msg = mark_safe(traceback.format_exc())
+                    else:
+                        registers = ctx.registers
+
+                if form.cleaned_data['complement']:
+                    ctx = DataflowInteractors.ComplementFromRegister.call(registers=registers, dataflow=dataflow)
+
+                    if ctx.exception:
+                        try:
+                            raise ctx.exception
+                        except Exception:
+                            status = 500
+                            error_msg = mark_safe(traceback.format_exc())
+                    else:
+                        registers = ctx.complement
+
         else:
             status = 500
             error_msg = form.errors.as_data
@@ -1280,6 +1326,48 @@ class MergeDeprecatorView(generic.FormView):
             return redirect("main:merge-deprecator")
 
 
+class LocateCommonDataset(generic.FormView):
+    template_name = "dataflow-manager/inspect/form.html"
+    form_class = forms.LocateCommonDatasetForm
+    success_url = reverse_lazy("main:locate-common-dataset")
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        files = request.FILES.getlist('dataflows')
+        if not len(files):
+            form.add_error('dataflows', "The field is required")
+
+        if form.is_valid():
+            dataflows = []
+            filenames = []
+            dataset_name = form.cleaned_data['dataset_name']
+
+            for file in files:
+                dataflows.append(json.load(file))
+                filenames.append(file.name)
+
+            ctx = DataflowInteractors.CommonDatasetLocator.call(dataflows=dataflows, filenames=filenames,
+                                                                dataset_name=dataset_name)
+
+            if ctx.exception:
+                messages.error(request, mark_safe(ctx.exception))
+                return self.form_invalid(form)
+            else:
+                messages.success(request, mark_safe('<br/>'.join(ctx.detected_dataflows)))
+                context = {
+                    'form': form,
+                    'detected': '\n'.join(ctx.detected_dataflows)
+                }
+                return render(request, self.template_name, context)
+        else:
+            messages.error(request, 'Check the errors')
+            return self.form_invalid(form)
+
+
 def list_nodes_from_df(request):
     error_msg = ""
     nodes = []
@@ -1390,7 +1478,8 @@ def profile_get_type_list(request):
         search = request.GET.get('search')
 
         if search:
-            payload['results'] = [item for item in payload['results'] if search.strip().lower() in item['text'].strip().lower()]
+            payload['results'] = [item for item in payload['results'] if
+                                  search.strip().lower() in item['text'].strip().lower()]
 
         status = 200
         error = None
@@ -1576,15 +1665,21 @@ def ajax_list_dataflows(request):
 
 
 def ajax_list_envs(request):
+    error = None
+    status = None
+    payload = None
+    env = SfdcEnv.objects.filter(user=request.user.pk,
+                                 oauth_flow_stage=SfdcEnv.oauth_flow_stages()[SfdcEnv.STATUS_ACCESS_TOKEN_RECEIVE])
+
     try:
-        if SfdcEnv.objects.filter(user=request.user.pk).exists():
+        if env.exists():
             payload = {
                 "results": [
                     {
                         "id": model.pk,
                         "text": model.name
                     }
-                    for model in SfdcEnv.objects.filter(user=request.user.pk).all()
+                    for model in env.all()
                 ]
             }
 
@@ -1594,7 +1689,6 @@ def ajax_list_envs(request):
                 payload['results'] = (item for item in payload['results'] if search in item['text'])
 
             status = 200
-            error = None
         else:
             error = "No 'Environment' has been found."
             status = 400

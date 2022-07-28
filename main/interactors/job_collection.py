@@ -84,8 +84,9 @@ def upload_dataflow(data: dict = None, job: Job = None):
     remote_df_name = data['remote_df_name']
     user = data['user']
     filemodel = data['filemodel']
+    comment = data['comment']
     ctx = UploadDataflowInteractorNoAnt.call(env=env, remote_df_name=remote_df_name, user=user,
-                                             filemodel=filemodel, job=job)
+                                             filemodel=filemodel, job=job, comment=comment)
 
     if ctx.exception:
         raise ctx.exception

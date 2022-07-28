@@ -8,7 +8,18 @@ $(document).ready(function (evt) {
         editor.set(template);
     }
 
+    const disable_clipboard = () => {
+        $('button.clipboard').attr('disabled', true);
+    };
+
+    const enable_clipboard = () => {
+        $('button.clipboard').removeAttr('disabled');
+    };
+
     function get_registers() {
+        disable_clipboard();
+        update_editor({"status": "Calculating. Please wait..."});
+
         let form = $('form#register-locator-form'),
             post_url = form.attr('action');
 
@@ -54,6 +65,7 @@ $(document).ready(function (evt) {
                 toast_remove();
                 let registers = response.registers;
                 update_editor(registers);
+                enable_clipboard();
             }
         });
     }
@@ -118,5 +130,29 @@ $(document).ready(function (evt) {
         placeholder: "Select a node",
     }).on('change', function (evt) {
         get_registers();
+    });
+
+    $('#id-complement').on('change', function (evt) {
+        get_registers();
+    });
+
+    $('#id-datasets').on('keyup focusout', function (evt) {
+        let usr_input = $(this).val();
+
+        usr_input = usr_input.replaceAll('\n\n', '\n');
+        usr_input = usr_input.split('\n').map(element => {
+            return element.trim();
+        }).filter(element => {
+            return ![false, undefined, null, '', '\n'].includes(element);
+        }).join('\n');
+        $(this).val(usr_input).trigger('change');
+    }).on('change', function (evt) {
+        get_registers();
+    });
+
+    $('button.clipboard').click(function (evt) {
+        evt.preventDefault();
+        navigator.clipboard.writeText(JSON.stringify(editor.get()));
+        popup_notification('Copy to Clipboard', "Copied successfully", 'success', true, 1000);
     });
 });

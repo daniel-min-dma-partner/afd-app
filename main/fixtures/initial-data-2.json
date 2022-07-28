@@ -1,0 +1,30 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$0PilMWrEsm9pAMGe2TaLlz$imEOQJqmvw0o8M1hQLQG4Hc0Tu8cbkITvIkFSR2kDAU=",
+      "last_login": "2021-08-17T23:08:17.874Z",
+      "is_superuser": true,
+      "username": "dmin",
+      "first_name": "Daniel",
+      "last_name": "Min",
+      "email": "dmin@salesforce.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2021-06-17T14:41:24Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "main.profile",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "key": "timezone",
+      "value": "UTC",
+      "type": "str"
+    }
+  },
+]

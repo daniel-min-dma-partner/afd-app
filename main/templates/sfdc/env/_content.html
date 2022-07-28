@@ -2,21 +2,26 @@
     <thead>
     <tr>
         <th>Name</th>
-        <th>Instance</th>
         <th>Oauth Flow Status</th>
-        <th>Access Token Created Date</th>
-        <th class="text-center">Copy to Clipboard</th>
-        <th class="text-right">CRUD</th>
+        <th>Created At</th>
+        <th>Access Token Received Date</th>
+        <th>Instance</th>
+        <th class="text-center d-none">Copy to Clipboard</th>
+        <th class="text-right">Actions</th>
     </tr>
     </thead>
     <tbody>
     {% for env in env_list %}
         <tr>
             <td>{{ env.name }}<input type="hidden" value="{{ env.pk }}"></td>
-            <td>{{ env.instance_url }}</td>
             <td>{{ env.get_oauth_flow_stage_string }}</td>
-            <td>{{ env.oauth_access_token_created_date }}</td>
-            <td class="text-center">
+            <td>{{ env.created_at }}</td>
+            <td>{{ env.oauth_access_token_created_date|default_if_none:"" }}</td>
+            <td style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:16px;">
+                <a href="{{ env.instance_url }}" target="_blank"
+                   title="{{ env.instance_url }}">{{ env.instance_url }}</a>
+            </td>
+            <td class="text-center d-none">
                 <a href="#" id="id_key_{{ env.pk }}" class="btn btn-info btn-icon-split btn-sm btn-show-diff">
                 <span class="icon text-white-50">
                     <i class="fas fa-copy"></i>
@@ -60,11 +65,13 @@
                     <i class="fas fa-sign-in-alt"></i>
                 </a>
 
-                <a href="{% url 'main:sfdc-connect' pk=env.pk action='logout' %}"
-                   class="btn btn-warning btn-circle btn-sm"
-                   title="Logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                </a>
+                {% with env.is_logged_out as logged_out %}
+                    <a href="{% url 'main:sfdc-connect' pk=env.pk action='logout' %}"
+                       class="btn btn-warning btn-circle btn-sm {% if logged_out %}d-none{% endif %}"
+                       title="Logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                {% endwith %}
             </td>
         </tr>
     {% endfor %}

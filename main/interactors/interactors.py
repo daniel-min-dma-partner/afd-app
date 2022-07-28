@@ -1,13 +1,14 @@
 import copy
 import json
 import os.path
+import traceback
 from typing import List
 
 from django.conf import settings
 
 from libs.interactor.interactor import Interactor
 from libs.tcrm_automation.libs.deprecation_libs import get_registers
-from libs.tcrm_automation.libs.json_libs import get_nodes_by_action
+from libs.tcrm_automation.libs.json_libs import get_nodes_by_action, node_is
 from main.models import DataflowDeprecation, DeprecationDetails
 
 
@@ -62,6 +63,76 @@ class DataflowInteractors:
                 self.context.deprecator = deprecator
             except Exception as e:
                 self.context.exception = e
+
+    class ComplementFromRegister(Interactor):
+        def run(self):
+            try:
+                registers = self.context.registers
+                dataflow = self.context.dataflow
+
+                _copy_df = copy.deepcopy(dataflow)
+                for register_name in registers.keys():
+                    del _copy_df[register_name]
+                dataflow = copy.deepcopy(_copy_df)
+
+                while True:
+                    deleted = False
+                    names = _copy_df.keys()  # names: node names or 1st-lvl keys in the df definition
+                    for name in names:
+                        if 'deleted' not in _copy_df[name].keys() and \
+                                not node_is(action=['digest', 'sfdcDigest', 'sfdcRegister'], node=_copy_df[name]):
+                            df_as_string = json.dumps(dataflow)
+                            if df_as_string.count(f"\"{name}\"") == 1:
+                                del dataflow[name]
+                                _copy_df[name]['deleted'] = 1
+                                deleted = True
+                    if not deleted:
+                        break
+
+                self.context.complement = dataflow
+            except Exception as e:
+                self.context.exception = e
+
+    class GetRegistersFromDatasetNameList(Interactor):
+        def run(self):
+            try:
+                dataflow = self.context.dataflow
+                datasets = self.context.datasets
+                registers = {
+                    nodename: {'dataset-name': node['parameters']['name'], 'dataset-alias': node['parameters']['alias']}
+                    for nodename, node in dataflow.items()
+                    if node_is(action='sfdcRegister', node=node) and node['parameters']['alias'] in datasets
+                }
+                self.context.registers = registers
+            except Exception as e:
+                self.context.exception = e
+
+    class CommonDatasetLocator(Interactor):
+        def run(self):
+            try:
+                dataflows = self.context.dataflows
+                filenames = self.context.filenames
+                dataset_name = self.context.dataset_name
+
+                detected_dataflows = []
+                for i in range(len(dataflows)):
+                    df = dataflows[i]
+                    filename = filenames[i]
+
+                    digest_nodes = get_nodes_by_action(df=df,
+                                                       action=['sfdcDigest', 'digest', 'edgemart'])
+                    register_nodes = list(get_registers(nodes=digest_nodes, df=df).keys())
+                    register_nodes = list(filter(
+                        lambda nn: dataset_name in [df[nn]['parameters']['name'], df[nn]['parameters']['alias']],
+                        register_nodes
+                    ))
+
+                    if len(register_nodes):
+                        detected_dataflows.append(filename.replace('.json', ''))
+
+                self.context.detected_dataflows = detected_dataflows
+            except Exception as e:
+                self.context.exception = traceback.format_exc()
 
 
 class FileSystemInteractors:

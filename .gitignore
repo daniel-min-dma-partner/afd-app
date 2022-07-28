@@ -21,3 +21,4 @@ core/local_settings.py
 data/*
 main/templates/json_diff_output.html
 *.sqlite
+*.sqlite*

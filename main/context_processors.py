@@ -114,11 +114,11 @@ def custom_context_data(request):
     default_context['heroku_app_env'] = heroku_app_env.lower()
 
     # Custom title for the app
-    site_name = "BT DNA"
+    site_name = "Field Deprecation"
     if parameters.exists():
         param = json.loads(parameters.first().parameter)
 
-        if 'site-name' in param.keys():
+        if isinstance(param, dict) and 'site-name' in param.keys():
             site_name = param['site-name']
     default_context['site_name'] = site_name
 

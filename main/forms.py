@@ -5,6 +5,7 @@ import pytz
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
 from jsoneditor.forms import JSONEditor
 from tinymce.widgets import TinyMCE
@@ -21,7 +22,7 @@ class LoginForm(AuthenticationForm):
             attrs={'class': 'form-control',
                    'placeholder': ''}
         ),
-        label=mark_safe("Username"),
+        label="Username",
         validators=[xss_absent_validator])
 
     password = forms.CharField(
@@ -72,30 +73,68 @@ class RegisterUserForm(forms.ModelForm):
         return user
 
 
-class SfdcEnvEditForm(forms.ModelForm):
+class SfdcEnvCreateForm(forms.ModelForm):
     _FORBIDDEN_SYMBOLS = ['-', '+', '*', '$', '&']
+
+    custom_domain = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Custom Domain...'}), required=False)
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Environment Name...'}), required=True)
+    environment = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Instance URL...'}), required=True)
+    client_key = forms.CharField(label='Client Key', widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+                                 initial='password',
+                                 required=True)
+    client_secret = forms.CharField(label='Client Secret', widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+                                    initial='password',
+                                    required=True)
+    client_password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+                                      initial='password',
+                                      required=True)
+    client_username = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username...'}), required=True)
+
+    edit = forms.BooleanField(required=False, label=mark_safe("Edit?"))
 
     class Meta:
         model = SalesforceEnvironment
         exclude = {'user'}
+        fields = [
+            'client_key', 'client_secret', 'client_username', 'client_password', 'environment', 'name'
+        ]
         REQUIRED_FIELDS = [
             'client_key', 'client_secret', 'client_username', 'client_password', 'environment', 'name'
         ]
+
+    def clean_custom_domain(self):
+        if self.data.get('custom_domain'):
+            return self.data.get('custom_domain').strip()
+        return ''
+
+    def clean_environment(self):
+        if self.clean_custom_domain():
+            return self.clean_custom_domain()
+
+        return self.cleaned_data['environment'].strip()
 
     def clean_name(self):
         return ''.join(e for e in self.cleaned_data['name'].strip() if e not in self._FORBIDDEN_SYMBOLS) \
             .replace(' ', "_")
 
+    def clean_client_username(self):
+        return self.cleaned_data['client_username'].strip()
+
     def save(self, commit=True):
-        sfdc_env = super(SfdcEnvEditForm, self).save(commit=False)
+        sfdc_env = super(SfdcEnvCreateForm, self).save(commit=False)
         if commit:
             sfdc_env.save()
         return sfdc_env
 
 
-# SfdcEnvEditFormset = modelformset_factory(SalesforceEnvironment,
-#                                           fields=('client_key', 'client_secret', 'client_username',
-#                                                   'client_password', 'environment', 'name'), exclude=('user',))
+class SfdcEnvEditForm(SfdcEnvCreateForm):
+    environment = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Instance URL...'}),
+        required=True)
 
 
 class TreeRemoverForm(forms.Form):
@@ -246,6 +285,13 @@ class DataflowDownloadForm(forms.Form):
 class DataflowUploadForm(forms.ModelForm):
     dataflow_selector = forms.CharField(required=False, validators=[xss_absent_validator])
     env_selector = forms.IntegerField(required=False)
+    comment = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control',
+                   'placeholder': 'Leave a comment'}
+        ),
+        label="Comment",
+        required=True)
 
     class Meta:
         model = FileModel
@@ -390,6 +436,8 @@ class DataflowEditForm(forms.Form):
 class RegisterNodeForm(forms.Form):
     dataflow = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
     node = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False, validators=[xss_absent_validator])
+    complement = forms.BooleanField(required=False)
+    datasets = forms.CharField(required=False, validators=[xss_absent_validator])
 
 
 class ExtractNodeByActionForm(forms.Form):
@@ -400,3 +448,21 @@ class ExtractNodeByActionForm(forms.Form):
 
 class DeprecatorMergeForm(forms.Form):
     files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+
+
+class LocateCommonDatasetForm(forms.Form):
+    dataflows = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control', 'multiple': True}),
+                                required=False,
+                                label="Dataflows")
+    dataset_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True,
+                                   label="Dataset Name")
+    detected = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}), required=False,
+                               label="Detected Dataflows", disabled=True)
+
+    def clean_dataset_name(self):
+        dataset_name = self.cleaned_data.get('dataset_name').strip()
+        if not dataset_name:
+            self.fields['dataset_name'].widget.attrs['class'] = f'form-control is-invalid'
+            raise ValidationError("Please provide a dataset name")
+
+        return dataset_name
