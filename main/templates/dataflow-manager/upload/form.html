@@ -62,8 +62,13 @@
 
                         <div class="form-row">
                             <div class="form-group col-md-12">
-                                <label for="id_comment">Comment</label>
-                                <input type="text" class="form-control" name="comment" id="id_comment">
+                                {{ form.comment.label_tag }}
+                                {{ form.comment }}
+                                {% if form.comment.errors %}
+                                    <div class="text-danger">
+                                        {{ form.comment.errors }}
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
 

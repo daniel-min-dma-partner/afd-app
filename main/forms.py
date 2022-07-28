@@ -291,7 +291,8 @@ class DataflowUploadForm(forms.ModelForm):
                    'placeholder': 'Leave a comment'}
         ),
         label="Comment",
-        required=True)
+        required=True,
+        validators=[xss_absent_validator])
 
     class Meta:
         model = FileModel

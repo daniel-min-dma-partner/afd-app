@@ -5,7 +5,16 @@ from django.core.exceptions import ValidationError
 
 def xss_absent_validator(value):
     any_multilined = r'(.|\n| )*'
-    script_tag = fr'(?=(<script.*?>{any_multilined}</script>))'
-    if re.findall(script_tag, value, re.MULTILINE):
-        print('error with', value)
-        raise ValidationError("Malformed input detected")
+    validations = [
+        (fr'(?=(<script.*?[>]?{any_multilined}[</script>]?))', 'script_html_tag'),
+        (fr'(?=(alert\(.*?{any_multilined}[\)]?))', 'alert_js_func')
+    ]
+    errors = []
+    [
+        errors.append(ValidationError("Malformed Input Detected: %(value)s",
+                                      code=forb_patt[1], params={'value': forb_patt[1]}))
+        for forb_patt in validations if re.findall(forb_patt[0], value, re.MULTILINE)
+    ]
+
+    if len(errors):
+        raise ValidationError(errors)

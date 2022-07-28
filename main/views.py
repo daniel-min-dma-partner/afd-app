@@ -511,7 +511,7 @@ class UploadDataflowView(PermissionRequiredMixin, generic.FormView):
                 }
                 ctx = JobsInteractor.call(data=_data, function="upload_dataflow", scheduler=sched)
             else:
-                messages.error(request, form.errors.as_data)
+                messages.error(request, "The form contains errors. Please review them.")
                 return self.form_invalid(form)
         except Exception as e:
             messages.error(request, mark_safe(e))
