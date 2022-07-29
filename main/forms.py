@@ -341,9 +341,20 @@ class DeprecateFieldsForm(forms.Form):
                            validators=[xss_absent_validator])
     org = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True,
                           validators=[xss_absent_validator])
-    files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
-    case_url = forms.URLField(label='SupportForce Case URL', required=False)
-    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
+    files = forms.FileField(required=False, label='Dataflows',
+                            widget=forms.ClearableFileInput(attrs={
+                                'multiple': True,
+                                'class': 'form-control'
+                            }))
+    case_url = forms.URLField(label='SupportForce Case URL', required=False, validators=[xss_absent_validator],
+                              widget=forms.TextInput(attrs={
+                                  'class': 'form-control'
+                              }))
+    file = forms.FileField(required=False, label='Get objects and fields from a file',
+                           widget=forms.ClearableFileInput(attrs={
+                               'multiple': False,
+                               'class': 'form-control'
+                           }))
     from_file = forms.BooleanField(required=False)
     save_metadata = forms.BooleanField(required=False)
     sobjects = forms.CharField(
@@ -379,6 +390,19 @@ class SecpredToSaqlForm(forms.Form):
 
 
 class ProfileForm(forms.ModelForm):
+    key = forms.CharField(label='Key', validators=[xss_absent_validator],
+                          widget=forms.TextInput(attrs={
+                              'class': 'form-control',
+                          }))
+    value = forms.CharField(label='Key', validators=[xss_absent_validator],
+                            widget=forms.TextInput(attrs={
+                                'class': 'form-control',
+                            }))
+    type = forms.CharField(label='Key', validators=[xss_absent_validator],
+                           widget=forms.TextInput(attrs={
+                               'class': 'form-control',
+                           }))
+
     class Meta:
         model = Profile
         fields = ['key', 'value', 'type']

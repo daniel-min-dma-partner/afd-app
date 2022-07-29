@@ -589,6 +589,10 @@ class DeprecateFieldsView(generic.FormView):
             return _filepath
 
         try:
+            dataflows = request.FILES.getlist('files')
+            if not len(dataflows):
+                form.add_error('files', "At least one dataflow is required")
+
             if form.is_valid():
                 # User indicated to read metadata from file
                 if form.cleaned_data.get('from_file'):
@@ -676,7 +680,7 @@ class DeprecateFieldsView(generic.FormView):
                 else:
                     _return = redirect('main:job-list')
             else:
-                message = ViewInteractors.FormErrorAsMessage.call(form=form).message
+                message = "The form contains error. Please review it."
                 flash_type = messages.ERROR
                 _return = render(request, 'dataflow-manager/deprecate-fields/form.html', {'form': form})
         except Exception as e:

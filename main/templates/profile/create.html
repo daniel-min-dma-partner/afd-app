@@ -25,19 +25,12 @@
                 <div class="card-body">
                     {% include '_guidelines.html' %}
 
-                    {% for non_field_error in form.non_field_errors %}
-                        <div class="alert alert-danger">
-                            {{ non_field_error|capfirst }}
+                    {% if form.non_field_errors %}
+                        <div class="form-row text-danger">
+                            {{ form.non_field_errors }}
+                            <br/>
                         </div>
-                    {% endfor %}
-
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <div class="alert alert-danger">
-                                <strong>{{ field.name|title }}</strong>: {{ error|safe }}
-                            </div>
-                        {% endfor %}
-                    {% endfor %}
+                    {% endif %}
 
                     <form method="POST" action="{% url 'main:profile-create' %}">
                         {% csrf_token %}
@@ -45,20 +38,24 @@
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <div class="mb-3">
-                                    <label for="id_{{ form.key.name }}" class="required">{{ form.key.name|title }}</label>
-                                    <input type="text" class="form-control" name="{{ form.key.name }}"
-                                           id="id_{{ form.key.name }}"
-                                           {% if form.key.value %} value="{{ form.key.value }}" {% endif %}
-                                           required>
+                                    {{ form.key.label_tag }}
+                                    {{ form.key }}
+                                    {% if form.key.errors %}
+                                        <div class="text-danger">
+                                            {{ form.key.errors }}
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="form-group col-md-4">
                                 <div class="mb-3">
-                                    <label for="id_{{ form.value.name }}" class="required">{{ form.value.name|title }}</label>
-                                    <input type="text" class="form-control" name="{{ form.value.name }}"
-                                           id="id_{{ form.value.name }}"
-                                           {% if form.value.value %} value="{{ form.value.value }}" {% endif %}
-                                           required>
+                                    {{ form.value.label_tag }}
+                                    {{ form.value }}
+                                    {% if form.value.errors %}
+                                        <div class="text-danger">
+                                            {{ form.value.errors }}
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
 
@@ -68,11 +65,17 @@
                                         name="{{ form.type.name }}"
                                         style="width:100%;">
                                     {% if form.type.value %}
-                                        <option value="{{ form.type.value }}" selected>{{ form.type.value|profile_type_to_text }}</option>
+                                        <option value="{{ form.type.value }}"
+                                                selected>{{ form.type.value|profile_type_to_text }}</option>
                                     {% else %}
                                         <option value="" selected disabled>Select One</option>
                                     {% endif %}
                                 </select>
+                                {% if form.type.errors %}
+                                    <div class="text-danger">
+                                        {{ form.type.errors }}
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
 
