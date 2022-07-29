@@ -11,8 +11,7 @@ def xss_absent_validator(value):
     ]
     errors = []
     [
-        errors.append(ValidationError("Malformed Input Detected: %(value)s",
-                                      code=forb_patt[1], params={'value': forb_patt[1]}))
+        errors.append(ValidationError("Malformed Input value", code=forb_patt[1]))
         for forb_patt in validations if re.findall(forb_patt[0], value, re.MULTILINE)
     ]
 

@@ -23,23 +23,36 @@
                                 </div>
                                 <form class="user" method="post" action="{% url 'main:login' %}">
                                     {% csrf_token %}
+
+                                    {% if form.non_field_errors %}
+                                        <div class="text-danger">
+                                            {{ form.non_field_errors }}
+                                        </div>
+                                    {% endif %}
+
                                     <div class="form-group">
-                                        <input type="text" class="form-control form-control-user"
-                                               id="id_username" name="username" required
-                                               placeholder="Enter Username...">
+                                        {{ form.username }}
+                                        {% if form.username.errors %}
+                                            <div class="text-danger">
+                                                {{ form.username.errors }}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                     <div class="form-group">
-                                        <input type="password" class="form-control form-control-user"
-                                               id="id_password" name="password" required
-                                               placeholder="Password">
+                                        {{ form.password }}
+                                        {% if form.password.errors %}
+                                            <div class="text-danger">
+                                                {{ form.password.errors }}
+                                            </div>
+                                        {% endif %}
                                     </div>
-{#                                    <div class="form-group">#}
-{#                                        <div class="custom-control custom-checkbox small">#}
-{#                                            <input type="checkbox" class="custom-control-input" id="customCheck">#}
-{#                                            <label class="custom-control-label" for="customCheck">Remember#}
-{#                                                Me</label>#}
-{#                                        </div>#}
-{#                                    </div>#}
+                                    {#                                    <div class="form-group">#}
+                                    {#                                        <div class="custom-control custom-checkbox small">#}
+                                    {#                                            <input type="checkbox" class="custom-control-input" id="customCheck">#}
+                                    {#                                            <label class="custom-control-label" for="customCheck">Remember#}
+                                    {#                                                Me</label>#}
+                                    {#                                        </div>#}
+                                    {#                                    </div>#}
                                     <hr>
                                     <button type="submit" class="btn btn-primary btn-user btn-block">
                                         Login

@@ -19,8 +19,8 @@ from main.validators.common_validators import xss_absent_validator
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
         widget=forms.TextInput(
-            attrs={'class': 'form-control',
-                   'placeholder': ''}
+            attrs={'class': 'form-control form-control-user',
+                   'placeholder': 'Enter username...'}
         ),
         label="Username",
         validators=[xss_absent_validator])
@@ -29,7 +29,8 @@ class LoginForm(AuthenticationForm):
         label="Password",
         widget=forms.PasswordInput(attrs={
             'autocomplete': 'current-password',
-            'class': 'form-control form-control-use',
+            'class': 'form-control form-control-user',
+            'placeholder': 'Password'
         }),
         validators=[xss_absent_validator])
 

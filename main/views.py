@@ -83,25 +83,18 @@ class LoginView(generic.FormView):
         form = form_class(data=request.POST)
 
         if form.is_valid():
-            # Recuperamos las credenciales validadas
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
-            # Verificamos las credenciales del usuario
             user = authenticate(username=username, password=password)
 
-            # Si existe un usuario con ese nombre y contraseña
             if user is not None:
-                # Hacemos el login manualmente
                 do_login(request, user)
-                # Y le redireccionamos a la portada
                 messages.success(request, "Loged in Successfully!")
                 return redirect(next_url('post', request))
             else:
                 messages.error(request, mark_safe(f"<code>{username}</code> user doesn't exist."))
-        else:
-            messages.error(request, form.errors.as_data)
-        # Si llegamos al final renderizamos el formulario
+
         return self.form_invalid(form)
 
 
