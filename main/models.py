@@ -122,19 +122,28 @@ class SalesforceEnvironment(models.Model):
 
     _HEADER = {'Authorization': "Bearer {{access_token}}", 'Content-Type': "application/json"}
 
-    client_key = models.CharField(max_length=128, help_text='', null=False, blank=False, default='', validators=[xss_absent_validator])
-    client_secret = models.CharField(max_length=128, help_text='', null=False, blank=False, default='', validators=[xss_absent_validator])
-    client_username = models.CharField(max_length=128, help_text='', null=False, blank=True, default='', validators=[xss_absent_validator])
-    client_password = models.CharField(max_length=128, help_text='', null=False, blank=False, default='', validators=[xss_absent_validator])
-    environment = models.CharField(max_length=128, help_text='', null=False, blank=False, validators=[xss_absent_validator],
+    client_key = models.CharField(max_length=128, help_text='', null=False, blank=False, default='',
+                                  validators=[xss_absent_validator])
+    client_secret = models.CharField(max_length=128, help_text='', null=False, blank=False, default='',
+                                     validators=[xss_absent_validator])
+    client_username = models.CharField(max_length=128, help_text='', null=False, blank=True, default='',
+                                       validators=[xss_absent_validator])
+    client_password = models.CharField(max_length=128, help_text='', null=False, blank=False, default='',
+                                       validators=[xss_absent_validator])
+    environment = models.CharField(max_length=128, help_text='', null=False, blank=False,
+                                   validators=[xss_absent_validator],
                                    default='https://test.salesforce.com')
-    name = models.CharField(max_length=128, help_text='', null=False, blank=False, default='', validators=[xss_absent_validator])
+    name = models.CharField(max_length=128, help_text='', null=False, blank=False, default='',
+                            validators=[xss_absent_validator])
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    instance_url = models.CharField(max_length=256, help_text='', default='', null=True, blank=True, validators=[xss_absent_validator])
+    instance_url = models.CharField(max_length=256, help_text='', default='', null=True, blank=True,
+                                    validators=[xss_absent_validator])
     oauth_flow_stage = models.IntegerField(default=0, blank=True, null=True)
-    oauth_authorization_code = models.CharField(max_length=256, help_text='', default='', null=True, blank=True, validators=[xss_absent_validator])
-    oauth_access_token = models.CharField(max_length=256, help_text='', default='', null=True, blank=True, validators=[xss_absent_validator])
+    oauth_authorization_code = models.CharField(max_length=256, help_text='', default='', null=True, blank=True,
+                                                validators=[xss_absent_validator])
+    oauth_access_token = models.CharField(max_length=256, help_text='', default='', null=True, blank=True,
+                                          validators=[xss_absent_validator])
     oauth_access_token_created_date = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
@@ -216,13 +225,15 @@ class Notifications(models.Model):
         3: 'READ_CLICKED',
     }
 
-    message = models.CharField(max_length=4096, help_text='', null=False, blank=False)
+    message = models.CharField(max_length=4096, help_text='', null=False, blank=False,
+                               validators=[xss_absent_validator])
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.IntegerField(default=1, blank=False, null=False, choices=_STATUS_CHOICE)
-    link = models.CharField(max_length=1024, help_text='', null=False, blank=False, default="#")
+    link = models.CharField(max_length=1024, help_text='', null=False, blank=False, default="#",
+                            validators=[xss_absent_validator])
     created_at = models.DateTimeField(auto_now_add=True)
     type = models.CharField(max_length=10, help_text='', null=False, blank=False, choices=_TYPE_CHOICE,
-                            default='info')
+                            default='info', validators=[xss_absent_validator])
 
     def __init__(self, *args, **kwargs):
         super(Notifications, self).__init__(*args, **kwargs)
@@ -261,12 +272,14 @@ class Notifications(models.Model):
 
 
 class DataflowDeprecation(models.Model):
-    name = models.CharField(max_length=1024, help_text='', null=False, blank=False)
-    salesforce_org = models.CharField(max_length=1024, help_text='', null=False, blank=False)
+    name = models.CharField(max_length=1024, help_text='', null=False, blank=False, validators=[xss_absent_validator])
+    salesforce_org = models.CharField(max_length=1024, help_text='', null=False, blank=False,
+                                      validators=[xss_absent_validator])
     sobjects = models.TextField(default="<< sfdc objs api >>")
     fields = models.TextField(default="<< sfdc obj fields api")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    case_url = models.CharField(max_length=1024, help_text='', null=True, blank=True, default="#")
+    case_url = models.CharField(max_length=1024, help_text='', null=True, blank=True, default="#",
+                                validators=[xss_absent_validator])
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_objects_fields_metadata(self):
@@ -318,14 +331,15 @@ class DeprecationDetails(models.Model):
         4: 'danger'
     }
 
-    file_name = models.CharField(max_length=1024, help_text='', null=False, blank=False)
+    file_name = models.CharField(max_length=1024, help_text='', null=False, blank=False,
+                                 validators=[xss_absent_validator])
     original_dataflow = CompressedJSONField()
     deprecated_dataflow = CompressedJSONField()
     meta = CompressedJSONField()
     removed_fields = CompressedJSONField(null=True, blank=True)
     registers = CompressedJSONField(null=True, blank=True)
     status = models.IntegerField(default=NO_DEPRECATION, blank=False, null=False, choices=_STATUS_CHOICES)
-    message = models.CharField(max_length=4096, help_text='', null=True, blank=True)
+    message = models.CharField(max_length=4096, help_text='', null=True, blank=True, validators=[xss_absent_validator])
     deprecation = models.ForeignKey(DataflowDeprecation, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -365,8 +379,9 @@ class DeprecationDetails(models.Model):
 
 
 class UploadNotifications(Notifications):
-    zipfile_path = models.CharField(max_length=2048, help_text='', null=False, blank=False)
-    envname = models.CharField(max_length=128, help_text='', null=False, blank=False)
+    zipfile_path = models.CharField(max_length=2048, help_text='', null=False, blank=False,
+                                    validators=[xss_absent_validator])
+    envname = models.CharField(max_length=128, help_text='', null=False, blank=False, validators=[xss_absent_validator])
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -382,8 +397,10 @@ class Job(models.Model):
         ('warning', 'Warning'),
     )
 
-    message = models.CharField(max_length=4096, help_text='', null=False, blank=False, default="New Job Created")
-    status = models.CharField(max_length=10, default='created', blank=False, null=False, choices=STATUS_CHOICES)
+    message = models.CharField(max_length=4096, help_text='', null=False, blank=False, default="New Job Created",
+                               validators=[xss_absent_validator])
+    status = models.CharField(max_length=10, default='created', blank=False, null=False, choices=STATUS_CHOICES,
+                              validators=[xss_absent_validator])
     progress = models.IntegerField(default=0, blank=False, null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     started_at = models.DateTimeField(auto_now_add=False, blank=True, null=True)
@@ -511,8 +528,10 @@ class Job(models.Model):
 
 
 class JobStage(models.Model):
-    message = models.CharField(max_length=4096, help_text='', null=False, blank=False, default="New Job Created")
-    status = models.CharField(max_length=10, default='created', blank=False, null=False, choices=Job.STATUS_CHOICES)
+    message = models.CharField(max_length=4096, help_text='', null=False, blank=False, default="New Job Created",
+                               validators=[xss_absent_validator])
+    status = models.CharField(max_length=10, default='created', blank=False, null=False, choices=Job.STATUS_CHOICES,
+                              validators=[xss_absent_validator])
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
     started_at = models.DateTimeField(auto_now_add=False, blank=True, null=True)
     finished_at = models.DateTimeField(auto_now_add=False, blank=True, null=True)
@@ -583,7 +602,7 @@ class JobStage(models.Model):
 
 
 class Release(models.Model):
-    title = models.CharField(max_length=1024, help_text='', null=False, blank=False)
+    title = models.CharField(max_length=1024, help_text='', null=False, blank=False, validators=[xss_absent_validator])
     description = HTMLField(blank=False, null=False)
     publisher = models.ForeignKey(User, models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True, blank=False, null=False)
@@ -627,8 +646,9 @@ class SpecialPermissions(models.Model):
 class DataflowUploadHistory(models.Model):
     original_dataflow = CompressedJSONField()
     uploaded_dataflow = CompressedJSONField()
-    dataflow_name = models.CharField(max_length=128, null=False, blank=False)
-    salesforce_env = models.ForeignKey(SalesforceEnvironment, models.SET_NULL, blank=True, null=True)
+    dataflow_name = models.CharField(max_length=128, null=False, blank=False, validators=[xss_absent_validator])
+    salesforce_env = models.ForeignKey(SalesforceEnvironment, models.SET_NULL, blank=True, null=True,
+                                       validators=[xss_absent_validator])
     user = models.ForeignKey(User, models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True, blank=False, null=False)
 

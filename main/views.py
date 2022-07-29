@@ -308,7 +308,6 @@ class SfdcEnvUpdateView(generic.FormView):
             messages.success(request, mark_safe(f"Connection <code>{sfdc_env.name}</code> modified succesfully."))
             return redirect('main:sfdc-env-list')
         else:
-            messages.error(request, mark_safe((ViewInteractors.FormErrorAsMessage.call(form=form)).message))
             return self.form_invalid(form)
 
 
@@ -327,6 +326,8 @@ class SfdcEnvCreateView(generic.FormView):
         form_class = self.get_form_class()
         form = form_class(data=request.POST)
 
+        print(request.POST)
+
         if form.is_valid():
             try:
                 sfdc_env = form.save(commit=False)
@@ -337,11 +338,17 @@ class SfdcEnvCreateView(generic.FormView):
                                  mark_safe(f"New <code>{sfdc_env.name}</code> connection created successfully."))
                 return redirect("main:sfdc-env-list")
             except Exception as e:
-                messages.error(request, e)
-        else:
-            messages.error(request, form.errors.as_data)
+                form.add_error(field='name', error=e)
 
-        return self.form_invalid(form)
+        context = {
+            'form': form,
+            'custom_domain_checked': form.data['custom_domain'] not in [None, ''],
+            'is_sandbox': form.data['environment'] == 'https://test.salesforce.com',
+            'is_production': form.data['environment'] == 'https://login.salesforce.com',
+            'environment_choice': SfdcEnv.environment_choice()
+        }
+        print(context)
+        return render(request, self.template_name, context=context)
 
 
 class SfdcEnvDelete(View):

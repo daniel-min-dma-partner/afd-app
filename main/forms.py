@@ -76,23 +76,26 @@ class RegisterUserForm(forms.ModelForm):
 class SfdcEnvCreateForm(forms.ModelForm):
     _FORBIDDEN_SYMBOLS = ['-', '+', '*', '$', '&']
 
-    custom_domain = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Custom Domain...'}), required=False)
+    custom_domain = forms.URLField(label='Custom Salesforce Domain', validators=[xss_absent_validator],
+                                   widget=forms.TextInput(
+                                       attrs={'class': 'form-control', 'placeholder': 'Custom Domain...'}),
+                                   required=False)
     name = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Environment Name...'}), required=True)
-    environment = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Instance URL...'}), required=True)
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Environment Name...'}), required=True,
+        validators=[xss_absent_validator])
+    environment = forms.URLField(label='Custom Salesforce Domain', validators=[xss_absent_validator], required=True)
     client_key = forms.CharField(label='Client Key', widget=forms.PasswordInput(attrs={'class': 'form-control'}),
                                  initial='password',
-                                 required=True)
+                                 required=True, validators=[xss_absent_validator])
     client_secret = forms.CharField(label='Client Secret', widget=forms.PasswordInput(attrs={'class': 'form-control'}),
                                     initial='password',
-                                    required=True)
+                                    required=True, validators=[xss_absent_validator])
     client_password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-control'}),
                                       initial='password',
-                                      required=True)
+                                      required=True, validators=[xss_absent_validator])
     client_username = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username...'}), required=True)
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username...'}), required=True,
+        validators=[xss_absent_validator])
 
     edit = forms.BooleanField(required=False, label=mark_safe("Edit?"))
 
@@ -147,7 +150,8 @@ class TreeRemoverForm(forms.Form):
                                 label='Register nodes', validators=[xss_absent_validator])
     name = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Output dataflow name',
-                                      'value': 'UpdatedDataflow.json'}), required=False, validators=[xss_absent_validator])
+                                      'value': 'UpdatedDataflow.json'}), required=False,
+        validators=[xss_absent_validator])
 
     # For tree removers
     replacers = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False,
@@ -316,7 +320,8 @@ class CompareDataflowForm(forms.ModelForm):
     )
     field1 = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
     field2 = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
-    method = forms.ChoiceField(choices=_METHOD_CHOICE, widget=forms.RadioSelect(), required=True, validators=[xss_absent_validator])
+    method = forms.ChoiceField(choices=_METHOD_CHOICE, widget=forms.RadioSelect(), required=True,
+                               validators=[xss_absent_validator])
 
     class Meta:
         model = DFCompModel
@@ -331,8 +336,10 @@ class CompareDataflowForm(forms.ModelForm):
 
 
 class DeprecateFieldsForm(forms.Form):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True, validators=[xss_absent_validator])
-    org = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True, validators=[xss_absent_validator])
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True,
+                           validators=[xss_absent_validator])
+    org = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True,
+                          validators=[xss_absent_validator])
     files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
     case_url = forms.URLField(label='SupportForce Case URL', required=False)
     file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
@@ -399,7 +406,8 @@ class ProfileForm(forms.ModelForm):
 
 
 class ReleaseForm(forms.ModelForm):
-    title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True, validators=[xss_absent_validator])
+    title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True,
+                            validators=[xss_absent_validator])
     description = forms.CharField(widget=TinyMCE(attrs={'cols': 200, 'rows': 30}), validators=[xss_absent_validator])
 
     class Meta:
@@ -431,12 +439,14 @@ class ParameterForm(forms.ModelForm):
 
 class DataflowEditForm(forms.Form):
     dataflow = JSONEditor()
-    filename = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False, validators=[xss_absent_validator])
+    filename = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False,
+                               validators=[xss_absent_validator])
 
 
 class RegisterNodeForm(forms.Form):
     dataflow = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
-    node = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False, validators=[xss_absent_validator])
+    node = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False,
+                           validators=[xss_absent_validator])
     complement = forms.BooleanField(required=False)
     datasets = forms.CharField(required=False, validators=[xss_absent_validator])
 
