@@ -38,11 +38,11 @@ urlpatterns = [
 
     path('register/', main.RegisterUserView.as_view(), name='register-user'),
 
-    re_path(r'^slack/', include([
-        re_path(r'^$', main.SlackIntegrationView.as_view(), name='slack'),
-        re_path(r'^interactive-endpoint/$', main.slack_interactive_endpoint, name='slack-interactive-endpoint'),
-        re_path(r'^get-targets/$', main.ajax_slack_get_targets, name='slack-targets'),
-    ])),
+    # re_path(r'^slack/', include([
+    #     re_path(r'^$', main.SlackIntegrationView.as_view(), name='slack'),
+    #     re_path(r'^interactive-endpoint/$', main.slack_interactive_endpoint, name='slack-interactive-endpoint'),
+    #     re_path(r'^get-targets/$', main.ajax_slack_get_targets, name='slack-targets'),
+    # ])),
 
     re_path(r'^dataflow-manager/', include([
         re_path(r'^edit/$', main.DataflowEditorView.as_view(), name='edit-dataflow'),
@@ -117,12 +117,12 @@ urlpatterns = [
         re_path(r'^list', main.JobListView.as_view(), name="job-list")
     ])),
 
-    re_path(r'^release/', include([
-        re_path(r'^delete/(?P<pk>\d+)/$', main.release_delete_view, name='release-delete'),
-        re_path(r'^create/$', main.ReleaseCreateView.as_view(), name='release-create'),
-        re_path(r'^edit/(?P<pk>\d+)$', main.ReleaseEditView.as_view(), name='release-edit'),
-        re_path(r'^view/$', main.ReleaseView.as_view(), name='release-view'),
-    ])),
+    # re_path(r'^release/', include([
+    #     re_path(r'^delete/(?P<pk>\d+)/$', main.release_delete_view, name='release-delete'),
+    #     re_path(r'^create/$', main.ReleaseCreateView.as_view(), name='release-create'),
+    #     re_path(r'^edit/(?P<pk>\d+)$', main.ReleaseEditView.as_view(), name='release-edit'),
+    #     re_path(r'^view/$', main.ReleaseView.as_view(), name='release-view'),
+    # ])),
 
     re_path(r'^parameter/', include([
         re_path(r'^delete/(?P<pk>\d+)/$', main.parameter_delete_view, name='parameter-delete'),
