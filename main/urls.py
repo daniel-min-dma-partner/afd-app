@@ -33,7 +33,7 @@ urlpatterns = [
         re_path(r'^delete/$', main.SfdcEnvDelete.as_view(), name='sfdc-env-remove'),
     ])),
 
-    path('sfdc/connected-app/oauth2/callback/', main.SfdcConnectedAppOauth2Callback.as_view(),
+    path('sfdc/connected-app/oauth2/callback', main.SfdcConnectedAppOauth2Callback.as_view(),
          name="sfdc-connected-app-callback"),
 
     path('register/', main.RegisterUserView.as_view(), name='register-user'),
