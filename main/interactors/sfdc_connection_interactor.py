@@ -24,8 +24,8 @@ class SFDCAuthenticateUserInteractor(Interactor):
 
         try:
             # Attempt to logout an already-logged-out env
-            if env_model.is_logged_out() and mode == 'logout':
-                raise Exception(f"<code>{env_model.name}</code> is already logged out.")
+            # if env_model.is_logged_out() and mode == 'logout':
+            #     raise Exception(f"<code>{env_model.name}</code> is already logged out.")
 
             resource = '/services/oauth2/authorize' if mode == 'login' else '/services/oauth2/revoke'
 
@@ -57,7 +57,7 @@ class SFDCAuthenticateUserInteractor(Interactor):
                 env_model.flush_oauth_data()
                 self.context.response = None
             else:
-                raise ConnectionError(f"Response status: <code>{response.status_code}</code>: {response.text}")
+                raise Exception(f"Response status: <code>{response.status_code}</code>: {response.text}")
         except Exception as e:
             exception = e
             env_model.flush_oauth_data()

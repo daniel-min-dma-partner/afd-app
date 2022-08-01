@@ -65,13 +65,13 @@
                     <i class="fas fa-sign-in-alt"></i>
                 </a>
 
-                {% with env.is_logged_out as logged_out %}
-                    <a href="{% url 'main:sfdc-connect' pk=env.pk action='logout' %}"
-                       class="btn btn-warning btn-circle btn-sm {% if logged_out %}d-none{% endif %}"
-                       title="Logout">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </a>
-                {% endwith %}
+                {#                {% with env.is_logged_out as logged_out %}#}
+                <a href="{% url 'main:sfdc-connect' pk=env.pk action='logout' %}"
+                   class="btn btn-warning btn-circle btn-sm {% if logged_out %}d-none{% endif %}"
+                   title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+                {#                {% endwith %}#}
             </td>
         </tr>
     {% endfor %}
