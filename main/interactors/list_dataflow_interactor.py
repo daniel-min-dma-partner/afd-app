@@ -80,7 +80,7 @@ class DataflowListInteractor(Interactor):
             df_ids_api = {}
 
             try:
-                generate_build_file(self.context.model, user=self.context.user)
+                # generate_build_file(self.context.model, user=self.context.user)
                 payload, df_ids_api = self._list_wave_dataflows()
 
             except Exception as e:

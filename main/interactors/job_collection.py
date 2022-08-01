@@ -33,7 +33,10 @@ def download_dataflow(data: dict = None, job: Job = None):
         logger.info(">>>> Compressing all json files into a zip file.")
         path = download_ctx.output_filepath
         files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
-        zipfile_path = os.path.join(path, f"{model.name}--dataflows.zip")
+        zipfile_path = path.replace('retrieve/dataflow/wave', 'zipfiles')
+        os.makedirs(zipfile_path) if not os.path.exists(zipfile_path) else None
+        zipfile_path = os.path.join(zipfile_path, f"{model.name}--dataflows.zip")
+        os.remove(zipfile_path) if os.path.isfile(zipfile_path) else None
         compressor_ctx = FileCompressorInteractor.call(files=files, path=path, zip_path=zipfile_path)
 
         if compressor_ctx.exception:
