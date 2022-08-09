@@ -1171,7 +1171,6 @@ class ExtractNodeByActionView(generic.FormView):
     form_class = forms.ExtractNodeByActionForm
 
     def post(self, request, *args, **kwargs):
-        print("POST")
         form = self.form_class(request.POST)
 
         if not form.is_valid():
