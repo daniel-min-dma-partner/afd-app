@@ -114,7 +114,7 @@ def custom_context_data(request):
     default_context['heroku_app_env'] = heroku_app_env.lower()
 
     # Custom title for the app
-    site_name = "Field Deprecation"
+    site_name = "AFD App"
     if parameters.exists():
         param = json.loads(parameters.first().parameter)
 

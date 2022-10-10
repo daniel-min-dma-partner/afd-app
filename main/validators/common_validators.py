@@ -12,4 +12,4 @@ def xss_absent_validator(value):
     errors = []
 
     if any([re.findall(forb_patt[0], value, re.MULTILINE) for forb_patt in no_xss_validation]):
-        raise ValidationError("Malformed Input Value")
+        raise ValidationError("Malformed Input Value: Possible XSS attempt detected")

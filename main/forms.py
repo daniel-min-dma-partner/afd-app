@@ -6,6 +6,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.utils.safestring import mark_safe
 from jsoneditor.forms import JSONEditor
 from tinymce.widgets import TinyMCE
@@ -76,6 +77,7 @@ class RegisterUserForm(forms.ModelForm):
 
 class SfdcEnvCreateForm(forms.ModelForm):
     _FORBIDDEN_SYMBOLS = ['-', '+', '*', '$', '&']
+    _REGEX_FOR_SECRETS = r'^[a-zA-Z0-9]+$'
 
     custom_domain = forms.URLField(label='Custom Salesforce Domain', validators=[xss_absent_validator],
                                    widget=forms.TextInput(
@@ -87,13 +89,19 @@ class SfdcEnvCreateForm(forms.ModelForm):
     environment = forms.URLField(label='Custom Salesforce Domain', validators=[xss_absent_validator], required=True)
     client_key = forms.CharField(label='Client Key', widget=forms.PasswordInput(attrs={'class': 'form-control'}),
                                  initial='password',
-                                 required=True, validators=[xss_absent_validator])
+                                 required=True,
+                                 validators=[xss_absent_validator, RegexValidator(_REGEX_FOR_SECRETS,
+                                                                                  message='Only numbers and letters are allowed')])
     client_secret = forms.CharField(label='Client Secret', widget=forms.PasswordInput(attrs={'class': 'form-control'}),
                                     initial='password',
-                                    required=True, validators=[xss_absent_validator])
+                                    required=True,
+                                    validators=[xss_absent_validator, RegexValidator(_REGEX_FOR_SECRETS,
+                                                                                     message='Only numbers and letters are allowed')])
     client_password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-control'}),
                                       initial='password',
-                                      required=True, validators=[xss_absent_validator])
+                                      required=True,
+                                      validators=[xss_absent_validator, RegexValidator(_REGEX_FOR_SECRETS,
+                                                                                       message='Only numbers and letters are allowed')])
     client_username = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username...'}), required=True,
         validators=[xss_absent_validator])

@@ -6,6 +6,7 @@ import os
 
 import tzlocal
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
 from jsoneditor.fields.django_jsonfield import JSONField
@@ -100,6 +101,8 @@ class Profile(models.Model):
 
 
 class SalesforceEnvironment(models.Model):
+    _REGEX_FOR_SECRETS = r'^[a-zA-Z0-9]+$'
+
     _ENVIRONMENT_CHOICE = (
         ('https://test.salesforce.com', 'Sandbox'),
         ('https://login.salesforce.com', 'Production'),
@@ -123,13 +126,16 @@ class SalesforceEnvironment(models.Model):
     _HEADER = {'Authorization': "Bearer {{access_token}}", 'Content-Type': "application/json"}
 
     client_key = models.CharField(max_length=128, help_text='', null=False, blank=False, default='',
-                                  validators=[xss_absent_validator])
+                                  validators=[xss_absent_validator, RegexValidator(_REGEX_FOR_SECRETS,
+                                                                                   message='Only numbers and letters are valid')])
     client_secret = models.CharField(max_length=128, help_text='', null=False, blank=False, default='',
-                                     validators=[xss_absent_validator])
+                                     validators=[xss_absent_validator, RegexValidator(_REGEX_FOR_SECRETS,
+                                                                                      message='Only numbers and letters are valid')])
     client_username = models.CharField(max_length=128, help_text='', null=False, blank=True, default='',
                                        validators=[xss_absent_validator])
     client_password = models.CharField(max_length=128, help_text='', null=False, blank=False, default='',
-                                       validators=[xss_absent_validator])
+                                       validators=[xss_absent_validator, RegexValidator(_REGEX_FOR_SECRETS,
+                                                                                        message='Only numbers and letters are valid')])
     environment = models.CharField(max_length=128, help_text='', null=False, blank=False,
                                    validators=[xss_absent_validator],
                                    default='https://test.salesforce.com')
