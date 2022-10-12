@@ -15,7 +15,7 @@
 
     <link href="{% static 'site/css/deprecation-list.css' %}" rel="stylesheet" type="text/css">
 
-    <script>
+    <script nonce="{{ request.csp_nonce }}">
         let remove_deprec_url = "{% url 'main:remove-deprecations' %}";
     </script>
 {% endblock header-scripts %}
@@ -120,7 +120,7 @@
     <script src="{% static 'sb-admin/assets/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
 
     <!-- Custom -->
-    <script>
+    <script nonce="{{ request.csp_nonce }}">
         let delete_all_url = "{% url 'main:deprecation-delete-all' %}",
             download_selected_dfs = "{% url 'main:download-selected-dfs' pk=0 only_dep='xxx' errors='yyy' none='zzz' %}",
             get_removed_fields_url = "{% url 'main:get-removed-fields' pk='00' %}";
