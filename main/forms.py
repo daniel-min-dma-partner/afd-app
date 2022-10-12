@@ -16,6 +16,8 @@ from .models import SalesforceEnvironment, FileModel, DataflowCompareFilesModel 
     Parameter
 from main.validators.common_validators import xss_absent_validator
 
+_REGEX_ONLY_ALPHANUM = r'^[a-zA-Z0-9]+$'
+
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
@@ -77,7 +79,6 @@ class RegisterUserForm(forms.ModelForm):
 
 class SfdcEnvCreateForm(forms.ModelForm):
     _FORBIDDEN_SYMBOLS = ['-', '+', '*', '$', '&']
-    _REGEX_FOR_SECRETS = r'^[a-zA-Z0-9]+$'
 
     custom_domain = forms.URLField(label='Custom Salesforce Domain', validators=[xss_absent_validator],
                                    widget=forms.TextInput(
@@ -90,17 +91,17 @@ class SfdcEnvCreateForm(forms.ModelForm):
     client_key = forms.CharField(label='Client Key', widget=forms.PasswordInput(attrs={'class': 'form-control'}),
                                  initial='password',
                                  required=True,
-                                 validators=[xss_absent_validator, RegexValidator(_REGEX_FOR_SECRETS,
+                                 validators=[xss_absent_validator, RegexValidator(_REGEX_ONLY_ALPHANUM,
                                                                                   message='Only numbers and letters are allowed')])
     client_secret = forms.CharField(label='Client Secret', widget=forms.PasswordInput(attrs={'class': 'form-control'}),
                                     initial='password',
                                     required=True,
-                                    validators=[xss_absent_validator, RegexValidator(_REGEX_FOR_SECRETS,
+                                    validators=[xss_absent_validator, RegexValidator(_REGEX_ONLY_ALPHANUM,
                                                                                      message='Only numbers and letters are allowed')])
     client_password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-control'}),
                                       initial='password',
                                       required=True,
-                                      validators=[xss_absent_validator, RegexValidator(_REGEX_FOR_SECRETS,
+                                      validators=[xss_absent_validator, RegexValidator(_REGEX_ONLY_ALPHANUM,
                                                                                        message='Only numbers and letters are allowed')])
     client_username = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username...'}), required=True,
@@ -346,15 +347,19 @@ class CompareDataflowForm(forms.ModelForm):
 
 class DeprecateFieldsForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True,
-                           validators=[xss_absent_validator])
+                           validators=[xss_absent_validator, RegexValidator(
+                               _REGEX_ONLY_ALPHANUM, message='Only numbers and letters are allowed')])
     org = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True,
-                          validators=[xss_absent_validator])
+                          validators=[xss_absent_validator, RegexValidator(
+                              _REGEX_ONLY_ALPHANUM, message='Only numbers and letters are allowed')])
     files = forms.FileField(required=False, label='Dataflows',
                             widget=forms.ClearableFileInput(attrs={
                                 'multiple': True,
                                 'class': 'form-control'
                             }))
-    case_url = forms.URLField(label='SupportForce Case URL', required=False, validators=[xss_absent_validator],
+    case_url = forms.URLField(label='SupportForce Case URL', required=False,
+                              validators=[xss_absent_validator, RegexValidator(
+                                  _REGEX_ONLY_ALPHANUM, message='Only numbers and letters are allowed')],
                               widget=forms.TextInput(attrs={
                                   'class': 'form-control'
                               }))
@@ -366,9 +371,13 @@ class DeprecateFieldsForm(forms.Form):
     from_file = forms.BooleanField(required=False)
     save_metadata = forms.BooleanField(required=False)
     sobjects = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control'}), required=False, validators=[xss_absent_validator])
+        widget=forms.TextInput(attrs={'class': 'form-control'}), required=False,
+        validators=[xss_absent_validator, RegexValidator(
+            _REGEX_ONLY_ALPHANUM, message='Only numbers and letters are allowed')])
     fields = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control'}), required=False, validators=[xss_absent_validator])
+        widget=forms.TextInput(attrs={'class': 'form-control'}), required=False,
+        validators=[xss_absent_validator, RegexValidator(
+            _REGEX_ONLY_ALPHANUM, message='Only numbers and letters are allowed')])
 
     # def clean_sobjects(self):
     #     from_file = self.cleaned_data.get('from_file')
@@ -398,15 +407,21 @@ class SecpredToSaqlForm(forms.Form):
 
 
 class ProfileForm(forms.ModelForm):
-    key = forms.CharField(label='Key', validators=[xss_absent_validator],
+    key = forms.CharField(label='Key',
+                          validators=[xss_absent_validator, RegexValidator(
+                              _REGEX_ONLY_ALPHANUM, message='Only numbers and letters are allowed')],
                           widget=forms.TextInput(attrs={
                               'class': 'form-control',
                           }))
-    value = forms.CharField(label='Key', validators=[xss_absent_validator],
+    value = forms.CharField(label='Key',
+                            validators=[xss_absent_validator, RegexValidator(
+                                _REGEX_ONLY_ALPHANUM, message='Only numbers and letters are allowed')],
                             widget=forms.TextInput(attrs={
                                 'class': 'form-control',
                             }))
-    type = forms.CharField(label='Key', validators=[xss_absent_validator],
+    type = forms.CharField(label='Key',
+                           validators=[xss_absent_validator, RegexValidator(
+                               _REGEX_ONLY_ALPHANUM, message='Only numbers and letters are allowed')],
                            widget=forms.TextInput(attrs={
                                'class': 'form-control',
                            }))
