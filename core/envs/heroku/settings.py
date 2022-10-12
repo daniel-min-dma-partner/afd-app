@@ -29,5 +29,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Securities
 CSRF_COOKIE_SECURE = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_HSTS_SECONDS = 60
+SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = [r'^no-ssl/$']
