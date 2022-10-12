@@ -30,6 +30,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 # Securities
 CSRF_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 SECURE_HSTS_SECONDS = 60
@@ -39,13 +40,18 @@ SESSION_COOKIE_SECURE = True
 # Django CSP Configs
 
 # - Content Security Policy
-CSP_IMG_SRC = ["'self'", "https://stage--dma-crma-afd.herokuapp.com/"]
-CSP_STYLE_SRC = ["'self'", 'https://stage--dma-crma-afd.herokuapp.com/']
-CSP_SCRIPT_SRC = ["'self'", 'https://stage--dma-crma-afd.herokuapp.com/',
-                  'https://code.jquery.com/',
-                  'https://cdnjs.cloudflare.com/',
-                  'ttps://code.jquery.com/']
-CSP_FONT_SRC = ["'self'", 'https://stage--dma-crma-afd.herokuapp.com/']
+ALLOWED_SOURCES = [
+    'https://code.jquery.com/',
+    'https://cdnjs.cloudflare.com/',
+    'ttps://code.jquery.com/',
+    'https://cdn.jsdelivr.net/',
+    'https://fonts.googleapis.com/',
+    '',
+]
+CSP_IMG_SRC = ["'self'", "https://stage--dma-crma-afd.herokuapp.com/"] + ALLOWED_SOURCES
+CSP_STYLE_SRC = ["'self'", 'https://stage--dma-crma-afd.herokuapp.com/'] + ALLOWED_SOURCES
+CSP_SCRIPT_SRC = ["'self'", 'https://stage--dma-crma-afd.herokuapp.com/'] + ALLOWED_SOURCES
+CSP_FONT_SRC = ["'self'", 'https://stage--dma-crma-afd.herokuapp.com/'] + ALLOWED_SOURCES
 
 # - Content Security Policy
 CSP_INCLUDE_NONCE_IN = ['script-src']
