@@ -7,6 +7,8 @@ MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 MIDDLEWARE.insert(1, 'django_permissions_policy.PermissionsPolicyMiddleware')
 MIDDLEWARE.insert(0, 'csp.middleware.CSPMiddleware')
 
+print(MIDDLEWARE)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -51,7 +53,9 @@ ALLOWED_SOURCES = [
     'http://www.w3.org/2000/svg',
 ]
 CSP_IMG_SRC = ["'self'", "https://stage--dma-crma-afd.herokuapp.com/"] + ALLOWED_SOURCES
-CSP_STYLE_SRC = ["'self'", 'https://stage--dma-crma-afd.herokuapp.com/'] + ALLOWED_SOURCES
+CSP_STYLE_SRC = ["'self'",
+                 "sha256-a89e987c3763dcd384dd799670af53fb070c604a820921197e05c058ba8bceaf",
+                 'https://stage--dma-crma-afd.herokuapp.com/'] + ALLOWED_SOURCES
 CSP_SCRIPT_SRC = ["'self'", 'https://stage--dma-crma-afd.herokuapp.com/'] + ALLOWED_SOURCES
 CSP_FONT_SRC = ["'self'", 'https://stage--dma-crma-afd.herokuapp.com/'] + ALLOWED_SOURCES
 
