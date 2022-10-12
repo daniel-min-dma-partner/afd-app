@@ -25,5 +25,5 @@ include(
     optional('local_settings.py')
 )
 
-print("DEBUG:", DEBUG)
-print(env_settings_file)
+# print("DEBUG:", DEBUG)
+# print(env_settings_file)

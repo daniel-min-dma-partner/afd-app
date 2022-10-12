@@ -4,6 +4,7 @@ import django_heroku
 INSTALLED_APPS.append('whitenoise.runserver_nostatic')
 
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+MIDDLEWARE.insert(1, 'django_permissions_policy.PermissionsPolicyMiddleware')
 MIDDLEWARE.insert(0, 'csp.middleware.CSPMiddleware')
 
 DATABASES = {
@@ -56,3 +57,24 @@ CSP_FONT_SRC = ["'self'", 'https://stage--dma-crma-afd.herokuapp.com/'] + ALLOWE
 
 # - Content Security Policy
 CSP_INCLUDE_NONCE_IN = ['script-src']
+
+# Django Permissions Policy Config
+PERMISSIONS_POLICY = {
+    "accelerometer": [],
+    "ambient-light-sensor": [],
+    "autoplay": [],
+    "camera": [],
+    "microfone": [],
+    "display-capture": [],
+    "document-domain": [],
+    "encrypted-media": [],
+    "fullscreen": [],
+    "geolocation": [],
+    "gyroscope": [],
+    "interest-cohort": [],
+    "magnetometer": [],
+    "microphone": [],
+    "midi": [],
+    "payment": [],
+    "usb": [],
+}
