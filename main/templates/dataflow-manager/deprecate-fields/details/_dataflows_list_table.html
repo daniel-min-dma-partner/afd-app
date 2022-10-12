@@ -21,7 +21,7 @@
                         <div class="form-check">
                             <input class="form-check-input deprecation-filter" type="checkbox"
                                    id="deprecation-filter-{{ object.pk }}"
-                                   name="deprecation-filter" onclick="filter_deprecation($(this));">
+                                   name="deprecation-filter">
                             <label class="form-check-label" for="deprecation-filter-{{ object.pk }}">
                                 Only Deprecated?
                             </label>
@@ -32,7 +32,7 @@
                         <div class="form-check">
                             <input class="form-check-input deprecation-filter" type="checkbox"
                                    id="deprecation-only-errors-{{ object.pk }}"
-                                   name="deprecation-only-errors" onclick="filter_deprecation($(this));">
+                                   name="deprecation-only-errors">
                             <label class="form-check-label" for="deprecation-only-errors-{{ object.pk }}">
                                 Only Errors?
                             </label>
@@ -43,7 +43,7 @@
                         <div class="form-check">
                             <input class="form-check-input deprecation-filter" type="checkbox"
                                    id="deprecation-no-changes-{{ object.pk }}"
-                                   name="deprecation-no-changes" onclick="filter_deprecation($(this));">
+                                   name="deprecation-no-changes">
                             <label class="form-check-label" for="deprecation-no-changes-{{ object.pk }}">
                                 No changes?
                             </label>

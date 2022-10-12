@@ -260,3 +260,13 @@ $("button.copy-removed-fields").click(function (evt) {
         }
     });
 });
+
+$("input[id^='deprecation-filter']").on('click', function (evt) {
+    filter_deprecation($(this));
+});
+$("input[id^='deprecation-only-errors']").on('click', function (evt) {
+    filter_deprecation($(this));
+});
+$("input[id^='deprecation-no-changes']").on('click', function (evt) {
+    filter_deprecation($(this));
+});
