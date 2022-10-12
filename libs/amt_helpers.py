@@ -9,12 +9,7 @@ from main.models import SalesforceEnvironment as Env
 from main.models import User
 
 _tmp = """
-sf.maxPoll = 20
-sf.pollWaitMillis = 10000
 
-sf.username = api-tcrm_field_deprecation@salesforce.com.org62stage
-sf.password = gPM9vYTxK8oLj
-sf.serverurl = https://test.salesforce.com
 """
 
 _BUILD_PROP_TEMPLATE = {
