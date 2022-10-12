@@ -26,3 +26,8 @@ DATABASES['default'].update(prod_db)
 
 # Static file handler for Heroku
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
+# Securities
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = [r'^no-ssl/$']
