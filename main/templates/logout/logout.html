@@ -5,17 +5,17 @@
 {% block title %}Login{% endblock title %}
 
 {% block extra_header_script %}
-<script>
-</script>
+    <script nonce="{{ request.csp_nonce }}">
+    </script>
 {% endblock extra_header_script %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-8 mx-auto">
-        <div class="card">
-            <div class="card-header card-header-rose">
-                <h3 class="card-title">Log Out</h3>
-                {% if default_category %}<p class="category">{{ default_category }}</p>{% endif %}
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header card-header-rose">
+                    <h3 class="card-title">Log Out</h3>
+                    {% if default_category %}<p class="category">{{ default_category }}</p>{% endif %}
             </div>
 
             <div class="card-body">

@@ -6,7 +6,7 @@
 {% block page-header %} Slack Integration / Communications {% endblock page-header %}
 
 {% block header-scripts %}
-    <script>
+    <script nonce="{{ request.csp_nonce }}">
         let default_title = "{{ default_title }}";
     </script>
 {% endblock header-scripts %}
@@ -14,21 +14,21 @@
 {% block page-content %}
     <div class="row">
         <div class="col-md-8">
-        {% include 'slack/_approval-request.html' %}
+            {% include 'slack/_approval-request.html' %}
+        </div>
     </div>
-</div>
 
 {% endblock page-content %}
 
 {% block extra-scripts %}
-<script>
-    {% with "id_"|add:form.case_manager_name.name as manager_name_id %}
-        const manager_name_field_id = "{{manager_name_id}}";
-    {% endwith %}
+    <script nonce="{{ request.csp_nonce }}">
+        {% with "id_"|add:form.case_manager_name.name as manager_name_id %}
+            const manager_name_field_id = "{{manager_name_id}}";
+        {% endwith %}
 
-    const has_manager_approval_field_id = "id_{{ form.case_manager_approval.name }}";
+        const has_manager_approval_field_id = "id_{{ form.case_manager_approval.name }}";
 
-    const targetlist_url = "{% url 'main:slack-targets' %}";
-</script>
-<script src="{% static 'site/js/slack_msg_pusher.js' %}?v={{ version }}" type="module"></script>
+        const targetlist_url = "{% url 'main:slack-targets' %}";
+    </script>
+    <script src="{% static 'site/js/slack_msg_pusher.js' %}?v={{ version }}" type="module"></script>
 {% endblock extra-scripts %}

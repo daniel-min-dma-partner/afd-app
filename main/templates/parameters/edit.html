@@ -72,7 +72,7 @@
 
 
 {% block extra-scripts %}
-    <script>
+    <script nonce="{{ request.csp_nonce }}">
         let modes = ['code', 'tree'],
             mode = 'code',
             mainMenuBar = true,

@@ -90,7 +90,7 @@
 {% endblock page-content %}
 
 {% block extra-scripts %}
-    <script>
+    <script nonce="{{ request.csp_nonce }}">
         let type_list_url = "{% url 'main:profile-get-type-list' %}";
     </script>
     <script src="{% static 'site/js/profile.js' %}?v={{ version }}" type="module"></script>

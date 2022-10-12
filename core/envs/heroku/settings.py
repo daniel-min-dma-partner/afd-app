@@ -1,10 +1,10 @@
 import dj_database_url
 import django_heroku
 
-
 INSTALLED_APPS.append('whitenoise.runserver_nostatic')
 
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+MIDDLEWARE.insert(0, 'csp.middleware.CSPMiddleware')
 
 DATABASES = {
     'default': {
@@ -35,3 +35,17 @@ SECURE_HSTS_PRELOAD = True
 SECURE_HSTS_SECONDS = 60
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
+
+# Django CSP Configs
+
+# - Content Security Policy
+CSP_IMG_SRC = ["'self'", "https://stage--dma-crma-afd.herokuapp.com/"]
+CSP_STYLE_SRC = ["'self'", 'https://stage--dma-crma-afd.herokuapp.com/']
+CSP_SCRIPT_SRC = ["'self'", 'https://stage--dma-crma-afd.herokuapp.com/',
+                  'https://code.jquery.com/',
+                  'https://cdnjs.cloudflare.com/',
+                  'ttps://code.jquery.com/']
+CSP_FONT_SRC = ["'self'", 'https://stage--dma-crma-afd.herokuapp.com/']
+
+# - Content Security Policy
+CSP_INCLUDE_NONCE_IN = ['script-src']

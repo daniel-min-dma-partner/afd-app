@@ -99,7 +99,7 @@
 {% endblock page-content %}
 
 {% block extra-scripts %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         $(document).ready(function (evt) {
             {#$("#sidebarToggle").click();#}
             $('input[name="days"]').focus().select();

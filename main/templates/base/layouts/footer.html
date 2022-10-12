@@ -28,8 +28,8 @@
     </nav>
       <div class="copyright float-right">
           &copy;
-          <script>
-        document.write(new Date().getFullYear())
+          <script nonce="{{ request.csp_nonce }}">
+              document.write(new Date().getFullYear())
 
           </script>
           , made with <em class="material-icons">favorite</em> by

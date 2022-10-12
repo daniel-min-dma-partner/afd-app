@@ -47,7 +47,7 @@
 </div>
 <!--{% include 'base/layouts/fixed-plugins.html' %}-->
 {% include 'base/footer_scripts.html' %}
-<script>
+<script nonce="{{ request.csp_nonce }}">
     function update_status_bubble(status, instance_url = "") {
         // Source: https://davidwalsh.name/css-variables-javascript
         let parent = $('.dot').parent();
