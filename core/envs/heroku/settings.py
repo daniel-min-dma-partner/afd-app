@@ -7,8 +7,6 @@ MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 MIDDLEWARE.insert(1, 'django_permissions_policy.PermissionsPolicyMiddleware')
 MIDDLEWARE.insert(0, 'csp.middleware.CSPMiddleware')
 
-print(MIDDLEWARE)
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -68,7 +66,6 @@ PERMISSIONS_POLICY = {
     "ambient-light-sensor": [],
     "autoplay": [],
     "camera": [],
-    "microfone": [],
     "display-capture": [],
     "document-domain": [],
     "encrypted-media": [],
