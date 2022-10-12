@@ -34,21 +34,24 @@
     {% url 'main:extract-update-dataflow' as url_mng_df %}
     {% url 'main:generate-deprecator' as url_generate_meta %}
     {% url 'main:list-datasets' as url_list_datasets %}
-    {% url 'main:merge-deprecator' as url_merge_dp%}
+    {% url 'main:merge-deprecator' as url_merge_dp %}
     {% url 'main:register-localizer' as url_reg_loc %}
     {% url 'main:upload-dataflow' as url_up_df %}
     {% url 'main:view-deprecations' as url_view_dp %}
     {% url 'main:view-upload-history' as url_upl_hist %}
     {% url 'main:locate-common-dataset' as url_locate_ds %}
+
     <a class="nav-link{% if 'dataflow-manager' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse"
        data-target="#collapse2"
        aria-expanded="{% if 'dataflow-manager' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapse2">
         <i class="fas fa-fw fa-cog"></i>
         <span>Tableau CRM Dataflows</span>
     </a>
+
     <div id="collapse2" class="collapse{% if 'dataflow-manager' in cur_url %} show{% endif %}"
          aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
+
             <!-- Deprecation: Related to field deprecation process -->
             <h6 class="collapse-header">Deprecation:</h6>
             <a class="collapse-item{% if cur_url == url_depr_df %} active{% endif %}" href="{{ url_depr_df }}">Deprecate
@@ -57,32 +60,32 @@
                 deprecations</a>
 
             <!-- Transformation: Related to any transformation operation applied to a specific dataflow -->
-            <h6 class="collapse-header">Transformation:</h6>
-            <a class="collapse-item{% if cur_url == url_edit_df %} active{% endif %}"
-               href="#"  data-toggle="modal" data-target="#file-selector-md">Edit</a>
-            <a class="collapse-item{% if cur_url == url_mng_df %} active{% endif %}" href="{{ url_mng_df }}">Extract |
-                Update</a>
+            {#            <h6 class="collapse-header">Transformation:</h6>#}
+            {#            <a class="collapse-item{% if cur_url == url_edit_df %} active{% endif %}"#}
+            {#               href="#" data-toggle="modal" data-target="#file-selector-md">Edit</a>#}
+            {#            <a class="collapse-item{% if cur_url == url_mng_df %} active{% endif %}" href="{{ url_mng_df }}">Extract |#}
+            {#                Update</a>#}
 
             <!-- Visualization: Related to operations which displays section of a given dataflow or extracts information about a dataflow -->
-            <h6 class="collapse-header">Visualization:</h6>
-            <a class="collapse-item{% if cur_url == url_comp_df %} active{% endif %}"
-               href="{{ url_comp_df }}">Compare</a>
-            <a class="collapse-item{% if cur_url == url_list_datasets %} active{% endif %}"
-               href="{{ url_list_datasets }}">List datasets</a>
-            <a class="collapse-item{% if cur_url == url_reg_loc %} active{% endif %}"
-               href="{{ url_reg_loc }}">Locate <code><strong>sfdcRegister</strong></code></a>
-            <a class="collapse-item{% if cur_url == url_locate_ds %} active{% endif %}"
-               href="{{ url_locate_ds }}">Locate Common Dataset</a>
+            {#            <h6 class="collapse-header">Visualization:</h6>#}
+            {#            <a class="collapse-item{% if cur_url == url_comp_df %} active{% endif %}"#}
+            {#               href="{{ url_comp_df }}">Compare</a>#}
+            {#            <a class="collapse-item{% if cur_url == url_list_datasets %} active{% endif %}"#}
+            {#               href="{{ url_list_datasets }}">List datasets</a>#}
+            {#            <a class="collapse-item{% if cur_url == url_reg_loc %} active{% endif %}"#}
+            {#               href="{{ url_reg_loc }}">Locate <code><strong>sfdcRegister</strong></code></a>#}
+            {#            <a class="collapse-item{% if cur_url == url_locate_ds %} active{% endif %}"#}
+            {#               href="{{ url_locate_ds }}">Locate Common Dataset</a>#}
 
             <!-- Generation: Operations which creates necessary files useful for field deprecation process. -->
-            <h6 class="collapse-header">Generation:</h6>
-            <a class="collapse-item{% if cur_url == url_extract_node %} active{% endif %}"
-               href="{{ url_extract_node }}">
-                Node Extractor
-            </a>
-            <a class="collapse-item{% if cur_url == url_digen_df %} active{% endif %}" href="{{ url_digen_df }}">
-                <code><strong>sfdcDigest</strong></code> Generator
-            </a>
+            {#            <h6 class="collapse-header">Generation:</h6>#}
+            {#            <a class="collapse-item{% if cur_url == url_extract_node %} active{% endif %}"#}
+            {#               href="{{ url_extract_node }}">#}
+            {#                Node Extractor#}
+            {#            </a>#}
+            {#            <a class="collapse-item{% if cur_url == url_digen_df %} active{% endif %}" href="{{ url_digen_df }}">#}
+            {#                <code><strong>sfdcDigest</strong></code> Generator#}
+            {#            </a>#}
 
             <!-- Metadata files: All managements related to deprecation fields metadata file -->
             <h6 class="collapse-header">Metadata File:</h6>
@@ -106,23 +109,23 @@
 </li>
 
 <!-- Nav Item - Pages Collapse Menu -->
-<li class="nav-item">
-    {% url 'main:secpred-to-saql' as url_sectosaql %}
-    <a class="nav-link{% if 'dataset-manager' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse"
-       data-target="#collapse3"
-       aria-expanded="{% if 'dataset-manager' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapse3">
-        <i class="fas fa-fw fa-cog"></i>
-        <span>Tableau CRM Datasets</span>
-    </a>
-    <div id="collapse3" class="collapse{% if 'dataset-manager' in cur_url %} show{% endif %}"
-         aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Security Predicate:</h6>
-            <a class="collapse-item{% if cur_url == url_sectosaql %} active{% endif %}" href="{{ url_sectosaql }}">
-                Convert to SAQL
-            </a>
-        </div>
-    </div>
-</li>
+{#<li class="nav-item">#}
+{#    {% url 'main:secpred-to-saql' as url_sectosaql %}#}
+{#    <a class="nav-link{% if 'dataset-manager' not in cur_url %} collapsed{% endif %}" href="#" data-toggle="collapse"#}
+{#       data-target="#collapse3"#}
+{#       aria-expanded="{% if 'dataset-manager' in cur_url %}true{% else %}false{% endif %}" aria-controls="collapse3">#}
+{#        <i class="fas fa-fw fa-cog"></i>#}
+{#        <span>Tableau CRM Datasets</span>#}
+{#    </a>#}
+{#    <div id="collapse3" class="collapse{% if 'dataset-manager' in cur_url %} show{% endif %}"#}
+{#         aria-labelledby="headingTwo" data-parent="#accordionSidebar">#}
+{#        <div class="bg-white py-2 collapse-inner rounded">#}
+{#            <h6 class="collapse-header">Security Predicate:</h6>#}
+{#            <a class="collapse-item{% if cur_url == url_sectosaql %} active{% endif %}" href="{{ url_sectosaql }}">#}
+{#                Convert to SAQL#}
+{#            </a>#}
+{#        </div>#}
+{#    </div>#}
+{#</li>#}
 
 {% include 'dataflow-manager/edit/file-selector-mdform.html' %}
