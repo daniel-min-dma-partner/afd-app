@@ -33,7 +33,7 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-SECURE_HSTS_SECONDS = 60
+SECURE_HSTS_SECONDS = 86400
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 
@@ -46,7 +46,7 @@ ALLOWED_SOURCES = [
     'ttps://code.jquery.com/',
     'https://cdn.jsdelivr.net/',
     'https://fonts.googleapis.com/',
-    '',
+    'https://fonts.gstatic.com/',
 ]
 CSP_IMG_SRC = ["'self'", "https://stage--dma-crma-afd.herokuapp.com/"] + ALLOWED_SOURCES
 CSP_STYLE_SRC = ["'self'", 'https://stage--dma-crma-afd.herokuapp.com/'] + ALLOWED_SOURCES
