@@ -47,6 +47,7 @@ ALLOWED_SOURCES = [
     'https://cdn.jsdelivr.net/',
     'https://fonts.googleapis.com/',
     'https://fonts.gstatic.com/',
+    'http://www.w3.org/2000/svg',
 ]
 CSP_IMG_SRC = ["'self'", "https://stage--dma-crma-afd.herokuapp.com/"] + ALLOWED_SOURCES
 CSP_STYLE_SRC = ["'self'", 'https://stage--dma-crma-afd.herokuapp.com/'] + ALLOWED_SOURCES
